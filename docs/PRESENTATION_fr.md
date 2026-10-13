@@ -14,7 +14,7 @@ document liste ce qui a été fait, conservé, modifié et pourquoi, pour que ch
 Le portage a été réalisé à partir des sources
 publiées par Antoine Potten (`antrenamer2_sources.zip`).
 
-Versions, journal des modifications et code source : [github.com/morfredus/antRenamer-qt](https://github.com/morfredus/antRenamer-qt).
+Versions, journal des modifications et code source : [github.com/morfredus/ant-renamer-qt](https://github.com/morfredus/ant-renamer-qt).
 
 ## Nom et coexistence
 
@@ -82,7 +82,7 @@ test (`tests/test_core.cpp`, lancé par `ctest`).
 ## Différences avec l'original, volontaires
 
 Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. Elles sont listées pour être explicites ; si l'une d'elles ressemble à une erreur, merci de la signaler dans les
-[Issues](https://github.com/morfredus/antRenamer-qt/issues).
+[Issues](https://github.com/morfredus/ant-renamer-qt/issues).
 
 1. **`$` isolé dans un masque `$if`** (`AdvancedFormat`) : l'original boucle indéfiniment sur un `$` qui n'est ni
    `$$` ni `$if(`. Le portage l'ignore et le supprime, comme les autres branches.
@@ -170,8 +170,8 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
 
 ## Retours et assistance
 
-Questions, signalements de bogues et idées concernant Ant Renamer Qt : [Issues](https://github.com/morfredus/antRenamer-qt/issues)
-et [Discussions](https://github.com/morfredus/antRenamer-qt/discussions). L'assistance du portage est séparée de celle du
+Questions, signalements de bogues et idées concernant Ant Renamer Qt : [Issues](https://github.com/morfredus/ant-renamer-qt/issues)
+et [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions). L'assistance du portage est séparée de celle du
 programme d'origine : merci de ne pas signaler ses problèmes à l'auteur d'Ant Renamer.
 
 Merci à Antoine Potten pour le programme et pour la publication de ses sources : sans elles ce portage n'existerait pas.

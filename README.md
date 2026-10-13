@@ -63,7 +63,7 @@ following paths add (f files, F folders, r recursive; wildcards allowed).
 
 ## Support
 
-Support for Ant Renamer Qt is provided on GitHub: [Issues](https://github.com/morfredus/antRenamer-qt/issues) (bugs, feature requests) and [Discussions](https://github.com/morfredus/antRenamer-qt/discussions) (questions, ideas). Please do not report Ant Renamer Qt problems to the author of the original program.
+Support for Ant Renamer Qt is provided on GitHub: [Issues](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, feature requests) and [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, ideas). Please do not report Ant Renamer Qt problems to the author of the original program.
 
 ## Credits
 

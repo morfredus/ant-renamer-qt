@@ -386,7 +386,7 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
     tabs->addTab(browser(
         u"<b>Copyright &copy; 2000-2025 Antoine Potten</b><br><br>"_s +
         tr("Ant Renamer Qt is a C++/Qt port of Ant Renamer by Antoine Potten, developed in parallel with the original program. Port (Windows and Linux): Frédéric Biron.") + u"<br><br>"_s +
-        tr("Ant Renamer Qt support: ") + u"<a href='https://github.com/morfredus/antRenamer-qt/'>github.com/morfredus/antRenamer-qt</a> ("_s + tr("issues and discussions") + u")<br><br>"_s +
+        tr("Ant Renamer Qt support: ") + u"<a href='https://github.com/morfredus/ant-renamer-qt/'>github.com/morfredus/ant-renamer-qt</a> ("_s + tr("issues and discussions") + u")<br><br>"_s +
         tr("Web site address: ") + u"<a href='https://www.antp.be/software/renamer/'>www.antp.be/software/renamer/</a><br><br>"_s +
         u"<b>"_s + tr("License:") + u"</b><br>"_s +
         tr("This program is free software; you can redistribute it and/or modify it under the terms of the GNU General "

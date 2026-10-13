@@ -63,7 +63,7 @@ choisit ce qu'ajoutent les chemins suivants (f fichiers, F dossiers, r récursif
 
 ## Assistance
 
-L'assistance pour Ant Renamer Qt se fait sur GitHub : [Issues](https://github.com/morfredus/antRenamer-qt/issues) (bugs, demandes de fonctions) et [Discussions](https://github.com/morfredus/antRenamer-qt/discussions) (questions, idées). Merci de ne pas signaler les problèmes d'Ant Renamer Qt à l'auteur du programme d'origine.
+L'assistance pour Ant Renamer Qt se fait sur GitHub : [Issues](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, demandes de fonctions) et [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, idées). Merci de ne pas signaler les problèmes d'Ant Renamer Qt à l'auteur du programme d'origine.
 
 ## Crédits
 

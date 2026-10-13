@@ -14,7 +14,7 @@ what was done, what was kept, what was changed and why, so that anyone can judge
 The port was written from the sources published by Antoine
 Potten (`antrenamer2_sources.zip`).
 
-Releases, changelog and source code: [github.com/morfredus/antRenamer-qt](https://github.com/morfredus/antRenamer-qt).
+Releases, changelog and source code: [github.com/morfredus/ant-renamer-qt](https://github.com/morfredus/ant-renamer-qt).
 
 ## Name and coexistence
 
@@ -80,7 +80,7 @@ The engine (`core/`) depends on QtCore only, has no interface code and has its o
 ## Differences from the original, on purpose
 
 These are the places where the port does not do exactly what version 2.13 does. They are listed so that they are explicit; if one of them looks like a mistake, please report it in the
-[Issues](https://github.com/morfredus/antRenamer-qt/issues).
+[Issues](https://github.com/morfredus/ant-renamer-qt/issues).
 
 1. **Lone `$` in an `$if` mask** (`AdvancedFormat`): the original loops forever on a `$` that is neither
    `$$` nor `$if(`. The port skips it and drops it, as the other branches do.
@@ -168,8 +168,8 @@ These are the places where the port does not do exactly what version 2.13 does. 
 ## Feedback and support
 
 Questions, bug reports and ideas about Ant Renamer Qt go to
-[Issues](https://github.com/morfredus/antRenamer-qt/issues) and
-[Discussions](https://github.com/morfredus/antRenamer-qt/discussions). Support for the port is separate from the
+[Issues](https://github.com/morfredus/ant-renamer-qt/issues) and
+[Discussions](https://github.com/morfredus/ant-renamer-qt/discussions). Support for the port is separate from the
 original program: please do not report its problems to the author of the original Ant Renamer.
 
 Thanks to Antoine Potten for the program and for publishing its sources: without them this port would not exist.
