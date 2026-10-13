@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Ant Renamer Qt
+GenericName=File renamer
+GenericName[fr]=Renommeur de fichiers
+Comment=Rename many files at once: replace, insert, enumerate, change case, regular expressions, MP3 and EXIF tags
+Comment[fr]=Renommer de nombreux fichiers d'un coup : remplacer, insérer, énumérer, casse, expressions régulières, tags MP3 et EXIF
+Exec=antrenamer-qt %F
+Icon=antrenamer-qt
+Terminal=false
+Categories=Utility;FileTools;
+Keywords=rename;renamer;files;batch;mp3;exif;renommer;fichiers;
+StartupNotify=true
+StartupWMClass=antrenamer-qt

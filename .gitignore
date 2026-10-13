@@ -1,0 +1,11 @@
+# Dossiers de build (un par preset)
+/build/
+/build-arm64/
+/build-arm64-cross/
+/build-mingw/
+/out/
+# Sorties locales
+*.user
+missing.txt
+/dist/
+/.cache/

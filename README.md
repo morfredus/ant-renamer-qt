@@ -1,0 +1,75 @@
+# Ant Renamer Qt
+
+![version](https://img.shields.io/badge/version-3.0.0--rc.5-blue)
+
+C++/Qt 6 port of [Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (originally Delphi 7,
+GPL v2). Batch file renaming: replace, insert, move, delete, enumerate, change case, regular
+expressions, names from a list, file date, MP3 tags (ID3v1/v2), EXIF.
+
+**Ant Renamer Qt** is the official name of this port, agreed with the author of the original program. It is
+developed in parallel with the original Ant Renamer and has its own executable, installation folder, settings and
+package names, so both can be installed side by side without confusion.
+
+The project is **self-contained**: Qt 6 and a C++20 compiler are the only requirements.
+
+## Build
+
+```bash
+cmake --preset mingw   && cmake --build --preset mingw     # Windows (MSYS2 / MinGW-w64)
+cmake --preset linux   && cmake --build --preset linux     # Linux x86_64
+cmake --preset linux-arm64 && cmake --build --preset linux-arm64   # ARM64 machine (e.g. Raspberry Pi)
+ctest --preset linux                                       # core tests
+```
+
+Output: `build-mingw/app/antrenamer-qt.exe` (Qt and MinGW DLLs are deployed next to it) or
+`build/app/antrenamer-qt`. `linux-arm64-cross` cross-compiles from x86_64: set `ARM64_SYSROOT` to an
+ARM64 sysroot containing Qt 6 (see `cmake/toolchains/linux-aarch64.cmake`).
+
+Release (Windows): `powershell -ExecutionPolicy Bypass -File scripts\windows\package-win.ps1` writes
+`dist/AntRenamerQt-<version>-win64-portable.zip` and, if Inno Setup 6 is installed, the `-setup.exe` installer.
+
+Linux packages (on Linux or in WSL): `scripts/linux/package-deb.sh` builds `dist/AntRenamerQt-<version>-linux-<arch>.deb` and
+`scripts/linux/package-appimage.sh` the x86_64 AppImage, after `cmake --preset linux && cmake --build --preset linux`.
+On aarch64 use the `linux-arm64` preset; from x86_64, `linux-arm64-cross` builds the arm64 package with an arm64 sysroot
+(`ARM64_SYSROOT`), then `package-deb.sh --build build-arm64-cross`.
+
+Windows prerequisites: MSYS2 with `mingw-w64-x86_64-{gcc,cmake,ninja,qt6-base}`.
+
+## Layout
+
+| Folder | Content |
+|---|---|
+| `core/` | renaming engine, QtCore only |
+| `app/` | Qt Widgets interface, `Languages/` and `help/` from the original program |
+| `tests/` | core checks (`ctest`) |
+| `cmake/toolchains/` | ARM64 cross toolchain |
+| `scripts/windows/` | MinGW DLL deployment, VS Code helper |
+
+## About this port
+
+What was kept, changed and added compared with Ant Renamer 2.13:
+[docs/PRESENTATION.md](docs/PRESENTATION.md) ([fr](docs/PRESENTATION_fr.md)).
+
+## Settings
+
+Portable mode: create an empty `antrenamer-qt.ini` next to the program (or tick the box in
+Options > Language). Otherwise settings live in `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini`.
+
+Explorer context menu: Options > Files && Folders adds "Add to Ant Renamer Qt" to files and folders (Windows 11:
+"Show more options"). Everything selected is sent to the window that is already open.
+
+Command line: `-b file.arb` load a batch, `-g` start, `-x` exit when done, `-a[fFr]` choose what the
+following paths add (f files, F folders, r recursive; wildcards allowed).
+
+## Support
+
+Support for Ant Renamer Qt is provided on GitHub: [Issues](https://github.com/morfredus/antRenamer-qt/issues) (bugs, feature requests) and [Discussions](https://github.com/morfredus/antRenamer-qt/discussions) (questions, ideas). Please do not report Ant Renamer Qt problems to the author of the original program.
+
+## Credits
+
+- Original program: Antoine Potten, [Ant Renamer](https://www.antp.be/software/renamer/) (Delphi 7, GPL v2).
+- C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/morfredus)).
+
+## License
+
+GPL v2 or later, like the original program.

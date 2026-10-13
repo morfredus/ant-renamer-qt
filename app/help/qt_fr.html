@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Aide pour Ant Renamer Qt</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="main.css" type="text/css" />
+</head>
+<body>
+<h1>Ant Renamer Qt : nouveaut&eacute;s et assistance</h1>
+<p><b>Ant Renamer Qt</b> est un portage C++/Qt 6 d'Ant Renamer 2.13 d'Antoine Potten, r&eacute;alis&eacute; par Fr&eacute;d&eacute;ric Biron. Il est d&eacute;velopp&eacute; en parall&egrave;le du programme
+  d'origine : il a son propre ex&eacute;cutable (<code>antrenamer-qt</code>), son dossier d'installation et ses r&eacute;glages, donc les deux peuvent &ecirc;tre install&eacute;s c&ocirc;te &agrave; c&ocirc;te.
+  Les fichiers de job (<code>.arb</code>) sont les m&ecirc;mes : chaque programme lit les jobs de l'autre. Le reste de cette aide est celle d'Ant Renamer 2.13,
+  qui d&eacute;crit aussi Ant Renamer Qt, sauf pour ce qui est list&eacute; ci-dessous.</p>
+
+<h2>Nouveaut&eacute;s</h2>
+<ul>
+  <li><b>Windows r&eacute;cents et Linux</b> : Windows 10 et 11 (chemins longs, &eacute;crans haute r&eacute;solution, th&egrave;me sombre) et Linux (paquets <code>.deb</code> amd64 et arm64, AppImage).</li>
+  <li><b>Tags ID3v2</b> : l'op&eacute;ration <a href="actions_fr.html">"Infos des tags mp3"</a> lit les tags ID3v2.2, 2.3 et 2.4 en plus de l'ID3v1. Les valeurs ID3v2 sont utilis&eacute;es en priorit&eacute;.</li>
+  <li><b>Compteur dans l'op&eacute;ration EXIF</b> : l'op&eacute;ration <a href="actions_fr.html">"Infos EXIF"</a> a un tag <code>%num%</code> avec les m&ecirc;mes r&eacute;glages que l'&eacute;num&eacute;ration (d&eacute;part, chiffres, incr&eacute;ment, retour au d&eacute;part dans chaque dossier), voir <a href="format_fr.html">formatage de cha&icirc;nes</a>.</li>
+  <li><b>Menu contextuel de l'Explorateur Windows</b> : <i>Options</i> &gt; <i>Fichiers &amp; Dossiers</i> ajoute "Ajouter &agrave; Ant Renamer Qt" au menu du clic droit sur les fichiers et dossiers. Tout ce que vous s&eacute;lectionnez est envoy&eacute; dans la fen&ecirc;tre d&eacute;j&agrave; ouverte. Sous Windows 11, l'entr&eacute;e est dans "Afficher plus d'options" (ou Maj+F10).</li>
+  <li><b>Mode portable</b> : les r&eacute;glages sont enregistr&eacute;s dans le fichier <code>antrenamer-qt.ini</code>. Quand ce fichier est &agrave; c&ocirc;t&eacute; du programme, tout reste dans ce dossier (cl&eacute; USB, aucune trace sur l'ordinateur). Sinon il est dans votre profil utilisateur. La case des <i>Options</i> &gt; <i>Langue</i> d&eacute;place les r&eacute;glages de l'un &agrave; l'autre. Les anciens r&eacute;glages <code>Renamer.xml</code> ne sont pas import&eacute;s.</li>
+  <li><b>Plus d'options</b> : jeu d'ic&ocirc;nes (Scrows, Windows XP, Windows XP Large), police forc&eacute;e, largeur automatique des colonnes, appliqu&eacute;s imm&eacute;diatement ; les barres d'outils sont d&eacute;pla&ccedil;ables ; la liste des langues indique version, auteurs et commentaires.</li>
+  <li><b>Aide int&eacute;gr&eacute;e</b> : cette fen&ecirc;tre, avec la table des mati&egrave;res de l'aide d'origine.</li>
+  <li><b>Ligne de commande</b> : voir <a href="params_fr.html">param&egrave;tres en ligne de commande</a> (<code>--shell</code>, <code>--install-shell</code>, <code>--remove-shell</code>).</li>
+</ul>
+
+<h2>Corrections par rapport &agrave; la 2.13</h2>
+<ul>
+  <li>Un tag ID3 ou EXIF vide reste vide. Avant, il &eacute;tait remplac&eacute; par un nombre, donc <code>$if(%title%,...)</code> &eacute;tait toujours vrai.</li>
+  <li>Un <code>$</code> isol&eacute; dans un masque ne bloque plus le renommage.</li>
+  <li>Le r&eacute;glage "Retour &agrave; la valeur de d&eacute;marrage" de l'&eacute;num&eacute;ration est correctement enregistr&eacute; dans les jobs.</li>
+  <li>L'aper&ccedil;u des op&eacute;rations date, mp3 et EXIF fonctionne quand elles suivent une autre op&eacute;ration.</li>
+  <li>Les noms contenant des caract&egrave;res hors de la page de code du syst&egrave;me ne sont plus abim&eacute;s par l'op&eacute;ration "Date et heure".</li>
+</ul>
+
+<h2>Petites diff&eacute;rences &agrave; conna&icirc;tre</h2>
+<ul>
+  <li>Les expressions rationnelles utilisent le moteur PCRE2 (Qt) &agrave; la place de TRegExpr : des constructions tr&egrave;s inhabituelles peuvent se comporter diff&eacute;remment.</li>
+  <li>Le lecteur EXIF conna&icirc;t une quarantaine de tags courants, pas toute la liste du programme d'origine.</li>
+</ul>
+
+<h2>Assistance</h2>
+<p>L'assistance pour Ant Renamer Qt se fait sur GitHub : <a href="https://github.com/morfredus/antRenamer-qt/">github.com/morfredus/antRenamer-qt</a></p>
+<ul>
+  <li><b>Issues</b> : pour signaler un bug ou demander une fonction. Indiquez la version du programme (fen&ecirc;tre <i>&Agrave; propos</i>), votre syst&egrave;me (Windows ou Linux, version) et les &eacute;tapes pour reproduire le probl&egrave;me.</li>
+  <li><b>Discussions</b> : pour les questions, l'aide et les id&eacute;es.</li>
+</ul>
+<p>Merci de ne pas signaler les probl&egrave;mes d'Ant Renamer Qt &agrave; l'auteur du programme d'origine : Ant Renamer 2.x est support&eacute; par son auteur sur <a href="https://www.antp.be/software/renamer/fr">www.antp.be/software/renamer/fr</a>.</p>
+</body>
+</html>
