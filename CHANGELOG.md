@@ -10,6 +10,26 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 Changes committed but not yet published; they get a version number and date when a release is made.
 
+## [3.0.0-rc.8] - 2026-10-14
+
+### Added
+
+- Modern interface layout, selectable in Options > Display ("Modern interface layout", used at the next start; the classic layout stays the default): one main bar with page tabs showing the number of files and planned actions, a prominent Go button, and the Undo, Options, Help, On top, About and Exit buttons; each page has its own slim toolbar; the Files list shows the new name (Preview) column by default; on the Actions page the plan is always visible next to the editor with a fixed preview strip under both. Uses the Fusion style and the system palette (light or dark). The modern layout keeps its own window size, columns and splitter settings. English and French texts.
+- Modern layout: edit an action of the plan in place. Double-click an action of the plan to load its settings into the editor (all 14 action types), change them, then click Modify to replace the action (same position in the batch). The "On top", "About" and "Exit" buttons are visible in the main bar again instead of a menu.
+- Modern layout: while an action is being edited, a bar under the editor offers "Validate the modification" and "Cancel the modification" (in addition to the Modify button of the toolbar).
+- Modern layout: "Pages layout" option (Options > Display, used at the next start): tabs (default), or a single screen with Files, Actions and Log all visible, either in bands (stacked) or in columns (Files on the left, Actions over Log on the right). The splitters are movable, each pane has a minimum size, the sizes and the hidden panes are remembered per arrangement, and the columns give way to bands when the window gets narrow (below about 900 px). In a single screen the page buttons of the main bar show or hide a pane. English and French texts. Idea: Antoine Potten.
+- Test `panel` (CTest, no window): loads every action type into the editor and reads it back (`ActionPanel::setFromAction` / `makeAction`); it fails when an action gets a new setting or a new type that the editor does not handle.
+- Help: new chapter "Modern interface layout" (English, French; English text in the Croatian and Tamil help) with screenshots of the three page layouts and the editing of an action of the batch; the news page, the Options, Files, Batch and Main window pages and the table of contents mention the modern layout and the natural sort.
+
+### Changed
+
+- Internal: the toolbars of the classic and the modern layouts are now built from one description (`MainWindow::createToolbars`), so a button is added once for both layouts. No visible change.
+
+### Fixed
+
+- Translations: a text that appears twice in the language files with two different translations (for example the caption "Ajouter" and the hint "Ajouter au job" of the batch button) got one or the other at random, depending on the run (the captions and tooltips of the classic layout too). The choice is now fixed (the caption wins).
+- Modern layout: the title of the "Batch contents" and "Preview" boxes was glued to the left edge of the box.
+
 ## [3.0.0-rc.7] - 2026-10-14
 
 ### Added

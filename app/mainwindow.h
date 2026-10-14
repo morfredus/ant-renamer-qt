@@ -5,11 +5,13 @@
 #include "ren_files.h"
 
 #include <QMainWindow>
+#include <QPersistentModelIndex>
 #include <QThread>
 #include <QTreeWidget>
 #include <vector>
 
 class QAction;
+class QFrame;
 class QGroupBox;
 class QLabel;
 class QListWidget;
@@ -73,6 +75,7 @@ public:
 
 protected:
     void closeEvent(QCloseEvent*) override;
+    void resizeEvent(QResizeEvent*) override;
     void dragEnterEvent(QDragEnterEvent*) override;
     void dropEvent(QDropEvent*) override;
 
@@ -83,6 +86,21 @@ private:
     QAction* makeAction(const QString& text, const QString& hint, int icon, const QKeySequence& key = {});
     void createActions();
     void createToolbars();
+    // Modern layout, "single screen": the three pages (bar + content) side by side in splitters instead of tabs.
+    void buildSingleScreen();
+    void arrangeSingle(int mode);   // 1 bands, 2 columns
+    void saveSingleState();
+    void setPaneVisible(int page, bool on);
+    int pageLayout_ = 0;            // option: 0 tabs, 1 bands, 2 columns
+    bool singleScreen_ = false;
+    int singleMode_ = 1;            // arrangement shown now (columns give way to bands in a narrow window)
+    QWidget* panes_[3] = {};
+    bool paneVisible_[3] = {true, true, true};
+    QWidget* singleHost_ = nullptr;
+    QSplitter *outer_ = nullptr, *inner_ = nullptr;
+    QByteArray stBands_, stColsOuter_, stColsInner_;
+    void updateTabCounts();
+    bool newUi_ = false;  // modern layout (option, read at start)
     void createPages();
     void createStatusBar();
     void loadSettings();
@@ -115,6 +133,14 @@ private:
     void addToBatch();
     void addBatchItem(ren::Action* a);
     void removeSelectedActions();
+    void editBatchItem(QTreeWidgetItem* item);  // load an action of the plan into the editor
+    void updateBatchItem();                     // replace the selected action with the editor settings
+    void applyEditorTo(QTreeWidgetItem* item);
+    void validateEdit();                        // "Validate the modification" of the editor zone
+    void endEdit();
+    QFrame* editBar_ = nullptr;                 // modern layout: shown under the editor while an action is edited
+    QLabel* editLabel_ = nullptr;
+    QPersistentModelIndex editIndex_;           // the plan row being edited (invalid once it is removed)
     void clearBatch();
     void renumberActions();
     void renumberBatchView();
@@ -168,7 +194,7 @@ private:
     QAction *aGo_, *aStop_, *aUndo_, *aOnTop_, *aOptions_, *aHelp_, *aAbout_, *aExit_;
     QAction *aTab_[3];
     QAction *aAddFiles_, *aAddFolders_, *aRemoveSel_, *aRemoveAll_, *aRemoveDead_, *aPreview_;
-    QAction *aBatchAdd_, *aBatchRemoveSel_, *aBatchClear_, *aBatchOpen_, *aBatchSave_;
+    QAction *aBatchAdd_, *aBatchEdit_, *aBatchRemoveSel_, *aBatchClear_, *aBatchOpen_, *aBatchSave_;
     QAction *aLogFilter_, *aLogOk_, *aLogError_, *aLogNot_, *aLogClear_, *aLogSave_, *aLogCopy_;
     QAction *aUp_, *aDown_, *aTop_, *aBottom_;
     QAction *aSelAll_, *aSelNone_, *aSelInvert_, *aUnsort_;

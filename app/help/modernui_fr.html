@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Aide pour Ant Renamer Qt</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="main.css" type="text/css" />
+</head>
+<body>
+<h1>Disposition moderne de l'interface</h1>
+<p>Ce chapitre est propre &#224; Ant Renamer Qt. En plus de la disposition classique d&#233;crite dans le reste de cette aide, le programme peut afficher sa fen&#234;tre principale avec une
+  disposition moderne : les m&#234;mes fonctions et le m&#234;me moteur de renommage, avec une autre pr&#233;sentation. La disposition classique reste celle par d&#233;faut.</p>
+
+<h2 id="enable">L'activer</h2>
+<p>Ouvrez la <a href="options_fr.html#display">fen&#234;tre des options</a>, page <i>Affichage</i> :</p>
+<ul>
+  <li><span class="optname">Disposition moderne de l'interface (prise en compte au prochain d&#233;marrage)</span> : affiche la disposition moderne &#224; la place de la classique.</li>
+  <li><span class="optname">Disposition des pages (interface moderne)</span> : la fa&#231;on dont les trois pages (Fichiers, Op&#233;rations, Journal) sont arrang&#233;es : <i>Onglets</i>,
+    <i>&#201;cran unique, en bandes</i> ou <i>&#201;cran unique, en colonnes</i>, voir <a href="#layouts">ci-dessous</a>. Ce choix n'est disponible que si la disposition moderne est activ&#233;e.</li>
+</ul>
+<p>Les changements sont pris en compte au prochain d&#233;marrage du programme. La disposition moderne garde sa propre taille de fen&#234;tre, ses largeurs de colonnes et la position de ses
+  s&#233;parateurs : la disposition classique n'est pas affect&#233;e, vous pouvez y revenir &#224; tout moment.</p>
+
+<h2 id="bar">Barre principale et barres des pages</h2>
+<p>La barre principale, en haut de la fen&#234;tre, contient les trois boutons de pages (<i>Fichiers</i>, <i>Op&#233;rations</i>, <i>Journal</i>), qui indiquent le nombre de fichiers de la liste
+  et le nombre d'op&#233;rations planifi&#233;es, par exemple &#171; Fichiers (100) &#187; et &#171; Op&#233;rations (2) &#187;. &#192; droite se trouvent le bouton <i>D&#233;marrer</i> (le seul en couleur), <i>Arr&#234;ter</i>,
+  <i>Annuler</i>, <i>Options</i>, <i>Aide</i>, <i>Toujours au premier plan</i>, <i>&#192; propos</i> et <i>Quitter</i>.</p>
+<p>Les autres boutons ne sont plus dans la barre principale : chaque page a sa propre barre d'outils fine, en haut de la page (ajout et retrait de fichiers pour la page Fichiers, les
+  commandes du job pour la page Op&#233;rations, le filtre et les commandes du journal pour la page Journal). Les boutons qui d&#233;placent les &#233;l&#233;ments sont &#224; droite des barres des pages Fichiers
+  et Op&#233;rations. Les barres d'outils de la disposition moderne ne sont pas d&#233;pla&#231;ables. Les raccourcis clavier sont les m&#234;mes que dans la disposition classique.</p>
+
+<h2 id="layouts">Disposition des pages</h2>
+<h3>Onglets</h3>
+<p>Une page &#224; la fois, comme dans la disposition classique, avec le nouveau style.</p>
+<p><img src="img/modern_tabs_fr.png" alt="Disposition moderne avec onglets" width="580" height="379" /></p>
+<h3>&#201;cran unique, en bandes</h3>
+<p>Les trois pages sont affich&#233;es ensemble, les unes au-dessus des autres : les fichiers en haut, les op&#233;rations au milieu, le journal en bas.</p>
+<p><img src="img/modern_bands_fr.png" alt="&#201;cran unique, en bandes" width="580" height="362" /></p>
+<h3>&#201;cran unique, en colonnes</h3>
+<p>Les fichiers &#224; gauche, les op&#233;rations &#224; droite au-dessus du journal. Cette disposition convient aux &#233;crans larges.</p>
+<p><img src="img/modern_columns_fr.png" alt="&#201;cran unique, en colonnes" width="580" height="329" /></p>
+<p>Dans les deux dispositions en &#233;cran unique :</p>
+<ul>
+  <li>Les volets sont s&#233;par&#233;s par des s&#233;parateurs que vous pouvez faire glisser. Chaque volet a une taille minimale. Les tailles, et les volets que vous avez masqu&#233;s, sont m&#233;moris&#233;s pour chaque disposition.</li>
+  <li>Les boutons de pages de la barre principale (et Ctrl+1, Ctrl+2, Ctrl+3) affichent ou masquent un volet au lieu de changer de page. Les actions qui ont besoin d'afficher une page, comme le
+    journal au d&#233;but du renommage, s'assurent que son volet est visible.</li>
+  <li>Les boutons qui d&#233;placent les &#233;l&#233;ments (haut, bas, d&#233;but, fin) agissent sur la liste qui a le focus du clavier : la liste des fichiers ou la liste du job.</li>
+  <li>La disposition en colonnes demande de la place : quand la fen&#234;tre est plus &#233;troite qu'environ 900 pixels, le programme passe en bandes, et revient aux colonnes quand la
+    fen&#234;tre est de nouveau assez large (environ 960 pixels).</li>
+</ul>
+
+<h2 id="files">La page Fichiers</h2>
+<p>La liste affiche le nom actuel, le nouveau nom (colonne <i>Aper&#231;u</i>) et le dossier. La colonne <i>Aper&#231;u</i> est visible par d&#233;faut ; comme dans la disposition classique, elle est
+  remplie par le bouton <img src="img/preview.png" alt="Actualiser l'aper&#231;u" /> &#171; Actualiser l'aper&#231;u &#187; (F5). Les colonnes peuvent toujours &#234;tre affich&#233;es, masqu&#233;es, d&#233;plac&#233;es et redimensionn&#233;es
+  depuis le menu des en-t&#234;tes.</p>
+
+<h2 id="edit">Modifier une op&#233;ration du job</h2>
+<p>Dans la disposition classique, une op&#233;ration ne peut plus &#234;tre modifi&#233;e apr&#232;s avoir &#233;t&#233; ajout&#233;e au <a href="batch_fr.html">job</a>. Dans la disposition moderne, c'est possible, pour tous les types d'op&#233;rations :</p>
+<ol>
+  <li>Double-cliquez sur l'op&#233;ration dans la liste &#171; Contenu du job &#187;. Son type et ses param&#232;tres sont charg&#233;s dans l'&#233;diteur, et la barre &#171; Modification de l'action N &#187; appara&#238;t sous l'&#233;diteur.</li>
+  <li>Changez les param&#232;tres.</li>
+  <li>Cliquez sur <i>Valider la modification</i> (ou sur le bouton <i>Modifier</i> de la barre d'outils des op&#233;rations) pour remplacer l'op&#233;ration. Elle garde sa position dans le job.
+    Cliquez sur <i>Annuler la modification</i> pour oublier les changements.</li>
+</ol>
+<p>Le bouton <i>Modifier</i> fonctionne aussi sans le double-clic : il remplace l'op&#233;ration s&#233;lectionn&#233;e de la liste par les r&#233;glages qui sont actuellement dans l'&#233;diteur.
+  La barre de modification dispara&#238;t d'elle-m&#234;me si l'op&#233;ration est retir&#233;e ou d&#233;plac&#233;e entre-temps.</p>
+
+<h2 id="diff">Autres diff&#233;rences avec la disposition classique</h2>
+<ul>
+  <li>La liste &#171; Contenu du job &#187; est toujours visible &#224; c&#244;t&#233; de l'&#233;diteur, et la bande &#171; Aper&#231;u du fichier s&#233;lectionn&#233; &#187; est toujours affich&#233;e.</li>
+  <li>Le texte des boutons et les raccourcis sont les m&#234;mes ; seule leur place change.</li>
+  <li>Le style suit les couleurs de votre syst&#232;me (th&#232;me clair ou sombre).</li>
+</ul>
+</body>
+</html>

@@ -24,6 +24,8 @@ struct AppOptions {
     bool autoComplete = false;
     // Files & folders
     bool dragNoAsk = false;
+    int pageLayout = 0;          // modern layout: 0 tabs, 1 single screen in bands, 2 single screen in columns
+    bool newUi = false;          // modern layout (taken into account at the next start)
     bool naturalSort = true;     // files list sort: natural (2 < 10) instead of alphabetical
     bool launchFile = false;     // double click opens the file
     bool addFiles = true, addFolders = false, recursive = true;  // last "add folders" choices

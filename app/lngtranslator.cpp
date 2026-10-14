@@ -165,7 +165,12 @@ bool LngTranslator::loadLanguage(const QString& dir, const QString& language) {
     const auto en = parse(readLng(QDir(dir).filePath(u"English.lng"_s)));
     const auto tr = parse(readLng(QDir(dir).filePath(language + u".lng"_s)));
     if (en.isEmpty() || tr.isEmpty()) return false;
-    for (auto it = en.constBegin(); it != en.constEnd(); ++it) {
+    // QHash order changes from one run to the next, and the same English text can be in several places (the caption and
+    // the hint of a button): a fixed order makes the translation of such a text the same every time (caption first).
+    QStringList keys = en.keys();
+    keys.sort();
+    for (const QString& enKey : keys) {
+        const auto it = en.constFind(enKey);
         const auto t = tr.constFind(it.key());
         if (t == tr.constEnd() || it.value().isEmpty() || t.value().isEmpty()) continue;
         const QString key = it.key();
@@ -207,6 +212,22 @@ QString LngTranslator::translate(const char* /*context*/, const char* sourceText
             {u"History"_s, u"Historique"_s},
             {u"Natural sort in files list (2 before 10) instead of alphabetical"_s,
              u"Tri naturel dans la liste des fichiers (2 avant 10) au lieu du tri alphabétique"_s},
+            {u"Modern interface layout (used at the next start)"_s,
+             u"Disposition moderne de l'interface (prise en compte au prochain démarrage)"_s},
+            {u"The new interface is used the next time the program starts."_s,
+             u"La nouvelle interface sera utilisée au prochain démarrage du programme."_s},
+            {u"Modify"_s, u"Modifier"_s},
+            {u"Pages layout (modern interface):"_s, u"Disposition des pages (interface moderne) :"_s},
+            {u"Tabs"_s, u"Onglets"_s},
+            {u"Single screen, in bands"_s, u"Écran unique, en bandes"_s},
+            {u"Single screen, in columns"_s, u"Écran unique, en colonnes"_s},
+            {u"Validate the modification"_s, u"Valider la modification"_s},
+            {u"Cancel the modification"_s, u"Annuler la modification"_s},
+            {u"Modification of action %1"_s, u"Modification de l'action %1"_s},
+            {u"Replace the selected action with the current settings (double-click an action to load its settings)"_s,
+             u"Remplacer l'action sélectionnée par les réglages actuels (double-cliquez sur une action pour charger ses réglages)"_s},
+            {u"Settings loaded: change them, then validate the modification"_s,
+             u"Réglages chargés : modifiez-les, puis validez la modification"_s},
             {u"Windows Explorer"_s, u"Explorateur Windows"_s},
             {u"Add to Ant Renamer Qt"_s, u"Ajouter à Ant Renamer Qt"_s},
             {u"Add \"Add to Ant Renamer Qt\" to the context menu of files and folders"_s,

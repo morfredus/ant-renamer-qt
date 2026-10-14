@@ -36,6 +36,7 @@ public:
     void selectAction(int index);
     // A new action configured from the current controls; null if no type is selected.
     std::unique_ptr<ren::Action> makeAction(bool updateHistory);
+    void setFromAction(const ren::Action& a);  // reverse of makeAction(): edit an action of the batch
     void loadState();
     void saveState() const;
     void applyOptions();  // history size / autocomplete

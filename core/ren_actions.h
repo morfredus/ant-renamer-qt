@@ -259,6 +259,10 @@ public:
     size_t size() const { return items_.size(); }
     Action& at(size_t i) { return *items_[i]; }
     void clear() { items_.clear(); }
+    void replace(size_t i, std::unique_ptr<Action> a) {  // edit in place: same position in the batch
+        a->position = int(i);
+        items_[i] = std::move(a);
+    }
     void remove(size_t i) {
         items_.erase(items_.begin() + i);
         for (size_t k = 0; k < items_.size(); ++k) items_[k]->position = int(k);

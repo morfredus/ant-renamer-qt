@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maquette - page Actions</title>
+<style>
+:root {
+  --bg: #f3f4f6; --panel: #ffffff; --line: #d9dce1; --text: #1f2328; --muted: #6a717b;
+  --accent: #0b6bcb; --accent-text: #ffffff; --row-alt: #f8f9fb; --sel: #dcebfb; --ok: #1a7f37; --change: #0b6bcb;
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1b1d21; --panel: #25282d; --line: #3a3e45; --text: #e6e8eb; --muted: #9aa1ab;
+          --accent: #3d8fe8; --accent-text: #0d1117; --row-alt: #2a2d33; --sel: #23405f; --ok: #56c271; --change: #6cb1ff; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.4 "Segoe UI", system-ui, sans-serif; }
+.note { padding: 8px 16px; font-size: 12px; color: var(--muted); }
+.win { max-width: 1040px; margin: 8px auto 24px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+/* main bar */
+.top { display: flex; align-items: center; gap: 4px; padding: 6px 10px 0; border-bottom: 1px solid var(--line); background: var(--bg); }
+.tab { padding: 8px 14px; border: 0; background: none; color: var(--muted); font: inherit; border-bottom: 2px solid transparent; cursor: pointer; }
+.tab b { font-weight: 600; }
+.tab.on { color: var(--text); border-bottom-color: var(--accent); }
+.badge { display: inline-block; min-width: 18px; padding: 0 6px; margin-left: 4px; border-radius: 9px; background: var(--line); font-size: 11px; text-align: center; }
+.spacer { flex: 1; }
+.go { background: var(--accent); color: var(--accent-text); border: 0; border-radius: var(--radius); padding: 6px 16px; font: inherit; font-weight: 600; cursor: pointer; margin: 0 6px 6px; }
+.ic { width: 30px; height: 30px; border: 0; background: none; color: var(--text); border-radius: var(--radius); cursor: pointer; font-size: 15px; margin-bottom: 6px; }
+.ic:hover, .tb button:hover { background: var(--sel); }
+/* page toolbar */
+.tb { display: flex; align-items: center; gap: 2px; padding: 6px 10px; border-bottom: 1px solid var(--line); }
+.tb button { border: 0; background: none; color: var(--text); font: inherit; padding: 5px 9px; border-radius: var(--radius); cursor: pointer; }
+.tb .sep { width: 1px; height: 18px; background: var(--line); margin: 0 6px; }
+/* body */
+.body { display: grid; grid-template-columns: 300px 1fr; min-height: 330px; }
+.plan { border-right: 1px solid var(--line); display: flex; flex-direction: column; }
+.plan h3, .edit h3 { margin: 0; padding: 10px 14px 6px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.plan ol { list-style: none; margin: 0; padding: 0 6px; flex: 1; }
+.plan li { display: flex; gap: 8px; align-items: baseline; padding: 8px 8px; border-radius: var(--radius); cursor: pointer; }
+.plan li:hover { background: var(--row-alt); }
+.plan li.on { background: var(--sel); }
+.plan li .n { color: var(--muted); width: 14px; text-align: right; }
+.plan li .s { color: var(--muted); font-size: 12px; display: block; }
+.add { position: relative; padding: 10px; }
+.add > button { width: 100%; padding: 8px; border: 1px dashed var(--line); background: none; color: var(--accent); border-radius: var(--radius); font: inherit; cursor: pointer; }
+.menu { display: none; position: absolute; left: 10px; right: 10px; bottom: 52px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 6px 20px rgba(0,0,0,.18); padding: 4px; z-index: 5; }
+.menu.open { display: block; }
+.menu div { padding: 6px 10px; border-radius: 4px; cursor: pointer; }
+.menu div:hover { background: var(--sel); }
+.menu small { display: block; padding: 6px 10px 2px; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
+.edit { padding-bottom: 14px; }
+.form { padding: 4px 18px; display: grid; gap: 12px; max-width: 520px; }
+label.f { display: grid; gap: 4px; font-size: 13px; }
+input[type=text], input[type=number], select { font: inherit; padding: 6px 8px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--text); width: 100%; }
+input:focus, select:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.chk { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; }
+.chk label { display: flex; gap: 6px; align-items: center; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+/* preview strip */
+.preview { border-top: 1px solid var(--line); background: var(--bg); padding: 10px 14px; }
+.preview h3 { margin: 0 0 6px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.pv { display: grid; grid-template-columns: 1fr 24px 1fr auto; gap: 8px; align-items: center; padding: 3px 0; font-family: "Cascadia Mono", Consolas, monospace; font-size: 13px; }
+.pv .old { color: var(--muted); }
+.pv .new { color: var(--change); font-weight: 600; }
+.pv .same { color: var(--muted); }
+.pv .cnt { color: var(--muted); font: 12px "Segoe UI", sans-serif; }
+@media (max-width: 720px) { .body { grid-template-columns: 1fr; } .plan { border-right: 0; border-bottom: 1px solid var(--line); } .row2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="note">Maquette de la proposition (docs/proposals/ui-modernisation.md, section 3.4) : l'aperçu se met à jour quand vous changez les réglages. Aucune donnée n'est enregistrée.</div>
+
+<div class="win">
+  <div class="top">
+    <button class="tab">Fichiers <span class="badge">5</span></button>
+    <button class="tab on"><b>Actions</b> <span class="badge" id="cnt">3</span></button>
+    <button class="tab">Journal</button>
+    <span class="spacer"></span>
+    <button class="go" title="F9">▶ Lancer</button>
+    <button class="ic" title="Annuler (F12)">⟲</button>
+    <button class="ic" title="Options (F10)">⚙</button>
+    <button class="ic" title="Aide (F1)">?</button>
+    <button class="ic" title="Plus : au premier plan, quitter">⋯</button>
+  </div>
+  <div class="tb">
+    <button>＋ Ajouter</button><button>Retirer</button><button>Vider</button>
+    <span class="sep"></span>
+    <button>Ouvrir ▾</button><button>Enregistrer</button>
+    <span class="spacer"></span>
+    <button title="Monter">↑</button><button title="Descendre">↓</button>
+  </div>
+  <div class="body">
+    <section class="plan">
+      <h3>Plan (<span id="cnt2">3</span> actions)</h3>
+      <ol id="plan"></ol>
+      <div class="add">
+        <div class="menu" id="menu">
+          <small>Texte</small><div data-add="replace">Remplacer</div>
+          <small>Numérotation</small><div data-add="enum">Énumérer</div>
+          <small>Casse</small><div data-add="case">Changer la casse</div>
+        </div>
+        <button id="addBtn">＋ Ajouter une action ▾</button>
+      </div>
+    </section>
+    <section class="edit">
+      <h3 id="editTitle">Éditeur</h3>
+      <div class="form" id="form"></div>
+    </section>
+  </div>
+  <div class="preview">
+    <h3>Aperçu</h3>
+    <div id="pv"></div>
+  </div>
+</div>
+
+<script>
+const files = ["IMG_0042.JPG", "IMG_0043.JPG", "IMG_0107.JPG", "notes.txt", "photo_final.png"];
+let plan = [
+  { type: "replace", search: "IMG_", repl: "photo_", cs: false },
+  { type: "enum", start: 1, step: 1, digits: 3 },
+  { type: "case", mode: "lower" },
+];
+let sel = 0;
+const NAMES = { replace: "Remplacer", enum: "Énumérer", case: "Changer la casse" };
+const $ = s => document.querySelector(s);
+const split = f => { const i = f.lastIndexOf("."); return i > 0 ? [f.slice(0, i), f.slice(i)] : [f, ""]; };
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function summary(a) {
+  if (a.type === "replace") return `« ${a.search} » → « ${a.repl} »`;
+  if (a.type === "enum") return `à partir de ${a.start}, ${a.digits} chiffres`;
+  return { lower: "minuscules", upper: "MAJUSCULES", title: "Première Lettre" }[a.mode];
+}
+function apply(a, f, i) {
+  let [n, e] = split(f);
+  if (a.type === "replace" && a.search) n = n.split(a.search).join(a.repl);   // ponytail: mockup only, plain replace
+  if (a.type === "enum") n = n + "_" + String(a.start + i * a.step).padStart(a.digits, "0");
+  if (a.type === "case") {
+    const g = s => a.mode === "lower" ? s.toLowerCase() : a.mode === "upper" ? s.toUpperCase() : s.toLowerCase().replace(/(^|[ _-])(\p{L})/gu, (m, p, c) => p + c.toUpperCase());
+    n = g(n); e = g(e);
+  }
+  return n + e;
+}
+function renderPlan() {
+  $("#plan").innerHTML = plan.map((a, i) =>
+    `<li data-i="${i}" class="${i === sel ? "on" : ""}"><span class="n">${i + 1}</span><span><b>${NAMES[a.type]}</b><span class="s">${esc(summary(a))}</span></span></li>`).join("");
+  $("#cnt").textContent = $("#cnt2").textContent = plan.length;
+}
+function renderForm() {
+  const a = plan[sel], f = $("#form");
+  if (!a) { f.innerHTML = '<p style="color:var(--muted)">Aucune action. Utilisez « Ajouter une action ».</p>'; $("#editTitle").textContent = "Éditeur"; return; }
+  $("#editTitle").textContent = "Éditeur : " + NAMES[a.type];
+  if (a.type === "replace") f.innerHTML = `
+    <label class="f">Rechercher<input type="text" data-k="search" value="${esc(a.search)}"></label>
+    <label class="f">Remplacer par<input type="text" data-k="repl" value="${esc(a.repl)}"></label>
+    <div class="chk"><label><input type="checkbox" data-k="cs" ${a.cs ? "checked" : ""}> Respecter la casse</label>
+    <label><input type="checkbox" disabled> Expression régulière</label></div>`;
+  if (a.type === "enum") f.innerHTML = `<div class="row2">
+    <label class="f">Début<input type="number" data-k="start" value="${a.start}"></label>
+    <label class="f">Pas<input type="number" data-k="step" value="${a.step}"></label>
+    <label class="f">Chiffres<input type="number" min="1" max="8" data-k="digits" value="${a.digits}"></label></div>`;
+  if (a.type === "case") f.innerHTML = `<label class="f">Mettre le nom en
+    <select data-k="mode"><option value="lower">minuscules</option><option value="upper">MAJUSCULES</option><option value="title">Première Lettre De Chaque Mot</option></select></label>`;
+  const s = f.querySelector("select"); if (s) s.value = a.mode;
+}
+function renderPreview() {
+  $("#pv").innerHTML = files.map((f, i) => {
+    const out = plan.reduce((n, a) => apply(a, n, i), f);
+    const changed = out !== f;
+    return `<div class="pv"><span class="old">${esc(f)}</span><span>→</span><span class="${changed ? "new" : "same"}">${esc(out)}</span><span class="cnt">${i + 1}/${files.length}</span></div>`;
+  }).join("");
+}
+function all() { renderPlan(); renderForm(); renderPreview(); }
+
+$("#plan").addEventListener("click", e => { const li = e.target.closest("li"); if (li) { sel = +li.dataset.i; all(); } });
+$("#form").addEventListener("input", e => {
+  const k = e.target.dataset.k; if (!k) return;
+  const a = plan[sel];
+  a[k] = e.target.type === "checkbox" ? e.target.checked : e.target.type === "number" ? (+e.target.value || 0) : e.target.value;
+  renderPlan(); renderPreview();
+});
+$("#addBtn").addEventListener("click", e => { e.stopPropagation(); $("#menu").classList.toggle("open"); });
+document.addEventListener("click", () => $("#menu").classList.remove("open"));
+$("#menu").addEventListener("click", e => {
+  const t = e.target.dataset.add; if (!t) return;
+  plan.push({ replace: { type: "replace", search: "", repl: "", cs: false }, enum: { type: "enum", start: 1, step: 1, digits: 3 }, case: { type: "case", mode: "lower" } }[t]);
+  sel = plan.length - 1; all();
+});
+all();
+</script>
+</body>
+</html>

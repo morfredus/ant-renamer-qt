@@ -14,6 +14,13 @@ if(MSVC)
     target_compile_options(antrenamer-qt PRIVATE /utf-8)
 endif()
 
+# Test d'aller-retour du panneau d'actions (charger une action dans l'editeur puis la relire), sans fenetre.
+# Echoue si un champ ou un type d'action est ajoute sans mettre a jour ActionPanel::setFromAction.
+add_executable(test_panel ../tests/test_panel.cpp actionpanel.cpp appsettings.cpp lngtranslator.cpp helpwindow.cpp)
+target_include_directories(test_panel PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(test_panel PRIVATE rencore Qt6::Widgets Qt6::Network)
+add_test(NAME panel COMMAND test_panel)
+
 # Fichiers de langue et aide de l'original, lus a l'execution depuis <exe>/Languages et <exe>/help
 add_custom_command(TARGET antrenamer-qt POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Languages $<TARGET_FILE_DIR:antrenamer-qt>/Languages

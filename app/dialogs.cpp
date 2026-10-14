@@ -111,9 +111,10 @@ bool DragDropDialog::dontAskAgain() const { return notAgain_->isChecked(); }
 
 // --- Options ---------------------------------------------------------------------------------------------
 struct OptionsDialog::Ui {
-    QCheckBox *realtime, *resizeCols, *icons, *forceFont, *autoComplete, *dragNoAsk, *launch, *naturalSort, *forceDir, *detectAbs,
+    QCheckBox *realtime, *resizeCols, *icons, *forceFont, *autoComplete, *dragNoAsk, *launch, *naturalSort, *newUi, *forceDir, *detectAbs,
         *copy, *genLog, *folderExt, *dst, *portable, *shellMenu;
     QCheckBox *dropFiles, *dropFolders, *dropRecursive;
+    QComboBox* pageLayout = nullptr;
     QSpinBox *historyMax, *fontSize;
     QFontComboBox* font;
     QComboBox* iconSet;
@@ -157,6 +158,18 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         ui_->realtime = box(l, tr("Real-time update when renaming files"), o.realtime);
         ui_->resizeCols = box(l, tr("Auto-resize columns of Files list"), o.resizeCols);
         ui_->icons = box(l, tr("Show icons in files list, based on file extension"), o.fileIcons);
+        ui_->newUi = box(l, tr("Modern interface layout (used at the next start)"), o.newUi);
+        auto* pl = new QHBoxLayout;
+        pl->setContentsMargins(20, 0, 0, 0);
+        pl->addWidget(new QLabel(tr("Pages layout (modern interface):")));
+        ui_->pageLayout = new QComboBox;
+        ui_->pageLayout->addItems({tr("Tabs"), tr("Single screen, in bands"), tr("Single screen, in columns")});
+        ui_->pageLayout->setCurrentIndex(qBound(0, o.pageLayout, 2));
+        ui_->pageLayout->setEnabled(o.newUi);
+        connect(ui_->newUi, &QCheckBox::toggled, ui_->pageLayout, &QWidget::setEnabled);
+        pl->addWidget(ui_->pageLayout);
+        pl->addStretch();
+        l->addLayout(pl);
 
         header(l, tr("Fonts"));
         ui_->forceFont = box(l, tr("Force the following font for controls that have to display special characters:"), o.forceFont);
@@ -322,6 +335,10 @@ void OptionsDialog::accept() {
         QMessageBox::warning(this, windowTitle(), tr("Could not change the Explorer context menu."));
 
     AppOptions& o = appOptions();
+    if (o.newUi != ui_->newUi->isChecked() || (ui_->newUi->isChecked() && o.pageLayout != ui_->pageLayout->currentIndex()))
+        QMessageBox::information(this, windowTitle(), tr("The new interface is used the next time the program starts."));
+    o.newUi = ui_->newUi->isChecked();
+    o.pageLayout = ui_->pageLayout->currentIndex();
     o.realtime = ui_->realtime->isChecked();
     o.resizeCols = ui_->resizeCols->isChecked();
     o.fileIcons = ui_->icons->isChecked();

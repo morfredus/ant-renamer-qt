@@ -26,6 +26,10 @@
 		</OBJECT>
 	<UL>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Modern interface layout">
+			<param name="Local" value="modernui_hr.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Datoteke">
 			<param name="Local" value="files_hr.html">
 			</OBJECT>

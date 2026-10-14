@@ -22,6 +22,10 @@
 		<param name="Local" value="main_fr.html">
 		</OBJECT>
 	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Disposition moderne de l&#39;interface">
+			<param name="Local" value="modernui_fr.html">
+			</OBJECT>
   	<LI> <OBJECT type="text/sitemap">
   		<param name="Name" value="Fichiers">
   		<param name="Local" value="files_fr.html">

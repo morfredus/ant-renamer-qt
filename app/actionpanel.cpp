@@ -666,6 +666,131 @@ std::unique_ptr<Action> ActionPanel::makeAction(bool updateHistory) {
     return act;
 }
 
+// Reverse of makeAction(): puts the settings of `act` back into the controls (to edit an action of the batch).
+void ActionPanel::setFromAction(const Action& act) {
+    W& w = *w_;
+    auto radio = [](std::vector<QRadioButton*>& r, int i) {
+        if (i >= 0 && i < int(r.size())) r[size_t(i)]->setChecked(true);
+    };
+    selectAction(int(act.type()));
+    switch (act.type()) {
+    case ActionType::ChangeExt: {
+        auto& a = static_cast<const ActionChangeExt&>(act);
+        w.extNew->setCurrentText(a.newExtension.startsWith(u'.') ? a.newExtension.mid(1) : a.newExtension);  // shown without the dot
+        w.extNoRepl->setChecked(a.noReplace);
+        break;
+    }
+    case ActionType::StringRepl: {
+        auto& a = static_cast<const ActionStringRepl&>(act);
+        w.srcSearch->setCurrentText(a.search);
+        w.srcRepl->setCurrentText(a.replace);
+        w.srAll->setChecked(a.all);
+        w.srCase->setChecked(a.caseSens);
+        w.srExt->setChecked(a.inclExt);
+        w.srOnlyExt->setChecked(a.onlyExt);
+        break;
+    }
+    case ActionType::MultstrRepl: {
+        auto& a = static_cast<const ActionMultstrRepl&>(act);
+        setName_->setCurrentText(a.setName);
+        setTableText(a.setChars);
+        w.msExt->setChecked(a.includeExt);
+        w.msCase->setChecked(a.caseSens);
+        break;
+    }
+    case ActionType::StringInsert: {
+        auto& a = static_cast<const ActionStringIns&>(act);
+        w.insStr->setCurrentText(a.newString);
+        w.insPos->setValue(a.pos);
+        radio(w.insDir, a.fromBegin ? 0 : 1);
+        w.insExt->setChecked(a.ext);
+        break;
+    }
+    case ActionType::MoveString: {
+        auto& a = static_cast<const ActionMoveStr&>(act);
+        w.mvFrom->setValue(a.fromPos);
+        radio(w.mvFrom_, a.fromBegin ? 0 : 1);
+        w.mvCount->setValue(a.count);
+        w.mvTo->setValue(a.toPos);
+        radio(w.mvTo_, a.toBegin ? 0 : 1);
+        break;
+    }
+    case ActionType::CharDel: {
+        auto& a = static_cast<const ActionCharDel&>(act);
+        w.delNb->setValue(a.nbChar);
+        radio(w.delWhere, a.afterString);
+        w.delPos->setValue(a.pos);
+        radio(w.delDir, a.fromBegin ? 0 : 1);
+        w.delStr->setCurrentText(a.str);
+        w.delExt->setChecked(a.ext);
+        break;
+    }
+    case ActionType::Enum: {
+        auto& a = static_cast<const ActionEnum&>(act);
+        w.enumMask->setCurrentText(a.mask);
+        w.enumStart->setValue(a.startAt);
+        w.enumDigits->setValue(a.digits);
+        w.enumIncr->setValue(a.increment);
+        w.enumRestart->setChecked(a.restart);
+        break;
+    }
+    case ActionType::MP3Tag: {
+        auto& a = static_cast<const ActionMP3&>(act);
+        w.mp3Mask->setCurrentText(a.mask);
+        w.mp3Two->setChecked(a.twoDigit);
+        break;
+    }
+    case ActionType::DateTime: {
+        auto& a = static_cast<const ActionDateTime&>(act);
+        w.dtMask->setCurrentText(a.mask);
+        w.dtSuffix->setChecked(a.addSuffix);
+        radio(w.dtWhich, a.whichDate == 0 ? 0 : 1);
+        w.dtOffset->setValue(a.offset);
+        break;
+    }
+    case ActionType::Random: {
+        auto& a = static_cast<const ActionRandom&>(act);
+        w.rndMask->setCurrentText(a.mask);
+        radio(w.rndMethod, a.method);
+        break;
+    }
+    case ActionType::Case: {
+        auto& a = static_cast<const ActionCase&>(act);
+        radio(w.caseType, a.caseType);
+        w.caseAfter->setCurrentText(a.afterChars);
+        w.caseLocale->setChecked(a.useLocale);
+        w.caseIncl->setChecked(a.includeExt);
+        w.caseOnly->setChecked(a.onlyExt);
+        break;
+    }
+    case ActionType::FromList: {
+        auto& a = static_cast<const ActionFromList&>(act);
+        listEdit_->setPlainText(a.listContents);
+        w.flAppend->setChecked(a.appendExt);
+        w.flOnlyExt->setChecked(a.onlyExt);
+        break;
+    }
+    case ActionType::Regexp: {
+        auto& a = static_cast<const ActionRegexp&>(act);
+        w.reExpr->setCurrentText(a.expr);
+        w.reRepl->setCurrentText(a.repl);
+        break;
+    }
+    case ActionType::Exif: {
+        auto& a = static_cast<const ActionExif&>(act);
+        w.exifMask->setCurrentText(a.mask);
+        w.exifOffset->setValue(a.offset);
+        w.exStart->setValue(a.numStart);
+        w.exDigits->setValue(a.numDigits);
+        w.exIncr->setValue(a.numIncr);
+        w.exRestart->setChecked(a.numRestart);
+        break;
+    }
+    default: break;
+    }
+    emit changed();
+}
+
 // --- persistence -----------------------------------------------------------------------------------
 void ActionPanel::loadState() {
     QSettings s = appSettings();

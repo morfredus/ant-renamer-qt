@@ -21,12 +21,14 @@
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QLabel>
+#include <QPushButton>
 #include <QListWidget>
 #include <QMenu>
 #include <QMessageBox>
 #include <QMimeData>
 #include <QProgressBar>
 #include <QCollator>
+#include <QScreen>
 #include <QSettings>
 #include <QSplitter>
 #include <QStackedWidget>
@@ -134,15 +136,52 @@ MainWindow::MainWindow() {
     resize(730, 500);
 
     appOptions().load();
+    newUi_ = appOptions().newUi;
+    pageLayout_ = newUi_ ? qBound(0, appOptions().pageLayout, 2) : 0;
+    singleScreen_ = pageLayout_ > 0;
+    singleMode_ = pageLayout_ == 2 ? 2 : 1;
+    if (newUi_) {
+        QApplication::setStyle(QStringLiteral("Fusion"));  // follows the system palette, light or dark
+        const QSize room = QGuiApplication::primaryScreen()->availableGeometry().size() - QSize(40, 60);
+        resize((pageLayout_ == 2 ? QSize(1500, 850) : singleScreen_ ? QSize(1280, 800) : QSize(980, 640)).boundedTo(room));
+    }
     setIconSet(appOptions().iconSet);
     appOptions().applyFont();
     createPages();
     createActions();
     createToolbars();
+    if (singleScreen_) {
+        buildSingleScreen();
+        // keep the Move buttons on the list that has the focus (there is no current tab any more)
+        connect(qApp, &QApplication::focusChanged, this, [this](QWidget*, QWidget* now) {
+            for (int i = 0; i < 2 && now; ++i)
+                if (panes_[i]->isAncestorOf(now)) currentTab_ = i;
+        });
+    }
     createStatusBar();
     // Flat toolbar buttons with hover / pressed / checked feedback, like the original TBX toolbars.
     // rgba() so it works on light and dark themes.
-    setStyleSheet(uR"(
+    if (newUi_) setStyleSheet(uR"(
+        QToolBar { spacing: 2px; padding: 4px 6px; border: 0; border-bottom: 1px solid palette(mid); }
+        QToolButton { border: 1px solid transparent; border-radius: 4px; padding: 4px 8px; background: transparent; }
+        QToolButton:hover { background: palette(midlight); border-color: palette(mid); }
+        QToolButton:pressed { background: palette(mid); }
+        QToolButton:checked { border-radius: 0; border-bottom: 2px solid palette(highlight); font-weight: bold; background: transparent; }
+        QToolButton:disabled { background: transparent; border-color: transparent; }
+        QToolButton::menu-button { border: 0; width: 12px; }
+        QToolButton::menu-indicator { image: none; }
+        QToolButton#goButton { background: palette(highlight); color: palette(highlighted-text); font-weight: bold; padding: 4px 16px; }
+        QToolButton#goButton:hover { background: palette(highlight); border-color: palette(highlighted-text); }
+        QToolButton#goButton:disabled { background: palette(midlight); color: palette(mid); }
+        QGroupBox#preview::indicator { width: 0; height: 0; }
+        QSplitter::handle:horizontal { width: 5px; }
+        QSplitter::handle:vertical { height: 5px; }
+        QFrame#editBar { border: 1px solid palette(highlight); border-radius: 4px; }
+        QGroupBox { font-weight: bold; margin-top: 10px; padding-top: 6px; }
+        QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; left: 10px; padding: 0 4px; }
+        QGroupBox QLabel, QGroupBox QTreeWidget { font-weight: normal; }
+    )"_s);
+    else setStyleSheet(uR"(
         QToolBar { spacing: 1px; padding: 1px; border: 0; }
         QToolButton { border: 1px solid transparent; border-radius: 2px; padding: 2px 3px; background: transparent; }
         QToolButton:hover { background: rgba(0,120,215,40); border-color: rgba(0,120,215,110); }
@@ -175,7 +214,10 @@ void MainWindow::createActions() {
     for (int i = 0; i < 3; ++i) {
         aTab_[i] = makeAction(tr_(tabNames[i]), tr_(tabHints[i]), TbTabFiles + i, K(Qt::CTRL | (Qt::Key_1 + i)));
         aTab_[i]->setCheckable(true);
-        connect(aTab_[i], &QAction::triggered, this, [this, i] { showTab(i); });
+        connect(aTab_[i], &QAction::triggered, this, [this, i](bool on) {
+            if (singleScreen_) setPaneVisible(i, on);  // the page buttons show / hide a pane
+            else showTab(i);
+        });
     }
 
     aAddFiles_ = makeAction(tr_("Add files..."), tr_("Add files to the list"), TbAddFiles, K(Qt::Key_F2));
@@ -186,6 +228,13 @@ void MainWindow::createActions() {
     aPreview_ = makeAction(tr_("Preview"), tr_("Refresh preview"), TbPreview, K(Qt::Key_F5));
 
     aBatchAdd_ = makeAction(tr_("Add to batch"), tr_("Add to batch"), TbBatchAdd, K(Qt::CTRL | Qt::Key_F2));
+    aBatchEdit_ = makeAction(tr_("Modify"), tr_("Replace the selected action with the current settings (double-click an action to load its settings)"), TbBatchAdd);
+    aBatchEdit_->setEnabled(false);
+    connect(aBatchEdit_, &QAction::triggered, this, [this] { updateBatchItem(); });
+    if (newUi_) {
+        connect(batchView_, &QTreeWidget::itemSelectionChanged, this, [this] { aBatchEdit_->setEnabled(!worker_ && batchView_->selectedItems().size() == 1); });
+        connect(batchView_, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* it, int) { editBatchItem(it); });
+    }
     aBatchRemoveSel_ = makeAction(tr_("Remove sel."), tr_("Remove selected actions from the batch"), TbBatchRemoveSel, K(Qt::SHIFT | Qt::Key_F6));
     aBatchClear_ = makeAction(tr_("Clear"), tr_("Remove all actions from the batch"), TbBatchClear, K(Qt::SHIFT | Qt::Key_F7));
     aBatchOpen_ = makeAction(tr_("Open..."), tr_("Open a batch file"), TbBatchOpen, K(Qt::CTRL | Qt::Key_O));
@@ -291,85 +340,128 @@ void MainWindow::createActions() {
     connect(aUnsort_, &QAction::triggered, this, [this] { unsortFiles(); });
 }
 
+// Toolbars. Every toolbar is described once, as a list of items; the classic layout puts the bars on the window, the
+// modern layout puts one main bar on the window and each page bar inside its page. The buttons themselves are the
+// shared QActions of createActions() (like the Delphi TActions), so a new button is added here once for both layouts.
 void MainWindow::createToolbars() {
-    auto bar = [this](const QString& name) {
+    enum Kind { Act, ActText, Sep, Spacer, RecentMenu, FilterMenu };
+    struct Item {
+        Kind kind;
+        QAction* a = nullptr;
+    };
+    using Items = std::vector<Item>;
+    auto A = [](QAction* a) { return Item{Act, a}; };      // icon only
+    auto T = [](QAction* a) { return Item{ActText, a}; };  // text beside the icon (the buttons the original labelled)
+    const Item sep{Sep}, spacer{Spacer}, recent{RecentMenu}, filter{FilterMenu};
+    auto append = [](Items& to, const Items& more) { to.insert(to.end(), more.begin(), more.end()); };
+
+    auto bar = [this](const QString& name, const Items& items) {
         auto* t = new QToolBar(name, this);
         t->setObjectName(name);
-        t->setMovable(true);
+        t->setMovable(!newUi_);
         t->setIconSize(QSize(16, 16));
         t->setFloatable(false);
+        for (const Item& i : items) {
+            switch (i.kind) {
+            case Act:
+            case ActText:
+                t->addAction(i.a);
+                if (auto* b = qobject_cast<QToolButton*>(t->widgetForAction(i.a)))
+                    b->setToolButtonStyle(i.kind == ActText ? Qt::ToolButtonTextBesideIcon : Qt::ToolButtonIconOnly);
+                break;
+            case Sep:
+                t->addSeparator();
+                break;
+            case Spacer: {
+                auto* s = new QWidget;
+                s->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+                t->addWidget(s);
+                break;
+            }
+            case RecentMenu: {  // "Open..." with the list of recent batch files
+                recentMenu_ = new QMenu(this);
+                auto* openBtn = new QToolButton;
+                openBtn->setDefaultAction(aBatchOpen_);
+                openBtn->setMenu(recentMenu_);
+                openBtn->setPopupMode(QToolButton::MenuButtonPopup);
+                t->addWidget(openBtn);
+                connect(recentMenu_, &QMenu::aboutToShow, this, [this] { updateRecentMenu(); });
+                break;
+            }
+            case FilterMenu: {  // log filter
+                auto* filterMenu = new QMenu(this);
+                filterMenu->addActions({aLogOk_, aLogError_, aLogNot_});
+                auto* filterBtn = new QToolButton;
+                filterBtn->setDefaultAction(aLogFilter_);
+                filterBtn->setMenu(filterMenu);
+                filterBtn->setPopupMode(QToolButton::InstantPopup);
+                t->addWidget(filterBtn);
+                break;
+            }
+            }
+        }
         return t;
     };
-    // text beside the icon for the buttons the original labelled
-    auto add = [](QToolBar* t, QAction* a, bool text) {
-        t->addAction(a);
-        if (auto* b = qobject_cast<QToolButton*>(t->widgetForAction(a)))
-            b->setToolButtonStyle(text ? Qt::ToolButtonTextBesideIcon : Qt::ToolButtonIconOnly);
-    };
 
-    tbTabs_ = bar(u"Pages"_s);
-    for (QAction* a : aTab_) add(tbTabs_, a, true);
-    addToolBar(Qt::TopToolBarArea, tbTabs_);
+    // --- what each bar contains ---
+    const Items tabs = {T(aTab_[0]), T(aTab_[1]), T(aTab_[2])};
+    const Items moves = {A(aUp_), A(aDown_), A(aTop_), A(aBottom_)};
+    Items files = {T(aAddFiles_), T(aAddFolders_), sep, A(aRemoveSel_), T(aRemoveAll_), A(aRemoveDead_), sep, A(aPreview_)};
+    Items actions = {newUi_ ? T(aBatchAdd_) : A(aBatchAdd_)};
+    if (newUi_) actions.push_back(T(aBatchEdit_));
+    append(actions, {A(aBatchRemoveSel_), sep, A(aBatchClear_), recent, A(aBatchSave_)});
+    const Items log = {filter, sep, A(aLogClear_), A(aLogSave_), A(aLogCopy_)};
 
-    tbProgram_ = bar(u"Program"_s);
-    add(tbProgram_, aGo_, true);
-    add(tbProgram_, aStop_, true);
-    add(tbProgram_, aUndo_, false);
-    tbProgram_->addSeparator();
-    add(tbProgram_, aOnTop_, false);
-    add(tbProgram_, aOptions_, false);
-    tbProgram_->addSeparator();
-    add(tbProgram_, aHelp_, false);
-    add(tbProgram_, aAbout_, false);
-    tbProgram_->addSeparator();
-    add(tbProgram_, aExit_, false);
+    if (!newUi_) {  // classic: bars on the window, movable; the move buttons have their own bar
+        tbTabs_ = bar(u"Pages"_s, tabs);
+        addToolBar(Qt::TopToolBarArea, tbTabs_);
+        tbProgram_ = bar(u"Program"_s, {T(aGo_), T(aStop_), A(aUndo_), sep, A(aOnTop_), A(aOptions_), sep, A(aHelp_), A(aAbout_), sep, A(aExit_)});
+        addToolBar(Qt::TopToolBarArea, tbProgram_);
+        addToolBarBreak();
+        tbFiles_ = bar(u"Files"_s, files);
+        addToolBar(Qt::TopToolBarArea, tbFiles_);
+        tbActions_ = bar(u"Actions"_s, actions);
+        addToolBar(Qt::TopToolBarArea, tbActions_);
+        tbLog_ = bar(u"Log"_s, log);
+        addToolBar(Qt::TopToolBarArea, tbLog_);
+        tbMove_ = bar(u"Move Items"_s, moves);
+        addToolBar(Qt::TopToolBarArea, tbMove_);
+        return;
+    }
+
+    // modern: tabs + program buttons in one main bar, a slim bar (with the move buttons) in each page
+    Items mainBar = tabs;
+    append(mainBar, {spacer, T(aGo_), T(aStop_), A(aUndo_), A(aOptions_), A(aHelp_), sep, A(aOnTop_), A(aAbout_), A(aExit_)});
+    tbProgram_ = bar(u"Main"_s, mainBar);
+    if (auto* b = tbProgram_->widgetForAction(aGo_)) b->setObjectName(u"goButton"_s);  // the one coloured button
     addToolBar(Qt::TopToolBarArea, tbProgram_);
+    for (Items* page : {&files, &actions}) {
+        page->push_back(spacer);
+        append(*page, moves);
+    }
+    tbFiles_ = bar(u"Files"_s, files);
+    tbActions_ = bar(u"Actions"_s, actions);
+    tbLog_ = bar(u"Log"_s, log);
 
-    addToolBarBreak();
-
-    tbFiles_ = bar(u"Files"_s);
-    add(tbFiles_, aAddFiles_, true);
-    add(tbFiles_, aAddFolders_, true);
-    tbFiles_->addSeparator();
-    add(tbFiles_, aRemoveSel_, false);
-    add(tbFiles_, aRemoveAll_, true);
-    add(tbFiles_, aRemoveDead_, false);
-    tbFiles_->addSeparator();
-    add(tbFiles_, aPreview_, false);
-    addToolBar(Qt::TopToolBarArea, tbFiles_);
-
-    tbActions_ = bar(u"Actions"_s);
-    add(tbActions_, aBatchAdd_, false);
-    add(tbActions_, aBatchRemoveSel_, false);
-    tbActions_->addSeparator();
-    add(tbActions_, aBatchClear_, false);
-    recentMenu_ = new QMenu(this);
-    auto* openBtn = new QToolButton;
-    openBtn->setDefaultAction(aBatchOpen_);
-    openBtn->setMenu(recentMenu_);
-    openBtn->setPopupMode(QToolButton::MenuButtonPopup);
-    tbActions_->addWidget(openBtn);
-    connect(recentMenu_, &QMenu::aboutToShow, this, [this] { updateRecentMenu(); });
-    add(tbActions_, aBatchSave_, false);
-    addToolBar(Qt::TopToolBarArea, tbActions_);
-
-    tbLog_ = bar(u"Log"_s);
-    auto* filterMenu = new QMenu(this);
-    filterMenu->addActions({aLogOk_, aLogError_, aLogNot_});
-    auto* filterBtn = new QToolButton;
-    filterBtn->setDefaultAction(aLogFilter_);
-    filterBtn->setMenu(filterMenu);
-    filterBtn->setPopupMode(QToolButton::InstantPopup);
-    tbLog_->addWidget(filterBtn);
-    tbLog_->addSeparator();
-    add(tbLog_, aLogClear_, false);
-    add(tbLog_, aLogSave_, false);
-    add(tbLog_, aLogCopy_, false);
-    addToolBar(Qt::TopToolBarArea, tbLog_);
-
-    tbMove_ = bar(u"Move Items"_s);
-    for (QAction* a : {aUp_, aDown_, aTop_, aBottom_}) add(tbMove_, a, false);
-    addToolBar(Qt::TopToolBarArea, tbMove_);
+    // each page gets its own bar on top
+    int i = 0;
+    for (auto sig : {&QAbstractItemModel::rowsInserted, &QAbstractItemModel::rowsRemoved})
+        connect(batchView_->model(), sig, this, [this] {
+            updateTabCounts();
+            if (editBar_ && editBar_->isVisible() && !editIndex_.isValid()) endEdit();
+        });
+    for (QToolBar* t : {tbFiles_, tbActions_, tbLog_}) {
+        QWidget* content = stack_->widget(i);
+        stack_->removeWidget(content);
+        auto* w = new QWidget;
+        auto* l = new QVBoxLayout(w);
+        l->setContentsMargins(0, 0, 0, 0);
+        l->setSpacing(0);
+        l->addWidget(t);
+        l->addWidget(content, 1);
+        content->show();  // removeWidget() hid it
+        stack_->insertWidget(i++, w);
+    }
 }
 
 void MainWindow::createPages() {
@@ -389,7 +481,12 @@ void MainWindow::createPages() {
     fileView_->header()->setStretchLastSection(true);  // the header bar fills the whole width, like the original
     const int widths[ColCount] = {200, 400, 400, 60, 200, 70, 130, 130};
     for (int c = 0; c < ColCount; ++c) fileView_->setColumnWidth(c, widths[c]);
-    for (int c : {ColFullPath, ColExt, ColPreview, ColSize, ColCreated, ColModified}) fileView_->setColumnHidden(c, true);
+    for (int c : {ColFullPath, ColExt, ColPreview, ColSize, ColCreated, ColModified})
+        if (!(newUi_ && c == ColPreview)) fileView_->setColumnHidden(c, true);  // modern layout: new name visible
+    if (newUi_) {  // current name, new name, folder
+        auto* h = fileView_->header();
+        h->moveSection(h->visualIndex(ColFolder), h->visualIndex(ColPreview));
+    }
     stack_->addWidget(fileView_);
 
     connect(fileView_, &ItemTree::urlsDropped, this, &MainWindow::filesDropped);
@@ -416,12 +513,12 @@ void MainWindow::createPages() {
     auto* page = new QWidget;
     auto* pl = new QVBoxLayout(page);
     pl->setContentsMargins(0, 0, 0, 0);
-    actionsSplit_ = new QSplitter(Qt::Vertical);
+    actionsSplit_ = new QSplitter(newUi_ ? Qt::Horizontal : Qt::Vertical);
     actionsSplit_->setChildrenCollapsible(false);
     pl->addWidget(actionsSplit_);
 
     panel_ = new ActionPanel;
-    actionsSplit_->addWidget(panel_);
+    if (!newUi_) actionsSplit_->addWidget(panel_);
     connect(panel_, &ActionPanel::changed, this, [this] { updateSamplePreview(); });
 
     previewGroup_ = new QGroupBox(tr_("Preview of selected file"));
@@ -441,7 +538,14 @@ void MainWindow::createPages() {
     };
     row(tr_("Current name:"), previewOld_);
     row(tr_("Sample new name:"), previewNew_);
-    actionsSplit_->addWidget(previewGroup_);
+    if (newUi_) {  // fixed strip under the plan and the editor
+        previewGroup_->setObjectName(u"preview"_s);
+        previewGroup_->setMaximumHeight(90);
+        pl->addWidget(previewGroup_);
+        connect(previewGroup_, &QGroupBox::toggled, this, [this](bool on) { if (!on) previewGroup_->setChecked(true); });  // always on
+    } else {
+        actionsSplit_->addWidget(previewGroup_);
+    }
     connect(previewGroup_, &QGroupBox::toggled, this, [this](bool on) {
         previewOld_->setVisible(on);
         previewNew_->setVisible(on);
@@ -450,8 +554,9 @@ void MainWindow::createPages() {
     });
 
     batchGroup_ = new QGroupBox(tr_("Batch contents (planned actions)"));
-    batchGroup_->setCheckable(true);
-    batchGroup_->setChecked(false);
+    batchGroup_->setCheckable(!newUi_);  // modern layout: the plan is always visible
+    if (newUi_) batchGroup_->setMinimumWidth(170);  // the long title must not decide the width of the plan
+    if (!newUi_) batchGroup_->setChecked(false);
     auto* bg = new QVBoxLayout(batchGroup_);
     batchView_ = new ItemTree(false);
     batchView_->setColumnCount(2);
@@ -461,11 +566,35 @@ void MainWindow::createPages() {
     batchView_->setContextMenuPolicy(Qt::CustomContextMenu);
     bg->addWidget(batchView_);
     actionsSplit_->addWidget(batchGroup_);
-    actionsSplit_->setStretchFactor(0, 1);
+    if (newUi_) {  // plan on the left, editor on the right
+        auto* right = new QWidget;
+        auto* rl = new QVBoxLayout(right);
+        rl->setContentsMargins(0, 0, 0, 0);
+        rl->addWidget(panel_, 1);
+        editBar_ = new QFrame;
+        editBar_->setObjectName(u"editBar"_s);
+        auto* eh = new QHBoxLayout(editBar_);
+        editLabel_ = new QLabel;
+        auto* okEdit = new QPushButton(tr_("Validate the modification"));
+        auto* cancelEdit = new QPushButton(tr_("Cancel the modification"));
+        eh->addWidget(editLabel_, 1);
+        eh->addWidget(okEdit);
+        eh->addWidget(cancelEdit);
+        editBar_->hide();
+        rl->addWidget(editBar_);
+        connect(okEdit, &QPushButton::clicked, this, [this] { validateEdit(); });
+        connect(cancelEdit, &QPushButton::clicked, this, [this] { endEdit(); });
+        actionsSplit_->addWidget(right);
+        actionsSplit_->setStretchFactor(1, 1);
+        actionsSplit_->setSizes({280, 700});
+    } else {
+        actionsSplit_->setStretchFactor(0, 1);
+    }
     connect(batchGroup_, &QGroupBox::toggled, this, [this](bool on) { setBatchVisible(on); });
     connect(batchView_, &ItemTree::reordered, this, [this] { renumberBatchView(); });
     connect(batchView_, &QWidget::customContextMenuRequested, this, [this](const QPoint& p) {
         QMenu m;
+        if (newUi_) m.addAction(aBatchEdit_);
         m.addAction(aBatchRemoveSel_);
         m.addAction(aBatchClear_);
         m.exec(batchView_->viewport()->mapToGlobal(p));
@@ -504,17 +633,30 @@ void MainWindow::createStatusBar() {
 // --- settings -------------------------------------------------------------------------------------------
 void MainWindow::loadSettings() {
     QSettings s = appSettings();
-    if (s.contains(u"window/geometry"_s)) restoreGeometry(s.value(u"window/geometry"_s).toByteArray());
-    if (s.contains(u"window/filesHeader"_s)) fileView_->header()->restoreState(s.value(u"window/filesHeader"_s).toByteArray());
-    if (s.contains(u"window/actionsSplit"_s)) actionsSplit_->restoreState(s.value(u"window/actionsSplit"_s).toByteArray());
-    previewGroup_->setChecked(s.value(u"window/enableSample"_s, true).toBool());
-    batchGroup_->setChecked(s.value(u"window/enableBatch"_s, false).toBool());
-    setBatchVisible(batchGroup_->isChecked());
+    // the modern layout keeps its own geometry, columns and splitter (the old ones do not fit it)
+    const QString sfx = newUi_ ? (singleScreen_ ? u"Single"_s : u"New"_s) : QString();
+    if (singleScreen_) {
+        stBands_ = s.value(u"window/singleBands"_s).toByteArray();
+        stColsOuter_ = s.value(u"window/singleColsOuter"_s).toByteArray();
+        stColsInner_ = s.value(u"window/singleColsInner"_s).toByteArray();
+        const int mask = s.value(u"window/panes"_s, 7).toInt();
+        for (int i = 0; i < 3; ++i) paneVisible_[i] = mask & (1 << i);
+        arrangeSingle(singleMode_);  // applies the remembered sizes
+        for (int i = 0; i < 3; ++i) aTab_[i]->setChecked(paneVisible_[i]);
+    }
+    if (s.contains(u"window/geometry"_s + sfx)) restoreGeometry(s.value(u"window/geometry"_s + sfx).toByteArray());
+    if (s.contains(u"window/filesHeader"_s + sfx)) fileView_->header()->restoreState(s.value(u"window/filesHeader"_s + sfx).toByteArray());
+    if (s.contains(u"window/actionsSplit"_s + sfx)) actionsSplit_->restoreState(s.value(u"window/actionsSplit"_s + sfx).toByteArray());
+    if (!newUi_) {
+        previewGroup_->setChecked(s.value(u"window/enableSample"_s, true).toBool());
+        batchGroup_->setChecked(s.value(u"window/enableBatch"_s, false).toBool());
+        setBatchVisible(batchGroup_->isChecked());
+    }
     aOnTop_->setChecked(s.value(u"window/onTop"_s, false).toBool());
     aLogOk_->setChecked(s.value(u"log/ok"_s, true).toBool());
     aLogError_->setChecked(s.value(u"log/error"_s, true).toBool());
     aLogNot_->setChecked(s.value(u"log/not"_s, true).toBool());
-    if (s.contains(u"window/toolbars"_s)) restoreState(s.value(u"window/toolbars"_s).toByteArray());
+    if (!newUi_ && s.contains(u"window/toolbars"_s)) restoreState(s.value(u"window/toolbars"_s).toByteArray());
     applyOptionsLive();
 }
 
@@ -537,12 +679,22 @@ void MainWindow::applyOptionsLive() {
 
 void MainWindow::saveSettings() {
     QSettings s = appSettings();
-    s.setValue(u"window/geometry"_s, saveGeometry());
-    s.setValue(u"window/toolbars"_s, saveState());
-    s.setValue(u"window/filesHeader"_s, fileView_->header()->saveState());
-    s.setValue(u"window/actionsSplit"_s, actionsSplit_->saveState());
-    s.setValue(u"window/enableSample"_s, previewGroup_->isChecked());
-    s.setValue(u"window/enableBatch"_s, batchGroup_->isChecked());
+    const QString sfx = newUi_ ? (singleScreen_ ? u"Single"_s : u"New"_s) : QString();
+    if (singleScreen_) {
+        saveSingleState();
+        s.setValue(u"window/singleBands"_s, stBands_);
+        s.setValue(u"window/singleColsOuter"_s, stColsOuter_);
+        s.setValue(u"window/singleColsInner"_s, stColsInner_);
+        s.setValue(u"window/panes"_s, int(paneVisible_[0]) | int(paneVisible_[1]) << 1 | int(paneVisible_[2]) << 2);
+    }
+    s.setValue(u"window/geometry"_s + sfx, saveGeometry());
+    s.setValue(u"window/filesHeader"_s + sfx, fileView_->header()->saveState());
+    s.setValue(u"window/actionsSplit"_s + sfx, actionsSplit_->saveState());
+    if (!newUi_) {
+        s.setValue(u"window/toolbars"_s, saveState());
+        s.setValue(u"window/enableSample"_s, previewGroup_->isChecked());
+        s.setValue(u"window/enableBatch"_s, batchGroup_->isChecked());
+    }
     s.setValue(u"window/onTop"_s, aOnTop_->isChecked());
     s.setValue(u"log/ok"_s, aLogOk_->isChecked());
     s.setValue(u"log/error"_s, aLogError_->isChecked());
@@ -564,22 +716,122 @@ void MainWindow::closeEvent(QCloseEvent* e) {
 // --- navigation / status -----------------------------------------------------------------------------------
 void MainWindow::showTab(int tab) {
     currentTab_ = tab;
+    if (singleScreen_) {  // everything is on screen: just make sure that pane is not hidden
+        setPaneVisible(tab, true);
+        return;
+    }
     stack_->setCurrentIndex(tab);
     for (int i = 0; i < 3; ++i) aTab_[i]->setChecked(i == tab);
+    if (newUi_) return;  // modern layout: each page carries its own bar
     tbActions_->setVisible(tab == 1);
     tbLog_->setVisible(tab == 2);
     tbFiles_->setVisible(true);  // the original keeps the files toolbar on every page
     tbMove_->setVisible((tab == 1 && batchGroup_->isChecked()) || tab == 0);
 }
 
+// --- modern layout: single screen ---------------------------------------------------------------------------------
+// The pages built by createPages()/createToolbars() are three widgets (bar + content). Instead of a stack of tabs they go
+// into splitters: bands (Files / Actions / Log stacked) or columns (Files on the left, Actions over Log on the right).
+void MainWindow::buildSingleScreen() {
+    for (QWidget*& p : panes_) {
+        p = stack_->widget(0);
+        stack_->removeWidget(p);
+    }
+    panes_[0]->setMinimumSize(300, 120);
+    panes_[1]->setMinimumSize(380, 220);
+    panes_[2]->setMinimumSize(200, 80);
+    actionsSplit_->setSizes({190, 560});  // less room for the plan: the editor needs it (a saved state replaces this)
+    singleHost_ = new QWidget;
+    auto* l = new QVBoxLayout(singleHost_);
+    l->setContentsMargins(0, 0, 0, 0);
+    arrangeSingle(singleMode_);  // moves the panes out of the stack first
+    setCentralWidget(singleHost_);  // deletes the (now empty) stack
+    stack_ = nullptr;
+}
+
+void MainWindow::arrangeSingle(int mode) {
+    for (QWidget* p : panes_) p->setParent(singleHost_);  // out of the old splitters, which are deleted below
+    delete outer_;                                        // also deletes inner_
+    outer_ = inner_ = nullptr;
+    singleMode_ = mode;
+    auto splitter = [](Qt::Orientation o) {
+        auto* s = new QSplitter(o);
+        s->setChildrenCollapsible(false);  // a pane is hidden with its page button, never lost by a drag
+        return s;
+    };
+    if (mode == 2) {
+        outer_ = splitter(Qt::Horizontal);
+        inner_ = splitter(Qt::Vertical);
+        outer_->addWidget(panes_[0]);
+        outer_->addWidget(inner_);
+        inner_->addWidget(panes_[1]);
+        inner_->addWidget(panes_[2]);
+    } else {
+        outer_ = splitter(Qt::Vertical);
+        for (QWidget* p : panes_) outer_->addWidget(p);
+    }
+    singleHost_->layout()->addWidget(outer_);
+    for (int i = 0; i < 3; ++i) panes_[i]->setVisible(paneVisible_[i]);
+    if (mode == 2) {
+        outer_->setStretchFactor(0, 1);
+        outer_->setStretchFactor(1, 1);
+        inner_->setStretchFactor(0, 3);
+        inner_->setStretchFactor(1, 1);
+        if (!stColsOuter_.isEmpty()) outer_->restoreState(stColsOuter_); else outer_->setSizes({420, 880});
+        if (!stColsInner_.isEmpty()) inner_->restoreState(stColsInner_); else inner_->setSizes({480, 180});
+    } else {
+        outer_->setStretchFactor(0, 2);
+        outer_->setStretchFactor(1, 3);
+        outer_->setStretchFactor(2, 1);
+        if (!stBands_.isEmpty()) outer_->restoreState(stBands_); else outer_->setSizes({260, 320, 140});
+    }
+}
+
+void MainWindow::saveSingleState() {
+    if (!outer_) return;
+    if (singleMode_ == 2) {
+        stColsOuter_ = outer_->saveState();
+        stColsInner_ = inner_->saveState();
+    } else {
+        stBands_ = outer_->saveState();
+    }
+}
+
+void MainWindow::setPaneVisible(int page, bool on) {
+    paneVisible_[page] = on;
+    panes_[page]->setVisible(on);
+    aTab_[page]->setChecked(on);
+}
+
+// Columns need room: below about 900 px they give way to bands, and come back above 960 px (no flapping).
+void MainWindow::resizeEvent(QResizeEvent* e) {
+    QMainWindow::resizeEvent(e);
+    if (!singleScreen_ || pageLayout_ != 2 || !outer_) return;
+    const int want = singleMode_ == 2 ? (width() < 900 ? 1 : 2) : (width() >= 960 ? 2 : 1);
+    if (want != singleMode_) {
+        saveSingleState();
+        arrangeSingle(want);
+    }
+}
+
 void MainWindow::setBatchVisible(bool on) {
+    if (newUi_) return;  // the plan is always visible
     batchView_->setVisible(on);
     batchGroup_->setMaximumHeight(on ? QWIDGETSIZE_MAX : 24);  // collapsed: just the title, like the original
     tbMove_->setVisible((currentTab_ == 1 && on) || currentTab_ == 0);
 }
 
+// Modern layout: the tabs show how many files / planned actions there are.
+void MainWindow::updateTabCounts() {
+    if (!newUi_) return;
+    const int n[] = {int(files_.size()), batchView_->topLevelItemCount()};
+    const char* names[] = {"Files", "Actions"};
+    for (int i = 0; i < 2; ++i) aTab_[i]->setText(n[i] > 0 ? tr_(names[i]) + u" (%1)"_s.arg(n[i]) : tr_(names[i]));
+}
+
 void MainWindow::setStatus() {
     countLabel_->setText(tr_("%1 files").arg(files_.size()));
+    updateTabCounts();
     statusLabel_->clear();
     progress_->setValue(0);
     progress_->setTextVisible(false);
@@ -845,6 +1097,48 @@ void MainWindow::renumberActions() {
     batch_.sort();
 }
 
+void MainWindow::editBatchItem(QTreeWidgetItem* item) {
+    if (worker_ || !item) return;
+    if (const Action* a = reinterpret_cast<const Action*>(item->data(0, PtrRole).value<quintptr>())) {
+        panel_->setFromAction(*a);
+        batchView_->setCurrentItem(item);
+        editIndex_ = QPersistentModelIndex(batchView_->indexFromItem(item));
+        editLabel_->setText(tr_("Modification of action %1").arg(item->text(0)));
+        editBar_->show();
+        setStatus(-1, tr_("Settings loaded: change them, then validate the modification"));
+    }
+}
+
+void MainWindow::applyEditorTo(QTreeWidgetItem* item) {
+    auto a = panel_->makeAction(true);
+    if (!a || !item) return;
+    renumberActions();  // view order == list order from here on
+    Action* raw = a.get();
+    batch_.replace(size_t(batchView_->indexOfTopLevelItem(item)), std::move(a));
+    item->setData(0, PtrRole, quintptr(raw));
+    item->setText(1, raw->description());
+    updateSamplePreview();
+}
+
+void MainWindow::updateBatchItem() {  // toolbar "Modify": the selected action
+    if (worker_) return;
+    const auto sel = batchView_->selectedItems();
+    if (sel.size() != 1) return;
+    applyEditorTo(sel.first());
+    endEdit();
+}
+
+void MainWindow::validateEdit() {  // editor zone "Validate the modification": the action being edited
+    if (worker_) return;
+    if (editIndex_.isValid()) applyEditorTo(batchView_->topLevelItem(editIndex_.row()));
+    endEdit();
+}
+
+void MainWindow::endEdit() {
+    editIndex_ = QPersistentModelIndex();
+    if (editBar_) editBar_->hide();
+}
+
 void MainWindow::removeSelectedActions() {
     if (worker_) return;
     renumberActions();  // view order == list order from here on
@@ -1087,7 +1381,7 @@ void MainWindow::addLog(const QString& text, State st) {
     auto* item = new QListWidgetItem(text, logView_);
     static const QColor colors[] = {QColor(0, 0, 128), QColor(0, 128, 0), QColor(128, 0, 0), QColor(128, 128, 128)};
     item->setForeground(colors[int(st)]);
-    if (currentTab_ == 2) logView_->scrollToItem(item);
+    if (currentTab_ == 2 || singleScreen_) logView_->scrollToItem(item);
 }
 
 void MainWindow::rebuildLog() {
