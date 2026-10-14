@@ -1,0 +1,7 @@
+# Keeps the GitHub Actions used by .github/workflows up to date (the project has no other package manifest).
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
