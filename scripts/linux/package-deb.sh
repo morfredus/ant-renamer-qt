@@ -157,7 +157,7 @@ Upstream-Name: Ant Renamer Qt
 Source: https://www.antp.be/software/renamer/
 
 Files: *
-Copyright: 2000-2025 Antoine Potten
+Copyright: 2000-2026 Antoine Potten - Frédéric Biron
            C++/Qt port: Frederic Biron
 License: GPL-2+
  This program is free software; you can redistribute it and/or modify it under
