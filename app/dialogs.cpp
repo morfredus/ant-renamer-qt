@@ -111,7 +111,7 @@ bool DragDropDialog::dontAskAgain() const { return notAgain_->isChecked(); }
 
 // --- Options ---------------------------------------------------------------------------------------------
 struct OptionsDialog::Ui {
-    QCheckBox *realtime, *resizeCols, *icons, *forceFont, *autoComplete, *dragNoAsk, *launch, *forceDir, *detectAbs,
+    QCheckBox *realtime, *resizeCols, *icons, *forceFont, *autoComplete, *dragNoAsk, *launch, *naturalSort, *forceDir, *detectAbs,
         *copy, *genLog, *folderExt, *dst, *portable, *shellMenu;
     QCheckBox *dropFiles, *dropFolders, *dropRecursive;
     QSpinBox *historyMax, *fontSize;
@@ -203,6 +203,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         for (auto* c : {ui_->dropFiles, ui_->dropFolders, ui_->dropRecursive}) c->setContentsMargins(20, 0, 0, 0);
         header(l, tr("List behaviour"));
         ui_->launch = box(l, tr("Launch file on double click"), o.launchFile);
+        ui_->naturalSort = box(l, tr("Natural sort in files list (2 before 10) instead of alphabetical"), o.naturalSort);
         header(l, tr("Windows Explorer"));
         ui_->shellMenu = box(l, tr("Add \"Add to Ant Renamer Qt\" to the context menu of files and folders"), shellMenuInstalled());
 #ifdef Q_OS_WIN
@@ -335,6 +336,7 @@ void OptionsDialog::accept() {
     o.addFolders = ui_->dropFolders->isChecked();
     o.recursive = ui_->dropRecursive->isChecked();
     o.launchFile = ui_->launch->isChecked();
+    o.naturalSort = ui_->naturalSort->isChecked();
     o.forceDir = ui_->forceDir->isChecked();
     o.detectAbsDir = ui_->detectAbs->isChecked();
     o.copy = ui_->copy->isChecked();

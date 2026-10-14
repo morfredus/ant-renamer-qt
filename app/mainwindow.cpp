@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QProgressBar>
+#include <QCollator>
 #include <QSettings>
 #include <QSplitter>
 #include <QStackedWidget>
@@ -57,6 +58,8 @@ public:
         const int c = treeWidget()->sortColumn();
         const QVariant a = data(c, SortRole), b = o.data(c, SortRole);
         if (a.isValid() && b.isValid()) return a.toLongLong() < b.toLongLong();
+        static QCollator natural = [] { QCollator q; q.setNumericMode(true); q.setCaseSensitivity(Qt::CaseInsensitive); return q; }();
+        if (appOptions().naturalSort) return natural.compare(text(c), o.text(c)) < 0;
         return text(c).compare(o.text(c), Qt::CaseInsensitive) < 0;
     }
 };
@@ -798,15 +801,19 @@ void MainWindow::fileHeaderMenu(const QPoint& pos) {
 }
 
 void MainWindow::sortFilesBy(int column) {
+    // Own state: Qt's header may already have toggled its indicator by the time sectionClicked fires.
     auto* h = fileView_->header();
-    Qt::SortOrder order = Qt::AscendingOrder;
-    if (h->isSortIndicatorShown() && h->sortIndicatorSection() == column && h->sortIndicatorOrder() == Qt::AscendingOrder)
-        order = Qt::DescendingOrder;
+    sortOrder_ = (sortColumn_ == column && sortOrder_ == Qt::AscendingOrder) ? Qt::DescendingOrder : Qt::AscendingOrder;
+    sortColumn_ = column;
     h->setSortIndicatorShown(true);
-    fileView_->sortItems(column, order);
+    h->setSortIndicator(column, sortOrder_);
+    fileView_->sortItems(column, sortOrder_);
 }
 
-void MainWindow::unsortFiles() { fileView_->header()->setSortIndicatorShown(false); }
+void MainWindow::unsortFiles() {
+    sortColumn_ = -1;
+    fileView_->header()->setSortIndicatorShown(false);
+}
 
 // --- batch -------------------------------------------------------------------------------------------------------
 void MainWindow::addBatchItem(Action* a) {

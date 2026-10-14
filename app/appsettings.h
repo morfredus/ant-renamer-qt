@@ -24,6 +24,7 @@ struct AppOptions {
     bool autoComplete = false;
     // Files & folders
     bool dragNoAsk = false;
+    bool naturalSort = true;     // files list sort: natural (2 < 10) instead of alphabetical
     bool launchFile = false;     // double click opens the file
     bool addFiles = true, addFolders = false, recursive = true;  // last "add folders" choices
     // Processing

@@ -107,6 +107,8 @@ private:
     void removeDeadFiles();
     void fileHeaderMenu(const QPoint& pos);
     void sortFilesBy(int column);
+    int sortColumn_ = -1;
+    Qt::SortOrder sortOrder_ = Qt::AscendingOrder;
     void unsortFiles();
 
     // batch

@@ -205,6 +205,8 @@ QString LngTranslator::translate(const char* /*context*/, const char* sourceText
             {u"The new language is used the next time the program starts."_s,
              u"La nouvelle langue sera utilisée au prochain démarrage du programme."_s},
             {u"History"_s, u"Historique"_s},
+            {u"Natural sort in files list (2 before 10) instead of alphabetical"_s,
+             u"Tri naturel dans la liste des fichiers (2 avant 10) au lieu du tri alphabétique"_s},
             {u"Windows Explorer"_s, u"Explorateur Windows"_s},
             {u"Add to Ant Renamer Qt"_s, u"Ajouter à Ant Renamer Qt"_s},
             {u"Add \"Add to Ant Renamer Qt\" to the context menu of files and folders"_s,

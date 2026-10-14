@@ -6,6 +6,16 @@ The project follows [Semantic Versioning](https://semver.org/) (the `VERSION` fi
 Original program: Antoine Potten ([Ant Renamer](https://www.antp.be/software/renamer/)).
 C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/morfredus)).
 
+## [3.0.0-rc.7] - 2026-10-14
+
+### Added
+
+- Option "Natural sort in files list (2 before 10) instead of alphabetical" (Options > Display), enabled by default: sorting the Files list by text columns now puts `fichier 2` before `fichier 10`. Untick it to get the alphabetical order of the original program. English and French texts.
+
+### Fixed
+
+- Files list: after the first click on a column header, clicking any header no longer sorted the list (the sort direction was read from the header, which Qt had already changed).
+
 ## [3.0.0-rc.6] - 2026-10-14
 
 ### Changed
