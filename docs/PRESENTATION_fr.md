@@ -160,7 +160,7 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
 ## Licence et crédits
 
 - GPL v2 ou ultérieure, comme l'original ; `LICENSE` est le `license.txt` d'origine.
-- Le copyright d'origine est conservé dans la boîte À propos et dans l'installeur (Copyright 2000-2025 Antoine Potten) ; la
+- Le copyright d'origine est conservé dans la boîte À propos et dans l'installeur (Copyright 2000-2026 Antoine Potten - Frédéric Biron) ; la
   boîte À propos indique qu'il s'agit d'un portage C++/Qt et renvoie vers le site d'origine.
 - Code tiers utilisé par le portage : Qt 6 (LGPL v3 / GPL), rien d'autre. Les composants Delphi de l'original ne
   sont plus nécessaires.

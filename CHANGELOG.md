@@ -6,6 +6,12 @@ The project follows [Semantic Versioning](https://semver.org/) (the `VERSION` fi
 Original program: Antoine Potten ([Ant Renamer](https://www.antp.be/software/renamer/)).
 C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/morfredus)).
 
+## [3.0.0-rc.6] - 2026-10-14
+
+### Changed
+
+- Copyright now reads 2000-2026 Antoine Potten - Frédéric Biron (About window, installer, Debian package, presentation documents).
+
 ## [3.0.0-rc.5] - 2026-10-13
 
 ### Changed

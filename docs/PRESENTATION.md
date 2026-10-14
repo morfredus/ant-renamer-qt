@@ -157,7 +157,7 @@ These are the places where the port does not do exactly what version 2.13 does. 
 ## Licence and credits
 
 - GPL v2 or later, like the original; `LICENSE` is the original `license.txt`.
-- The original copyright is kept in the About box and in the installer (Copyright 2000-2025 Antoine Potten); the
+- The original copyright is kept in the About box and in the installer (Copyright 2000-2026 Antoine Potten - Frédéric Biron); the
   About box states that this is a C++/Qt port and links to the original site.
 - Third-party code used by the port: Qt 6 (LGPL v3 / GPL), nothing else. The Delphi components of the
   original are not needed.
