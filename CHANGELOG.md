@@ -14,6 +14,10 @@ Changes committed but not yet published; they get a version number and date when
 
 - `.github/dependabot.yml`: Dependabot checks the GitHub Actions used by the workflows once a month (pull requests when a newer version exists).
 
+### Changed
+
+- CI workflow: `actions/checkout` and `actions/upload-artifact` updated from v4 to v7 (the two first Dependabot pull requests, whose checks passed). No effect on the program.
+
 ## [3.0.0-rc.9] - 2026-10-14
 
 ### Added
