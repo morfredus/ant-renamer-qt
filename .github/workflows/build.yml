@@ -56,7 +56,7 @@ jobs:
         env:
           MSYS2_ROOT: ${{ steps.msys2.outputs.msys2-location }}
         run: powershell -ExecutionPolicy Bypass -File scripts\windows\package-win.ps1
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: windows-dist
           path: |
