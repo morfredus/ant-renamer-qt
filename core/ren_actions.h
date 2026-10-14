@@ -80,7 +80,7 @@ class ActionStringRepl : public Action {
 public:
     ActionStringRepl() : Action(ActionType::StringRepl) {}
     QString search = QStringLiteral("old"), replace = QStringLiteral("new");
-    bool all = true, caseSens = true, inclExt = false, onlyExt = false;
+    bool all = true, caseSens = true, inclExt = false, onlyExt = false, wildcards = false;
     QString description() const override;
     QString makeNewName(const QString&, bool) override;
     void save(QXmlStreamWriter&) const override;
@@ -135,22 +135,33 @@ public:
     void load(const XmlElem&) override;
 };
 
+// Tracks the current "same photo" group (JPG + RAW...) for the shared-number option: a file continues
+// the group when folder and base name match (case-insensitive) and its extension is not yet in it.
+struct PairGroup {
+    QString key;
+    QStringList exts;
+    bool continues(const QString& fn);
+    void clear() { key.clear(); exts.clear(); }
+};
+
 class ActionEnum : public Action {
 public:
     ActionEnum() : Action(ActionType::Enum) {}
     QString mask = QStringLiteral("File %num%%ext%");
     int startAt = 1, digits = 3, increment = 1;
     bool restart = false;
+    bool sharePairs = false;  // same number for files with the same base name and different extensions
     QString description() const override;
     QString makeNewName(const QString&, bool) override;
     void save(QXmlStreamWriter&) const override;
     void load(const XmlElem&) override;
 protected:
     bool getTag(const QString&, QString&) override;
-    void init() override { curPos_ = startAt; prevFolder_.clear(); }
+    void init() override { curPos_ = startAt; prevFolder_.clear(); group_.clear(); }
 private:
     int curPos_ = 0;
     QString prevFolder_;
+    PairGroup group_;
 };
 
 class ActionMP3 : public Action {
@@ -239,17 +250,19 @@ public:
     // %num% counter, same meaning as in the Enumeration action
     int numStart = 1, numDigits = 3, numIncr = 1;
     bool numRestart = false;
+    bool numSharePairs = false;
     QString description() const override;
     QString makeNewName(const QString&, bool) override;
     void save(QXmlStreamWriter&) const override;
     void load(const XmlElem&) override;
 protected:
     bool getTag(const QString&, QString&) override;
-    void init() override { curNum_ = numStart; prevFolder_.clear(); }
+    void init() override { curNum_ = numStart; prevFolder_.clear(); group_.clear(); }
 private:
     QMap<QString, QString> tags_;
     int curNum_ = 0;
     QString prevFolder_;
+    PairGroup group_;
 };
 
 class ActionList {

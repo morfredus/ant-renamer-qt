@@ -45,6 +45,8 @@
   Na primjer, ako hoæete umetnuti "2" iza svakog pojavljivanja "test" sadržanog u nazivima, zamjenite "test" s "test2".
 <p>To se takoðer može koristiti za brisanje odreðenog niza: jednostavno ostavite drugo polje prazno.</p>
 
+<p>S opcijom "Koristi zamjenske znakove", <code>*</code> u polju za traženje oznaèava bilo koji tekst, a <code>?</code> bilo koji pojedinaèni znak; svi ostali znakovi traže se onakvi kakvi jesu. Na primjer, traženje "IMG_*_copy" i zamjena s "Photo" pretvara "IMG_001_copy (1).jpg" u "Photo (1).jpg". Tekst zamjene uvijek se uzima doslovno.</p>
+
 <h2 id="multstrrepl">Višestruka zamjena niza znakova</h2>
 <p>It can be used for single characters replacement, like replacing all accentuated characters by their latin equivalent, or to replace whole strings, of different lengths.</p>
 <p>U poèetku je dodano za zamjene više znakova, poput zamjene svih naglašenim slova svojim latinskim ekvivalentom. Ali sam dodao podršku za
@@ -92,6 +94,8 @@
 <p>Ako su datoteke grupirane u mapama (npr. osnovno sortiranje je naziv mape, tako da sadržaji mape nisu pomješani na spisku) možete upotrijebiti opciju "Vrati 
   na poèetnu vrijednost...". To æe staviti vrijednost "Poèni s", kada je trenutna datoteka iz druge mape na poèetnu vrijednost. To omoguæava neku vrstu brojèanog preimenovanja
     u više mapa bez potrebe ponavljanja te operacije za svaku mapu odvojeno.</p>
+
+<p>Opcija "Isti broj za datoteke istog naziva..." daje isti broj datotekama iz iste mape koje imaju isti naziv (bez nastavka), ali razlièite nastavke, na primjer <code>IMG_1234.JPG</code> i <code>IMG_1234.CR2</code> s fotoaparata. Datoteka èiji je nastavak veæ u skupini dobiva novi broj. Datoteke moraju slijediti jedna drugu na popisu (poredajte po nazivu). Ista opcija postoji i u akciji EXIF.</p>
 
 <h2 id="mp3">Koristi mp3 info</h2>
 <p>Ovdje opet morate unijeti masku. Tu postoji nekoliko oznaka koje se mogu raspoznati. Pogledajte stranicu <a href="format_hr.html#folder">"Oblikovanje"</a> za više informacija.</p>
@@ -193,7 +197,8 @@
   To može biti, na primjer, vrlo korisno kao zamjena akciji <a href="#datetime">Koristi datum &amp; vrijeme</a> ako datumi vaših fotografija nisu saèuvani kada
   ste ih prenosili iz vaše digitalne kamere.</a>
 <p>Pogledajte stranicu <a href="format_hr.html#folder">"Oblikovanje"</a> za više informacija. zbog vrlo dugog popisa postojeæih EXIF oznaka, oni su navedene
-  <a href="exif_tags.txt">na posebnoj stranici</a> umjesto da budu ukljuèene ovdje.</p>
+  <a href="metadata_tags_hr.html">na posebnoj stranici</a> umjesto da budu ukljuèene ovdje.</p>
+<p>The XMP sidecar file of a picture (<code>IMG.xmp</code> or <code>IMG.CR2.xmp</code>) is read with the picture and wins over the XMP embedded in it. When the picture is renamed, its sidecar files (<code>.xmp</code>, and DxO <code>.dop</code>) are renamed with it: see the option in <a href="options_hr.html">Options</a>, <i>Processing</i>.</p>
 
 </body>
 </html>

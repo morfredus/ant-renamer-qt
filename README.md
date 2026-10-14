@@ -1,10 +1,10 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.0.0--rc.8-blue)
+![version](https://img.shields.io/badge/version-3.0.0--rc.9-blue)
 
 C++/Qt 6 port of [Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (originally Delphi 7,
 GPL v2). Batch file renaming: replace, insert, move, delete, enumerate, change case, regular
-expressions, names from a list, file date, MP3 tags (ID3v1/v2), EXIF.
+expressions, names from a list, file date, MP3 tags (ID3v1/v2), EXIF / IPTC / XMP.
 
 **Ant Renamer Qt** is the official name of this port, agreed with the author of the original program. It is
 developed in parallel with the original Ant Renamer and has its own executable, installation folder, settings and

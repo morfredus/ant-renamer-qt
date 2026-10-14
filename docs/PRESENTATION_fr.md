@@ -30,7 +30,7 @@ jobs de l'autre.
 |---|---|---|
 | Taille | environ 14 700 lignes de Pascal | environ 2 000 lignes (moteur) + 3 300 lignes (interface) + tests |
 | Prérequis | Delphi 7 + 5 paquets de composants tiers | un compilateur C++20 et Qt 6, rien d'autre |
-| Plateformes | Windows | Windows (MinGW, testé), Linux x86_64 (compile, tests du moteur passent), ARM64 (presets, non testé) |
+| Plateformes | Windows | Windows (MinGW, testé), Linux x86_64 (installé depuis les paquets et utilisé, testé), ARM64 (presets, non testé) |
 | Unicode | WideString + contrôles Tnt | `QString` (UTF-16), mêmes positions de caractères |
 | Distribution | installeur Inno Setup | zip portable + installeur Inno Setup 6 |
 
@@ -67,7 +67,7 @@ jobs de l'autre.
 | `Actions.pas`, `Files.pas`, `thread.pas` | `core/ren_actions.*`, `core/ren_files.*`, `RenWorker` dans `app/mainwindow.*` |
 | `functions_strformat.pas` | `core/ren_format.*` (avec un `FormatDateTime` compatible Delphi) |
 | `ExtractID3.pas` | `core/ren_id3.*` |
-| dEXIF / dIPTC | `core/ren_exif.*` (lecteur minimal maison) |
+| dEXIF / dIPTC | `core/ren_exif.*` (lecteurs minimaux maison : EXIF, IPTC, XMP) |
 | JvSimpleXml | `QXmlStreamReader` / `QXmlStreamWriter` |
 | TRegExpr | `QRegularExpression` (PCRE2) |
 | Tnt Unicode Controls, `WideString` | `QString` |
@@ -143,14 +143,18 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   annulation), aller-retour XML des jobs, ID3v2.3 avec repli sur la v1, réglages du compteur EXIF.
 - À la main : des jobs avec remplacement de chaîne et EXIF + énumération ont été exécutés sur de vrais fichiers ;
   l'interface a été comparée page par page à des captures de la 2.13 ; l'installeur a été installé et retiré en
-  mode silencieux ; le zip portable a été lancé avec un `PATH` minimal.
+  mode silencieux ; le zip portable a été lancé avec un `PATH` minimal ; le menu « Ajouter à Ant Renamer » a été
+  cliqué dans l'Explorateur sur un ou plusieurs fichiers et sur un ou plusieurs dossiers (contenu compris) ; les
+  paquets Linux ont été installés et le programme fonctionne.
 - Pas encore couvert : très grosses listes, disques réseau, un vrai fichier `.arb` enregistré par la version
-  Delphi, fichiers ID3v2.2/2.4, le menu cliqué dans l'Explorateur lui-même, exécution de l'interface sous Linux et
-  ARM64, installation pour tous les utilisateurs (administrateur).
+  Delphi, fichiers ID3v2.2/2.4, exécution de l'interface sous ARM64, installation pour tous les utilisateurs
+  (administrateur).
 
 ## Limites connues
 
-- Environ quarante balises EXIF ; pas d'IPTC.
+- Environ trente-cinq balises EXIF (IFD0 et IFD Exif seulement, MakerNote non décodé) ; l'IPTC n'est lu que dans les
+  JPEG ; les fichiers XMP annexes sont lus et renommés avec leur image (IMG.xmp, IMG.CR2.xmp et `.dop` de DxO ; pas les
+  autres types de fichiers annexes).
 - Seulement les tags ID3 ; pas d'autres formats de tags audio.
 - Le menu court de Windows 11 demande un composant COM empaqueté et signé, non réalisé.
 - L'exécutable n'est pas signé, donc SmartScreen peut avertir au premier téléchargement.

@@ -1,10 +1,10 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.0.0--rc.8-blue)
+![version](https://img.shields.io/badge/version-3.0.0--rc.9-blue)
 
 Portage C++/Qt 6 d'[Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (Delphi 7 à l'origine,
 GPL v2). Renommage de fichiers par lots : remplacer, insérer, déplacer, supprimer, énumérer, changer
-la casse, expressions régulières, noms depuis une liste, date du fichier, tags MP3 (ID3v1/v2), EXIF.
+la casse, expressions régulières, noms depuis une liste, date du fichier, tags MP3 (ID3v1/v2), EXIF / IPTC / XMP.
 
 **Ant Renamer Qt** est le nom officiel de ce portage, convenu avec l'auteur du programme d'origine. Il est
 développé en parallèle de l'Ant Renamer d'origine et a son propre exécutable, son propre dossier d'installation,

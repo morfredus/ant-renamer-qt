@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Ant Renamer 2 Help</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<link rel="stylesheet" href="main.css" type="text/css" />
+</head>
+<body>
+
+<h1>EXIF, IPTC and XMP tags</h1>
+<p>The <a href="actions_hr.html#exif">Use EXIF info</a> action reads the information stored inside the picture files and lets you use it in the mask, like any other <code>%tag%</code> (see <a href="format_hr.html">"Formatting"</a>). Three kinds of metadata are read:</p>
+<ul><li><b>EXIF</b>: what the camera writes (date, camera, exposure...). Read from JPEG and TIFF-based files (including most RAW files such as DNG, NEF, CR2, ARW).</li><li><b>IPTC</b>: what is typed in a photo manager (keywords, caption, author, place...). Tags start with <code>Iptc</code>. Read from JPEG files.</li><li><b>XMP</b>: the modern equivalent of IPTC, written by Lightroom, Capture One, Photoshop, digiKam... Tags start with <code>Xmp</code>. Read from any file that embeds an XMP packet (JPEG, PNG, WebP, TIFF, DNG...) and from <code>.xmp</code> files.</li></ul>
+<p>Tag names are not case-sensitive. A tag that the file does not contain gives an empty text; the action reports "No EXIF info found" only when the file has none of the three kinds of metadata.</p>
+<h2>Good to know</h2>
+<ul><li><b>Same information in IPTC and XMP.</b> Lightroom and most photo managers write both; others write only XMP. Use <code>$if</code> to take the first one that exists, e.g. <code>$if(%XmpTitle%,%XmpTitle%,%IptcObjectName%)%ext%</code>.</li><li><b>Several values</b> (keywords, authors) are joined with a comma and a space. Use <code>$if</code> to avoid a leading separator when a tag is empty, e.g. <code>%DateTimeOriginal%$if(%XmpKeywords%, - %XmpKeywords%,)%ext%</code>.</li><li><b>Dates.</b> EXIF, IPTC and XMP dates are all given as <code>yyyy:MM:dd HH:mm:ss</code>. The characters that cannot be used in a file name (such as ":") are replaced by "-", so <code>2024:05:17 14:30:05</code> gives <code>2024-05-17 14-30-05</code>. The "Offset" setting of the action shifts every date tag that has this layout.</li><li><b>Codes.</b> Tags such as <code>Flash</code>, <code>Orientation</code> or <code>MeteringMode</code> give the number stored in the file (see the EXIF specification for the meaning of each value).</li><li><b>Forbidden characters.</b> The values are cleaned like every file name: <code>/ \ : * ? " &lt; &gt; |</code> are replaced.</li><li><b>XMP sidecar files.</b> The <code>.xmp</code> file next to a picture (<code>IMG.xmp</code> or <code>IMG.CR2.xmp</code>) is read with the picture and wins over the XMP embedded in it: the keywords, title and rating you gave to a RAW file in your photo manager are usable. The sidecar (and a DxO <code>.dop</code> file) is also renamed with the picture (Options, Processing).</li><li><b>Limits.</b> Only the first 512 KB of each file are examined. IPTC is read from JPEG only.</li></ul>
+<h2 id="exif">EXIF tags</h2>
+<table border="1" cellpadding="3" cellspacing="0">
+<tr><th align="left">Tag</th><th align="left">Meaning</th></tr>
+<tr><td><code>%DateTimeOriginal%</code></td><td>Date and time the picture was taken</td></tr>
+<tr><td><code>%DateTimeDigitized%</code></td><td>Date and time the picture was digitized</td></tr>
+<tr><td><code>%DateTime%</code></td><td>Date and time of the last modification of the file</td></tr>
+<tr><td><code>%Make%</code></td><td>Camera manufacturer</td></tr>
+<tr><td><code>%Model%</code></td><td>Camera model</td></tr>
+<tr><td><code>%BodySerialNumber%</code></td><td>Camera serial number</td></tr>
+<tr><td><code>%LensMake%</code></td><td>Lens manufacturer</td></tr>
+<tr><td><code>%LensModel%</code></td><td>Lens model</td></tr>
+<tr><td><code>%ExposureTime%</code></td><td>Shutter speed, as 1/250 for fast speeds</td></tr>
+<tr><td><code>%FNumber%</code></td><td>Aperture (f-number), e.g. 2.8</td></tr>
+<tr><td><code>%ISOSpeedRatings%</code></td><td>ISO sensitivity</td></tr>
+<tr><td><code>%FocalLength%</code></td><td>Focal length in mm</td></tr>
+<tr><td><code>%FocalLengthIn35mmFilm%</code></td><td>Focal length in mm, 35 mm equivalent</td></tr>
+<tr><td><code>%ExposureBiasValue%</code></td><td>Exposure compensation (EV)</td></tr>
+<tr><td><code>%ShutterSpeedValue%</code></td><td>Shutter speed, APEX value</td></tr>
+<tr><td><code>%ApertureValue%</code></td><td>Aperture, APEX value</td></tr>
+<tr><td><code>%ExposureProgram%</code></td><td>Exposure program (code)</td></tr>
+<tr><td><code>%ExposureMode%</code></td><td>Exposure mode (code)</td></tr>
+<tr><td><code>%MeteringMode%</code></td><td>Metering mode (code)</td></tr>
+<tr><td><code>%Flash%</code></td><td>Flash status (code; 0 = did not fire)</td></tr>
+<tr><td><code>%WhiteBalance%</code></td><td>White balance (0 = auto, 1 = manual)</td></tr>
+<tr><td><code>%SceneCaptureType%</code></td><td>Scene type (code)</td></tr>
+<tr><td><code>%Orientation%</code></td><td>Orientation of the picture (1 to 8)</td></tr>
+<tr><td><code>%ExifImageWidth%</code></td><td>Width in pixels</td></tr>
+<tr><td><code>%ExifImageLength%</code></td><td>Height in pixels</td></tr>
+<tr><td><code>%XResolution%</code></td><td>Horizontal resolution</td></tr>
+<tr><td><code>%YResolution%</code></td><td>Vertical resolution</td></tr>
+<tr><td><code>%ResolutionUnit%</code></td><td>Resolution unit (2 = inch, 3 = cm)</td></tr>
+<tr><td><code>%ColorSpace%</code></td><td>Color space (1 = sRGB)</td></tr>
+<tr><td><code>%Software%</code></td><td>Software that wrote the file</td></tr>
+<tr><td><code>%Artist%</code></td><td>Photographer (EXIF field)</td></tr>
+<tr><td><code>%Copyright%</code></td><td>Copyright (EXIF field)</td></tr>
+<tr><td><code>%ImageDescription%</code></td><td>Description (EXIF field)</td></tr>
+<tr><td><code>%UserComment%</code></td><td>User comment (often empty or not readable)</td></tr>
+<tr><td><code>%ExifVersion%</code></td><td>EXIF version</td></tr>
+<tr><td><code>%MakerNote%</code></td><td>Manufacturer notes (rarely usable)</td></tr>
+</table>
+<h2 id="iptc">IPTC tags</h2>
+<table border="1" cellpadding="3" cellspacing="0">
+<tr><th align="left">Tag</th><th align="left">Meaning</th></tr>
+<tr><td><code>%IptcKeywords%</code></td><td>Keywords (several values joined with a comma)</td></tr>
+<tr><td><code>%IptcCaption%</code></td><td>Caption / description</td></tr>
+<tr><td><code>%IptcHeadline%</code></td><td>Headline</td></tr>
+<tr><td><code>%IptcObjectName%</code></td><td>Title (object name)</td></tr>
+<tr><td><code>%IptcByline%</code></td><td>Author / photographer</td></tr>
+<tr><td><code>%IptcBylineTitle%</code></td><td>Author's job title</td></tr>
+<tr><td><code>%IptcCopyright%</code></td><td>Copyright notice</td></tr>
+<tr><td><code>%IptcCredit%</code></td><td>Credit line</td></tr>
+<tr><td><code>%IptcSource%</code></td><td>Source</td></tr>
+<tr><td><code>%IptcCity%</code></td><td>City</td></tr>
+<tr><td><code>%IptcSublocation%</code></td><td>Location within the city</td></tr>
+<tr><td><code>%IptcState%</code></td><td>State / province</td></tr>
+<tr><td><code>%IptcCountry%</code></td><td>Country name</td></tr>
+<tr><td><code>%IptcCountryCode%</code></td><td>Country code (e.g. FRA)</td></tr>
+<tr><td><code>%IptcDateCreated%</code></td><td>Date of creation, as 2024:05:17</td></tr>
+<tr><td><code>%IptcTimeCreated%</code></td><td>Time of creation, as 14:30:05</td></tr>
+<tr><td><code>%IptcCategory%</code></td><td>Category</td></tr>
+<tr><td><code>%IptcSupplementalCategories%</code></td><td>Supplemental categories</td></tr>
+<tr><td><code>%IptcSpecialInstructions%</code></td><td>Special instructions</td></tr>
+<tr><td><code>%IptcUrgency%</code></td><td>Urgency (1 to 8)</td></tr>
+<tr><td><code>%IptcWriter%</code></td><td>Caption writer</td></tr>
+<tr><td><code>%IptcTransmissionReference%</code></td><td>Job identifier (transmission reference)</td></tr>
+</table>
+<h2 id="xmp">XMP tags</h2>
+<table border="1" cellpadding="3" cellspacing="0">
+<tr><th align="left">Tag</th><th align="left">Meaning</th></tr>
+<tr><td><code>%XmpTitle%</code></td><td>Title (dc:title)</td></tr>
+<tr><td><code>%XmpDescription%</code></td><td>Description (dc:description)</td></tr>
+<tr><td><code>%XmpKeywords%</code></td><td>Keywords (dc:subject, joined with a comma)</td></tr>
+<tr><td><code>%XmpHierarchicalKeywords%</code></td><td>Lightroom keyword hierarchy, e.g. Places|France|Paris</td></tr>
+<tr><td><code>%XmpCreator%</code></td><td>Author / photographer (dc:creator)</td></tr>
+<tr><td><code>%XmpRights%</code></td><td>Copyright (dc:rights)</td></tr>
+<tr><td><code>%XmpRating%</code></td><td>Rating, 0 to 5 stars (-1 = rejected)</td></tr>
+<tr><td><code>%XmpLabel%</code></td><td>Color label (e.g. Red)</td></tr>
+<tr><td><code>%XmpCreateDate%</code></td><td>Date and time of creation, as 2024:05:17 14:30:05</td></tr>
+<tr><td><code>%XmpModifyDate%</code></td><td>Date and time of last modification, same layout</td></tr>
+<tr><td><code>%XmpDateCreated%</code></td><td>Date of creation of the content (photoshop:DateCreated)</td></tr>
+<tr><td><code>%XmpCreatorTool%</code></td><td>Software that created the file</td></tr>
+<tr><td><code>%XmpHeadline%</code></td><td>Headline</td></tr>
+<tr><td><code>%XmpCredit%</code></td><td>Credit line</td></tr>
+<tr><td><code>%XmpSource%</code></td><td>Source</td></tr>
+<tr><td><code>%XmpCity%</code></td><td>City</td></tr>
+<tr><td><code>%XmpState%</code></td><td>State / province</td></tr>
+<tr><td><code>%XmpCountry%</code></td><td>Country name</td></tr>
+<tr><td><code>%XmpCountryCode%</code></td><td>Country code</td></tr>
+<tr><td><code>%XmpLocation%</code></td><td>Location (sublocation)</td></tr>
+<tr><td><code>%XmpCategory%</code></td><td>Category</td></tr>
+<tr><td><code>%XmpInstructions%</code></td><td>Special instructions</td></tr>
+<tr><td><code>%XmpAuthorsPosition%</code></td><td>Author's job title</td></tr>
+<tr><td><code>%XmpCaptionWriter%</code></td><td>Caption writer</td></tr>
+<tr><td><code>%XmpTransmissionReference%</code></td><td>Job identifier</td></tr>
+<tr><td><code>%XmpLens%</code></td><td>Lens description (aux:Lens)</td></tr>
+</table>
+
+</body>
+</html>

@@ -29,7 +29,7 @@ common, on purpose: both programs read each other's batches.
 |---|---|---|
 | Size | about 14,700 lines of Pascal | about 2,000 lines (engine) + 3,300 lines (interface) + tests |
 | Needs | Delphi 7 + 5 third-party component packs | a C++20 compiler and Qt 6, nothing else |
-| Platforms | Windows | Windows (MinGW, tested), Linux x86_64 (builds, engine tests pass), ARM64 (presets, untested) |
+| Platforms | Windows | Windows (MinGW, tested), Linux x86_64 (installed from the packages and run, tested), ARM64 (presets, untested) |
 | Unicode | WideString + Tnt controls | `QString` (UTF-16), same semantics for positions |
 | Distribution | Inno Setup installer | portable zip + Inno Setup 6 installer |
 
@@ -65,7 +65,7 @@ common, on purpose: both programs read each other's batches.
 | `Actions.pas`, `Files.pas`, `thread.pas` | `core/ren_actions.*`, `core/ren_files.*`, `RenWorker` in `app/mainwindow.*` |
 | `functions_strformat.pas` | `core/ren_format.*` (also a Delphi-compatible `FormatDateTime`) |
 | `ExtractID3.pas` | `core/ren_id3.*` |
-| dEXIF / dIPTC | `core/ren_exif.*` (own minimal reader) |
+| dEXIF / dIPTC | `core/ren_exif.*` (own minimal readers: EXIF, IPTC, XMP) |
 | JvSimpleXml | `QXmlStreamReader` / `QXmlStreamWriter` |
 | TRegExpr | `QRegularExpression` (PCRE2) |
 | Tnt Unicode Controls, `WideString` | `QString` |
@@ -140,14 +140,16 @@ These are the places where the port does not do exactly what version 2.13 does. 
   round trip, ID3v2.3 with fallback to v1, EXIF counter settings.
 - By hand: batches with string replacement and EXIF + enumeration were run on real files; the interface
   was compared page by page with screenshots of version 2.13; the installer was installed and removed
-  silently; the portable zip was run with a minimal `PATH`.
+  silently; the portable zip was run with a minimal `PATH`; the Explorer menu "Add to Ant Renamer" was
+  clicked in Explorer on one or several files and on one or several folders (contents included); the Linux
+  packages were installed and the program runs.
 - Not covered yet: very large lists, network drives, a real `.arb` file saved by the Delphi version,
-  ID3v2.2/2.4 files, the Explorer menu clicked in Explorer itself, Linux and ARM64 interface runs,
-  administrator (all users) installation.
+  ID3v2.2/2.4 files, ARM64 interface runs, administrator (all users) installation.
 
 ## Known limits
 
-- Roughly forty EXIF tags; no IPTC.
+- About thirty-five EXIF tags (IFD0 and Exif IFD only, no MakerNote decoding); IPTC is read from JPEG only; XMP
+  sidecar files are read and renamed with their picture (IMG.xmp, IMG.CR2.xmp and DxO `.dop`; other sidecar types are not).
 - Only ID3 tags; no other audio tag formats.
 - The Windows 11 short context menu needs a packaged COM component and a signed package, not done.
 - The executable is not code-signed, so SmartScreen may warn on the first download.

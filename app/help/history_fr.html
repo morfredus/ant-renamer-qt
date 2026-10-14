@@ -9,6 +9,16 @@
 <h1>Historique des versions</h1>
 <p>Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Fr&eacute;d&eacute;ric Biron, d&eacute;velopp&eacute; en parall&egrave;le de l'original) :</p>
 <ul>
+	<li>3.0.0-rc.9 (14/10/2026)
+		<ul>
+			<li>Nouveau bouton &#171; Seulement modifi&#233;s &#187; dans la liste des fichiers : il masque les fichiers dont le nom ne change pas dans l'aper&#231;u (simple filtre d'affichage, les fichiers masqu&#233;s sont quand m&#234;me renomm&#233;s).</li>
+			<li>Une image renomm&#233;e emporte maintenant ses fichiers associ&#233;s (IMG.xmp, IMG.CR2.xmp et fichiers .dop de DxO), aussi annul&#233;s avec elle (option dans Options, Traitement, activ&#233;e par d&#233;faut). Le fichier XMP associ&#233; est aussi lu par l'action EXIF.</li>
+			<li>Nouvelle option &#171; Utiliser les jokers &#187; dans le remplacement de cha&#238;ne : * remplace n'importe quel texte et ? un seul caract&#232;re.</li>
+			<li>Nouvelle option &#171; M&#234;me num&#233;ro pour les fichiers de m&#234;me nom et d'extensions diff&#233;rentes &#187; dans &#201;num&#233;ration et EXIF, pour qu'un JPG et son RAW (ou XMP) re&#231;oivent le m&#234;me num&#233;ro.</li>
+			<li>L'action EXIF lit maintenant aussi les donn&#233;es IPTC et XMP (mots-cl&#233;s, titre, l&#233;gende, auteur, lieu, note...). Nouvelle page d'aide listant tous les tags utilisables.</li>
+			<li>Les notes et les textes des cases &#224; cocher de l'&#233;diteur d'actions passent maintenant &#224; la ligne selon la largeur du panneau au lieu d'&#234;tre coup&#233;s par une barre de d&#233;filement.</li>
+		</ul>
+	</li>
 	<li>3.0.0-rc.8 (14/10/2026)
 		<ul>
 			<li>Nouvelle disposition moderne de l'interface, au choix dans Options, Affichage (la disposition classique reste celle par d&#233;faut) : onglets avec compteurs, une barre par page, colonne du nouveau nom visible, et job toujours visible &#224; c&#244;t&#233; de l'&#233;diteur.</li>

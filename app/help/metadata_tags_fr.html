@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Ant Renamer 2 Help</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<link rel="stylesheet" href="main.css" type="text/css" />
+</head>
+<body>
+
+<h1>Tags EXIF, IPTC et XMP</h1>
+<p>L'action <a href="actions_fr.html#exif">Utiliser les informations EXIF</a> lit les informations stock&eacute;es dans les fichiers image et permet de les utiliser dans le masque, comme n'importe quel <code>%tag%</code> (voir <a href="format_fr.html">&laquo;&nbsp;Formatage&nbsp;&raquo;</a>). Trois types de m&eacute;tadonn&eacute;es sont lus :</p>
+<ul><li><b>EXIF</b> : ce qu'&eacute;crit l'appareil photo (date, appareil, exposition...). Lu dans les fichiers JPEG et ceux bas&eacute;s sur TIFF (dont la plupart des RAW : DNG, NEF, CR2, ARW).</li><li><b>IPTC</b> : ce qui est saisi dans un logiciel de gestion de photos (mots-cl&eacute;s, l&eacute;gende, auteur, lieu...). Les tags commencent par <code>Iptc</code>. Lu dans les fichiers JPEG.</li><li><b>XMP</b> : l'&eacute;quivalent moderne de l'IPTC, &eacute;crit par Lightroom, Capture One, Photoshop, digiKam... Les tags commencent par <code>Xmp</code>. Lu dans tout fichier contenant un bloc XMP (JPEG, PNG, WebP, TIFF, DNG...) et dans les fichiers <code>.xmp</code>.</li></ul>
+<p>Les noms de tags ne tiennent pas compte des majuscules. Un tag absent du fichier donne un texte vide ; l'action n'indique &laquo;&nbsp;Aucune info EXIF trouv&eacute;e&nbsp;&raquo; que si le fichier ne contient aucun des trois types de m&eacute;tadonn&eacute;es.</p>
+<h2>&Agrave; savoir</h2>
+<ul><li><b>M&ecirc;me information en IPTC et en XMP.</b> Lightroom et la plupart des gestionnaires de photos &eacute;crivent les deux ; d'autres n'&eacute;crivent que du XMP. Utilisez <code>$if</code> pour prendre le premier qui existe, par ex. <code>$if(%XmpTitle%,%XmpTitle%,%IptcObjectName%)%ext%</code>.</li><li><b>Plusieurs valeurs</b> (mots-cl&eacute;s, auteurs) : elles sont jointes par une virgule et une espace. Utilisez <code>$if</code> pour &eacute;viter un s&eacute;parateur en trop quand un tag est vide, par ex. <code>%DateTimeOriginal%$if(%XmpKeywords%, - %XmpKeywords%,)%ext%</code>.</li><li><b>Dates.</b> Les dates EXIF, IPTC et XMP sont toutes donn&eacute;es sous la forme <code>aaaa:MM:jj HH:mm:ss</code>. Les caract&egrave;res interdits dans un nom de fichier (comme &laquo;&nbsp;:&nbsp;&raquo;) sont remplac&eacute;s par &laquo;&nbsp;-&nbsp;&raquo; : <code>2024:05:17 14:30:05</code> donne <code>2024-05-17 14-30-05</code>. Le r&eacute;glage &laquo;&nbsp;D&eacute;calage&nbsp;&raquo; de l'action d&eacute;cale tous les tags date ayant cette forme.</li><li><b>Codes.</b> Des tags comme <code>Flash</code>, <code>Orientation</code> ou <code>MeteringMode</code> donnent le nombre stock&eacute; dans le fichier (voir la sp&eacute;cification EXIF pour la signification de chaque valeur).</li><li><b>Caract&egrave;res interdits.</b> Les valeurs sont nettoy&eacute;es comme tout nom de fichier : <code>/ \ : * ? " &lt; &gt; |</code> sont remplac&eacute;s.</li><li><b>Fichiers XMP annexes.</b> Le fichier <code>.xmp</code> &agrave; c&ocirc;t&eacute; d'une image (<code>IMG.xmp</code> ou <code>IMG.CR2.xmp</code>) est lu avec l'image et l'emporte sur le XMP int&eacute;gr&eacute; : les mots-cl&eacute;s, le titre et la note donn&eacute;s &agrave; un fichier RAW dans votre logiciel photo sont utilisables. Le fichier annexe (et un fichier <code>.dop</code> de DxO) est aussi renomm&eacute; avec l'image (Options, Traitement).</li><li><b>Limites.</b> Seuls les 512 premiers Ko de chaque fichier sont examin&eacute;s. L'IPTC n'est lu que dans les JPEG.</li></ul>
+<h2 id="exif">Tags EXIF</h2>
+<table border="1" cellpadding="3" cellspacing="0">
+<tr><th align="left">Tag</th><th align="left">Signification</th></tr>
+<tr><td><code>%DateTimeOriginal%</code></td><td>Date et heure de la prise de vue</td></tr>
+<tr><td><code>%DateTimeDigitized%</code></td><td>Date et heure de num&eacute;risation</td></tr>
+<tr><td><code>%DateTime%</code></td><td>Date et heure de derni&egrave;re modification du fichier</td></tr>
+<tr><td><code>%Make%</code></td><td>Fabricant de l'appareil</td></tr>
+<tr><td><code>%Model%</code></td><td>Mod&egrave;le de l'appareil</td></tr>
+<tr><td><code>%BodySerialNumber%</code></td><td>Num&eacute;ro de s&eacute;rie de l'appareil</td></tr>
+<tr><td><code>%LensMake%</code></td><td>Fabricant de l'objectif</td></tr>
+<tr><td><code>%LensModel%</code></td><td>Mod&egrave;le de l'objectif</td></tr>
+<tr><td><code>%ExposureTime%</code></td><td>Temps de pose, sous la forme 1/250 pour les vitesses rapides</td></tr>
+<tr><td><code>%FNumber%</code></td><td>Ouverture (nombre f), par ex. 2.8</td></tr>
+<tr><td><code>%ISOSpeedRatings%</code></td><td>Sensibilit&eacute; ISO</td></tr>
+<tr><td><code>%FocalLength%</code></td><td>Focale en mm</td></tr>
+<tr><td><code>%FocalLengthIn35mmFilm%</code></td><td>Focale en mm, &eacute;quivalent 24x36</td></tr>
+<tr><td><code>%ExposureBiasValue%</code></td><td>Correction d'exposition (IL)</td></tr>
+<tr><td><code>%ShutterSpeedValue%</code></td><td>Vitesse d'obturation, valeur APEX</td></tr>
+<tr><td><code>%ApertureValue%</code></td><td>Ouverture, valeur APEX</td></tr>
+<tr><td><code>%ExposureProgram%</code></td><td>Programme d'exposition (code)</td></tr>
+<tr><td><code>%ExposureMode%</code></td><td>Mode d'exposition (code)</td></tr>
+<tr><td><code>%MeteringMode%</code></td><td>Mode de mesure (code)</td></tr>
+<tr><td><code>%Flash%</code></td><td>&Eacute;tat du flash (code ; 0 = n'a pas d&eacute;clench&eacute;)</td></tr>
+<tr><td><code>%WhiteBalance%</code></td><td>Balance des blancs (0 = auto, 1 = manuelle)</td></tr>
+<tr><td><code>%SceneCaptureType%</code></td><td>Type de sc&egrave;ne (code)</td></tr>
+<tr><td><code>%Orientation%</code></td><td>Orientation de l'image (1 &agrave; 8)</td></tr>
+<tr><td><code>%ExifImageWidth%</code></td><td>Largeur en pixels</td></tr>
+<tr><td><code>%ExifImageLength%</code></td><td>Hauteur en pixels</td></tr>
+<tr><td><code>%XResolution%</code></td><td>R&eacute;solution horizontale</td></tr>
+<tr><td><code>%YResolution%</code></td><td>R&eacute;solution verticale</td></tr>
+<tr><td><code>%ResolutionUnit%</code></td><td>Unit&eacute; de r&eacute;solution (2 = pouce, 3 = cm)</td></tr>
+<tr><td><code>%ColorSpace%</code></td><td>Espace colorim&eacute;trique (1 = sRGB)</td></tr>
+<tr><td><code>%Software%</code></td><td>Logiciel ayant &eacute;crit le fichier</td></tr>
+<tr><td><code>%Artist%</code></td><td>Photographe (champ EXIF)</td></tr>
+<tr><td><code>%Copyright%</code></td><td>Copyright (champ EXIF)</td></tr>
+<tr><td><code>%ImageDescription%</code></td><td>Description (champ EXIF)</td></tr>
+<tr><td><code>%UserComment%</code></td><td>Commentaire utilisateur (souvent vide ou illisible)</td></tr>
+<tr><td><code>%ExifVersion%</code></td><td>Version d'EXIF</td></tr>
+<tr><td><code>%MakerNote%</code></td><td>Notes du fabricant (rarement exploitable)</td></tr>
+</table>
+<h2 id="iptc">Tags IPTC</h2>
+<table border="1" cellpadding="3" cellspacing="0">
+<tr><th align="left">Tag</th><th align="left">Signification</th></tr>
+<tr><td><code>%IptcKeywords%</code></td><td>Mots-cl&eacute;s (plusieurs valeurs jointes par une virgule)</td></tr>
+<tr><td><code>%IptcCaption%</code></td><td>L&eacute;gende / description</td></tr>
+<tr><td><code>%IptcHeadline%</code></td><td>Titre court (headline)</td></tr>
+<tr><td><code>%IptcObjectName%</code></td><td>Titre (nom de l'objet)</td></tr>
+<tr><td><code>%IptcByline%</code></td><td>Auteur / photographe</td></tr>
+<tr><td><code>%IptcBylineTitle%</code></td><td>Fonction de l'auteur</td></tr>
+<tr><td><code>%IptcCopyright%</code></td><td>Mention de copyright</td></tr>
+<tr><td><code>%IptcCredit%</code></td><td>Cr&eacute;dit</td></tr>
+<tr><td><code>%IptcSource%</code></td><td>Source</td></tr>
+<tr><td><code>%IptcCity%</code></td><td>Ville</td></tr>
+<tr><td><code>%IptcSublocation%</code></td><td>Lieu pr&eacute;cis dans la ville</td></tr>
+<tr><td><code>%IptcState%</code></td><td>R&eacute;gion / &eacute;tat</td></tr>
+<tr><td><code>%IptcCountry%</code></td><td>Nom du pays</td></tr>
+<tr><td><code>%IptcCountryCode%</code></td><td>Code du pays (par ex. FRA)</td></tr>
+<tr><td><code>%IptcDateCreated%</code></td><td>Date de cr&eacute;ation, sous la forme 2024:05:17</td></tr>
+<tr><td><code>%IptcTimeCreated%</code></td><td>Heure de cr&eacute;ation, sous la forme 14:30:05</td></tr>
+<tr><td><code>%IptcCategory%</code></td><td>Cat&eacute;gorie</td></tr>
+<tr><td><code>%IptcSupplementalCategories%</code></td><td>Cat&eacute;gories suppl&eacute;mentaires</td></tr>
+<tr><td><code>%IptcSpecialInstructions%</code></td><td>Instructions sp&eacute;ciales</td></tr>
+<tr><td><code>%IptcUrgency%</code></td><td>Urgence (1 &agrave; 8)</td></tr>
+<tr><td><code>%IptcWriter%</code></td><td>R&eacute;dacteur de la l&eacute;gende</td></tr>
+<tr><td><code>%IptcTransmissionReference%</code></td><td>Identifiant de travail (r&eacute;f&eacute;rence de transmission)</td></tr>
+</table>
+<h2 id="xmp">Tags XMP</h2>
+<table border="1" cellpadding="3" cellspacing="0">
+<tr><th align="left">Tag</th><th align="left">Signification</th></tr>
+<tr><td><code>%XmpTitle%</code></td><td>Titre (dc:title)</td></tr>
+<tr><td><code>%XmpDescription%</code></td><td>Description (dc:description)</td></tr>
+<tr><td><code>%XmpKeywords%</code></td><td>Mots-cl&eacute;s (dc:subject, joints par une virgule)</td></tr>
+<tr><td><code>%XmpHierarchicalKeywords%</code></td><td>Hi&eacute;rarchie des mots-cl&eacute;s de Lightroom, par ex. Lieux|France|Paris</td></tr>
+<tr><td><code>%XmpCreator%</code></td><td>Auteur / photographe (dc:creator)</td></tr>
+<tr><td><code>%XmpRights%</code></td><td>Copyright (dc:rights)</td></tr>
+<tr><td><code>%XmpRating%</code></td><td>Note de 0 &agrave; 5 &eacute;toiles (-1 = rejet&eacute;e)</td></tr>
+<tr><td><code>%XmpLabel%</code></td><td>Label de couleur (par ex. Rouge)</td></tr>
+<tr><td><code>%XmpCreateDate%</code></td><td>Date et heure de cr&eacute;ation, sous la forme 2024:05:17 14:30:05</td></tr>
+<tr><td><code>%XmpModifyDate%</code></td><td>Date et heure de derni&egrave;re modification, m&ecirc;me forme</td></tr>
+<tr><td><code>%XmpDateCreated%</code></td><td>Date de cr&eacute;ation du contenu (photoshop:DateCreated)</td></tr>
+<tr><td><code>%XmpCreatorTool%</code></td><td>Logiciel ayant cr&eacute;&eacute; le fichier</td></tr>
+<tr><td><code>%XmpHeadline%</code></td><td>Titre court (headline)</td></tr>
+<tr><td><code>%XmpCredit%</code></td><td>Cr&eacute;dit</td></tr>
+<tr><td><code>%XmpSource%</code></td><td>Source</td></tr>
+<tr><td><code>%XmpCity%</code></td><td>Ville</td></tr>
+<tr><td><code>%XmpState%</code></td><td>R&eacute;gion / &eacute;tat</td></tr>
+<tr><td><code>%XmpCountry%</code></td><td>Nom du pays</td></tr>
+<tr><td><code>%XmpCountryCode%</code></td><td>Code du pays</td></tr>
+<tr><td><code>%XmpLocation%</code></td><td>Lieu pr&eacute;cis (sublocation)</td></tr>
+<tr><td><code>%XmpCategory%</code></td><td>Cat&eacute;gorie</td></tr>
+<tr><td><code>%XmpInstructions%</code></td><td>Instructions sp&eacute;ciales</td></tr>
+<tr><td><code>%XmpAuthorsPosition%</code></td><td>Fonction de l'auteur</td></tr>
+<tr><td><code>%XmpCaptionWriter%</code></td><td>R&eacute;dacteur de la l&eacute;gende</td></tr>
+<tr><td><code>%XmpTransmissionReference%</code></td><td>Identifiant de travail</td></tr>
+<tr><td><code>%XmpLens%</code></td><td>Description de l'objectif (aux:Lens)</td></tr>
+</table>
+
+</body>
+</html>

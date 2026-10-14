@@ -47,6 +47,7 @@
 	<li><span class="optname">Generate log</span> : If this is disabled, the Log page of the main window will not be filled with all the files processed.</li>
 	<li><span class="optname">DST offset related to file date</span> : If enabled, the offset for daylight saving time is computed from the file date (default on
 		Windows 7 and higher), otherwise it is computed from current date (default for older Windows versions).</li>
+	<li><span class="optname">Also rename the sidecar files (.xmp, .dop) of a renamed picture</span> : (Ant Renamer Qt) Enabled by default. When a picture is renamed, its sidecar files are renamed with it: XMP files (<code>IMG.xmp</code>, written by Lightroom or Capture One, or <code>IMG.CR2.xmp</code>, written by digiKam or darktable) and DxO PhotoLab files (<code>IMG.dop</code> or <code>IMG.CR2.dop</code>); also with an upper-case extension. They go back to their old names if you revert. If a file with the new sidecar name already exists, the sidecar is left alone and the log line says so. Not used in "Copy instead of Rename" mode.</li>
 	<li><span class="optname">Force directories</span> : A "\" character is not valid in a file name since it is used as path delimited (e.g. c:\Program Files\Ant
 		Renamer\Renamer.exe). So when a "\" is found in a file name the part before the "\" is considered as a folder. To be able to move the file to this folder,
 	it must exist. If this option is checked, before renaming/moving each file the program will check that the folder exists, and will create it if it is not found.</li>

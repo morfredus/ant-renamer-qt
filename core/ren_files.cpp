@@ -1,5 +1,6 @@
 #include "ren_files.h"
 
+#include "ren_exif.h"
 #include "ren_path.h"
 
 #include <QCoreApplication>
@@ -11,6 +12,8 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
+
+using namespace Qt::StringLiterals;
 
 namespace ren {
 
@@ -99,6 +102,8 @@ bool File::rename(QString newName) {
             description_ = tr("%1 renamed to %2").arg(source, newName);
             folder_ = extractFilePath(newName);
         }
+        sidecarsMoved_.clear();
+        if (o.renameSidecar && !o.copy && !isFolder_) moveSidecars(source, newName, false);
         status_ = State::Ok;
     } else {
         if (pathExists(newName)) err = tr("A file or a folder with this name already exists");
@@ -120,6 +125,7 @@ bool File::revert() {
     if (moveFile(source, oldName_, err)) {
         if (onRenamed) onRenamed(*this, source, oldName_);
         description_ = tr("%1 reverted to previous name %2").arg(name_, extractFileName(oldName_));
+        moveSidecars(source, oldName_, true);
         status_ = State::Ok;
         name_ = extractFileName(oldName_);
         folder_ = extractFilePath(oldName_);
@@ -130,6 +136,39 @@ bool File::revert() {
     description_ = tr("Could not rename %1 to %2: %3").arg(source, oldName_, err);
     status_ = State::Error;
     return false;
+}
+
+void File::followPath(const QString& to) {
+    const QString p = QDir::toNativeSeparators(to);
+    folder_ = extractFilePath(p);
+    name_ = extractFileName(p);
+}
+
+// Moves the sidecars (.xmp, .dop) of `from` so they match `to` (or puts them back when `revert`). A problem with a
+// sidecar never fails the picture: it is only mentioned in the log line.
+void File::moveSidecars(const QString& from, const QString& to, bool revert) {
+    std::vector<std::pair<QString, QString>> pairs;  // (old, new) of every sidecar to move
+    if (revert) {
+        for (const auto& p : sidecarsMoved_) pairs.emplace_back(p.second, p.first);
+        sidecarsMoved_.clear();
+    } else {
+        const QStringList a = sidecarCandidates(from, sidecarExtensions()), b = sidecarCandidates(to, sidecarExtensions());
+        for (int i = 0; i < a.size() && i < b.size(); ++i)
+            pairs.emplace_back(a[i], b[i]);
+    }
+    for (const auto& [src, dst] : pairs) {
+        if (src == dst || !QFileInfo::exists(src)) continue;  // checked now: on Windows .xmp and .XMP are one file
+        QString err;
+        const bool onlyCase = src.compare(dst, Qt::CaseInsensitive) == 0;
+        if (!onlyCase && pathExists(dst)) err = tr("A file or a folder with this name already exists");
+        else if (moveFile(src, dst, err)) {
+            if (!revert) sidecarsMoved_.emplace_back(src, dst);
+            if (onSidecarMoved) onSidecarMoved(src, dst);
+            description_ += u" ("_s + tr("sidecar file %1 renamed to %2").arg(extractFileName(src), extractFileName(dst)) + u')';
+            continue;
+        }
+        description_ += u" ("_s + tr("sidecar file %1 not renamed: %2").arg(extractFileName(src), err) + u')';
+    }
 }
 
 void File::fixPathAfterFolderRename(const QString& from, const QString& to) {
@@ -145,6 +184,10 @@ File& FileList::add(const QString& path) {
         const QString from = includeTrailingBackslash(src), to = includeTrailingBackslash(dst);
         for (auto& it : items_)
             if (it.get() != &who) it->fixPathAfterFolderRename(from, to);
+    };
+    f.onSidecarMoved = [this](const QString& from, const QString& to) {  // a .xmp that is also in the list follows
+        for (auto& it : items_)
+            if (!it->isFolder() && QDir::fromNativeSeparators(it->filePath()).compare(from, Qt::CaseInsensitive) == 0) it->followPath(to);
     };
     return f;
 }

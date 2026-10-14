@@ -28,6 +28,7 @@ Authors=Antoine Potten|antrenamer-contact@antp.be
     <ActionRemoveAll Caption="Retirer tout" Hint="Retirer tout|Retirer de la liste tous les fichiers"/>
     <ActionRemoveDead Caption="Retirer manquants" Hint="Retirer les fichiers manquants|Retirer de la liste les fichiers n'existant plus"/>
     <ActionPreview Caption="Aperçu" Hint="Actualiser l'aperçu|Réactualiser la colonne d'aperçu en tenant compte des actions planifiées"/>
+    <ActionChangedOnly Caption="Seulement modifiés" Hint="Seulement modifiés|Afficher seulement les fichiers dont le nom change dans l'aperçu"/>
     <ActionFromListClear Caption="Vider" Hint="Vider la liste|Vider la liste"/>
     <ActionFromListOpen Caption="Ouvrir..." Hint="Ouvrir|Charger une liste depuis un fichier"/>
     <ActionFromListSave Caption="Sauver..." Hint="Sauver|Sauver la liste dans un fichier"/>
@@ -108,6 +109,7 @@ Authors=Antoine Potten|antrenamer-contact@antp.be
     <cbxStrReplCase Caption="Sensible à la casse"/>
     <cbxStrReplExt Caption="Inclure l'extension dans la recherche"/>
     <cbxStrReplOnlyExt Caption="Appliquer à l'extension plutôt qu'au nom"/>
+    <cbxStrReplWildcards Caption="Utiliser les jokers (* = n'importe quel texte, ? = n'importe quel caractère)"/>
     <lblMultstrSearch Caption="Rechercher :"/>
     <lblMultstrReplBy Caption="Remplacer par :"/>
     <lblMultstrReplSet Caption="Sets prédéfinis :"/>
@@ -141,6 +143,8 @@ Authors=Antoine Potten|antrenamer-contact@antp.be
     <lblEnumDigits Caption="Nombre de chiffres :"/>
     <lblEnumIncr Caption="Incrémenter de :"/>
     <cbxEnumRestart Caption="Retour à la valeur de démarrage lors d'un changement de dossier"/>
+    <cbxEnumSharePairs Caption="Même numéro pour les fichiers de même nom et d'extensions différentes (ex. JPG + RAW + XMP)"/>
+    <cbxExifNumSharePairs Caption="Même numéro pour les fichiers de même nom et d'extensions différentes (ex. JPG + RAW + XMP)"/>
     <lblEnumNotes Caption="Notes:&lt;BR&gt;- %name% = Nom de fichier original (sans extension)&lt;BR&gt;- %ext% = Extension originale (incluant le point)&lt;BR&gt;- %num% = Numéro&lt;BR&gt;- %folderN% = Nom du dossier, où N est le niveau (1 = courant, 2 = parent, etc.)&lt;BR&gt;- %% = caractère %&lt;BR&gt;consultez l'&lt;LINK&gt;aide&lt;/LINK&gt; pour plus d'information"/>
     <lblMP3Mask Caption="Masque :"/>
     <cbxMP3TwoDigit Caption="Numéro de piste sur deux chiffres (insérer un '0' devant le numéro si nécessaire)"/>
@@ -208,7 +212,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <lblExifMask Caption="Masque :"/>
     <lblExifOffset Caption="Décalage :"/>
     <lblExifOffsetSec Caption="seconds"/>
-    <lblExifNotes Caption="Notes :&lt;BR&gt;- %name% = Nom de fichier original (sans extension)&lt;BR&gt;- %ext% = Extension originale (incluant le point)&lt;BR&gt;- %datetimeoriginal% ou %datetime% = Date et heure d'origine de l'image&lt;BR&gt;- %orientation% = Orientation de l'image&lt;BR&gt;- %flash% = Activation ou non du flash&lt;BR&gt;- %% = caractère %&lt;BR&gt;consultez l'&lt;LINK&gt;aide&lt;/LINK&gt; pour plus d'information et une liste complète des tags EXIF"/>
+    <lblExifNotes Caption="Notes :&lt;BR&gt;- %name% = Nom de fichier original (sans extension)&lt;BR&gt;- %ext% = Extension originale (incluant le point)&lt;BR&gt;- %datetimeoriginal% ou %datetime% = Date et heure d'origine de l'image&lt;BR&gt;- %orientation% = Orientation de l'image&lt;BR&gt;- %flash% = Activation ou non du flash&lt;BR&gt;- %% = caractère %&lt;BR&gt;consultez l'&lt;LINK&gt;aide&lt;/LINK&gt; pour plus d'information et la liste complète des tags EXIF, IPTC et XMP"/>
     <lstLog Hint="|Journal"/>
     <VarMessages>
       <Item Name="strfltAllFiles" Value="Tous les fichiers"/>
@@ -237,6 +241,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
       <Item Name="stradStringRepl" Value="Remplacer &#34;%s&#34; par &#34;%s&#34;"/>
       <Item Name="stradStringReplAll" Value=", remplacer toutes les occurences"/>
       <Item Name="stradStringReplCase" Value=", sensible à la casse"/>
+      <Item Name="stradStringReplWild" Value=", avec jokers"/>
       <Item Name="stradMultstrRepl" Value="Remplacement de chaînes multiples en utilisant le set &#34;%s&#34;"/>
       <Item Name="stradStringIns" Value="Insérer &#34;%s&#34; à la position %d"/>
       <Item Name="stradMoveStr" Value="Déplacer %d caractères de la position %d%s, vers la position %d%s"/>

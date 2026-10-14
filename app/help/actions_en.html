@@ -44,6 +44,7 @@
 <p>This action can be also used for inserting a string before or after an existing one (if you do not know the position where the new string has to be placed).
   For example, if you want to insert "2" after all the "test" contained in names, replace "test" by "test2".
 <p>It can also be used for deleting a specified string: simply leave the second field empty for that.</p>
+<p>With the "Use wildcards" option, <code>*</code> in the search field stands for any text and <code>?</code> for any single character; all the other characters are searched as they are. For example, searching "IMG_*_copy" and replacing by "Photo" turns "IMG_001_copy (1).jpg" into "Photo (1).jpg". The replacement text is always taken literally.</p>
 
 <h2 id="multstrrepl">Multiple string replacement</h2>
 <p>You can enter here multiple strings to replace. The left column contain the strings to search in names, the right column contains the text to put instead
@@ -92,6 +93,7 @@
 <p>If the files are grouped by folders (i.e. the primary sort is the folder name, so the folders' contents are not mixed in the list) you can use the option "Go
   back to start value...". It will restart at the "Start at" value when the current file is in another folder than the previous one. This allows to make same kind
     of enumeration in lots of folders without having to do the operation for each folder separately.</p>
+<p>The option "Same number for files with the same name..." gives the same number to files of one folder that have the same name (without extension) but different extensions, for example <code>IMG_1234.JPG</code> and <code>IMG_1234.CR2</code> from a camera. A file whose extension is already in the group gets a new number. The files must follow each other in the list (sort by name).</p>
 
 <h2 id="mp3">Use mp3 tag info</h2>
 <p>Here again you have to enter a mask. There are a few special tags recognized. See the <a href="format_en.html#folder">"Formatting"</a> page for more information.</p>
@@ -192,8 +194,10 @@
 <p>Using the same mask system than several actions described above, you can generate with this action a new file name based on EXIF data contained in JPEG pictures.
   This can be, for example, very useful as replacement of the <a href="#datetime">Use date &amp; time</a> action if the dates of your photos are not kept when
   you transfer them from your digital camera.</a>
-<p>See <a href="format_en.html#folder">"Formatting"</a> page for more information. Due to the very long list of existing EXIF tags, they are listed
-  <a href="exif_tags.txt">on this dedicated page</a> rather than being included here.</p>
+<p>See <a href="format_en.html#folder">"Formatting"</a> page for more information. Besides the EXIF tags, the IPTC and XMP data (keywords, title, author, place, rating...) can also be used. All the available tags are listed
+  <a href="metadata_tags_en.html">on this dedicated page</a>.</p>
+<p>The <code>%num%</code> tag is a counter, like in the <a href="#enum">Enumeration</a> action (same options, including "Go back to start value..." and "Same number for files with the same name...", handy to give a JPEG and its RAW file the same number).</p>
+<p>The XMP sidecar file of a picture (<code>IMG.xmp</code> or <code>IMG.CR2.xmp</code>) is read with the picture and wins over the XMP embedded in it, which is how the keywords and the rating of a RAW file become available. When the picture is renamed, its sidecar files (<code>.xmp</code>, and DxO <code>.dop</code>) are renamed with it: see the option in <a href="options_en.html">Options</a>, <i>Processing</i>.</p>
 
 </body>
 </html>

@@ -24,6 +24,10 @@
   <li><b>Ligne de commande</b> : voir <a href="params_fr.html">param&egrave;tres en ligne de commande</a> (<code>--shell</code>, <code>--install-shell</code>, <code>--remove-shell</code>).</li>
   <li><b>Disposition moderne de l'interface (option)</b> : une autre pr&#233;sentation de la fen&#234;tre principale, avec les trois pages sur un seul &#233;cran si vous pr&#233;f&#233;rez (en bandes ou en colonnes), et des op&#233;rations du job que l'on peut modifier. La disposition classique reste celle par d&#233;faut. Voir <a href="modernui_fr.html">disposition moderne de l'interface</a>.</li>
   <li><b>Tri naturel</b> : la liste des fichiers trie &#171; fichier 2 &#187; avant &#171; fichier 10 &#187; par d&#233;faut ; l'ordre alphab&#233;tique du programme d'origine est une option (<i>Options</i> &gt; <i>Fichiers &amp; Dossiers</i>).</li>
+  <li><b>IPTC et XMP dans l'op&eacute;ration EXIF</b> : mots-cl&eacute;s, titre, l&eacute;gende, auteur, lieu, note... utilisables dans le masque (<code>%IptcKeywords%</code>, <code>%XmpTitle%</code>...), voir <a href="metadata_tags_fr.html">Tags EXIF, IPTC et XMP</a>. Le fichier XMP associ&eacute; &agrave; une image est lu aussi.</li>
+  <li><b>Les fichiers associ&eacute;s suivent leur image</b> : renommer une image renomme aussi ses fichiers <code>.xmp</code> et <code>.dop</code> de DxO (IMG.xmp, IMG.CR2.xmp, IMG.dop...), et l'annulation les remet (<a href="options_fr.html">Options</a> &gt; <i>Traitement</i>, activ&eacute; par d&eacute;faut).</li>
+  <li><b>Jokers</b> dans le <a href="actions_fr.html#stringrepl">remplacement de cha&icirc;ne</a> (<code>*</code> et <code>?</code>), et une option pour donner <b>le m&ecirc;me num&eacute;ro aux fichiers de m&ecirc;me nom</b> et d'extensions diff&eacute;rentes (JPG + RAW) dans les op&eacute;rations &Eacute;num&eacute;ration et EXIF.</li>
+  <li><b>Bouton "Seulement modifi&eacute;s"</b> dans la <a href="files_fr.html">liste des fichiers</a> : masque les fichiers dont le nom ne change pas dans l'aper&ccedil;u.</li>
 </ul>
 
 <h2>Corrections par rapport &agrave; la 2.13</h2>
@@ -38,7 +42,7 @@
 <h2>Petites diff&eacute;rences &agrave; conna&icirc;tre</h2>
 <ul>
   <li>Les expressions rationnelles utilisent le moteur PCRE2 (Qt) &agrave; la place de TRegExpr : des constructions tr&egrave;s inhabituelles peuvent se comporter diff&eacute;remment.</li>
-  <li>Le lecteur EXIF conna&icirc;t une quarantaine de tags courants, pas toute la liste du programme d'origine.</li>
+  <li>Le lecteur EXIF conna&icirc;t trente-cinq tags EXIF courants (plus ceux de l'IPTC et du XMP), pas toute la liste du programme d'origine.</li>
 </ul>
 
 <h2>Assistance</h2>

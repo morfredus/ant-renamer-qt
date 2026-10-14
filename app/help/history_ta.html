@@ -9,6 +9,16 @@
 <h1>பதிப்பு வரலாறு </h1>
 <p>Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Fr&eacute;d&eacute;ric Biron, developed in parallel with the original):</p>
 <ul>
+	<li>3.0.0-rc.9 (14/10/2026)
+		<ul>
+			<li>New "Changed only" button in the files list: it hides the files whose name does not change in the preview (view filter only, the hidden files are still renamed).</li>
+			<li>A renamed picture now takes its sidecar files along (IMG.xmp, IMG.CR2.xmp, and DxO .dop files), also reverted with it (option in Options, Processing, enabled by default). The XMP sidecar is also read by the EXIF action.</li>
+			<li>New option "Use wildcards" in String replacement: * stands for any text and ? for any single character.</li>
+			<li>New option "Same number for files with the same name and different extensions" in Enumeration and EXIF, so a JPG and its RAW (or XMP) get the same number.</li>
+			<li>The EXIF action now also reads IPTC and XMP data (keywords, title, caption, author, place, rating...). New help page listing every usable tag.</li>
+			<li>The notes and check box texts of the action editor now wrap to the panel width instead of being cut by a scroll bar.</li>
+		</ul>
+	</li>
 	<li>3.0.0-rc.8 (14/10/2026)
 		<ul>
 			<li>New modern interface layout, selectable in Options, Display (the classic layout stays the default): tabs with counters, a bar per page, the new name column visible, and the batch always visible next to the editor.</li>

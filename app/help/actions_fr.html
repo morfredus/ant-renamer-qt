@@ -45,6 +45,7 @@
 <p>Cette opération peut aussi être utilisée pour insérer une chaîne devant un autre (si vous ne connaissez pas la position exacte où doit être mise la nouvelle chaîne).
   Par exemple, si vous voulez insérer "2" après les "test" contenus dans les noms, remplacez "test" par "test2".
 <p>Elle peut également être utilisée pour supprimer une chaîne spécifiée : laissez simplement le second champ vide.</p>
+<p>Avec l'option "Utiliser les jokers", <code>*</code> dans le champ de recherche représente n'importe quel texte et <code>?</code> n'importe quel caractère ; tous les autres caractères sont recherchés tels quels. Par exemple, chercher "IMG_*_copie" et remplacer par "Photo" transforme "IMG_001_copie (1).jpg" en "Photo (1).jpg". Le texte de remplacement est toujours pris tel quel.</p>
 
 <h2 id="multstrrepl">Remplacement de chaînes multiples</h2>
 <p>Vous pouvez entrer ici plusieurs chaînes à remplacer. La colonne de gauche contient les chaînes à rechercher dans les noms, la colonne de droite contient le texte
@@ -96,6 +97,7 @@
   dans la liste) vous pouvez utiliser l'option "Retour à la valeur de démarrage...". Cela provoquera un retour à la valeur "Démarrer à" quand le fichier courant
   est dans un autre dossier que le précédent. Ceci permet de faire le même genre d'énumération dans un grand nombre de dossiers sans avoir à répéter l'opération
   pour chaque dossier séparément.</p>
+<p>L'option "Même numéro pour les fichiers de même nom..." donne le même numéro aux fichiers d'un même dossier qui ont le même nom (sans extension) mais des extensions différentes, par exemple <code>IMG_1234.JPG</code> et <code>IMG_1234.CR2</code> d'un appareil photo. Un fichier dont l'extension est déjà présente dans le groupe reçoit un nouveau numéro. Les fichiers doivent se suivre dans la liste (tri par nom).</p>
 
 <h2 id="mp3">Infos des tags mp3</h2>
 <p>Ici encore vous avez à entrer un masque. Il y a quelques tags spéciaux qui sont reconnus. Consultez la page <a href="format_fr.html#folder">"Formatage"</a>
@@ -201,8 +203,10 @@
 <p>En utilisant le même système de masque que plusieurs des actions décrites ci-dessus, vous pouvez générer un nouveau nom de fichier sur base des données EXIF
   contenues dans les images JPEG. Ceci peut, par exemple, être un bon moyen de remplacer l'action <a href="#datetime">Date et heure</a> si les dates de vos photos
   ne sont pas conservées lors de leur transfert depuis votre appareil photo numérique.</a>
-<p>Consultez la page <a href="format_fr.html#folder">"Formatage"</a> pour plus d'informations. Étant donné la très longue liste de tags EXIF existant, celle-ci est
-  disponible <a href="exif_tags.txt">sur cette page dédiée</a> plutôt que d'être directement présentée ici.</p>
+<p>Consultez la page <a href="format_fr.html#folder">"Formatage"</a> pour plus d'informations. Outre les tags EXIF, les données IPTC et XMP (mots-clés, titre, auteur, lieu, note...) peuvent aussi être utilisées. Tous les tags disponibles sont listés
+  <a href="metadata_tags_fr.html">sur cette page dédiée</a>.</p>
+<p>Le tag <code>%num%</code> est un compteur, comme dans l'action <a href="#enum">Énumération</a> (mêmes options, dont "Retour à la valeur de démarrage..." et "Même numéro pour les fichiers de même nom...", utile pour qu'un JPEG et son fichier RAW reçoivent le même numéro).</p>
+<p>Le fichier XMP associ&eacute; &agrave; une image (<code>IMG.xmp</code> ou <code>IMG.CR2.xmp</code>) est lu avec l'image et l'emporte sur le XMP int&eacute;gr&eacute; : c'est ainsi que les mots-cl&eacute;s et la note d'un fichier RAW deviennent disponibles. Quand l'image est renomm&eacute;e, ses fichiers associ&eacute;s (<code>.xmp</code>, et <code>.dop</code> de DxO) sont renomm&eacute;s avec elle : voir l'option dans <a href="options_fr.html">Options</a>, <i>Traitement</i>.</p>
 
 </body>
 </html>

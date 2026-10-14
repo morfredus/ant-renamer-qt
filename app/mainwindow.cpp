@@ -227,6 +227,13 @@ void MainWindow::createActions() {
     aRemoveDead_ = makeAction(tr_("Remove dead"), tr_("Remove dead files from the list"), TbRemoveDead, K(Qt::Key_F8));
     aPreview_ = makeAction(tr_("Preview"), tr_("Refresh preview"), TbPreview, K(Qt::Key_F5));
 
+    // view filter only: hidden files stay in the list and are processed as usual
+    aChangedOnly_ = makeAction(tr_("Changed only"), tr_("Show only the files whose name changes in the preview"), TbLogFilter);
+    aChangedOnly_->setIcon(QIcon());
+    aChangedOnly_->setData(QVariant());
+    aChangedOnly_->setCheckable(true);
+    connect(aChangedOnly_, &QAction::toggled, this, [this] { updateAllItems(); });
+
     aBatchAdd_ = makeAction(tr_("Add to batch"), tr_("Add to batch"), TbBatchAdd, K(Qt::CTRL | Qt::Key_F2));
     aBatchEdit_ = makeAction(tr_("Modify"), tr_("Replace the selected action with the current settings (double-click an action to load its settings)"), TbBatchAdd);
     aBatchEdit_->setEnabled(false);
@@ -335,7 +342,8 @@ void MainWindow::createActions() {
     connect(aSelNone_, &QAction::triggered, this, [this] { if (auto* t = currentList()) t->clearSelection(); });
     connect(aSelInvert_, &QAction::triggered, this, [this] {
         if (auto* t = currentList())
-            for (int i = 0; i < t->topLevelItemCount(); ++i) t->topLevelItem(i)->setSelected(!t->topLevelItem(i)->isSelected());
+            for (int i = 0; i < t->topLevelItemCount(); ++i)
+                if (!t->topLevelItem(i)->isHidden()) t->topLevelItem(i)->setSelected(!t->topLevelItem(i)->isSelected());
     });
     connect(aUnsort_, &QAction::triggered, this, [this] { unsortFiles(); });
 }
@@ -406,7 +414,7 @@ void MainWindow::createToolbars() {
     // --- what each bar contains ---
     const Items tabs = {T(aTab_[0]), T(aTab_[1]), T(aTab_[2])};
     const Items moves = {A(aUp_), A(aDown_), A(aTop_), A(aBottom_)};
-    Items files = {T(aAddFiles_), T(aAddFolders_), sep, A(aRemoveSel_), T(aRemoveAll_), A(aRemoveDead_), sep, A(aPreview_)};
+    Items files = {T(aAddFiles_), T(aAddFolders_), sep, A(aRemoveSel_), T(aRemoveAll_), A(aRemoveDead_), sep, A(aPreview_), T(aChangedOnly_)};
     Items actions = {newUi_ ? T(aBatchAdd_) : A(aBatchAdd_)};
     if (newUi_) actions.push_back(T(aBatchEdit_));
     append(actions, {A(aBatchRemoveSel_), sep, A(aBatchClear_), recent, A(aBatchSave_)});
@@ -653,6 +661,7 @@ void MainWindow::loadSettings() {
         setBatchVisible(batchGroup_->isChecked());
     }
     aOnTop_->setChecked(s.value(u"window/onTop"_s, false).toBool());
+    aChangedOnly_->setChecked(s.value(u"view/changedOnly"_s, false).toBool());
     aLogOk_->setChecked(s.value(u"log/ok"_s, true).toBool());
     aLogError_->setChecked(s.value(u"log/error"_s, true).toBool());
     aLogNot_->setChecked(s.value(u"log/not"_s, true).toBool());
@@ -696,6 +705,7 @@ void MainWindow::saveSettings() {
         s.setValue(u"window/enableBatch"_s, batchGroup_->isChecked());
     }
     s.setValue(u"window/onTop"_s, aOnTop_->isChecked());
+    s.setValue(u"view/changedOnly"_s, aChangedOnly_->isChecked());
     s.setValue(u"log/ok"_s, aLogOk_->isChecked());
     s.setValue(u"log/error"_s, aLogError_->isChecked());
     s.setValue(u"log/not"_s, aLogNot_->isChecked());
@@ -864,6 +874,9 @@ void MainWindow::updateItem(QTreeWidgetItem* item) {
     item->setText(ColFullPath, f->filePath());
     item->setText(ColExt, extractFileExt(f->fileName()));
     item->setText(ColPreview, f->preview);
+    const bool hide = aChangedOnly_->isChecked() && !f->preview.isEmpty() && f->preview == f->fileName();
+    item->setHidden(hide);
+    if (hide) item->setSelected(false);  // a hidden file must never be hit by "Remove sel." or the move buttons
     auto visible = [this](int c) { return !fileView_->isColumnHidden(c); };
     if (visible(ColSize)) {
         const qint64 sz = f->isFolder() ? -1 : f->size();

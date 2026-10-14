@@ -52,7 +52,7 @@ bool setPortable(bool on) {
 #define KEYS(X)                                                                                  \
     X(realtime) X(resizeCols) X(fileIcons) X(forceFont) X(fontName) X(fontSize) X(iconSet)       \
     X(historyMax) X(autoComplete) X(dragNoAsk) X(launchFile) X(naturalSort) X(newUi) X(pageLayout)                                   \
-    X(addFiles) X(addFolders) X(recursive) X(forceDir) X(detectAbsDir) X(folderExt) X(copy)      \
+    X(addFiles) X(addFolders) X(recursive) X(forceDir) X(detectAbsDir) X(folderExt) X(renameSidecar) X(copy)      \
     X(genLog) X(dstRelativeToFile) X(startSwitch) X(finishSwitch) X(startClearLog)               \
     X(finishClearFiles) X(finishClearBatch) X(saveLog) X(saveLogAppend) X(saveLogFile)
 
@@ -76,6 +76,7 @@ void AppOptions::applyToCore() const {
     o.forceDir = forceDir;
     o.detectAbsDir = detectAbsDir;
     o.folderExt = folderExt;
+    o.renameSidecar = renameSidecar;
     o.copy = copy;
     o.dstRelativeToFile = dstRelativeToFile;
 }

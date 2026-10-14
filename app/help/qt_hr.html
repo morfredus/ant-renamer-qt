@@ -24,6 +24,10 @@
   <li><b>Command line</b>: see <a href="params_hr.html">command-line parameters</a> (<code>--shell</code>, <code>--install-shell</code>, <code>--remove-shell</code>).</li>
   <li><b>Modern interface layout (option)</b>: another presentation of the main window, with the three pages on one screen if you prefer (in bands or in columns), and actions of the batch that can be edited. The classic layout stays the default. See <a href="modernui_hr.html">modern interface layout</a>.</li>
   <li><b>Natural sort</b>: the Files list sorts "file 2" before "file 10" by default; the alphabetical order of the original program is an option (<i>Options</i> &gt; <i>Files &amp; Folders</i>).</li>
+  <li><b>IPTC and XMP in the EXIF action</b>: keywords, title, caption, author, place, rating... can be used in the mask (<code>%IptcKeywords%</code>, <code>%XmpTitle%</code>...), see <a href="metadata_tags_hr.html">EXIF, IPTC and XMP tags</a>. The XMP sidecar file of a picture is read too.</li>
+  <li><b>Sidecar files follow their picture</b>: renaming a picture also renames its <code>.xmp</code> and DxO <code>.dop</code> files (IMG.xmp, IMG.CR2.xmp, IMG.dop...), and the revert puts them back (<a href="options_hr.html">Options</a> &gt; <i>Processing</i>, enabled by default).</li>
+  <li><b>Wildcards</b> in <a href="actions_hr.html#stringrepl">String replacement</a> (<code>*</code> and <code>?</code>), and an option to give <b>the same number to files with the same name</b> and different extensions (JPG + RAW) in the Enumeration and EXIF actions.</li>
+  <li><b>"Changed only" button</b> in the <a href="files_hr.html">Files list</a>: hides the files whose name does not change in the preview.</li>
 </ul>
 
 <h2>Corrections compared with 2.13</h2>
@@ -38,7 +42,7 @@
 <h2>Small differences to know</h2>
 <ul>
   <li>Regular expressions use the PCRE2 engine (Qt) instead of TRegExpr: very unusual constructs may behave differently.</li>
-  <li>The EXIF reader knows about forty common tags, not the whole list of the original program.</li>
+  <li>The EXIF reader knows about thirty-five common EXIF tags (plus the IPTC and XMP ones), not the whole list of the original program.</li>
 </ul>
 
 <h2>Support</h2>

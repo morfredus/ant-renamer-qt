@@ -50,6 +50,10 @@
 				<param name="Local" value="format_en.html">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="EXIF, IPTC and XMP tags">
+				<param name="Local" value="metadata_tags_en.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Regular expressions">
 				<param name="Local" value="regexp_en.html">
 				</OBJECT>

@@ -49,6 +49,10 @@
     		<param name="Name" value="Formatage de cha&icirc;nes">
     		<param name="Local" value="format_fr.html">
     		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Tags EXIF, IPTC et XMP">
+		<param name="Local" value="metadata_tags_fr.html">
+		</OBJECT>
     	<LI> <OBJECT type="text/sitemap">
     		<param name="Name" value="Expressions rationnelles">
     		<param name="Local" value="regexp_fr.html">

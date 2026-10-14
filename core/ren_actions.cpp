@@ -270,6 +270,7 @@ QString ActionStringRepl::description() const {
     QString r = tr("Replace \"%1\" by \"%2\"").arg(search, replace);
     if (all) r += tr(", replace all occurences");
     if (caseSens) r += tr(", case-sensitive");
+    if (wildcards) r += tr(", with wildcards");
     if (onlyExt) r += tr(", apply to extension instead of name");
     else if (inclExt) r += tr(", also apply to extension");
     return r;
@@ -287,7 +288,24 @@ QString ActionStringRepl::makeNewName(const QString& fn, bool isFolder) {
         oldName = changeFileExt(extractFileName(fn), QString());
     }
     QString r = oldName;
-    if (!search.isEmpty()) {
+    if (!search.isEmpty() && wildcards) {
+        // '*' and '?' are wildcards, everything else is literal; the replacement stays literal.
+        QString pat;
+        for (const QChar c : search)
+            pat += c == u'*' ? QStringLiteral(".*?") : c == u'?' ? QStringLiteral(".") : QRegularExpression::escape(c);
+        QRegularExpression re(pat, QRegularExpression::DotMatchesEverythingOption |
+                                       (caseSens ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption));
+        QString out;
+        qsizetype last = 0;
+        for (auto it = re.globalMatch(r); it.hasNext();) {
+            const auto m = it.next();
+            if (m.capturedLength() == 0) continue;  // "*" alone would match the empty string everywhere
+            out += r.mid(last, m.capturedStart() - last) + replace;
+            last = m.capturedEnd();
+            if (!all) break;
+        }
+        r = out + r.mid(last);
+    } else if (!search.isEmpty()) {
         if (all) r.replace(search, replace, cs);
         else if (int p = r.indexOf(search, 0, cs); p >= 0) r.replace(p, search.size(), replace);
     }
@@ -297,7 +315,8 @@ QString ActionStringRepl::makeNewName(const QString& fn, bool isFolder) {
 }
 void ActionStringRepl::save(QXmlStreamWriter& w) const {
     begin(w, "StrRepl", {{"Search", search}, {"Repl", replace}, {"AllOccurences", all},
-                         {"CaseSensitive", caseSens}, {"IncludeExt", inclExt}, {"OnlyExt", onlyExt}});
+                         {"CaseSensitive", caseSens}, {"IncludeExt", inclExt}, {"OnlyExt", onlyExt},
+                         {"Wildcards", wildcards}});
     w.writeEndElement();
 }
 void ActionStringRepl::load(const XmlElem& e) {
@@ -307,6 +326,7 @@ void ActionStringRepl::load(const XmlElem& e) {
     caseSens = e.flag("CaseSensitive", true);
     inclExt = e.flag("IncludeExt", false);
     onlyExt = e.flag("OnlyExt", false);
+    wildcards = e.flag("Wildcards", false);
 }
 
 // --- MultstrRepl --------------------------------------------------------------------------
@@ -460,6 +480,15 @@ void ActionCharDel::load(const XmlElem& e) {
 }
 
 // --- Enum ---------------------------------------------------------------------------------
+bool PairGroup::continues(const QString& fn) {
+    const QFileInfo fi(fn);
+    const QString k = (fi.absolutePath() + u'/' + fi.completeBaseName()).toLower();
+    const QString e = fi.suffix().toLower();
+    if (k == key && !exts.contains(e)) { exts << e; return true; }
+    key = k;
+    exts = {e};
+    return false;
+}
 QString ActionEnum::description() const {
     return tr("Generate an enumeration with \"%1\" from %2 to %3 by %4").arg(mask).arg(startAt).arg(digits).arg(increment);
 }
@@ -473,13 +502,14 @@ QString ActionEnum::makeNewName(const QString& fn, bool isFolder) {
         const QString cur = extractFilePath(fn);
         if (cur != prevFolder_) { curPos_ = startAt; prevFolder_ = cur; }
     }
+    if (sharePairs && group_.continues(fn)) curPos_ -= increment;
     QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); });
     curPos_ += increment;
     return r;
 }
 void ActionEnum::save(QXmlStreamWriter& w) const {
     // The Delphi version stored Increment in "Restart" by mistake; fixed here.
-    begin(w, "Enum", {{"Mask", mask}, {"Start", startAt}, {"Digits", digits}, {"Incr", increment}, {"Restart", restart}});
+    begin(w, "Enum", {{"Mask", mask}, {"Start", startAt}, {"Digits", digits}, {"Incr", increment}, {"Restart", restart}, {"SharePairs", sharePairs}});
     w.writeEndElement();
 }
 void ActionEnum::load(const XmlElem& e) {
@@ -488,6 +518,7 @@ void ActionEnum::load(const XmlElem& e) {
     digits = e.num("Digits", 3);
     increment = e.num("Incr", 1);
     restart = e.flag("Restart", false);
+    sharePairs = e.flag("SharePairs", false);
 }
 
 // --- MP3 ----------------------------------------------------------------------------------
@@ -766,13 +797,14 @@ QString ActionExif::makeNewName(const QString& fn, bool isFolder) {
         const QString folder = extractFilePath(fn);
         if (folder != prevFolder_) { curNum_ = numStart; prevFolder_ = folder; }
     }
+    if (numSharePairs && group_.continues(fn)) curNum_ -= numIncr;
     const QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
     curNum_ += numIncr;
     return r;
 }
 void ActionExif::save(QXmlStreamWriter& w) const {
     begin(w, "Exif", {{"Mask", mask}, {"Offset", offset}, {"Start", numStart}, {"Digits", numDigits},
-                      {"Incr", numIncr}, {"Restart", numRestart}});
+                      {"Incr", numIncr}, {"Restart", numRestart}, {"SharePairs", numSharePairs}});
     w.writeEndElement();
 }
 void ActionExif::load(const XmlElem& e) {
@@ -782,6 +814,7 @@ void ActionExif::load(const XmlElem& e) {
     numDigits = e.num("Digits", 3);
     numIncr = e.num("Incr", 1);
     numRestart = e.flag("Restart", false);
+    numSharePairs = e.flag("SharePairs", false);
 }
 
 // --- ActionList ---------------------------------------------------------------------------

@@ -112,7 +112,7 @@ bool DragDropDialog::dontAskAgain() const { return notAgain_->isChecked(); }
 // --- Options ---------------------------------------------------------------------------------------------
 struct OptionsDialog::Ui {
     QCheckBox *realtime, *resizeCols, *icons, *forceFont, *autoComplete, *dragNoAsk, *launch, *naturalSort, *newUi, *forceDir, *detectAbs,
-        *copy, *genLog, *folderExt, *dst, *portable, *shellMenu;
+        *copy, *genLog, *folderExt, *sidecar, *dst, *portable, *shellMenu;
     QCheckBox *dropFiles, *dropFolders, *dropRecursive;
     QComboBox* pageLayout = nullptr;
     QSpinBox *historyMax, *fontSize;
@@ -232,6 +232,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         ui_->copy = box(l, tr("Copy instead of Rename"), o.copy);
         ui_->genLog = box(l, tr("Generate log"), o.genLog);
         ui_->dst = box(l, tr("DST offset related to file date"), o.dstRelativeToFile);
+        ui_->sidecar = box(l, tr("Also rename the sidecar files (.xmp, .dop) of a renamed picture"), o.renameSidecar);
         header(l, tr("Folder rules"));
         ui_->forceDir = box(l, tr("Force directories (allows to create folders if \"\\\" are found in names)"), o.forceDir);
         ui_->detectAbs = box(l, tr("Detect a \":\\\" or \"\\\\\" as an absolute path (allows to move files to anywhere)"), o.detectAbsDir);
@@ -359,6 +360,7 @@ void OptionsDialog::accept() {
     o.copy = ui_->copy->isChecked();
     o.genLog = ui_->genLog->isChecked();
     o.dstRelativeToFile = ui_->dst->isChecked();
+    o.renameSidecar = ui_->sidecar->isChecked();
     o.folderExt = ui_->folderExt->isChecked();
     o.startSwitch = ui_->startSwitch->isChecked() ? ui_->startTab->currentIndex() : -1;
     o.startClearLog = ui_->startClearLog->isChecked();

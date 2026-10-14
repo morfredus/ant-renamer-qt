@@ -193,7 +193,7 @@ private:
 
     QAction *aGo_, *aStop_, *aUndo_, *aOnTop_, *aOptions_, *aHelp_, *aAbout_, *aExit_;
     QAction *aTab_[3];
-    QAction *aAddFiles_, *aAddFolders_, *aRemoveSel_, *aRemoveAll_, *aRemoveDead_, *aPreview_;
+    QAction *aAddFiles_, *aAddFolders_, *aRemoveSel_, *aRemoveAll_, *aRemoveDead_, *aPreview_, *aChangedOnly_;
     QAction *aBatchAdd_, *aBatchEdit_, *aBatchRemoveSel_, *aBatchClear_, *aBatchOpen_, *aBatchSave_;
     QAction *aLogFilter_, *aLogOk_, *aLogError_, *aLogNot_, *aLogClear_, *aLogSave_, *aLogCopy_;
     QAction *aUp_, *aDown_, *aTop_, *aBottom_;

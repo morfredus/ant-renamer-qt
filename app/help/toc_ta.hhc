@@ -50,6 +50,10 @@
 				<param name="Local" value="format_ta.html">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="EXIF, IPTC and XMP tags">
+				<param name="Local" value="metadata_tags_ta.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="வழக்கமான வெளிப்பாடுகள் ">
 				<param name="Local" value="regexp_ta.html">
 				</OBJECT>

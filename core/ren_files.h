@@ -2,6 +2,7 @@
 // Port of Files.pas: one entry of the list to rename, plus the list itself.
 #include <QDateTime>
 #include <QString>
+#include <QStringList>
 #include <atomic>
 #include <functional>
 #include <memory>
@@ -23,6 +24,7 @@ struct Options {
     bool folderExt = false;     // treat folder names as having an extension
     bool copy = false;          // copy instead of rename
     bool dstRelativeToFile = true;  // file times use the DST rule of the date itself (else today's offset)
+    bool renameSidecar = true;  // a renamed picture takes its sidecars (IMG.xmp, IMG.CR2.xmp, IMG.dop...) along
 };
 Options& options();
 QDateTime adjustFileTime(const QDateTime& t);  // applies options().dstRelativeToFile
@@ -55,11 +57,17 @@ public:
     // After a folder rename, entries below it must follow the move.
     void fixPathAfterFolderRename(const QString& from, const QString& to);
 
+    // The file was moved by its picture (sidecar): follow it.
+    void followPath(const QString& to);
+
     // Set by FileList.
     std::function<void(File&, const QString&, const QString&)> onRenamed;
+    std::function<void(const QString&, const QString&)> onSidecarMoved;
 
 private:
+    void moveSidecars(const QString& from, const QString& to, bool revert);
     QString folder_, name_, oldName_, description_;
+    std::vector<std::pair<QString, QString>> sidecarsMoved_;  // (from, to) of the last rename, to put them back on revert
     State status_ = State::NotRenamed;
     bool isFolder_ = false;
     bool copyDone_ = false;

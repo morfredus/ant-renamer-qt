@@ -57,7 +57,7 @@ void HistoryCombo::remember() {
 struct ActionPanel::W {
     HistoryCombo *extNew, *srcSearch, *srcRepl, *insStr, *delStr, *enumMask, *mp3Mask, *dtMask, *rndMask,
         *caseAfter, *reExpr, *reRepl, *exifMask;
-    QCheckBox *extNoRepl, *srAll, *srCase, *srExt, *srOnlyExt, *msExt, *msCase, *insExt, *delExt, *enumRestart,
+    QCheckBox *extNoRepl, *srAll, *srCase, *srExt, *srOnlyExt, *srWild, *msExt, *msCase, *insExt, *delExt, *enumRestart, *enumShare, *exShare,
         *mp3Two, *dtSuffix, *caseLocale, *caseIncl, *caseOnly, *flAppend, *flOnlyExt, *exRestart;
     QSpinBox *insPos, *mvFrom, *mvCount, *mvTo, *delNb, *delPos, *enumStart, *enumDigits, *enumIncr, *dtOffset, *exifOffset, *exStart, *exDigits, *exIncr;
     std::vector<QRadioButton*> insDir, mvFrom_, mvTo_, delWhere, delDir, dtWhich, rndMethod, caseType;
@@ -147,9 +147,29 @@ QSpinBox* ActionPanel::spin(Page& p, const QString& key, const QString& label, i
 }
 
 QCheckBox* ActionPanel::check(Page& p, const QString& key, const QString& label, bool def) {
-    auto* c = new QCheckBox(label);
+    // A QCheckBox never wraps its text: use a bare box plus a wrapping label that toggles it when clicked.
+    struct Toggle : QObject {
+        QCheckBox* box;
+        bool eventFilter(QObject*, QEvent* e) override {
+            if (e->type() != QEvent::MouseButtonRelease) return false;
+            box->toggle();
+            return true;
+        }
+    };
+    auto* c = new QCheckBox;
     c->setChecked(def);
-    p.v->addWidget(c);
+    auto* text = new QLabel(label);
+    text->setWordWrap(true);
+    text->setMinimumWidth(1);  // a wrapping label must not force the page wider than the panel
+    auto* toggle = new Toggle;
+    toggle->setParent(text);
+    toggle->box = c;
+    text->installEventFilter(toggle);
+    auto* row = new QHBoxLayout;
+    row->setSpacing(2);
+    row->addWidget(c, 0, Qt::AlignTop);
+    row->addWidget(text, 1);
+    p.v->addLayout(row);
     connect(c, &QCheckBox::toggled, this, &ActionPanel::changed);
     fields_.push_back({p.name + u'/' + key, [c] { return c->isChecked(); }, [c](const QVariant& v) { c->setChecked(v.toBool()); }});
     return c;
@@ -193,19 +213,24 @@ void ActionPanel::notes(Page& p, const QString& control, const QString& english)
             if (m.hasMatch()) number = m.captured(1).trimmed();
         }
         html = html.trimmed();
-        html += u"<BR>- %num% = "_s + number;
+        const QString extra = u"<BR>- %num% = "_s + number + u"<BR>- "_s
+                              + tr("%IptcKeywords%, %XmpTitle%... = IPTC and XMP data (keywords, title, author, place...)");
+        const qsizetype at = html.indexOf(u"<BR>- %% ="_s);  // keep the "see Help" line last
+        if (at >= 0) html.insert(at, extra);
+        else html += extra;
     }
     static const QRegularExpression link(u"<link>(.*?)</link>"_s, QRegularExpression::CaseInsensitiveOption);
     QString h = html;
     h.replace(link, u"<a href=\"\\1\">\\1</a>"_s);
     auto* l = new QLabel(h);
     l->setWordWrap(true);
+    l->setMinimumWidth(1);  // a wrapping label must not force the page wider than the panel
     l->setTextFormat(Qt::RichText);
     l->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     connect(l, &QLabel::linkActivated, this, [this, control](const QString& href) {
         for (int i = 0; i < list_->count(); ++i)
             if (list_->item(i)->text().compare(href, Qt::CaseInsensitive) == 0) { list_->setCurrentRow(i); return; }
-        emit helpRequested(control == u"lblRegexpNotes" ? u"regexp"_s : u"format"_s);  // any other link is the \"Help\" link
+        emit helpRequested(control == u"lblRegexpNotes" ? u"regexp"_s : control == u"lblExifNotes" ? u"metadata_tags"_s : u"format"_s);  // any other link is the \"Help\" link
     });
     p.v->addSpacing(8);
     p.v->addWidget(l);
@@ -237,6 +262,7 @@ void ActionPanel::buildPages() {
         w.srCase = check(p, u"Case"_s, tr("Case sensitive"), true);
         w.srExt = check(p, u"Ext"_s, tr("Include extension in search"), false);
         w.srOnlyExt = check(p, u"OnlyExt"_s, tr("Apply to extension instead of name"), false);
+        w.srWild = check(p, u"Wildcards"_s, tr("Use wildcards (* = any text, ? = any character)"), false);
         p.v->addStretch();
     }
     {   // 2 Multiple string replacement
@@ -283,6 +309,7 @@ void ActionPanel::buildPages() {
         w.enumDigits = spin(p, u"Digits"_s, tr("Number of digits:"), 3, 1, 20);
         w.enumIncr = spin(p, u"Incr"_s, tr("Increment by:"), 1, -999999, 999999);
         w.enumRestart = check(p, u"Restart"_s, tr("Go back to start value when changing folder"), false);
+        w.enumShare = check(p, u"SharePairs"_s, tr("Same number for files with the same name and different extensions (e.g. JPG + RAW + XMP)"), false);
         notes(p, u"lblEnumNotes"_s, notesHead + tagNotes + tr("- %num% = Number<BR>") + folderNote);
         p.v->addStretch();
     }
@@ -366,9 +393,10 @@ void ActionPanel::buildPages() {
         w.exDigits = spin(p, u"NumDigits"_s, tr("Number of digits:"), 3, 1, 20);
         w.exIncr = spin(p, u"NumIncr"_s, tr("Increment by:"), 1, -999999, 999999);
         w.exRestart = check(p, u"NumRestart"_s, tr("Go back to start value when changing folder"), false);
+        w.exShare = check(p, u"NumSharePairs"_s, tr("Same number for files with the same name and different extensions (e.g. JPG + RAW + XMP)"), false);
         notes(p, u"lblExifNotes"_s, notesHead + tagNotes + tr("- %datetimeoriginal% or %datetime% = Original date and time of the picture<BR>"
                                            "- %orientation% = Picture orientation<BR>- %flash% = Flash was on or off<BR>"
-                                           "- %% = % character<BR>see <LINK>Help</LINK> for more information and for complete list of EXIF tags"));
+                                           "- %% = % character<BR>see <LINK>Help</LINK> for more information and for the complete list of EXIF, IPTC and XMP tags"));
         p.v->addStretch();
     }
 }
@@ -551,6 +579,7 @@ std::unique_ptr<Action> ActionPanel::makeAction(bool updateHistory) {
         a.caseSens = w.srCase->isChecked();
         a.inclExt = w.srExt->isChecked();
         a.onlyExt = w.srOnlyExt->isChecked();
+        a.wildcards = w.srWild->isChecked();
         remember(w.srcSearch);
         remember(w.srcRepl);
         break;
@@ -599,6 +628,7 @@ std::unique_ptr<Action> ActionPanel::makeAction(bool updateHistory) {
         a.digits = w.enumDigits->value();
         a.increment = w.enumIncr->value();
         a.restart = w.enumRestart->isChecked();
+        a.sharePairs = w.enumShare->isChecked();
         remember(w.enumMask);
         break;
     }
@@ -658,6 +688,7 @@ std::unique_ptr<Action> ActionPanel::makeAction(bool updateHistory) {
         a.numDigits = w.exDigits->value();
         a.numIncr = w.exIncr->value();
         a.numRestart = w.exRestart->isChecked();
+        a.numSharePairs = w.exShare->isChecked();
         remember(w.exifMask);
         break;
     }
@@ -688,6 +719,7 @@ void ActionPanel::setFromAction(const Action& act) {
         w.srCase->setChecked(a.caseSens);
         w.srExt->setChecked(a.inclExt);
         w.srOnlyExt->setChecked(a.onlyExt);
+        w.srWild->setChecked(a.wildcards);
         break;
     }
     case ActionType::MultstrRepl: {
@@ -732,6 +764,7 @@ void ActionPanel::setFromAction(const Action& act) {
         w.enumDigits->setValue(a.digits);
         w.enumIncr->setValue(a.increment);
         w.enumRestart->setChecked(a.restart);
+        w.enumShare->setChecked(a.sharePairs);
         break;
     }
     case ActionType::MP3Tag: {
@@ -784,6 +817,7 @@ void ActionPanel::setFromAction(const Action& act) {
         w.exDigits->setValue(a.numDigits);
         w.exIncr->setValue(a.numIncr);
         w.exRestart->setChecked(a.numRestart);
+        w.exShare->setChecked(a.numSharePairs);
         break;
     }
     default: break;

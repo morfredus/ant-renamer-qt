@@ -10,6 +10,27 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 Changes committed but not yet published; they get a version number and date when a release is made.
 
+## [3.0.0-rc.9] - 2026-10-14
+
+### Added
+
+- Sidecar files follow their picture: when a file is renamed, its `.xmp` (`IMG.xmp`, `IMG.CR2.xmp`) and DxO PhotoLab `.dop` (`IMG.dop`, `IMG.CR2.dop`) sidecars (also upper-case extensions) are renamed with it, put back on revert, and reported in the log line (a sidecar that cannot be renamed, for example because the target exists, never fails the picture). A sidecar that is itself in the files list follows too. New option "Also rename the sidecar files (.xmp, .dop) of a renamed picture" (Options > Processing, on by default, `renameSidecar`); not used in copy mode. The list of extensions is `sidecarExtensions()` in `core/ren_exif.cpp`. Tested on real DNG + JPG pairs with darktable sidecars and a DxO `.dop`.
+- EXIF action: the XMP sidecar of a file is read with it and wins over the embedded XMP, so the keywords, title and rating of a RAW file (that cannot embed them) are usable in the mask. `xmpSidecarCandidates()` in `core/ren_exif.*`, tests in `test_core`.
+- `docs/WHATS_NEW.md` and `WHATS_NEW_fr.md`: list of what Ant Renamer Qt adds or improves compared with Ant Renamer 2.13, with the version of each item ("a venir" for unreleased ones); to be completed with every user-visible change.
+- Files list: "Changed only" button next to Preview. It hides the files whose name does not change in the preview (view filter only: hidden files stay in the list and are renamed as usual, but are never selected, so "Remove sel." and the move buttons cannot touch them). Useful to review the few files concerned in a big list (for example only the names with umlauts). Saved between sessions. English and French texts, help (Files page; also Croatian and Tamil, with the wildcards and shared-number paragraphs).
+- EXIF action: IPTC and XMP data can be used in the mask, with new tags `%IptcKeywords%`, `%IptcCaption%`, `%IptcByline%`, `%IptcCity%`... (22 IPTC tags, read from the APP13 segment of JPEG files, UTF-8 or Latin-1) and `%XmpTitle%`, `%XmpKeywords%`, `%XmpRating%`, `%XmpCreateDate%`... (26 XMP tags, read from the XMP packet found in any file: JPEG, PNG, WebP, TIFF, DNG, `.xmp`). Repeated values (keywords) are joined with a comma; IPTC/XMP dates use the same layout as the EXIF ones. A file with only IPTC or XMP is no longer reported as "No EXIF info found". Covered by a test (`core`) that builds a JPEG with IPTC and XMP.
+- Help: news page ("Ant Renamer Qt: news and support") lists the IPTC/XMP tags, the sidecar files, the wildcards, the shared number and the "Changed only" button, and no longer says the EXIF reader knows about forty tags; the EXIF section of the Actions page describes the sidecar files; README (EN, FR) mention IPTC and XMP.
+- Help: new page "EXIF, IPTC and XMP tags" (English, French; English text in the Croatian and Tamil help) listing every usable tag with its meaning, plus tips ($if fallback between IPTC and XMP, dates, several values, limits). It replaces `exif_tags.txt`, a list of 250 dEXIF names of which the program only knew about forty.
+- Enumeration and EXIF actions: "Same number for files with the same name and different extensions" option (off by default), so a JPG and its RAW (or XMP) get the same number. A file continues the previous group only if it is in the same folder, has the same base name and an extension not yet in the group (case-insensitive); otherwise it gets a new number. Saved in the batch files (`SharePairs`); older batches load with it off. English and French texts, help (Actions page, Enumeration and EXIF sections), test in `test_core`.
+- String replacement: "Use wildcards" option (off by default). `*` in the search field stands for any text and `?` for any single character; every other character is searched as it is, and the replacement text stays literal (for example "IMG_*_copy" replaced by "Photo" turns `IMG_001_copy (1).jpg` into `Photo (1).jpg`). Saved in the batch files (`Wildcards`); older batches load with it off. English and French texts, help (Actions page), test in `test_core`.
+
+### Changed
+
+- `docs/proposals/` removed (UI modernisation draft and two HTML mockups): the modern layout and the single screen are implemented and described in the help; the files stay in the git history.
+- Presentation documents (EN, FR): "Quality and testing" now says that the Explorer menu was tested in Explorer (one or several files, one or several folders with their contents) and that the Linux packages install and run; only ARM64, very large lists, network drives and an administrator install remain untested.
+- Actions editor: the notes under the parameters (and the check box texts) now always wrap to the panel width instead of being cut by a horizontal scroll bar. The EXIF notes mention the IPTC/XMP tags (one short line) and their "Help" link opens the new tags page.
+- Actions editor: the long texts of the check boxes now wrap to the next line when the panel is narrow (instead of being cut off with a horizontal scroll bar); clicking the text still ticks the box.
+
 ## [3.0.0-rc.8] - 2026-10-14
 
 ### Added

@@ -32,6 +32,7 @@ Once done, you can send the file to antrenamer-contact@antp.be to have it includ
     <ActionRemoveAll Caption="Remove all" Hint="Remove all|Remove all files from the list"/>
     <ActionRemoveDead Caption="Remove dead" Hint="Remove dead|Remove dead files from the list"/>
     <ActionPreview Caption="Preview" Hint="Refresh preview|Refresh preview column with currently planned actions"/>
+    <ActionChangedOnly Caption="Changed only" Hint="Changed only|Show only the files whose name changes in the preview"/>
     <ActionFromListClear Caption="Clear" Hint="Clear list|Clear list"/>
     <ActionFromListOpen Caption="Open..." Hint="Open|Load a list from a file"/>
     <ActionFromListSave Caption="Save..." Hint="Save|Save the list to a file"/>
@@ -112,6 +113,7 @@ Once done, you can send the file to antrenamer-contact@antp.be to have it includ
     <cbxStrReplCase Caption="Case sensitive"/>
     <cbxStrReplExt Caption="Include extension in search"/>
     <cbxStrReplOnlyExt Caption="Apply to extension instead of name"/>
+    <cbxStrReplWildcards Caption="Use wildcards (* = any text, ? = any character)"/>
     <lblMultstrSearch Caption="Search for:"/>
     <lblMultstrReplBy Caption="Replace by:"/>
     <lblMultstrReplSet Caption="Predefined sets:"/>
@@ -145,6 +147,8 @@ Once done, you can send the file to antrenamer-contact@antp.be to have it includ
     <lblEnumDigits Caption="Number of digits:"/>
     <lblEnumIncr Caption="Increment by:"/>
     <cbxEnumRestart Caption="Go back to start value when changing folder"/>
+    <cbxEnumSharePairs Caption="Same number for files with the same name and different extensions (e.g. JPG + RAW + XMP)"/>
+    <cbxExifNumSharePairs Caption="Same number for files with the same name and different extensions (e.g. JPG + RAW + XMP)"/>
 <n/>    <lblEnumNotes Caption="Notes:&lt;BR&gt;- %name% = Original file name (without extension)&lt;BR&gt;- %ext% = Original extension (including the dot)&lt;BR&gt;- %num% = Number&lt;BR&gt;- %folderN% = Folder name, where N is the level (1 = current, 2 = parent, etc.)&lt;BR&gt;- %% = % character&lt;BR&gt;see &lt;LINK&gt;Help&lt;/LINK&gt; for more information"/>
     <lblMP3Mask Caption="Mask:"/>
     <cbxMP3TwoDigit Caption="Two-digit track number (insert a '0' in front of the number if required)"/>
@@ -212,7 +216,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <lblExifMask Caption="Mask:"/>
 <n/>    <lblExifOffset Caption="Offset:"/>
 <n/>    <lblExifOffsetSec Caption="seconds"/>
-    <lblExifNotes Caption="Notes:&lt;BR&gt;- %name% = Original file name (without extension)&lt;BR&gt;- %ext% = Original extension (including the dot)&lt;BR&gt;- %datetimeoriginal% or %datetime% = Original date and time of the picture&lt;BR&gt;- %orientation% = Picture orientation&lt;BR&gt;- %flash% = Flash was on or off&lt;BR&gt;- %% = % character&lt;BR&gt;see &lt;LINK&gt;Help&lt;/LINK&gt; for more information and for complete list of EXIF tags"/>
+    <lblExifNotes Caption="Notes:&lt;BR&gt;- %name% = Original file name (without extension)&lt;BR&gt;- %ext% = Original extension (including the dot)&lt;BR&gt;- %datetimeoriginal% or %datetime% = Original date and time of the picture&lt;BR&gt;- %orientation% = Picture orientation&lt;BR&gt;- %flash% = Flash was on or off&lt;BR&gt;- %% = % character&lt;BR&gt;see &lt;LINK&gt;Help&lt;/LINK&gt; for more information and for the complete list of EXIF, IPTC and XMP tags"/>
     <lstLog Hint="|Log"/>
     <VarMessages>
       <Item Name="strfltAllFiles" Value="All files"/>
@@ -241,6 +245,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
       <Item Name="stradStringRepl" Value="Replace &#34;%s&#34; by &#34;%s&#34;"/>
       <Item Name="stradStringReplAll" Value=", replace all occurences"/>
       <Item Name="stradStringReplCase" Value=", case-sensitive"/>
+      <Item Name="stradStringReplWild" Value=", with wildcards"/>
       <Item Name="stradMultstrRepl" Value="Replace multiple strings using set &#34;%s&#34;"/>
       <Item Name="stradStringIns" Value="Insert &#34;%s&#34; at position %d"/>
       <Item Name="stradMoveStr" Value="Move %d characters from position %d%s, to position %d%s"/>
