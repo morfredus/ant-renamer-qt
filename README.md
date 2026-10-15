@@ -50,6 +50,11 @@ Windows prerequisites: MSYS2 with `mingw-w64-x86_64-{gcc,cmake,ninja,qt6-base}`.
 What was kept, changed and added compared with Ant Renamer 2.13:
 [docs/PRESENTATION.md](docs/PRESENTATION.md) ([fr](docs/PRESENTATION_fr.md)).
 
+## User guide
+
+Every function with instructions (operations, shortcuts, masks, tags, command line, options):
+[docs/USER_GUIDE.md](docs/USER_GUIDE.md) ([fr](docs/USER_GUIDE_fr.md)).
+
 ## Settings
 
 Portable mode: create an empty `antrenamer-qt.ini` next to the program (or tick the box in

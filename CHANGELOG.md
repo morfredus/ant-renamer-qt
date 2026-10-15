@@ -13,6 +13,7 @@ Changes committed but not yet published; they get a version number and date when
 ### Added
 
 - `.github/dependabot.yml`: Dependabot checks the GitHub Actions used by the workflows once a month (pull requests when a newer version exists).
+- `docs/USER_GUIDE_fr.md`: user guide (English `USER_GUIDE.md` and French `USER_GUIDE_fr.md`, linked from both READMEs and the presentation) listing every function (the 14 operations, shortcuts, files list, jobs, masks, EXIF/IPTC/XMP tags, command line, log, options) with instructions.
 
 ### Changed
 
