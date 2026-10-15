@@ -14,6 +14,11 @@ Changes committed but not yet published; they get a version number and date when
 
 - `.github/dependabot.yml`: Dependabot checks the GitHub Actions used by the workflows once a month (pull requests when a newer version exists).
 - `docs/USER_GUIDE_fr.md`: user guide (English `USER_GUIDE.md` and French `USER_GUIDE_fr.md`, linked from both READMEs and the presentation) listing every function (the 14 operations, shortcuts, files list, jobs, masks, EXIF/IPTC/XMP tags, command line, log, options) with instructions.
+- `docs/USER_RECIPES.md` / `USER_RECIPES_fr.md`: recipes guide (how to reach a result: cleaning names, numbering, photos, music and videos, moving and filing, command line, common problems), linked from both READMEs, the presentation and the user guides. Samples checked against the core engine.
+
+### Fixed
+
+- Date and time mask: `am/pm`, `AM/PM` and `a/p` now switch the hours to the 12-hour clock and print am / pm (a / p), as the help says and as Delphi's `FormatDateTime` does; before, the hours stayed on 24 hours and the marker was printed wrongly (`a10/p10`). `ampm` still prints AM / PM (12-hour hours now too). A marker inside quotes stays plain text. Test in `test_core`.
 
 ### Changed
 

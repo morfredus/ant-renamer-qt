@@ -1,7 +1,7 @@
 # Ant Renamer Qt: a port of Ant Renamer 2.13
 
 *A presentation of this C++/Qt 6 port of Ant Renamer 2.13, the program by Antoine Potten.*
-French version: [PRESENTATION_fr.md](PRESENTATION_fr.md). User guide: [USER_GUIDE.md](USER_GUIDE.md).
+French version: [PRESENTATION_fr.md](PRESENTATION_fr.md). User guide: [USER_GUIDE.md](USER_GUIDE.md), recipes: [USER_RECIPES.md](USER_RECIPES.md).
 
 ## About this document
 

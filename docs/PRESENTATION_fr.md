@@ -1,7 +1,7 @@
 # Ant Renamer Qt : un portage d'Ant Renamer 2.13
 
 *Présentation de ce portage C++/Qt 6 d'Ant Renamer 2.13, le programme d'Antoine Potten.*
-Version anglaise : [PRESENTATION.md](PRESENTATION.md). Guide d'utilisation : [USER_GUIDE_fr.md](USER_GUIDE_fr.md).
+Version anglaise : [PRESENTATION.md](PRESENTATION.md). Guide d'utilisation : [USER_GUIDE_fr.md](USER_GUIDE_fr.md), recettes : [USER_RECIPES_fr.md](USER_RECIPES_fr.md).
 
 ## À propos de ce document
 

@@ -54,6 +54,8 @@ Ce qui a été conservé, modifié et ajouté par rapport à Ant Renamer 2.13 :
 
 Toutes les fonctions avec leur mode d'emploi (opérations, raccourcis, masques, tags, ligne de commande, options) :
 [docs/USER_GUIDE_fr.md](docs/USER_GUIDE_fr.md) ([en](docs/USER_GUIDE.md)).
+Recettes pas à pas pour les cas courants et complexes (nettoyer des noms, numéroter, photos, musique, déplacer des fichiers, ligne de commande) :
+[docs/USER_RECIPES_fr.md](docs/USER_RECIPES_fr.md) ([en](docs/USER_RECIPES.md)).
 
 ## Réglages
 

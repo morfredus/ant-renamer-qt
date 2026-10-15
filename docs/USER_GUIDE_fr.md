@@ -1,7 +1,7 @@
 # Ant Renamer Qt : guide des fonctions
 
 *Liste de toutes les fonctions de Ant Renamer Qt 3.0.0-rc.9 avec leur mode d'emploi.*
-Version anglaise : [USER_GUIDE.md](USER_GUIDE.md). Détail complet : l'aide intégrée (touche F1).
+Version anglaise : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détail complet : l'aide intégrée (touche F1).
 
 ## 1. Principe général
 
@@ -73,7 +73,7 @@ Choisir l'opération dans la liste, régler ses paramètres (la zone *Notes* sou
 | 6 | **Suppression de caractères** | Effacer N caractères | Depuis une position, ou après une chaîne donnée. |
 | 7 | **Énumération** | Numéroter les fichiers | Masque contenant `%num%` (ex. `Fichier %num%%ext%`). Réglages : *Démarrer à*, *Nombre de chiffres* (zéros devant), *Incrémenter de*. Options : *Retour à la valeur de démarrage* à chaque nouveau dossier (liste triée par dossier), *Même numéro pour les fichiers de même nom* (IMG_1234.JPG + IMG_1234.CR2). |
 | 8 | **Tags MP3** | Nommer d'après les tags ID3 (v1, v2.2, v2.3, v2.4) | Masque avec `%author%`, `%title%`, `%album%`, `%year%`, `%genre%`, `%comm%`, `%track%`, `%name%`, `%ext%`. Ex. `%author% - %title%%ext%`. Option : remplacer les caractères interdits. `$if` disponible (§6). |
-| 9 | **Date et heure** | Nommer d'après la date du fichier | Masque en lettres : `yyyy` `yy` `mm` `mmm` `mmmm` `dd` `ddd` `dddd` `hh` `nn` (minutes) `ss` `am/pm`, `f` (nom d'origine), `e` (extension). Tout texte fixe va entre guillemets. Ex. `yyyy'-'mm'-'dd hh'-'nn'-'sse`. Choix date de création ou de modification ; option de suffixe pour les doublons. |
+| 9 | **Date et heure** | Nommer d'après la date du fichier | Masque en lettres : `yyyy` `yy` `mm` `mmm` `mmmm` `dd` `ddd` `dddd` `hh` `nn` (minutes) `ss` `am/pm` `a/p` (horloge 12 h), `f` (nom d'origine), `e` (extension). Tout texte fixe va entre guillemets. Ex. `yyyy'-'mm'-'dd hh'-'nn'-'sse`. Choix date de création ou de modification ; option de suffixe pour les doublons. |
 | 10 | **Noms aléatoires** | Générer un nom avec une part aléatoire | Masque avec `%random%` (+ `%name%`, `%ext%`). Type : nombre aléatoire (8 chiffres), compteur Windows, ou GUID. |
 | 11 | **Changement de casse** | Majuscules / minuscules | Quatre choix : majuscule à la première lettre après certains caractères (espace, tiret, point... à saisir), majuscule à la première lettre du nom, tout en majuscules, tout en minuscules. Garder « options régionales » activé pour traiter correctement les accents. |
 | 12 | **Noms depuis une liste** | Appliquer une liste de noms | Une ligne par fichier, dans l'ordre de la liste. Options : ajouter l'extension d'origine ; utiliser la liste comme extensions. Fichier sans ligne correspondante ou ligne vide = non renommé. |

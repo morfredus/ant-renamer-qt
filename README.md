@@ -54,6 +54,8 @@ What was kept, changed and added compared with Ant Renamer 2.13:
 
 Every function with instructions (operations, shortcuts, masks, tags, command line, options):
 [docs/USER_GUIDE.md](docs/USER_GUIDE.md) ([fr](docs/USER_GUIDE_fr.md)).
+Step-by-step recipes for common and complex cases (cleaning names, numbering, photos, music, moving files, command line):
+[docs/USER_RECIPES.md](docs/USER_RECIPES.md) ([fr](docs/USER_RECIPES_fr.md)).
 
 ## Settings
 

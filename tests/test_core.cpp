@@ -61,6 +61,12 @@ int main(int argc, char** argv) {
     CHECK_EQ(formatDateTime(u"yyyy'-'mm'-'dd hh:nn:ss"_s, QDateTime(QDate(2024, 3, 9), QTime(7, 5, 4))),
              u"2024-03-09 07:05:04"_s);
     CHECK_EQ(formatDateTime(u"hh:mm"_s, QDateTime(QDate(2024, 3, 9), QTime(7, 5, 4))), u"07:05"_s);
+    // 12-hour clock: am/pm, AM/PM, a/p and ampm switch every hour
+    CHECK_EQ(formatDateTime(u"hh'-'nn am/pm"_s, QDateTime(QDate(2024, 3, 9), QTime(22, 35, 4))), u"10-35 pm"_s);
+    CHECK_EQ(formatDateTime(u"h AM/PM"_s, QDateTime(QDate(2024, 3, 9), QTime(0, 5, 4))), u"12 AM"_s);
+    CHECK_EQ(formatDateTime(u"hh a/p"_s, QDateTime(QDate(2024, 3, 9), QTime(12, 5, 4))), u"12 p"_s);
+    CHECK_EQ(formatDateTime(u"hh ampm"_s, QDateTime(QDate(2024, 3, 9), QTime(13, 5, 4))), u"01 PM"_s);
+    CHECK_EQ(formatDateTime(u"hh \"am/pm\""_s, QDateTime(QDate(2024, 3, 9), QTime(13, 5, 4))), u"13 am/pm"_s);  // quoted: plain text, 24-hour
 
     // actions (previews)
     CHECK_EQ(prev<ActionChangeExt>(u"a.txt"_s, [](auto& a) { a.newExtension = u".md"_s; }), u"a.md"_s);

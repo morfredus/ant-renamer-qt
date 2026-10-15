@@ -89,6 +89,14 @@ QString formatDateTime(const QString& f, const QDateTime& dt) {
     QString out;
     bool lastWasHour = false;
     const int L = f.size();
+    // As in Delphi, an am/pm, a/p or ampm marker (outside quotes) switches every hour to the 12-hour clock.
+    bool h12 = false;
+    for (int i = 0; i < L && !h12;) {
+        if (f[i] == u'\'' || f[i] == u'"') { const int e = f.indexOf(f[i], i + 1); i = e < 0 ? L : e + 1; continue; }
+        const QString w = f.mid(i, 5).toLower();
+        h12 = w == u"am/pm" || w.startsWith(u"a/p") || w.startsWith(u"ampm");
+        ++i;
+    }
     auto run = [&](int i) { int n = 1; while (i + n < L && f[i + n].toLower() == f[i].toLower()) ++n; return n; };
     auto p2 = [](int v) { return QStringLiteral("%1").arg(v, 2, 10, QLatin1Char('0')); };
     for (int i = 0; i < L;) {
@@ -108,11 +116,18 @@ QString formatDateTime(const QString& f, const QDateTime& dt) {
                         : n == 3 ? loc.dayName(d.dayOfWeek(), QLocale::ShortFormat)
                                  : loc.dayName(d.dayOfWeek(), QLocale::LongFormat); break;
         case 'y': piece = n <= 2 ? p2(d.year() % 100) : QStringLiteral("%1").arg(d.year(), 4, 10, QLatin1Char('0')); break;
-        case 'h': piece = n == 1 ? QString::number(t.hour()) : p2(t.hour()); hour = true; break;
+        case 'h': { const int hr = h12 ? (t.hour() % 12 == 0 ? 12 : t.hour() % 12) : t.hour();
+                  piece = n == 1 ? QString::number(hr) : p2(hr); hour = true; break; }
         case 'n': piece = n == 1 ? QString::number(t.minute()) : p2(t.minute()); break;
         case 's': piece = n == 1 ? QString::number(t.second()) : p2(t.second()); break;
         case 'z': piece = n == 1 ? QString::number(t.msec()) : QStringLiteral("%1").arg(t.msec(), 3, 10, QLatin1Char('0')); break;
-        case 'a': if (f.mid(i, 4).toLower() == u"ampm") { piece = t.hour() < 12 ? u"AM"_s : u"PM"_s; out += piece; i += 4; lastWasHour = false; continue; }
+        case 'a': {  // am/pm and a/p follow the case they are typed in; ampm gives AM / PM
+                  const bool pm = t.hour() >= 12, up = f[i].isUpper();
+                  auto cased = [&](const QString& x) { return up ? x.toUpper() : x.toLower(); };
+                  if (f.mid(i, 5).toLower() == u"am/pm") { out += cased(pm ? u"pm"_s : u"am"_s); i += 5; lastWasHour = false; continue; }
+                  if (f.mid(i, 3).toLower() == u"a/p") { out += cased(pm ? u"p"_s : u"a"_s); i += 3; lastWasHour = false; continue; }
+              }
+              if (f.mid(i, 4).toLower() == u"ampm") { piece = t.hour() < 12 ? u"AM"_s : u"PM"_s; out += piece; i += 4; lastWasHour = false; continue; }
                   piece = QString(1, f[i]); break;
         case 'm': {
             int k = i + n;  // minutes if it follows an hour or precedes seconds

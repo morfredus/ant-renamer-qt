@@ -1,7 +1,7 @@
 # Ant Renamer Qt: function guide
 
 *Every function of Ant Renamer Qt 3.0.0-rc.9 with instructions.*
-French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Full details: the built-in help (F1).
+French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use cases): [USER_RECIPES.md](USER_RECIPES.md). Full details: the built-in help (F1).
 
 ## 1. General principle
 
@@ -73,7 +73,7 @@ Pick the operation in the list, set its parameters (the *Notes* area under the p
 | 6 | **Character deletion** | Erase N characters | From a position, or after a given string. |
 | 7 | **Enumeration** | Number the files | Mask containing `%num%` (e.g. `File %num%%ext%`). Settings: *Start at*, *Digits* (leading zeros), *Increment by*. Options: *Restart at the start value* in each new folder (list sorted by folder), *Same number for files with the same name* (IMG_1234.JPG + IMG_1234.CR2). |
 | 8 | **MP3 tags** | Name from the ID3 tags (v1, v2.2, v2.3, v2.4) | Mask with `%author%`, `%title%`, `%album%`, `%year%`, `%genre%`, `%comm%`, `%track%`, `%name%`, `%ext%`. E.g. `%author% - %title%%ext%`. Option: replace forbidden characters. `$if` available (§6). |
-| 9 | **Date and time** | Name from the file date | Mask in letters: `yyyy` `yy` `mm` `mmm` `mmmm` `dd` `ddd` `dddd` `hh` `nn` (minutes) `ss` `am/pm`, `f` (original name), `e` (extension). Any fixed text goes in quotes. E.g. `yyyy'-'mm'-'dd hh'-'nn'-'sse`. Choice of creation or modification date; option to add a suffix to duplicates. |
+| 9 | **Date and time** | Name from the file date | Mask in letters: `yyyy` `yy` `mm` `mmm` `mmmm` `dd` `ddd` `dddd` `hh` `nn` (minutes) `ss` `am/pm` `a/p` (12-hour clock), `f` (original name), `e` (extension). Any fixed text goes in quotes. E.g. `yyyy'-'mm'-'dd hh'-'nn'-'sse`. Choice of creation or modification date; option to add a suffix to duplicates. |
 | 10 | **Random names** | Generate a name with a random part | Mask with `%random%` (+ `%name%`, `%ext%`). Type: random number (8 digits), Windows tick count, or GUID. |
 | 11 | **Change case** | Upper / lower case | Four choices: upper the first letter following given characters (space, hyphen, dot... to type in), upper the first letter of the name, all upper, all lower. Keep "use locale" on to handle accents correctly. |
 | 12 | **Names from a list** | Apply a list of names | One line per file, in list order. Options: add the original extension; use the list as extensions. A file without a matching line, or with an empty line, is not renamed. |
