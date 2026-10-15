@@ -9,6 +9,13 @@
 <h1>Version history</h1>
 <p>Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Fr&eacute;d&eacute;ric Biron, developed in parallel with the original):</p>
 <ul>
+	<li>3.0.0-rc.10 (15/10/2026)
+		<ul>
+			<li>Fixed: sidecar files (.xmp, .dop) that are also in the files list are no longer renamed a second time (name ".xmp", "already exists" errors): their picture renames them, whatever their order in the list.</li>
+			<li>Fixed: am/pm, AM/PM and a/p in the date mask now use the 12-hour clock, as the help says.</li>
+			<li>New user guide and recipes guide (English and French) in the docs.</li>
+		</ul>
+	</li>
 	<li>3.0.0-rc.9 (14/10/2026)
 		<ul>
 			<li>New "Changed only" button in the files list: it hides the files whose name does not change in the preview (view filter only, the hidden files are still renamed).</li>

@@ -209,6 +209,20 @@ void Action::setInfo(const QString& what) {
     lastError_.status = State::Info;
 }
 
+// A sidecar (.xmp, .dop) whose picture is in the list too: the picture renames it, so it must not be renamed on its own
+// (whatever their order in the list, and whether it already followed or not).
+static bool isListedSidecar(FileList& list, const File& f) {
+    if (f.isFolder() || !options().renameSidecar || options().copy) return false;
+    const QString me = QDir::fromNativeSeparators(f.filePath());
+    for (size_t i = 0; i < list.size(); ++i) {
+        const File& g = list.at(i);
+        if (&g == &f || g.isFolder()) continue;
+        for (const QString& c : sidecarCandidates(g.filePath(), sidecarExtensions()))
+            if (QDir::fromNativeSeparators(c).compare(me, Qt::CaseInsensitive) == 0) return true;
+    }
+    return false;
+}
+
 void Action::perform(FileList& list, Op op, const Progress& progress) {
     lastError_ = Error{};
     if (op != Op::Revert) init();
@@ -216,6 +230,10 @@ void Action::perform(FileList& list, Op op, const Progress& progress) {
         if (stopFlag()) break;
         File& f = list.at(i);
         curFile_ = &f;
+        if (op == Op::Rename && isListedSidecar(list, f)) {  // renamed with its picture
+            if (progress) progress(f, position, int(i));
+            continue;
+        }
         if (op != Op::Preview) {
             QString newName;
             if (!f.exists()) {

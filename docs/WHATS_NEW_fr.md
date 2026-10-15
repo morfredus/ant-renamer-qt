@@ -4,7 +4,7 @@
 Version anglaise : [WHATS_NEW.md](WHATS_NEW.md). Liste tenue à jour au fil du développement. Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le
 portage lui-même (ce qui est conservé, les différences voulues) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.0.0-rc.9**. Ce qui est marqué *(à venir)* est dans le code mais pas encore publié.
+Version courante : **3.0.0-rc.10**. Ce qui est marqué *(à venir)* est dans le code mais pas encore publié.
 
 ## Ajouts
 

@@ -10,6 +10,8 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 Changes committed but not yet published; they get a version number and date when a release is made.
 
+## [3.0.0-rc.10] - 2026-10-15
+
 ### Added
 
 - `.github/dependabot.yml`: Dependabot checks the GitHub Actions used by the workflows once a month (pull requests when a newer version exists).
@@ -18,6 +20,8 @@ Changes committed but not yet published; they get a version number and date when
 
 ### Fixed
 
+- Sidecar files in the list are no longer renamed a second time by the mask when their picture is in the list too, whatever the order (they were renamed a second time: ".xmp", errors "already exists"; or before their picture).
+- Sidecar files (`IMG.DNG.xmp`, `IMG.DNG.dop`) that are also in the files list now follow their picture: on Windows the list entry kept its old path (backslashes vs slashes in the comparison), so after the picture was renamed (sidecar renamed on disk) the entry failed with "Source file not found". Test with Windows paths in `test_core`.
 - Date and time mask: `am/pm`, `AM/PM` and `a/p` now switch the hours to the 12-hour clock and print am / pm (a / p), as the help says and as Delphi's `FormatDateTime` does; before, the hours stayed on 24 hours and the marker was printed wrongly (`a10/p10`). `ampm` still prints AM / PM (12-hour hours now too). A marker inside quotes stays plain text. Test in `test_core`.
 
 ### Changed

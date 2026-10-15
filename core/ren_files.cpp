@@ -186,8 +186,9 @@ File& FileList::add(const QString& path) {
             if (it.get() != &who) it->fixPathAfterFolderRename(from, to);
     };
     f.onSidecarMoved = [this](const QString& from, const QString& to) {  // a .xmp that is also in the list follows
+        const QString f = QDir::fromNativeSeparators(from);  // candidates mix '/' and native separators
         for (auto& it : items_)
-            if (!it->isFolder() && QDir::fromNativeSeparators(it->filePath()).compare(from, Qt::CaseInsensitive) == 0) it->followPath(to);
+            if (!it->isFolder() && QDir::fromNativeSeparators(it->filePath()).compare(f, Qt::CaseInsensitive) == 0) it->followPath(to);
     };
     return f;
 }

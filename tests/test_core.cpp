@@ -172,6 +172,17 @@ int main(int argc, char** argv) {
         fl.at(0).revert();
         CHECK_EQ(has("a.jpg.xmp") + has("z.jpg.xmp") + has("b.xmp") + has("y.xmp") + has("b.dop") + has("y.dop"), u"ynynyn"_s);
 
+        {   // Windows paths (backslashes), the .xmp being in the list as IMG.CR2.xmp: it must follow too
+            QTemporaryDir nd;
+            const QString n = QDir::toNativeSeparators(nd.path()) + QDir::separator();
+            for (const char* f : {"p.dng", "p.dng.xmp"}) { QFile w(n + QString::fromLatin1(f)); if (w.open(QIODevice::WriteOnly)) w.write(xmp); }
+            FileList nl;
+            nl.add(n + u"p.dng"_s);
+            nl.add(n + u"p.dng.xmp"_s);
+            nl.at(0).rename(u"q.dng"_s);
+            CHECK_EQ(nl.at(1).fileName(), u"q.dng.xmp"_s);
+        }
+
         options().renameSidecar = false;
         fl.at(0).rename(u"z.jpg"_s);
         CHECK_EQ(has("a.jpg.xmp") + has("z.jpg.xmp"), u"yn"_s);
