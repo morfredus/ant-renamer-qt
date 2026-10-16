@@ -57,6 +57,12 @@ Every function with instructions (operations, shortcuts, masks, tags, command li
 Step-by-step recipes for common and complex cases (cleaning names, numbering, photos, music, moving files, command line):
 [docs/USER_RECIPES.md](docs/USER_RECIPES.md) ([fr](docs/USER_RECIPES_fr.md)).
 
+## Development
+
+Building, testing and packaging: [docs/BUILDING.md](docs/BUILDING.md) ([fr](docs/BUILDING_fr.md)).
+How the code is organised and how a renaming runs: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) ([fr](docs/ARCHITECTURE_fr.md)).
+Contributing: [CONTRIBUTING.md](CONTRIBUTING.md) ([fr](CONTRIBUTING_fr.md)).
+
 ## Settings
 
 Portable mode: create an empty `antrenamer-qt.ini` next to the program (or tick the box in

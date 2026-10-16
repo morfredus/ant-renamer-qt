@@ -57,6 +57,12 @@ Toutes les fonctions avec leur mode d'emploi (opérations, raccourcis, masques, 
 Recettes pas à pas pour les cas courants et complexes (nettoyer des noms, numéroter, photos, musique, déplacer des fichiers, ligne de commande) :
 [docs/USER_RECIPES_fr.md](docs/USER_RECIPES_fr.md) ([en](docs/USER_RECIPES.md)).
 
+## Développement
+
+Compilation, tests et paquets : [docs/BUILDING_fr.md](docs/BUILDING_fr.md) ([en](docs/BUILDING.md)).
+Organisation du code et déroulé d'un renommage : [docs/ARCHITECTURE_fr.md](docs/ARCHITECTURE_fr.md) ([en](docs/ARCHITECTURE.md)).
+Contribuer : [CONTRIBUTING_fr.md](CONTRIBUTING_fr.md) ([en](CONTRIBUTING.md)).
+
 ## Réglages
 
 Mode portable : créer un fichier `antrenamer-qt.ini` vide à côté du programme (ou cocher la case dans

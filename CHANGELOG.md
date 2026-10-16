@@ -10,6 +10,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 Changes committed but not yet published; they get a version number and date when a release is made.
 
+### Added
+
+- Developer documentation (English and French, linked from both READMEs): `docs/BUILDING.md` (requirements, presets, what a build does, packaging, command line), `docs/ARCHITECTURE.md` (layout, engine, interface, one renaming end to end) and `CONTRIBUTING.md` (workflow, recipes to add an operation, option, tag, sidecar type, language, pitfalls).
+
 ## [3.0.0-rc.10] - 2026-10-15
 
 ### Added
