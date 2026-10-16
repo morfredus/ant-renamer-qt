@@ -126,6 +126,9 @@ else
     DEPENDS="$(detect_depends || true)"
     [ -n "$DEPENDS" ] || DEPENDS="libc6, libqt6core6, libqt6gui6, libqt6widgets6, libqt6network6"
 fi
+# Ubuntu 24.04 nomme libqt6gui6t64 ce que Debian 13 nomme libqt6gui6 (et inversement selon les paquets) :
+# chaque dependance en "xxxt64" devient "xxxt64 | xxx" pour s'installer sur les deux.
+DEPENDS="$(printf '%s' "$DEPENDS" | sed -E 's/([A-Za-z0-9.+-]+)t64\b/\1t64 | \1/g')"
 # Le plugin xcb (charge par dlopen) exige libxcb-cursor0 depuis Qt 6.5.
 case ", $DEPENDS," in
     *", libxcb-cursor0,"*) : ;;
@@ -180,6 +183,7 @@ Architecture: $ARCH
 Maintainer: $MAINTAINER
 Installed-Size: $INSTALLED_KB
 Depends: $DEPENDS
+Recommends: qt6-wayland
 Section: utils
 Priority: optional
 Homepage: https://www.antp.be/software/renamer/
