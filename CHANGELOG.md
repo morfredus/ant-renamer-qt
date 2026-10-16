@@ -14,7 +14,7 @@ Changes committed but not yet published; they get a version number and date when
 
 ### Fixed
 
-- `.deb` package refused on Debian 13 (`libqt6gui6t64 is only referenced by name`): dependencies detected on Ubuntu carried the `t64` suffix. Each `xxxt64` dependency is now written `xxxt64 | xxx`, so the package installs on both Ubuntu 24.04 and Debian 13.
+- `.deb` package refused on Debian 13 (`libqt6gui6t64 is only referenced by name`): dependencies detected on Ubuntu carried the `t64` suffix. Each `xxxt64` dependency is now written `xxxt64 | xxx`, so the package installs on both Ubuntu 24.04 and Debian 13. Checked: arm64 package installed from the `.deb` and working on Debian 13 (Raspberry Pi 4, two machines); build and dependency list on Ubuntu 24.04. Not yet confirmed on Debian 13 x86-64.
 - `.deb` package: `Recommends: qt6-wayland`, so apt installs the native Wayland platform plugin by default (the program otherwise falls back to XWayland).
 
 ### Changed
@@ -23,6 +23,7 @@ Changes committed but not yet published; they get a version number and date when
 
 ### Added
 
+- `docs/TESTED_PLATFORMS.md` / `TESTED_PLATFORMS_fr.md`: systems and versions the program has really been tested on, linked from both READMEs.
 - Developer documentation (English and French, linked from both READMEs): `docs/BUILDING.md` (requirements, presets, what a build does, packaging, command line), `docs/ARCHITECTURE.md` (layout, engine, interface, one renaming end to end) and `CONTRIBUTING.md` (workflow, recipes to add an operation, option, tag, sidecar type, language, pitfalls).
 
 ## [3.0.0-rc.10] - 2026-10-15

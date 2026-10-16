@@ -60,6 +60,7 @@ Recettes pas à pas pour les cas courants et complexes (nettoyer des noms, numé
 ## Développement
 
 Compilation, tests et paquets : [docs/BUILDING_fr.md](docs/BUILDING_fr.md) ([en](docs/BUILDING.md)).
+Systèmes sur lesquels le programme a réellement été testé : [docs/TESTED_PLATFORMS_fr.md](docs/TESTED_PLATFORMS_fr.md) ([en](docs/TESTED_PLATFORMS.md)).
 Organisation du code et déroulé d'un renommage : [docs/ARCHITECTURE_fr.md](docs/ARCHITECTURE_fr.md) ([en](docs/ARCHITECTURE.md)).
 Contribuer : [CONTRIBUTING_fr.md](CONTRIBUTING_fr.md) ([en](CONTRIBUTING.md)).
 

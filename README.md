@@ -60,6 +60,7 @@ Step-by-step recipes for common and complex cases (cleaning names, numbering, ph
 ## Development
 
 Building, testing and packaging: [docs/BUILDING.md](docs/BUILDING.md) ([fr](docs/BUILDING_fr.md)).
+Systems the program has really been tested on: [docs/TESTED_PLATFORMS.md](docs/TESTED_PLATFORMS.md) ([fr](docs/TESTED_PLATFORMS_fr.md)).
 How the code is organised and how a renaming runs: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) ([fr](docs/ARCHITECTURE_fr.md)).
 Contributing: [CONTRIBUTING.md](CONTRIBUTING.md) ([fr](CONTRIBUTING_fr.md)).
 
