@@ -9,6 +9,12 @@
 <h1>Povijest inaèica</h1>
 <p>Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Fr&eacute;d&eacute;ric Biron, developed in parallel with the original):</p>
 <ul>
+	<li>3.0.0-rc.11 (16/10/2026)
+		<ul>
+			<li>Fixed: the Linux .deb package could not be installed on Debian 13 (missing "t64" Qt libraries): its dependencies now accept both the Ubuntu and the Debian names.</li>
+			<li>The .deb package now recommends qt6-wayland, so the program runs natively under Wayland.</li>
+		</ul>
+	</li>
 	<li>3.0.0-rc.10 (15/10/2026)
 		<ul>
 			<li>Fixed: sidecar files (.xmp, .dop) that are also in the files list are no longer renamed a second time (name ".xmp", "already exists" errors): their picture renames them, whatever their order in the list.</li>

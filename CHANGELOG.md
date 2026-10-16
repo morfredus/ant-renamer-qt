@@ -10,6 +10,13 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 Changes committed but not yet published; they get a version number and date when a release is made.
 
+## [3.0.0-rc.11] - 2026-10-16
+
+### Fixed
+
+- `.deb` package refused on Debian 13 (`libqt6gui6t64 is only referenced by name`): dependencies detected on Ubuntu carried the `t64` suffix. Each `xxxt64` dependency is now written `xxxt64 | xxx`, so the package installs on both Ubuntu 24.04 and Debian 13.
+- `.deb` package: `Recommends: qt6-wayland`, so apt installs the native Wayland platform plugin by default (the program otherwise falls back to XWayland).
+
 ### Changed
 
 - Line endings: every text file is now LF (`.gitattributes` with `* text=auto eol=lf`; binary files are marked `binary`). Before, the repository mixed CRLF (help pages, language files, some sources) and LF. Only the line endings changed, not the content or the encodings; no effect on the program.

@@ -9,6 +9,12 @@
 <h1>Historique des versions</h1>
 <p>Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Fr&eacute;d&eacute;ric Biron, d&eacute;velopp&eacute; en parall&egrave;le de l'original) :</p>
 <ul>
+	<li>3.0.0-rc.11 (16/10/2026)
+		<ul>
+			<li>Corrig&#233; : le paquet .deb Linux ne s'installait pas sous Debian 13 (biblioth&#232;ques Qt &#171; t64 &#187; introuvables) : ses d&#233;pendances acceptent maintenant les noms Ubuntu et Debian.</li>
+			<li>Le paquet .deb recommande maintenant qt6-wayland : le programme fonctionne nativement sous Wayland.</li>
+		</ul>
+	</li>
 	<li>3.0.0-rc.10 (15/10/2026)
 		<ul>
 			<li>Corrig&#233; : les fichiers associ&#233;s (.xmp, .dop) pr&#233;sents aussi dans la liste des fichiers ne sont plus renomm&#233;s une seconde fois (nom &#171; .xmp &#187;, erreurs &#171; existe d&#233;j&#224; &#187;) : leur image les renomme, quel que soit leur ordre dans la liste.</li>

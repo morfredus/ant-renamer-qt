@@ -1,6 +1,6 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.0.0--rc.10-blue)
+![version](https://img.shields.io/badge/version-3.0.0--rc.11-blue)
 
 Portage C++/Qt 6 d'[Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (Delphi 7 à l'origine,
 GPL v2). Renommage de fichiers par lots : remplacer, insérer, déplacer, supprimer, énumérer, changer

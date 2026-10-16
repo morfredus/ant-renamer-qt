@@ -1,6 +1,6 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.0.0--rc.10-blue)
+![version](https://img.shields.io/badge/version-3.0.0--rc.11-blue)
 
 C++/Qt 6 port of [Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (originally Delphi 7,
 GPL v2). Batch file renaming: replace, insert, move, delete, enumerate, change case, regular

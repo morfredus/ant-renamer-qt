@@ -5,7 +5,7 @@ French version: [WHATS_NEW_fr.md](WHATS_NEW_fr.md). This list is kept up to date
 technical detail: [CHANGELOG](../CHANGELOG.md). For the port itself (what is kept, the deliberate differences):
 [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.0.0-rc.10**. Items marked *(upcoming)* are in the code but not published yet.
+Current version: **3.0.0-rc.11**. Items marked *(upcoming)* are in the code but not published yet.
 
 ## Additions
 
