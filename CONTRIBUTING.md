@@ -57,7 +57,7 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 - **Threads.** The engine runs in a worker thread (`RenWorker`). The interface must only read the `Snapshot` copies it receives, never a `File` while a renaming runs.
 - **A job renames for real at each operation**, not once at the end. The revert goes back one level only (the previous name of each file).
 - **Translations.** The English text in the code must be identical to an entry of `English.lng` to be translated, otherwise it stays in English. `ANTREN_MISSING=1` lists the texts without translation.
-- **Line endings.** They are not uniform in the repository (for example `core/ren_actions.cpp` and the help pages are CRLF, `CHANGELOG.md` is LF; `git ls-files --eol <file>` tells). Keep the line endings of the file you edit, or the diff will show the whole file as modified.
+- **Line endings.** Every text file is LF, in the repository and in the working tree (`.gitattributes`). If your editor or a script writes CRLF, Git converts it back, but fix the tool when you can. Encodings are not touched: the help pages and the `.lng` files keep theirs, so do not re-save them with another encoding.
 
 ## License
 

@@ -1,2 +1,8 @@
-*.sh text eol=lf
-*.desktop text eol=lf
+# One rule for every text file: LF in the repository and in the working tree, on every system.
+# (Encodings are untouched: the help pages and the .lng files keep theirs, only line endings are normalised.)
+* text=auto eol=lf
+
+# Binary files: never converted.
+*.png binary
+*.bmp binary
+*.ico binary

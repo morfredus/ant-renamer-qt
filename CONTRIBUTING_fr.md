@@ -57,7 +57,7 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 - **Fils d'exécution.** Le moteur tourne dans un fil de travail (`RenWorker`). L'interface ne doit lire que les copies `Snapshot` qu'elle reçoit, jamais un `File` pendant un renommage.
 - **Un job renomme réellement à chaque opération**, pas une seule fois à la fin. L'annulation ne remonte que d'un niveau (l'ancien nom de chaque fichier).
 - **Traductions.** Le texte anglais du code doit être identique à une entrée de `English.lng` pour être traduit, sinon il reste en anglais. `ANTREN_MISSING=1` liste les textes sans traduction.
-- **Fins de ligne.** Elles ne sont pas uniformes dans le dépôt (par exemple `core/ren_actions.cpp` et les pages d'aide sont en CRLF, `CHANGELOG.md` en LF ; `git ls-files --eol <fichier>` l'indique). Gardez les fins de ligne du fichier que vous modifiez, sinon le diff montrera tout le fichier modifié.
+- **Fins de ligne.** Tous les fichiers texte sont en LF, dans le dépôt et dans le dossier de travail (`.gitattributes`). Si votre éditeur ou un script écrit du CRLF, Git le reconvertit, mais corrigez l'outil si possible. Les encodages ne sont pas touchés : les pages d'aide et les fichiers `.lng` gardent les leurs, ne les réenregistrez pas dans un autre encodage.
 
 ## Licence
 

@@ -10,6 +10,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 Changes committed but not yet published; they get a version number and date when a release is made.
 
+### Changed
+
+- Line endings: every text file is now LF (`.gitattributes` with `* text=auto eol=lf`; binary files are marked `binary`). Before, the repository mixed CRLF (help pages, language files, some sources) and LF. Only the line endings changed, not the content or the encodings; no effect on the program.
+
 ### Added
 
 - Developer documentation (English and French, linked from both READMEs): `docs/BUILDING.md` (requirements, presets, what a build does, packaging, command line), `docs/ARCHITECTURE.md` (layout, engine, interface, one renaming end to end) and `CONTRIBUTING.md` (workflow, recipes to add an operation, option, tag, sidecar type, language, pitfalls).
