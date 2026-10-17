@@ -3,7 +3,7 @@
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
 - 3.0.0-rc.12 (17/10/2026)
-  - Fixed (Linux): a file name containing a colon or a backslash was cut at that character; on Linux only "/" delimits a path now. Also fixed on Linux: the files inside a renamed folder follow it, %folder-N% and the %count% tags work.
+  - Fixed (Linux): a file name containing a colon or a backslash was cut at that character; on Linux only "/" delimits a path now. Also fixed on Linux: the files inside a renamed folder follow it, %folder-N% and the %count% tags work. Tested on Linux Mint 22.3 and Debian 13.
   - New icon set "Modern" (the default): line icons drawn by the program, sharp on any screen, light and dark theme. The other sets stay in Options, Display.
   - The help was rewritten and checked against the program (every option and operation, tags, keyboard shortcuts), with new screenshots. Croatian and Tamil show the English text for the rewritten pages.
   - New guide for translators; user guide and recipes up to date.

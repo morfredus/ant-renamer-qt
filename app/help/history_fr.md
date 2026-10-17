@@ -3,7 +3,7 @@
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
 - 3.0.0-rc.12 (17/10/2026)
-  - Corrigé (Linux) : un nom de fichier contenant deux-points ou antislash était coupé à ce caractère ; sous Linux seul « / » délimite un chemin maintenant. Corrigé aussi sous Linux : les fichiers d'un dossier renommé le suivent, %folder-N% et les tags %count% fonctionnent.
+  - Corrigé (Linux) : un nom de fichier contenant deux-points ou antislash était coupé à ce caractère ; sous Linux seul « / » délimite un chemin maintenant. Corrigé aussi sous Linux : les fichiers d'un dossier renommé le suivent, %folder-N% et les tags %count% fonctionnent. Testé sous Linux Mint 22.3 et Debian 13.
   - Nouveau jeu d'icônes « Modern » (par défaut) : icônes au trait dessinées par le programme, nettes sur tout écran, thèmes clair et sombre. Les autres sets restent dans Options, Affichage.
   - L'aide a été réécrite et vérifiée contre le programme (chaque option et opération, tags, raccourcis clavier), avec de nouvelles captures. Le croate et le tamoul affichent le texte anglais pour les pages réécrites.
   - Nouveau guide du traducteur ; guide d'utilisation et recettes à jour.
