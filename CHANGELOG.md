@@ -10,6 +10,31 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 Changes committed but not yet published; they get a version number and date when a release is made.
 
+## [3.0.0-rc.12] - 2026-10-17
+
+### Added
+
+- New toolbar icon set "Modern" (Options, Display, Icon set): 30 line icons drawn in code with `QPainter` on a 24 x 24 grid (`QIconEngine` in `app/icons.cpp`), so they are sharp at any size and screen scaling, follow the light or dark colours of the system and are greyed when disabled; green and red badges for add / remove, green Go, red Stop, black Help and About (the bubble "i"). No new dependency and no image file. It is the default set for everyone who has not chosen one yet (settings saved by an older version are switched once, because every option is saved, so "Scrows" was stored without anybody having chosen it; after that, the choice made in Options is kept); "Scrows" and the Windows XP sets stay available.
+
+### Changed
+
+- User guide (`docs/USER_GUIDE.md`) and recipes (`docs/USER_RECIPES.md`), English and French, brought up to date: every option of every operation, tags table, Windows / Linux differences, icon sets, help and languages; `/` as the folder separator in the examples, with the Linux notes; `WHATS_NEW` and the READMEs updated.
+- Help: the pictures of the buttons now show the "Modern" icons (all the small icons, the toolbar strips and every screenshot were remade from the program, in English and French, including the modern layout), and a picture of the options page shows the correspondence between the classic and the modern icons (new section "The toolbar icons" of the options help, linked from the main window page). A pass of checks on the help: same structure in English and French on every page, all links and images resolve, option names match the program.
+- New guide for translators, `docs/TRANSLATING.md` and `docs/TRANSLATING_fr.md`: the whole process of a `.lng` file (create, encoding, header, rules for the texts, test with `ANTREN_MISSING=1`, credits, submission, help pages), linked from CONTRIBUTING.
+- Help pages converted from HTML to Markdown (UTF-8, 72 pages in 4 languages, same text): the table of contents is now `toc_<lang>.md` (a nested list of links) instead of the CHM `.hhc` file, and `main.css` is gone. This also ends the mix of encodings (iso-8859-1, windows-1250, UTF-8) of the old pages. The help window shows headings, lists, tables and screenshots as before; links to a heading (`page.md#id`) still work. The About window's history tab reads `history_<lang>.md`.
+- Help images: the six screenshots of the modern layout are recompressed (palette PNG, about 385 KB down to 120 KB) and the 11 unused `*xp.png` icons are removed. The `help/` folder goes from 0.94 MB to 0.55 MB (files, not disk blocks).
+- Help reviewed against the program (English and French, every page): wrong or outdated statements removed or corrected (regular expressions are PCRE2 and not TRegExpr, ID3v2 is read, "Windows tick count" and GUID details, forbidden characters always replaced in mp3 tags, "c/ddddd/dddddd" date tags do not exist, the font option changes the whole program, settings location, Linux notes such as "/" as folder delimiter), and missing items added (options of each action, Multiple string replacement buttons, Case options, offset in seconds, `z`/`zzz`/`ampm` date tags, numbering and offset of the EXIF action, Events and Language pages of the options, portable mode, Explorer menu, keyboard shortcuts table, tags table and `$if` anchors in "Formatting").
+- Help: new screenshots of the real program (Files, Actions and Log pages, the five pages of the Options), in English and French. The help window opens wider (1040 x 650) for them.
+- Help in Croatian and Tamil: the pages that were rewritten (Actions, Files, Adding files, Log, Options, Fonts, Formatting, Regular expressions, Main window, What the program does, About, news) show the English text until translated, so that they no longer say what is not true any more.
+- Developer helpers: `ANTREN_ACTION=n`, `ANTREN_PREVIEW=1` and `ANTREN_SIZE=WxH` (see `docs/BUILDING.md`) to take reproducible screenshots.
+
+### Fixed
+
+- Build: changing only a help page or a language file was not copied next to the executable (the copy ran only after a link). It is now a target of its own (`antrenamer-data`), run at every build, which also removes deleted help files.
+- Linux: a file name containing a colon (`a:b.txt`) or a backslash was cut at that character, as if it were a folder delimiter (Windows rules applied everywhere). On Linux only `/` delimits now. Also fixed on Linux: the files of the list that are inside a renamed folder did not follow it, `%folder-N%` (count from the root) gave nothing, and the `%count%` tags counted nothing. With "Detect absolute path" a new name that begins with `/` is now an absolute path. The unit tests use paths of the running system.
+- Help: external links (dEXIF, regular expression reference) were broken by the conversion to Markdown; links to a section of another page (`page.md#folder`...) now all land on their section (a link checker found and fixed the missing anchors).
+- Help, Actions page (all four languages): the list of tags of "String insertion" (`%name%`, `%ext%`, `%folderN%`) had a broken list structure in the source.
+
 ## [3.0.0-rc.11] - 2026-10-16
 
 ### Fixed

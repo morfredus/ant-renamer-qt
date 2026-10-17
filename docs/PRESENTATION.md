@@ -50,7 +50,7 @@ common, on purpose: both programs read each other's batches.
   batches, the status bar with progress, the same keyboard shortcuts.
 - **The original language files**: the 27 `.lng` files are used as they are (each with its own encoding), and the
   language can be changed in Options. The French interface is built entirely from the original `French.lng`.
-- **The original help**: the HTML help pages (English, French, Croatian, Tamil) and the version history are shipped
+- **The original help**: the help pages (English, French, Croatian, Tamil) and the version history are shipped
   and opened from F1 and from the "Help" links of the action notes.
 - **The original graphics**: toolbar icon sets (Scrows, Windows XP, Windows XP Large), `renamer.ico`, `ant.bmp`,
   and the predefined "Remove west-european accents" set from `default.xml`.
@@ -125,7 +125,7 @@ These are the places where the port does not do exactly what version 2.13 does. 
   otherwise settings go to `%APPDATA%`. A checkbox moves the settings from one to the other.
 - **Windows 10/11 readiness**: application manifest with long paths (over 260 characters), UTF-8 code
   page, per-monitor DPI v2 and common controls v6; Qt handles the dark theme and high DPI.
-- **Icon set, font and "auto-resize columns"** applied immediately, toolbars that can be moved and
+- **Icon set (a new "Modern" vector set), font and "auto-resize columns"** applied immediately, toolbars that can be moved and
   remembered, languages list with version, authors and comments.
 - **Build system**: CMake presets for Windows (MinGW), Linux x86_64, Linux ARM64 and ARM64 cross
   compilation; Qt and MinGW DLLs are deployed automatically next to the executable on Windows.
@@ -163,7 +163,7 @@ These are the places where the port does not do exactly what version 2.13 does. 
   About box states that this is a C++/Qt port and links to the original site.
 - Third-party code used by the port: Qt 6 (LGPL v3 / GPL), nothing else. The Delphi components of the
   original are not needed.
-- Reused from the original, unchanged: `Languages/*.lng`, `help/` (HTML, CSS, images), toolbar bitmaps,
+- Reused from the original, unchanged: `Languages/*.lng`, `help/` (images; the pages were converted from HTML to Markdown, same text), toolbar bitmaps,
   `renamer.ico`, `ant.bmp`, `default.xml`, texts of the action notes. Translators are credited in the
   Credits tab as in the original About box.
 

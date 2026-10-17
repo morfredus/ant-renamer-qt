@@ -1,0 +1,147 @@
+# Version history
+
+Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
+
+- 3.0.0-rc.12 (17/10/2026)
+  - Fixed (Linux): a file name containing a colon or a backslash was cut at that character; on Linux only "/" delimits a path now. Also fixed on Linux: the files inside a renamed folder follow it, %folder-N% and the %count% tags work.
+  - New icon set "Modern" (the default): line icons drawn by the program, sharp on any screen, light and dark theme. The other sets stay in Options, Display.
+  - The help was rewritten and checked against the program (every option and operation, tags, keyboard shortcuts), with new screenshots. Croatian and Tamil show the English text for the rewritten pages.
+  - New guide for translators; user guide and recipes up to date.
+- 3.0.0-rc.11 (16/10/2026)
+  - Fixed: the Linux .deb package could not be installed on Debian 13 (missing "t64" Qt libraries): its dependencies now accept both the Ubuntu and the Debian names.
+  - The .deb package now recommends qt6-wayland, so the program runs natively under Wayland.
+- 3.0.0-rc.10 (15/10/2026)
+  - Fixed: sidecar files (.xmp, .dop) that are also in the files list are no longer renamed a second time (name ".xmp", "already exists" errors): their picture renames them, whatever their order in the list.
+  - Fixed: am/pm, AM/PM and a/p in the date mask now use the 12-hour clock, as the help says.
+  - New user guide and recipes guide (English and French) in the docs.
+- 3.0.0-rc.9 (14/10/2026)
+  - New "Changed only" button in the files list: it hides the files whose name does not change in the preview (view filter only, the hidden files are still renamed).
+  - A renamed picture now takes its sidecar files along (IMG.xmp, IMG.CR2.xmp, and DxO .dop files), also reverted with it (option in Options, Processing, enabled by default). The XMP sidecar is also read by the EXIF action.
+  - New option "Use wildcards" in String replacement: \* stands for any text and ? for any single character.
+  - New option "Same number for files with the same name and different extensions" in Enumeration and EXIF, so a JPG and its RAW (or XMP) get the same number.
+  - The EXIF action now also reads IPTC and XMP data (keywords, title, caption, author, place, rating...). New help page listing every usable tag.
+  - The notes and check box texts of the action editor now wrap to the panel width instead of being cut by a scroll bar.
+- 3.0.0-rc.8 (14/10/2026)
+  - New modern interface layout, selectable in Options, Display (the classic layout stays the default): tabs with counters, a bar per page, the new name column visible, and the batch always visible next to the editor.
+  - New option "Pages layout": tabs, or a single screen with Files, Actions and Log together, in bands or in columns (movable splitters, sizes remembered, columns give way to bands in a narrow window).
+  - Modern layout: an action of the batch can be edited in place (double-click, then "Validate the modification" or "Modify"), for all types of actions.
+  - New help chapter "Modern interface layout".
+  - Fixed: a text present twice in the language files with two translations got one or the other at random.
+- 3.0.0-rc.7 (14/10/2026)
+  - New option "Natural sort in files list" (Options, Display), enabled by default: "file 2" is sorted before "file 10". Untick it for the alphabetical sort.
+  - Fixed: in the Files list, clicking a column header sorted only the first time.
+- 3.0.0-rc.6 (14/10/2026)
+  - The copyright now reads 2000-2026 Antoine Potten - Frédéric Biron (About window, installer, packages).
+- 3.0.0-rc.5 (13/10/2026)
+  - The original author's e-mail address is removed from the About window and the help (support for Ant Renamer Qt is on GitHub).
+- 3.0.0-rc.4 (13/10/2026)
+  - Build error with Qt 6.4 (Ubuntu 24.04) in the About window, fixed.
+- 3.0.0-rc.3 (13/10/2026)
+  - The help opens in a window of the program, with the table of contents of the original help, instead of an external browser (path error depending on the installation).
+  - New help page "Ant Renamer Qt: news and support" (what is new compared with 2.13, support on GitHub).
+- 3.0.0-rc.2 (13/10/2026)
+  - Linux packages: .deb (amd64, arm64) and AppImage (x86_64).
+  - Languages and help are also looked up in *../share/antrenamer* (Linux installation).
+- 3.0.0-rc.1 (13/10/2026)
+  - C++/Qt 6 port of version 2.13: the program no longer needs Delphi nor any third-party component pack, and runs on recent Windows (10 and 11, long paths, high DPI) and on Linux.
+  - New: ID3v2.2/2.3/2.4 tags in the "Use mp3 tag info" action, *%num%* counter in the "Use EXIF info" action, Windows Explorer context menu, portable mode, installer and portable zip.
+  - Settings are stored in an INI file (antrenamer.ini) instead of Renamer.xml; old preferences are not imported. Batch files (.arb) are unchanged.
+  - Fixed: endless loop on a lone "$" in a mask, empty ID3/EXIF tags becoming a number, wrong "Restart" value saved by the "Enumeration" action, missing "%" in the default MP3 mask.
+
+\2.x versions:
+
+- 2.13 (14/12/2024)
+  - Option for better handling of daylight summer time (DST) for files to follow the behaviour of recent Windows versions (enabled by default on Windows 7 and higher).
+  - Offset feature for "Date & time" and "EXIF Info" actions.
+  - Copy/paste of the table for the "Multiple string replacement" action, for easy export/import.
+  - Upgrade of TRegExpr library.
+  - A few bugs fixed.
+- 2.12 (04/07/2015)
+  - Option (disabled by default) to consider the last "." in folder name as extension delimiter. Previous versions were always considering that a folder could have an extension, but that's not commonly used.
+  - When folders are renamed, the path of files in the list is updated if needed. Previous versions were giving an error as files contained by renamed folders were not found anymore.
+  - "Case sensitive" option in the "Multiple string replace" action.
+  - A few bugs fixed.
+- 2.11 (01/04/2015)
+  - By default, when installed, the settings are stored in Users folders instead of Program Files, for better compatibility with Windows Vista/7/8.
+  - A few bugs/details fixed.
+- 2.10 (12/05/2008)
+  - Replaced component used for number fields.
+  - Added %count% tag, and improved the %folder% tag.
+- 2.09 (09/09/2006)
+  - Characters deletion: option to also delete characters before a specified string.
+  - Added a new action for using data contained in JPEG EXIF tags.
+  - Added a new action for generating new names using a regular expression.
+  - When the "Shift" or "Ctrl" key is pressed when adding files/folders by drag & drop, the files/folders/subfolders addition options window is always displayed.
+  - A few bugs corrected
+- 2.08 (15/10/2004)
+  - Help file
+  - Added support for some command-line parameters, see help file.
+  - More advanced formatting system for some actions, especially for mp3.
+  - Option for using Creation date instead of Modification date, in Date & time action.
+  - Option for reverting to start value when changing folder, in Enumeration action.
+  - Option for storing log to a file, with or without append.
+  - Possibility to filter log entries (successes, errors, not renamed files).
+  - A few bugs corrected
+- 2.07 (06/02/2004)
+  - "Move string" action.
+  - A few bugs corrected, a few options added in actions.
+- 2.06 (23/09/2003)
+  - Modified toolbar system, and switched from TBSkin to TBX (dropped "Windows XP" theme on non-XP systems).
+  - "Multiple string remplacement" allowing to replace a set of characters by another set, e.g. remove accents on letters.
+  - Faster log (it was really slow when renaming hundreds of files).
+  - Corrected "preview" bug when using planned actions list.
+- 2.05 (18/05/2003)
+  - Optional columns in file list : size, date created, date modified, full path, extension.
+  - Items in Files and Batch list can now be moved by drag & drop.
+- 2.04 (04/05/2003)
+  - Can rename folders in addition of files. This required a few changes in the "Add folder contents" and Drag & Drop operations.
+  - Option to move files to another path if their new name starts with "x:\\" (where x is any letter) or "\\\\".
+  - Option to specify the maximum number of items to keep in drop-down lists.
+  - A few other small changes, and corrected a bug with the drag & drop of long file names under NT/2000/XP.
+- 2.03 (13/04/2003)
+  - Unicode support under Windows NT4, 2000 and XP.
+  - Batches can be saved and loaded.
+- 2.02 (06/04/2003)
+  - Option (enabled by default) to display icons in the file list (based on the extensions of the files).
+  - Toolbars positions and list columns settings are now saved.
+- 2.01 (25/03/2003)
+  - Added a French translation and a sample English translation file, to allow any translation to be made.
+  - Corrected a bug that sometimes stopped the renaming process before the end.
+- 2.00 (16/03/2003)
+  - Option to copy files to new name instead of rename them.
+  - Added a few missing things. Now all what was in version 1.4 should be there (except translation system).
+- 2.00 'Preview 1' (08/03/2003)
+  - Very long time since last update, because this version is a complete rewrite of the program with Borland Delphi 7 (instead of C++Builder 5).
+  - Possibility to make a list of actions to apply.
+  - Corrected lots of bugs (but probably added new ones).
+  - New action: take names from a list or a file.
+
+---
+
+\1.x versions:
+
+- 1.4.0 (08/09/2001)
+  - "Preview" function that allows you to see what the names will look like without modifying anything on the disk.
+  - "Undo" function that restores names before the renaming process (for files that are still in the list).
+  - Contextual menu in the file list allowing to move items (if you want to change the order of the files before they are renamed).
+  - Improved some small things, most of them are not visible but make the source code cleaner.
+- 1.3.1 (23/03/2001)
+  - Corrected some small problems with the "Change extension" feature.
+  - Corrected a bug when drag & drop a folder on the program's window.
+  - Now the program saves in its configuration file all the renaming options that where used last time.
+- 1.3.0 (14/02/2001)
+  - Use of the track number for the mp3s (ID3v1.1).
+  - Case change (uppercase, lowercase, first letter of each word in uppercase, ...).
+  - Some small details.
+- 1.2.1 (20/10/2000)
+  - Fixed a bug in the Options window.
+  - Can replace invalid characters in filenames such as : \< \> \* \| ¦ / \\ ? when they are in a mp3 tag.
+- 1.2.0 (07/10/2000)
+  - Random names creation.
+  - You can add files to the list by a drag & drop from Windows' Explorer.
+- 1.1.1 (20/09/2000)
+  - New extension replacement option : enumeration.
+- 1.1.0 (15/09/2000)
+  - Easy translation by addition of two files (lng and txt).
+- 1.0.0 (13/09/2000)
+  - First release.

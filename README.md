@@ -1,6 +1,6 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.0.0--rc.11-blue)
+![version](https://img.shields.io/badge/version-3.0.0--rc.12-blue)
 
 C++/Qt 6 port of [Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (originally Delphi 7,
 GPL v2). Batch file renaming: replace, insert, move, delete, enumerate, change case, regular
@@ -52,7 +52,7 @@ What was kept, changed and added compared with Ant Renamer 2.13:
 
 ## User guide
 
-Every function with instructions (operations, shortcuts, masks, tags, command line, options):
+Every function with instructions (operations, shortcuts, masks, tags, command line, options, icon sets, differences between Windows and Linux):
 [docs/USER_GUIDE.md](docs/USER_GUIDE.md) ([fr](docs/USER_GUIDE_fr.md)).
 Step-by-step recipes for common and complex cases (cleaning names, numbering, photos, music, moving files, command line):
 [docs/USER_RECIPES.md](docs/USER_RECIPES.md) ([fr](docs/USER_RECIPES_fr.md)).
@@ -63,13 +63,14 @@ Building, testing and packaging: [docs/BUILDING.md](docs/BUILDING.md) ([fr](docs
 Systems the program has really been tested on: [docs/TESTED_PLATFORMS.md](docs/TESTED_PLATFORMS.md) ([fr](docs/TESTED_PLATFORMS_fr.md)).
 How the code is organised and how a renaming runs: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) ([fr](docs/ARCHITECTURE_fr.md)).
 Contributing: [CONTRIBUTING.md](CONTRIBUTING.md) ([fr](CONTRIBUTING_fr.md)).
+Translating the interface (the `.lng` files): [docs/TRANSLATING.md](docs/TRANSLATING.md) ([fr](docs/TRANSLATING_fr.md)).
 
 ## Settings
 
 Portable mode: create an empty `antrenamer-qt.ini` next to the program (or tick the box in
-Options > Language). Otherwise settings live in `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini`.
+Options > Language). Otherwise settings live in `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) or `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
 
-Explorer context menu: Options > Files && Folders adds "Add to Ant Renamer Qt" to files and folders (Windows 11:
+Explorer context menu (Windows): Options > Files && Folders adds "Add to Ant Renamer Qt" to files and folders (Windows 11:
 "Show more options"). Everything selected is sent to the window that is already open.
 
 Command line: `-b file.arb` load a batch, `-g` start, `-x` exit when done, `-a[fFr]` choose what the

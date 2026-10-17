@@ -61,6 +61,9 @@ void AppOptions::load() {
 #define LOAD(k) k = s.value(QStringLiteral("options/" #k), k).value<decltype(k)>();
     KEYS(LOAD)
 #undef LOAD
+    // Settings written before the "Modern" set existed carry iconSet=0 although nobody chose it (every key is saved):
+    // they take the new default once. From the first save of this version on the choice is the user's own.
+    if (!s.contains(QStringLiteral("options/iconSetChosen"))) iconSet = 3;
     applyToCore();
 }
 
@@ -69,6 +72,7 @@ void AppOptions::save() const {
 #define SAVE(k) s.setValue(QStringLiteral("options/" #k), k);
     KEYS(SAVE)
 #undef SAVE
+    s.setValue(QStringLiteral("options/iconSetChosen"), true);
 }
 
 void AppOptions::applyToCore() const {

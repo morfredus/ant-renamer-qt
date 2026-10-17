@@ -37,7 +37,7 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 3. `app/actionpanel.cpp`: add the page in `buildPages` (the order of the pages is the type index), then the branch in `makeAction` and in `setFromAction`.
 4. Add the English texts in the code and their translations in the `.lng` files (`app/Languages/`).
 5. Add a case to `tests/test_core.cpp`. `tests/test_panel.cpp` catches a forgotten `setFromAction`.
-6. Documentation: help pages (`app/help/actions_*.html`), `docs/USER_GUIDE*.md`, `docs/WHATS_NEW*.md`, `CHANGELOG.md`.
+6. Documentation: help pages (`app/help/actions_*.md`), `docs/USER_GUIDE*.md`, `docs/WHATS_NEW*.md`, `CHANGELOG.md`.
 
 **Add a setting to an existing operation.** A field in the class (with its default), `save` / `load` (an XML attribute; use the default when it is missing so older jobs still load), the use in `makeNewName`, the control in `buildPages`, `makeAction` **and** `setFromAction`, the text in the `.lng` files, a case in `test_core.cpp`.
 
@@ -49,7 +49,7 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 
 **Add a source file.** Add the `.cpp` to `add_library(rencore ...)` (engine) or to `set(SRC ...)` in `app/CMakeLists.txt`: the lists of sources are written by hand, nothing is detected automatically. A forgotten file shows up as an "undefined reference" at link time. If `test_panel` also needs it, add it to its list too.
 
-**Add a language or fix a translation.** Edit or add a `.lng` file in `app/Languages/`. For the help, add the `_<code>.html` pages and the `toc_<code>.hhc`, and declare the code in `helpLanguageCode()` (`app/lngtranslator.cpp`).
+**Add a language or fix a translation.** Follow [docs/TRANSLATING.md](docs/TRANSLATING.md). Edit or add a `.lng` file in `app/Languages/`. For the help, add the `_<code>.md` pages and the `toc_<code>.md`, and declare the code in `helpLanguageCode()` (`app/lngtranslator.cpp`).
 
 ## Things to know
 

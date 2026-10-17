@@ -177,9 +177,13 @@ bool Action::getTag(const QString& tag, QString& value) {
         const QString nStr = tag.mid(6);
         int n = nStr == u"N" ? 1 : nStr.toInt();
         if (n < 0) {
+#ifdef Q_OS_WIN
             if (cur.startsWith(u"\\\\")) cur.remove(0, 2);
-            for (; n < 0; ++n) {  // Split(cur, '\', value, cur): value = before first '\', cur = rest
-                int p = cur.indexOf(u'\\');
+#else
+            if (cur.startsWith(u'/')) cur.remove(0, 1);
+#endif
+            for (; n < 0; ++n) {  // Split(cur, sep, value, cur): value = before first separator, cur = rest
+                int p = cur.indexOf(kSep);
                 value = p < 0 ? QString() : cur.left(p);
                 cur = cur.mid(p + 1);
             }

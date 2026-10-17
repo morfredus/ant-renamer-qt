@@ -21,10 +21,14 @@ target_include_directories(test_panel PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(test_panel PRIVATE rencore Qt6::Widgets Qt6::Network)
 add_test(NAME panel COMMAND test_panel)
 
-# Fichiers de langue et aide de l'original, lus a l'execution depuis <exe>/Languages et <exe>/help
-add_custom_command(TARGET antrenamer-qt POST_BUILD
+# Fichiers de langue et aide, lus a l'execution depuis <exe>/Languages et <exe>/help.
+# Cible a part, jouee a chaque compilation (une commande POST_BUILD ne l'est qu'apres une edition de liens : une
+# modification de l'aide seule n'etait pas recopiee). L'aide est videe d'abord : un fichier supprime ne reste pas.
+add_custom_target(antrenamer-data ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Languages $<TARGET_FILE_DIR:antrenamer-qt>/Languages
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/help $<TARGET_FILE_DIR:antrenamer-qt>/help)
+    COMMAND ${CMAKE_COMMAND} -E remove_directory $<TARGET_FILE_DIR:antrenamer-qt>/help
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/help $<TARGET_FILE_DIR:antrenamer-qt>/help
+    COMMENT "Copie des fichiers de langue et de l'aide a cote de l'executable")
 
 # --- Deploiement Windows : DLL Qt (windeployqt) + DLL MinGW (script) -------
 # Meme mecanisme que ComponentHub : l'exe est lancable hors du shell MSYS2 (double-clic).

@@ -1,0 +1,145 @@
+# Historique des versions
+
+Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
+
+- 3.0.0-rc.12 (17/10/2026)
+  - Corrigé (Linux) : un nom de fichier contenant deux-points ou antislash était coupé à ce caractère ; sous Linux seul « / » délimite un chemin maintenant. Corrigé aussi sous Linux : les fichiers d'un dossier renommé le suivent, %folder-N% et les tags %count% fonctionnent.
+  - Nouveau jeu d'icônes « Modern » (par défaut) : icônes au trait dessinées par le programme, nettes sur tout écran, thèmes clair et sombre. Les autres sets restent dans Options, Affichage.
+  - L'aide a été réécrite et vérifiée contre le programme (chaque option et opération, tags, raccourcis clavier), avec de nouvelles captures. Le croate et le tamoul affichent le texte anglais pour les pages réécrites.
+  - Nouveau guide du traducteur ; guide d'utilisation et recettes à jour.
+- 3.0.0-rc.11 (16/10/2026)
+  - Corrigé : le paquet .deb Linux ne s'installait pas sous Debian 13 (bibliothèques Qt « t64 » introuvables) : ses dépendances acceptent maintenant les noms Ubuntu et Debian.
+  - Le paquet .deb recommande maintenant qt6-wayland : le programme fonctionne nativement sous Wayland.
+- 3.0.0-rc.10 (15/10/2026)
+  - Corrigé : les fichiers associés (.xmp, .dop) présents aussi dans la liste des fichiers ne sont plus renommés une seconde fois (nom « .xmp », erreurs « existe déjà ») : leur image les renomme, quel que soit leur ordre dans la liste.
+  - Corrigé : am/pm, AM/PM et a/p dans le masque de date utilisent maintenant l'horloge 12 heures, comme l'aide l'annonce.
+  - Nouveaux guide de l'utilisateur et guide de recettes (anglais et français) dans la documentation.
+- 3.0.0-rc.9 (14/10/2026)
+  - Nouveau bouton « Seulement modifiés » dans la liste des fichiers : il masque les fichiers dont le nom ne change pas dans l'aperçu (simple filtre d'affichage, les fichiers masqués sont quand même renommés).
+  - Une image renommée emporte maintenant ses fichiers associés (IMG.xmp, IMG.CR2.xmp et fichiers .dop de DxO), aussi annulés avec elle (option dans Options, Traitement, activée par défaut). Le fichier XMP associé est aussi lu par l'action EXIF.
+  - Nouvelle option « Utiliser les jokers » dans le remplacement de chaîne : \* remplace n'importe quel texte et ? un seul caractère.
+  - Nouvelle option « Même numéro pour les fichiers de même nom et d'extensions différentes » dans Énumération et EXIF, pour qu'un JPG et son RAW (ou XMP) reçoivent le même numéro.
+  - L'action EXIF lit maintenant aussi les données IPTC et XMP (mots-clés, titre, légende, auteur, lieu, note...). Nouvelle page d'aide listant tous les tags utilisables.
+  - Les notes et les textes des cases à cocher de l'éditeur d'actions passent maintenant à la ligne selon la largeur du panneau au lieu d'être coupés par une barre de défilement.
+- 3.0.0-rc.8 (14/10/2026)
+  - Nouvelle disposition moderne de l'interface, au choix dans Options, Affichage (la disposition classique reste celle par défaut) : onglets avec compteurs, une barre par page, colonne du nouveau nom visible, et job toujours visible à côté de l'éditeur.
+  - Nouvelle option « Disposition des pages » : onglets, ou écran unique avec Fichiers, Opérations et Journal ensemble, en bandes ou en colonnes (séparateurs déplaçables, tailles mémorisées, les colonnes passent en bandes dans une fenêtre étroite).
+  - Disposition moderne : une opération du job peut être modifiée sur place (double-clic, puis « Valider la modification » ou « Modifier »), pour tous les types d'opérations.
+  - Nouveau chapitre d'aide « Disposition moderne de l'interface ».
+  - Corrigé : un texte présent deux fois dans les fichiers de langue avec deux traductions recevait l'une ou l'autre au hasard.
+- 3.0.0-rc.7 (14/10/2026)
+  - Nouvelle option « Tri naturel dans la liste des fichiers » (Options, Affichage), activée par défaut : « fichier 2 » est trié avant « fichier 10 ». Décochez-la pour le tri alphabétique.
+  - Corrigé : dans la liste des fichiers, un clic sur un en-tête de colonne ne triait que la première fois.
+- 3.0.0-rc.6 (14/10/2026)
+  - Le copyright devient 2000-2026 Antoine Potten - Frédéric Biron (fenêtre À propos, installeur, paquets).
+- 3.0.0-rc.5 (13/10/2026)
+  - L'adresse e-mail de l'auteur d'origine est retirée de la fenêtre À propos et de l'aide (l'assistance d'Ant Renamer Qt se fait sur GitHub).
+- 3.0.0-rc.4 (13/10/2026)
+  - Erreur de compilation avec Qt 6.4 (Ubuntu 24.04) dans la fenêtre À propos, corrigée.
+- 3.0.0-rc.3 (13/10/2026)
+  - L'aide s'ouvre dans une fenêtre du programme, avec la table des matières de l'aide d'origine, au lieu d'un navigateur externe (erreur de chemin selon l'installation).
+  - Nouvelle page d'aide "Ant Renamer Qt : nouveautés et assistance" (nouveautés par rapport à la 2.13, assistance sur GitHub).
+- 3.0.0-rc.2 (13/10/2026)
+  - Paquets Linux : .deb (amd64, arm64) et AppImage (x86_64).
+  - Les langues et l'aide sont aussi recherchées dans *../share/antrenamer* (installation Linux).
+- 3.0.0-rc.1 (13/10/2026)
+  - Portage C++/Qt 6 de la version 2.13 : le programme n'a plus besoin de Delphi ni de composants tiers, et fonctionne sous les Windows récents (10 et 11, chemins longs, haute résolution) et sous Linux.
+  - Nouveautés : tags ID3v2.2/2.3/2.4 pour l'opération "Infos des tags mp3", compteur *%num%* pour l'opération "Infos EXIF", menu contextuel de l'Explorateur Windows, mode portable, installeur et zip portable.
+  - Les réglages sont enregistrés dans un fichier INI (antrenamer.ini) au lieu de Renamer.xml ; les anciennes préférences ne sont pas importées. Les jobs (.arb) sont inchangés.
+  - Corrigé : boucle infinie sur un "$" isolé dans un masque, tags ID3/EXIF vides remplacés par un nombre, mauvaise valeur "Restart" enregistrée par l'énumération, "%" manquant dans le masque MP3 par défaut.
+
+Versions 2.x :
+
+- 2.13 (14/12/2024)
+  - Option pour une meilleure gestion de l'heure d'été pour les fichiers, suivant le comportement des versions récentes de Windows (activé par défaut sous Windows 7 et supérieur).
+  - Possibilité de décalage de l'heure pour les opérations "Date et heure" et "Infos EXIF".
+  - Copier/coller de la grille pour l'opération "Replacement de chaînes multiples", pour un export/import facile.
+  - Mise à jour du composant TRegExpr.
+  - Quelques bugs corrigés.
+- 2.12 (04/07/2015)
+  - Option (désactivée par défaut) pour considérer le dernier "." d'un dossier comme délimiteur d'extension. Les versions précédentes considéraient toujours qu'un dossier pouvait avoir une extension, mais ce n'est pas souvent utilisé comme tel.
+  - Quand des dossiers sont renommés, le chemin vers les fichiers de la liste est mis à jour si nécessaire. Les versions précédentes généraient une erreur car les fichiers contenus dans des dossiers renommés n'étaient plus trouvés.
+  - Option "Sensible à la casse" dans l'opération de remplacement de chaînes multiples.
+  - Quelques bugs corrigés.
+- 2.11 (01/04/2015)
+  - Par défaut, quand le programme est installé, les paramètres sont stockés dans le dossier des utilisateurs plutôt que celui des programmes, pour une meilleure compatibilité avec Windows Vista/7/8.
+  - Quelques bugs/détails corrigés.
+- 2.10 (12/05/2008)
+  - Remplacement du composant utilisé pour les champs numériques.
+  - Ajout d'un tag %count%, et amélioration du tag %folder%.
+- 2.09 (09/09/2006)
+  - Suppression de caractères : option pour pouvoir également supprimer des caractères devant une chaîne spécifiée.
+  - Ajout d'une opération pour utiliser les données contenues dans les tags EXIF des fichiers JPEG.
+  - Ajout d'une opération pour générer de nouveaux noms sur base d'une expression rationnelle.
+  - Lorsque la touche "Maj" ou "Ctrl" est enfoncée lors d'un ajout de fichiers/dossiers par glisser-déposer, la fenêtre de choix fichiers/dossiers/sous-dossiers est affichée d'office.
+  - Quelques bugs corrigés
+- 2.08 (15/10/2004)
+  - Fichier d'aide
+  - Ajout de quelques paramètres pour commander l'application depuis la ligne de commande, voir le fichier d'aide.
+  - Système de formatage avancé pour quelques opérations, principalement pour les mp3.
+  - Option pour utiliser la date de création à la place de la date de modification, dans l'opération Date et heure.
+  - Option pour revenir à la valeur de départ lors du changement de dossier, dans l'opération Énumération.
+  - Option pour stocker le journal dans un fichier, à la suite du fichier existant ou non.
+  - Possibilité de filtrer les entrées du journal (succès, erreurs, fichiers non renommés).
+  - Quelques bugs corrigés
+- 2.07 (06/02/2004)
+  - Action "Déplacement de chaîne".
+  - Quelques bugs corrigés, quelques options ajoutées dans les actions.
+- 2.06 (23/09/2003)
+  - Modification du système des barres d'outils, passage de TBSkin à TBX (j'ai dû supprimer le thème "Windows XP" pour les systèmes autres que XP).
+  - "Remplacement de chaînes multiples" permettant de remplacer un set de caractères par un autre, par ex. pour supprimer les accents des lettres.
+  - Journal plus rapide (il était vraiment lent pour renommer des centaines de fichiers).
+  - Correction d'un bug de la prévisualisation lors de l'utilisation d'une liste d'actions planifiées.
+- 2.05 (18/05/2003)
+  - Colonnes optionnelles dans la liste de fichier : taille, date de création, date de modification, chemin complet, extension.
+  - Les éléments des listes de fichiers et de jobs peuvent maintenant être déplacés par drag & drop.
+- 2.04 (04/05/2003)
+  - Possibilité de renommer des dossiers en plus des fichiers. Ceci a demandé quelques changements dans les fonctions d'ajout du contenu d'un dossier et du Drag & Drop.
+  - Option pour déplacer les fichiers vers un autre chemin si leur nom commence par "x:\\" (où x est n'importe quelle lettre) ou "\\\\".
+  - Option pour spécifier le nombre maximal d'éléments à conserver dans les listes déroulantes.
+  - Quelques autres petits changements, et correction d'un bug lors du drag & drop de longs noms de fichiers sous NT/2000/XP.
+- 2.03 (13/04/2003)
+  - Support de l'Unicode sous Windows NT4, 2000 et XP.
+  - Les jobs (batch) peuvent être sauvés et chargés.
+- 2.02 (06/04/2003)
+  - Option (activée par défaut) pour l'affichage des icones dans la liste des fichiers (se basant sur l'extension des fichiers).
+  - Les positions des barres d'outiles et les paramètres des colonnes sont maintenant sauvés.
+- 2.01 (25/03/2003)
+  - Ajout d'une traduction Française et d'un fichier de traduction en Anglais d'exemple permettant d'ajouter n'importe quelle traduction.
+  - Correction d'un bug qui interrompait par moments le renommage.
+- 2.00 (16/03/2003)
+  - Option pour copier les fichiers vers leur nouveau nom plutôt que de les renommer.
+  - Ajout de quelques petits détails. Maintenant tout ce qui était dans la version 1.4 devrait être là (sauf le système de traduction).
+- 2.00 'Preview 1' (08/03/2003)
+  - Réécriture complète du programme avec Borland Delphi 7 (à la place de C++Builder 5).
+  - Possibilité de faire une liste d'actions à effectuer.
+  - Correction de pas mal de bugs (mais probablement ajout de nouveaux bugs).
+  - Nouvelle action : utilisation de noms provenants d'une liste ou d'un fichier.
+
+---
+
+- 1.4.0 (08/09/2001)
+  - "Preview" function that allows you to see what the names will look like without modifying anything on the disk.
+  - "Undo" function that restores names before the renaming process (for files that are still in the list).
+  - Contextual menu in the file list allowing to move items (if you want to change the order of the files before they are renamed).
+  - Improved some small things, most of them are not visible but make the source code cleaner.
+- 1.3.1 (23/03/2001)
+  - Corrected some small problems with the "Change extension" feature.
+  - Corrected a bug when drag & drop a folder on the program's window.
+  - Now the program saves in its configuration file all the renaming options that where used last time.
+- 1.3.0 (14/02/2001)
+  - Use of the track number for the mp3s (ID3v1.1).
+  - Case change (uppercase, lowercase, first letter of each word in uppercase, ...).
+  - Some small details.
+- 1.2.1 (20/10/2000)
+  - Fixed a bug in the Options window.
+  - Can replace invalid characters in filenames such as : \< \> \* \| ¦ / \\ ? when they are in a mp3 tag.
+- 1.2.0 (07/10/2000)
+  - Random names creation.
+  - You can add files to the list by a drag & drop from Windows' Explorer.
+- 1.1.1 (20/09/2000)
+  - New extension replacement option : enumeration.
+- 1.1.0 (15/09/2000)
+  - Easy translation by addition of two files (lng and txt).
+- 1.0.0 (13/09/2000)
+  - First release.

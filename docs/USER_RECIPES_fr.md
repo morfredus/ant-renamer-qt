@@ -16,7 +16,7 @@ Chaque recette donne le but, les opérations à empiler dans le job (dans l'ordr
 
 Deux règles à retenir :
 - Une opération voit le **nom déjà modifié** par les précédentes, sauf les opérations de métadonnées (Date, MP3, EXIF) qui lisent toujours le **vrai fichier** sur le disque.
-- Un `\` dans un nouveau nom est un **séparateur de dossier** : c'est ainsi qu'on déplace des fichiers (§5).
+- Un **séparateur de dossier** dans un nouveau nom déplace le fichier dans ce dossier (§5) : écrivez `/` (il fonctionne sous Windows et sous Linux ; `\` fonctionne aussi, sous Windows seulement). Sous Linux `\` et `:` sont des caractères ordinaires d'un nom de fichier.
 
 ---
 
@@ -102,7 +102,7 @@ Triez par nom pour que `IMG_1234.JPG` et `IMG_1234.CR2` se suivent, puis cochez 
 *Infos EXIF* ou *Date et heure*, réglage **Décalage** en secondes, tous les tags date de la forme `aaaa:MM:jj HH:mm:ss` sont décalés. Exemple : appareil resté à l'heure d'hiver, décalage `3600` (+1 heure) ; négatif pour reculer. `-86400` retire un jour.
 
 ### 3.4 Nommer d'après la date du fichier (pas d'EXIF)
-*Date et heure* : masque `yyyy'-'mm'-'dd'_'fe` → `2026-10-15_IMG_1.jpg` (`f` = nom d'origine, `e` = extension). Tout texte fixe va entre guillemets ou apostrophes. Date et heure : `yyyymmdd'_'hhnnss'_'fe` → `20261015_223515_IMG_1.jpg`. Pour l'heure sur 12 h, ajouter `am/pm` (ou `a/p`) au masque : `hh'-'nn am/pm`, 22:35 → `10-35 pm`. Choisir **Création** ou **Dernière modification**. Cocher **Ajouter un suffixe si plusieurs fichiers ont la même date** pour éviter les noms identiques. `nn` est toujours les minutes ; `mm` est les minutes s'il suit `hh` ou précède `ss`, sinon le mois.
+*Date et heure* : masque `yyyy'-'mm'-'dd'_'fe` → `2026-10-15_IMG_1.jpg` (`f` = nom d'origine, `e` = extension). Tout texte fixe va entre guillemets ou apostrophes. Date et heure : `yyyymmdd'_'hhnnss'_'fe` → `20261015_223515_IMG_1.jpg`. Pour l'heure sur 12 h, ajouter `am/pm` (ou `a/p`) au masque : `hh'-'nn am/pm`, 22:35 → `10-35 pm`. Choisir **Création** ou **Dernière modification** (beaucoup de systèmes de fichiers Linux ne conservent pas la date de création : la date de modification est alors utilisée). Cocher **Ajouter un suffixe si plusieurs fichiers ont la même date** pour éviter les noms identiques. `nn` est toujours les minutes ; `mm` est les minutes s'il suit `hh` ou précède `ss`, sinon le mois.
 
 ### 3.5 Nommer d'après le titre ou les mots-clés (IPTC / XMP)
 *Infos EXIF*, masque avec `$if` pour prendre le premier tag existant et éviter un séparateur en trop :
@@ -115,18 +115,18 @@ Les valeurs multiples sont jointes par « , ». Pour un RAW, les mots-clés et l
 Rien à faire si la case « Renommer aussi les fichiers associés (.xmp, .dop) d'une image renommée » (Options > Traitement) est cochée, ce qui est le cas par défaut. `IMG_0001.CR2` et `IMG_0001.CR2.xmp` partent ensemble, l'annulation (F12) remet les deux. Le journal le signale. Voir aussi §2.4.
 
 ### 3.7 Ranger les photos dans des dossiers année / mois
-*Date et heure* (ou EXIF si la date de prise de vue compte) : masque `yyyy'\'mm'\'fe` → `2026\10\nom.jpg`. Le `\` fait un sous-dossier, créé à côté du fichier. Cochez **Forcer les dossiers** (Options > Traitement) pour qu'ils soient créés automatiquement ; sans cela le dossier doit exister.
+*Date et heure* (ou EXIF si la date de prise de vue compte) : masque `yyyy'/'mm'/'fe` → `2026/10/nom.jpg`. Le `/` fait un sous-dossier, créé à côté du fichier. Cochez **Forcer les dossiers** (Options > Traitement) pour qu'ils soient créés automatiquement ; sans cela le dossier doit exister.
 
 ---
 
 ## 4. Musique et vidéos
 
 ### 4.1 « Artiste - Titre » depuis les tags ID3
-*Infos des tags MP3* : masque `%author% - %title%%ext%`. Option « Remplacer les caractères interdits » (`"` → `''`, `?` → `.`, les autres → `-`). Gère ID3v1 et ID3v2.2 / 2.3 / 2.4. Fichier sans tag : « non renommé » dans le journal.
+*Infos des tags MP3* : masque `%author% - %title%%ext%`. Les caractères qu'un nom de fichier ne peut pas contenir sont toujours remplacés dans les tags (`"` → `'`, `?` → `.`, `\ / : * < > |` → `-`). Gère ID3v1 et ID3v2.2 / 2.3 / 2.4. Fichier sans tag : « non renommé » dans le journal.
 
 ### 4.2 Numéro de piste, album, tags incomplets
 - `%track% - %title%%ext%` avec la case **Numéro de piste sur deux chiffres** → `01 - Titre.mp3`.
-- `%album%\%track% - %title%%ext%` range dans un dossier par album (cocher Forcer les dossiers).
+- `%album%/%track% - %title%%ext%` range dans un dossier par album (cocher Forcer les dossiers).
 - Tags vides : `%author%$if(%title%, - %title%,)%ext%` → `Blur - Song 2.mp3` mais `Vivaldi.mp3` si le titre est vide (pas de « - » en trop). Les valeurs contenant virgule ou parenthèse se mettent entre guillemets : `%author%$if(%album%," ("%album%")",)%ext%`.
 
 ### 4.3 Épisodes de séries
@@ -136,16 +136,16 @@ Rien à faire si la case « Renommer aussi les fichiers associés (.xmp, .dop) d
 
 ## 5. Dossiers : déplacer, ranger, aplatir
 
-Principe : un `\` dans le nouveau nom désigne un dossier. Avec **Forcer les dossiers**, il est créé s'il n'existe pas.
+Principe : un `/` dans le nouveau nom désigne un dossier (sous Windows `\` fonctionne aussi). Avec **Forcer les dossiers**, il est créé s'il n'existe pas. Les exemples utilisent `/`, valable partout.
 
 ### 5.1 Un dossier par nom de fichier
-Fichiers `cars.doc`, `cars.xls`, `cars.jpg`, `houses.doc`... *Insertion de chaîne* : texte `%name%\`, position 0, début. Cochez Forcer les dossiers. Résultat : `cars\cars.doc`, `cars\cars.xls`... `houses\houses.doc`...
+Fichiers `cars.doc`, `cars.xls`, `cars.jpg`, `houses.doc`... *Insertion de chaîne* : texte `%name%/`, position 0, début. Cochez Forcer les dossiers. Résultat : `cars/cars.doc`, `cars/cars.xls`... `houses/houses.doc`...
 
 ### 5.2 Remonter des fichiers d'un sous-dossier en gardant son nom
 Fichiers `images\movies\poster1.jpg` et `images\games\poster1.jpg` : *Insertion de chaîne*, texte `../%folder1% `, position 0. Résultat dans `images` : `movies poster1.jpg`, `games poster1.jpg`. Les dossiers vides se suppriment ensuite à la main.
 
 ### 5.3 Déplacer vers un autre endroit (chemin complet)
-Options > Traitement : cocher **Détecter les « :\ » ou « \\ » comme chemins absolus**. *Insertion de chaîne* : texte `D:\Tri\`, position 0. `a.txt` → `D:\Tri\a.txt`. Combinez avec Forcer les dossiers pour créer l'arborescence. Pour garder l'original, cochez « Copier plutôt que renommer ».
+Options > Traitement : cocher **Détecter les « :\ » ou « \\ » comme chemins absolus** (sous Linux : un nom qui commence par `/`). *Insertion de chaîne* : texte `D:\Tri\` sous Windows ou `/home/moi/Tri/` sous Linux, position 0. `a.txt` → `D:\Tri\a.txt` (ou `/home/moi/Tri/a.txt`). Combinez avec Forcer les dossiers pour créer l'arborescence. Pour garder l'original, cochez « Copier plutôt que renommer ».
 
 ### 5.4 Renommer des dossiers
 Dossiers (F3) : cochez « ajouter les dossiers » (et décochez les fichiers si besoin). Les dossiers sont traités comme des fichiers sans extension. Si vos noms de dossier contiennent un point qui n'est pas une extension (`Photos 2024.05`), laissez « Le dernier point d'un nom de dossier délimite l'extension » décoché (défaut). `%countfiles%` et `%countfolders%` (récursifs avec `r`) donnent le nombre d'éléments du dossier : `Vacances (%countfiles%)`.
@@ -158,7 +158,7 @@ Dossiers (F3) : cochez « ajouter les dossiers » (et décochez les fichiers si 
 *Noms à partir d'une liste* : collez un nom par ligne, dans l'ordre exact de la liste de fichiers (triez-la d'abord). Cochez « Ajouter l'extension originale » si la liste n'a pas d'extensions. Plus de fichiers que de lignes, ou ligne vide : le fichier n'est pas renommé. Option « Utiliser les éléments comme extensions » pour ne changer que les extensions.
 
 ### 6.2 Anonymiser avec des noms aléatoires
-*Noms aléatoires* : masque `%random%%ext%`, méthode GUID (unique garanti), nombre à 8 chiffres ou compteur Windows.
+*Noms aléatoires* : masque `%random%%ext%`, méthode GUID (unique garanti), nombre à 8 chiffres ou « Compteur Windows » (un compteur de millisecondes, donc des noms séquentiels).
 
 ### 6.3 Enchaîner plusieurs opérations
 Un nettoyage complet type, dans cet ordre : 1) *Remplacements multiples* (accents) ; 2) *Remplacement de chaîne* (jokers, retirer `_copie`) ; 3) *Remplacement de chaîne* (espaces → `_`) ; 4) *Changement de casse* (minuscules) ; 5) *Énumération* en dernier, puisque le numéro doit s'appliquer au nom définitif. Vérifiez avec F5, puis enregistrez le job (Ctrl+S).
@@ -168,7 +168,7 @@ Pour corriger une étape déjà ajoutée : retirez-la et refaites-la (dispositio
 ```
 antrenamer-qt -b d:\jobs\nettoyage.arb -af c:\import\*.* -g -x
 ```
-charge le job, ajoute les fichiers du dossier, renomme et quitte. `-afr dossier` ajoute récursivement, `-aF` ajoute des dossiers. Le même appel peut être lancé par le Planificateur de tâches Windows ou depuis un script. Les `*` et `?` de la ligne de commande choisissent les fichiers ; ils n'ont rien à voir avec les jokers du remplacement de chaîne.
+charge le job, ajoute les fichiers du dossier, renomme et quitte. `-afr dossier` ajoute récursivement, `-aF` ajoute des dossiers. Sous Linux : `antrenamer-qt -b ~/jobs/nettoyage.arb -af "/import/*" -g -x` (mettre les jokers entre guillemets). Le même appel peut être lancé par le Planificateur de tâches Windows, par cron ou depuis un script. Les `*` et `?` de la ligne de commande choisissent les fichiers ; ils n'ont rien à voir avec les jokers du remplacement de chaîne.
 
 ### 6.5 Faire entrer des fichiers depuis l'Explorateur
 Activer « Ajouter à Ant Renamer Qt » (Options > Fichiers & Dossiers). Clic droit sur une sélection de fichiers et de dossiers (Windows 11 : *Afficher plus d'options*) : tout arrive dans la fenêtre déjà ouverte.
@@ -186,6 +186,6 @@ Activer « Ajouter à Ant Renamer Qt » (Options > Fichiers & Dossiers). Clic dr
 | Les numéros ne suivent pas l'ordre voulu | La liste n'est pas triée comme prévu : trier ou réordonner avant de démarrer. |
 | « Nom déjà utilisé » (rouge) | Deux fichiers donnent le même nouveau nom : ajouter un compteur (`%num%`) ou le suffixe de l'opération Date et heure. |
 | Un fichier n'est pas renommé (bleu) | Nouveau nom identique à l'ancien, tag manquant (MP3, EXIF) ou fichier absent : lire le message du journal. |
-| Un `\` fait échouer le renommage | Le dossier cible n'existe pas : cochez Forcer les dossiers. |
+| Un séparateur de dossier (`/`) fait échouer le renommage | Le dossier cible n'existe pas : cochez Forcer les dossiers. |
 | Les accents sont mal gérés en majuscules | Garder cochée l'option de langue de l'opération Changement de casse. |
 | L'expression rationnelle ne trouve rien | Elle s'applique au nom complet, extension comprise ; vérifier aussi les `\` devant `.` `(` `)` `[`. |

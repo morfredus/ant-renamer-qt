@@ -1,0 +1,147 @@
+# Povijest inačica
+
+Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
+
+- 3.0.0-rc.12 (17/10/2026)
+  - Fixed (Linux): a file name containing a colon or a backslash was cut at that character; on Linux only "/" delimits a path now. Also fixed on Linux: the files inside a renamed folder follow it, %folder-N% and the %count% tags work.
+  - New icon set "Modern" (the default): line icons drawn by the program, sharp on any screen, light and dark theme. The other sets stay in Options, Display.
+  - The help was rewritten and checked against the program (every option and operation, tags, keyboard shortcuts), with new screenshots. Croatian and Tamil show the English text for the rewritten pages.
+  - New guide for translators; user guide and recipes up to date.
+- 3.0.0-rc.11 (16/10/2026)
+  - Fixed: the Linux .deb package could not be installed on Debian 13 (missing "t64" Qt libraries): its dependencies now accept both the Ubuntu and the Debian names.
+  - The .deb package now recommends qt6-wayland, so the program runs natively under Wayland.
+- 3.0.0-rc.10 (15/10/2026)
+  - Fixed: sidecar files (.xmp, .dop) that are also in the files list are no longer renamed a second time (name ".xmp", "already exists" errors): their picture renames them, whatever their order in the list.
+  - Fixed: am/pm, AM/PM and a/p in the date mask now use the 12-hour clock, as the help says.
+  - New user guide and recipes guide (English and French) in the docs.
+- 3.0.0-rc.9 (14/10/2026)
+  - New "Changed only" button in the files list: it hides the files whose name does not change in the preview (view filter only, the hidden files are still renamed).
+  - A renamed picture now takes its sidecar files along (IMG.xmp, IMG.CR2.xmp, and DxO .dop files), also reverted with it (option in Options, Processing, enabled by default). The XMP sidecar is also read by the EXIF action.
+  - New option "Use wildcards" in String replacement: \* stands for any text and ? for any single character.
+  - New option "Same number for files with the same name and different extensions" in Enumeration and EXIF, so a JPG and its RAW (or XMP) get the same number.
+  - The EXIF action now also reads IPTC and XMP data (keywords, title, caption, author, place, rating...). New help page listing every usable tag.
+  - The notes and check box texts of the action editor now wrap to the panel width instead of being cut by a scroll bar.
+- 3.0.0-rc.8 (14/10/2026)
+  - New modern interface layout, selectable in Options, Display (the classic layout stays the default): tabs with counters, a bar per page, the new name column visible, and the batch always visible next to the editor.
+  - New option "Pages layout": tabs, or a single screen with Files, Actions and Log together, in bands or in columns (movable splitters, sizes remembered, columns give way to bands in a narrow window).
+  - Modern layout: an action of the batch can be edited in place (double-click, then "Validate the modification" or "Modify"), for all types of actions.
+  - New help chapter "Modern interface layout".
+  - Fixed: a text present twice in the language files with two translations got one or the other at random.
+- 3.0.0-rc.7 (14/10/2026)
+  - New option "Natural sort in files list" (Options, Display), enabled by default: "file 2" is sorted before "file 10". Untick it for the alphabetical sort.
+  - Fixed: in the Files list, clicking a column header sorted only the first time.
+- 3.0.0-rc.6 (14/10/2026)
+  - The copyright now reads 2000-2026 Antoine Potten - Frédéric Biron (About window, installer, packages).
+- 3.0.0-rc.5 (13/10/2026)
+  - The original author's e-mail address is removed from the About window and the help (support for Ant Renamer Qt is on GitHub).
+- 3.0.0-rc.4 (13/10/2026)
+  - Build error with Qt 6.4 (Ubuntu 24.04) in the About window, fixed.
+- 3.0.0-rc.3 (13/10/2026)
+  - The help opens in a window of the program, with the table of contents of the original help, instead of an external browser (path error depending on the installation).
+  - New help page "Ant Renamer Qt: news and support" (what is new compared with 2.13, support on GitHub).
+- 3.0.0-rc.2 (13/10/2026)
+  - Linux packages: .deb (amd64, arm64) and AppImage (x86_64).
+  - Languages and help are also looked up in *../share/antrenamer* (Linux installation).
+- 3.0.0-rc.1 (13/10/2026)
+  - C++/Qt 6 port of version 2.13: the program no longer needs Delphi nor any third-party component pack, and runs on recent Windows (10 and 11, long paths, high DPI) and on Linux.
+  - New: ID3v2.2/2.3/2.4 tags in the "Use mp3 tag info" action, *%num%* counter in the "Use EXIF info" action, Windows Explorer context menu, portable mode, installer and portable zip.
+  - Settings are stored in an INI file (antrenamer.ini) instead of Renamer.xml; old preferences are not imported. Batch files (.arb) are unchanged.
+  - Fixed: endless loop on a lone "$" in a mask, empty ID3/EXIF tags becoming a number, wrong "Restart" value saved by the "Enumeration" action, missing "%" in the default MP3 mask.
+
+\2.x inačice:
+
+- 2.13 (14/12/2024)
+  - Option for better handling of daylight summer time (DST) for files to follow the behaviour of recent Windows versions (enabled by default on Windows 7 and higher).
+  - Offset feature for "Date & time" and "EXIF Info" actions.
+  - Copy/paste of the table for the "Multiple string replacement" action, for easy export/import.
+  - Upgrade of TRegExpr library.
+  - A few bugs fixed.
+- 2.12 (04/07/2015)
+  - Option (disabled by default) to consider the last "." in folder name as extension delimiter. Previous versions were always considering that a folder could have an extension, but that's not commonly used.
+  - When folders are renamed, the path of files in the list is updated if needed. Previous versions were giving an error as files contained by renamed folders were not found anymore.
+  - "Case sensitive" option in the "Multiple string replace" action.
+  - A few bugs fixed.
+- 2.11 (01/04/2015)
+  - By default, when installed, the settings are stored in Users folders instead of Program Files, for better compatibility with Windows Vista/7/8.
+  - A few bugs/details fixed.
+- 2.10 (12/05/2008)
+  - Zamijenjena komponenta korištena za broj polja.
+  - Dodana %count% oznaka, i poboljšana %folder% oznaka.
+- 2.09 (09/09/2006)
+  - Brisanje znakova : opcija za brisanje znakova prije određivanja niza.
+  - Dodana nova akciju za korištenje podataka sadržanih u JPEG EXIF oznakama.
+  - Dodana nova akciju za stvaranje novih imena pomoću regularnih izraza.
+  - Kada su pritisnute tipka "Shift" ili "Ctrl" pri dodavanju datoteke/mape pomoću povuci & ispusti, prozor opcije dodavanja datoteke/mape/podmape uvijek se prikazuje.
+  - Nekoliko bugova ispravljeno
+- 2.08 (15/10/2004)
+  - Datoteka pomoći
+  - Dodana podrška za neke parametre naredbenog retka, pogledajte datoteku za pomoć.
+  - Više naprednih sustava za oblikovanje u nekim akcijama, pogotovo za mp3.
+  - Opcija za korištenje datum kreiranja umjesto datuma promjene, u akciji Datum & vrijeme.
+  - Opcija za povratak na početne vrijednosti pri promjeni mape u akciji brojčani naziv.
+  - Opcija za spremanje zapisnika u datoteku, sa ili bez dodavanja.
+  - Mogućnost za filtriranje unosa u zapisnik (uspjesi, pogreške, ne preimenovane datoteke).
+  - Nekoliko bugova ispravljeno
+- 2.07 (06/02/2004)
+  - "Premijesti niz znakova" akcija.
+  - Nekoliko bugova ispravljeno, malo opcija dodano u akcije.
+- 2.06 (23/09/2003)
+  - Izmijenjen sustav alatne trake, i prebačen s TBSkin na TBX (pala je "Windows XP" tema na ne-XP sustavima).
+  - "Višestruka zamjena niza znakova" čime možete zamijeniti skup znakova drugim skupom, npr. ukloniti akcente sa slova.
+  - Brži zapisnik (bio je stvarno spor kod preimenovanje stotina datoteka).
+  - Ispravljen "Pregle" bug kada se koristiti popis planiranih akcija.
+- 2.05 (18/05/2003)
+  - Dodatni stupci u popisu datoteka: veličina, datum izrade, datum promjene, puna putanja, datotečni nastavak.
+  - Stavke popisa Datoteke i Serija sada se mogu seliti drag & drop operacijom.
+- 2.04 (04/05/2003)
+  - Možete preimenovati mape osim datoteka. To je zahtijevalo nekoliko promjena u "Dodaj sadržaj mape" i prevuci & ispusti operacija.
+  - Opcija za premještanje datoteka na drugu putanju ako im novo ime počinje s "x:\\" (gdje je x bilo koje slovo) ili "\\\\".
+  - Opcija da navedete maksimalan broj stavki koje će se zadržati u padajućem popisu.
+  - Nekoliko malih promjena i ispravljen bug s povuci & ispusti kod dugih imena datoteka na sistemima NT/2000/XP.
+- 2.03 (13/04/2003)
+  - Unicode podrška kod Windows NT4, 2000 i XP.
+  - Serijska akcija može biti spremljena i učitana.
+- 2.02 (06/04/2003)
+  - Opcija (omogućeno prema zadanim postavkama) za prikaz ikona u popisu datoteka (na temelju datotečnog nastavka).
+  - Pozicije alatne trake i postavke stupaca popisa sada se spremaju.
+- 2.01 (25/03/2003)
+  - Dodano francuski prijevod i uzorak datoteke engleskog prijevoda, kako bi se omogućio bilo koji prijevod.
+  - Ispravljen bug koji je ponekad zaustavio proces preimenovanja prije kraja.
+- 2.00 (16/03/2003)
+  - Opcija za kopiranje datoteka s novim imenom umjesto njihova preimenovanja.
+  - Dodano nekoliko stvari koje su nedostajale. Sada bi trebalo biti sve što je bilo u verziji 1.4 (osim sustava prijevoda).
+- 2.00 'Preview 1' (08/03/2003)
+  - Vrlo dugo vremena od posljednjeg ažuriranja, jer ova verzija je kompletno prepisana pomoću programa Borland Delphi 7 (umjesto C++Builder 5).
+  - Mogućnost da se napravi popis akcija koje se primjenjuju.
+  - Ispravljeno puno bugova (ali vjerojatno dodani novi).
+  - Nova akcija: uzeti imena s popisa ili datoteke.
+
+---
+
+\1.x inačice:
+
+- 1.4.0 (08/09/2001)
+  - Funkcija "Pregled" koja vam omogućuje da vidite kako će izgledati imena bez mijenjanja ičega na disku.
+  - Funkciju "Poništi" koja vraća imena na ona prije procesa preimenovanja (za datoteke koje su još uvijek na popisu).
+  - Kontekstualni izbornik na popisu datoteka, omogućuje da se presele stavke (ako želite promijeniti redoslijed datoteka prije nego se preimenuju).
+  - Poboljšane neke male stvari, većina njih nije vidljiva, ali su učinile čišći izvorni kod.
+- 1.3.1 (23/03/2001)
+  - Ispravljeni neki mali problemi sa značajkom "Promijeni datotečni nastavak"
+  - Ispravljen bug prilikom povuci i ispusti mapu u prozoru programa.
+  - Sada program sprema u konfiguracijskoj datoteci sve opcije preimenovanja koje su korištene u posljednje vrijeme.
+- 1.3.0 (14/02/2001)
+  - Korištenje broj zapisa za mp3s (ID3v1.1).
+  - Velika i mala slova (velika slova, mala slova, prvo slovo svake riječi je veliko slovo, ...).
+  - Neki sitni detalji.
+- 1.2.1 (20/10/2000)
+  - Ispravljen bug u prozoru Opcije.
+  - Možete zamijeniti neodgovarajuće znakove u nazivima datoteka, kao što su : \< \> \* \| ¦ / \\ ? kada su u mp3 oznaci.
+- 1.2.0 (07/10/2000)
+  - Kreiranje slučajanog imena.
+  - Možete dodati datoteke na popis s povuci i ispusti iz Windows Explorera.
+- 1.1.1 (20/09/2000)
+  - Nova opcija zamjene nastavaka; Brojčani naziv.
+- 1.1.0 (15/09/2000)
+  - Jednostavan prijevod dodavanjem dviju datoteka (lng i txt).
+- 1.0.0 (13/09/2000)
+  - Prvo izdanje.

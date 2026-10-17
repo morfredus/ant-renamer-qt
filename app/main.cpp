@@ -10,6 +10,7 @@
 #include <QIcon>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QListWidget>
 #include <QLockFile>
 #include <QTabWidget>
 #include <QThread>
@@ -99,6 +100,18 @@ int main(int argc, char** argv) {
     // Developer aid: ANTREN_SHOT=out.png renders the window (optionally switching to ANTREN_TAB) and exits.
     if (const QByteArray shot = qgetenv("ANTREN_SHOT"); !shot.isEmpty()) {
         if (const QByteArray tab = qgetenv("ANTREN_TAB"); !tab.isEmpty()) w.showTab(tab.toInt());
+        // ANTREN_ACTION=n picks action n (0-13) on the Actions page; ANTREN_PREVIEW=1 refreshes the preview (F5);
+        // ANTREN_SIZE=WxH sizes the window.
+        if (const QByteArray act = qgetenv("ANTREN_ACTION"); !act.isEmpty())
+            for (auto* l : w.findChildren<QListWidget*>())
+                if (l->count() == 14) l->setCurrentRow(act.toInt());
+        if (qEnvironmentVariableIsSet("ANTREN_PREVIEW"))  // from the event loop: the preview waits for its worker thread
+            QTimer::singleShot(0, &w, [&w] {
+                for (auto* a : w.findChildren<QAction*>())
+                    if (a->shortcut() == QKeySequence(Qt::Key_F5)) { a->trigger(); break; }
+            });
+        if (const QByteArray size = qgetenv("ANTREN_SIZE"); size.contains('x'))  // e.g. 900x640
+            w.resize(size.split('x')[0].toInt(), size.split('x')[1].toInt());
         QTimer::singleShot(qEnvironmentVariableIntValue("ANTREN_DELAY") + 300, [&w, &app, shot] {
             const QByteArray which = qgetenv("ANTREN_DIALOG");  // "options" / "about": grab that dialog instead
             if (which == "help") {  // the help window: grab the visible top-level that is not the main window

@@ -34,14 +34,25 @@ template <class A, class Fn>
 static QString prev(const QString& name, Fn setup, bool isFolder = false) {
     A a;
     setup(a);
+#ifdef Q_OS_WIN
     return a.makeNewName(u"C:\\data\\sub\\"_s + name, isFolder);
+#else
+    return a.makeNewName(u"/data/sub/"_s + name, isFolder);
+#endif
 }
 
 int main(int argc, char** argv) {
     QCoreApplication app(argc, argv);
 
     // paths
+#ifdef Q_OS_WIN
     CHECK_EQ(extractFileExt(u"C:\\a.b\\file"_s), u""_s);
+#else
+    CHECK_EQ(extractFileExt(u"/a.b/file"_s), u""_s);
+    CHECK_EQ(extractFileName(u"/data/a:b\\c.txt"_s), u"a:b\\c.txt"_s);  // ':' and '\' are ordinary characters here
+    CHECK_EQ(extractFilePath(u"/data/a:b.txt"_s), u"/data/"_s);
+    CHECK_EQ(prev<ActionStringIns>(u"a:b.txt"_s, [](auto& a) { a.newString = u"%folder-1%_"_s; a.pos = 0; }), u"data_a:b.txt"_s);
+#endif
     CHECK_EQ(extractFileExt(u"x/y.tar.gz"_s), u".gz"_s);
     CHECK_EQ(changeFileExt(u"a.txt"_s, u".md"_s), u"a.md"_s);
 

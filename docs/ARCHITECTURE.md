@@ -15,7 +15,7 @@ The code is cut in two:
 core/             Engine (static library rencore)
 app/              Interface (executable antrenamer-qt)
   Languages/      Language files of the original (.lng, read at run time)
-  help/           HTML help in 4 languages, table of contents, images
+  help/           Markdown help in 4 languages, table of contents, images
 tests/            test_core (engine), test_panel (actions editor)
 cmake/toolchains/ ARM64 cross-compilation toolchain
 scripts/          windows/ (MinGW build helper, zip and installer) and linux/ (.deb, AppImage, .desktop)
@@ -28,7 +28,7 @@ CMakeLists.txt, CMakePresets.json, VERSION   Build files and the version, the si
 | In `app/` | Compiled? |
 |---|---|
 | `*.cpp`, `*.h` | Yes |
-| `resources.qrc`: `renamer.ico`, the three toolbar bitmap sets, `ant.bmp`, `default.xml` | Embedded in the executable by Qt's `rcc` |
+| `resources.qrc`: `renamer.ico`, the three toolbar bitmap sets (the fourth, "Modern", is drawn in code), `ant.bmp`, `default.xml` | Embedded in the executable by Qt's `rcc` |
 | `app.rc`, `app.manifest` (icon, long paths, UTF-8, per-monitor DPI) | Windows only, compiled with `windres` |
 | `Languages/`, `help/` | Not compiled: copied next to the executable (and installed by the packages) |
 | `antrenamer-qt.png` | Not compiled: Linux icon, used by the packaging scripts |
@@ -129,7 +129,7 @@ Settings are attributes (`True` / `False`), long texts (replacement table, list 
 | `dialogs.h/.cpp` | Add folders, drag and drop, Options, About |
 | `appsettings.h/.cpp` | Program options in an INI file |
 | `lngtranslator.h/.cpp` | Translation with the original `.lng` files |
-| `helpwindow.h/.cpp` | Built-in HTML help viewer |
+| `helpwindow.h/.cpp` | Built-in help viewer (Markdown) |
 | `icons.h/.cpp` | Toolbar icons cut from the bitmap sets |
 | `shellmenu.h/.cpp` | Windows Explorer context menu entry (registry, Windows only) |
 
@@ -157,7 +157,7 @@ While a renaming runs (`worker_` set), adding, moving and opening a job are igno
 
 **Log.** `addLog(text, state)` stores the line in memory and shows it unless its state is filtered. Colours: blue (not renamed), green (OK), red (error), grey (information). The log filters rebuild the display from the stored lines.
 
-**Other files.** `dialogs.*`: `AddFoldersDialog` (a folder tree with files / folders / recursive boxes), `DragDropDialog` (what to do with a drop), `OptionsDialog`, `AboutDialog`; `AddChoice` is the small shared "files / folders / recursive" structure. `helpwindow.*`: two-pane viewer (table of contents `toc_<lang>.hhc` in a `QTreeWidget`, page in a `QTextBrowser`, back and forward buttons) that reads `help/<page>_<lang>.html`; the help language is `en`, `fr`, `hr` or `ta`, English otherwise. `icons.*`: loads one of the three bitmap sets (square icons side by side) and cuts icon number `index`. `shellmenu.*`: writes or removes `HKCU\Software\Classes\{*,Directory}\shell\AntRenamerQt` with the command `antrenamer-qt.exe --shell "%1"`.
+**Other files.** `dialogs.*`: `AddFoldersDialog` (a folder tree with files / folders / recursive boxes), `DragDropDialog` (what to do with a drop), `OptionsDialog`, `AboutDialog`; `AddChoice` is the small shared "files / folders / recursive" structure. `helpwindow.*`: two-pane viewer (table of contents `toc_<lang>.md`, a nested list of links, in a `QTreeWidget`, page in a `QTextBrowser`, back and forward buttons) that reads `help/<page>_<lang>.md` (a heading written `## Title {#id}` gets the anchor `id`, so `page.md#id` links work); the help language is `en`, `fr`, `hr` or `ta`, English otherwise. `icons.*`: loads one of the three bitmap sets (square icons side by side) and cuts icon number `index`, or, for the fourth set ("Modern"), returns a `QIconEngine` that draws the icon with `QPainter` on a 24 x 24 grid (any size, theme colours, disabled look; no file). `shellmenu.*`: writes or removes `HKCU\Software\Classes\{*,Directory}\shell\AntRenamerQt` with the command `antrenamer-qt.exe --shell "%1"`.
 
 ## One renaming, end to end
 

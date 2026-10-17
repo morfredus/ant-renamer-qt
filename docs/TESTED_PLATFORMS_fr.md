@@ -6,10 +6,10 @@ Si vous essayez un autre système, merci de donner le résultat dans les [discus
 
 | Système | Architecture | Version | Ce qui a été testé |
 |---|---|---|---|
-| Debian GNU/Linux 13 (trixie), Raspberry Pi 4 Model B (deux machines) | arm64 | 3.0.0-rc.11 | `.deb` installé depuis le paquet (dépendances résolues par apt), entrée de menu présente, programme fonctionnel, interface en français |
-| Linux Mint 22.3 Xfce (base Ubuntu 24.04) | x86-64 | 3.0.0-rc.11 | `.deb` installé depuis le paquet, programme fonctionnel |
+| Debian GNU/Linux 13 (trixie), Raspberry Pi 4 Model B (deux machines) | arm64 | 3.0.0-rc.11, rc.12 | rc.11 : `.deb` installé depuis le paquet (dépendances résolues par apt), entrée de menu présente, programme fonctionnel, interface en français. rc.12 : `.deb` arm64 installé depuis le paquet, programme fonctionnel, noms de fichiers Linux, pages d'aide et liens, jeux d'icônes et lisibilité |
+| Linux Mint 22.3 Xfce (base Ubuntu 24.04) | x86-64 | 3.0.0-rc.11, rc.12 | rc.11 : `.deb` installé depuis le paquet, programme fonctionnel. rc.12 : `.deb` installé depuis le paquet ; noms de fichiers Linux (`:`, `/`, renommage de dossier, `%folder-N%`, `%count%`), pages d'aide et liens, jeux d'icônes et lisibilité |
 | Ubuntu 24.04 (WSL2 sous Windows 11) | x86-64 | 3.0.0-rc.10, rc.11 | compilation, tests unitaires, `.deb` et AppImage construits ; programme démarré, aide affichée ; liste de dépendances du `.deb` vérifiée (`ldd` : aucune bibliothèque manquante) |
-| Windows 11 Famille | x86-64 | 3.0.0-rc.10 | compilation MinGW, tests unitaires, installeur et zip portable |
+| Windows 11 Famille | x86-64 | 3.0.0-rc.10, rc.12 | rc.10 : compilation MinGW, tests unitaires, installeur et zip portable. rc.12 : testé depuis le paquet Windows ; programme, pages d'aide et liens, jeux d'icônes et lisibilité, `%count%` |
 
 ## Pas encore testé
 

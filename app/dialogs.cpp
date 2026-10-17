@@ -429,7 +429,7 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
     const QString code = helpLanguageCode();
     auto* hist = new QTextBrowser;
     hist->setOpenExternalLinks(true);
-    hist->setSource(QUrl::fromLocalFile(QDir(dataPath(u"help"_s)).filePath(u"history_%1.html"_s.arg(code))));
+    hist->setSource(QUrl::fromLocalFile(QDir(dataPath(u"help"_s)).filePath(u"history_%1.md"_s.arg(code))));
     tabs->addTab(hist, tr("History"));
     v->addWidget(tabs, 1);
 

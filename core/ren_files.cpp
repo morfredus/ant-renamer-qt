@@ -73,7 +73,11 @@ QDateTime File::modifiedDate() const { return adjustFileTime(QFileInfo(filePath(
 
 bool File::rename(QString newName) {
     const Options& o = options();
+#ifdef Q_OS_WIN
     const bool absolute = o.detectAbsDir && (newName.mid(1, 2) == u":\\" || newName.left(2) == u"\\\\");
+#else
+    const bool absolute = o.detectAbsDir && newName.startsWith(u'/');
+#endif
     if (!absolute) newName = folder_ + newName;
     const QString source = filePath();
     if (newName == source) {

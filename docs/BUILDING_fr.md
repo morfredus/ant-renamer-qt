@@ -67,7 +67,7 @@ Ne partagez pas un dossier de build entre deux systèmes (par exemple configuré
 3. **Compilation** de chaque `.cpp` en fichier objet.
 4. **Archivage** des objets de `core/` dans `librencore.a`.
 5. **Édition de liens** : `test_core` = sa source + `rencore` ; `antrenamer-qt` = les objets de `app/` + `rencore` + Qt ; `test_panel` = sa source + quelques fichiers de `app/` + `rencore`.
-6. **Après la compilation** : `app/Languages/` et `app/help/` sont copiés à côté de l'exécutable. Sous Windows, `windeployqt` copie ensuite les DLL et les plugins Qt, et `scripts/windows/deploy-mingw.sh` les DLL MinGW, de sorte que `build-mingw/app/antrenamer-qt.exe` démarre par double-clic.
+6. **Après la compilation** : `app/Languages/` et `app/help/` sont copiés à côté de l'exécutable à chaque compilation (cible `antrenamer-data` ; le dossier d'aide est vidé d'abord, une page supprimée ne reste donc pas ; `cmake --build <dossier> --target antrenamer-data` les rafraîchit seuls, même programme lancé). Sous Windows, `windeployqt` copie ensuite les DLL et les plugins Qt, et `scripts/windows/deploy-mingw.sh` les DLL MinGW, de sorte que `build-mingw/app/antrenamer-qt.exe` démarre par double-clic.
 
 ```
 core/*.cpp ── compilation ──> librencore.a ─┬─> test_core
@@ -108,4 +108,4 @@ Tous les paquets sont écrits dans `dist/`.
 | `--shell chemin...` | Utilisé par le menu de l'Explorateur : ajoute les chemins à la fenêtre déjà ouverte |
 | `--install-shell` / `--remove-shell` | Ajoute ou retire l'entrée du menu contextuel de l'Explorateur, puis quitte |
 
-Aides de développement (variables d'environnement) : `ANTREN_MISSING=1` journalise les textes sans traduction dans toutes les boîtes de dialogue ; `ANTREN_SHOT=fichier.png` enregistre une capture de la fenêtre puis quitte (avec `ANTREN_TAB`, `ANTREN_DELAY`, `ANTREN_DIALOG`, `ANTREN_DTAB` et `ANTREN_HELPTOPIC` pour choisir la page ou la boîte).
+Aides de développement (variables d'environnement) : `ANTREN_MISSING=1` journalise les textes sans traduction dans toutes les boîtes de dialogue ; `ANTREN_SHOT=fichier.png` enregistre une capture de la fenêtre puis quitte (avec `ANTREN_TAB`, `ANTREN_DELAY`, `ANTREN_DIALOG`, `ANTREN_DTAB` et `ANTREN_HELPTOPIC` pour choisir la page ou la boîte, `ANTREN_ACTION=n` pour choisir l'opération `n` (0 à 13) sur la page Opérations et `ANTREN_PREVIEW=1` pour actualiser l'aperçu d'abord). Avec un fichier `antrenamer-qt.ini` à côté du programme (mode portable) contenant `language=French`, c'est ainsi que sont faites les captures d'écran de l'aide sans toucher à vos propres réglages.

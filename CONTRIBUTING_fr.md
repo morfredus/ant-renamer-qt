@@ -37,7 +37,7 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 3. `app/actionpanel.cpp` : ajouter la page dans `buildPages` (l'ordre des pages est l'index du type), puis la branche dans `makeAction` et dans `setFromAction`.
 4. Ajouter les textes anglais dans le code et leurs traductions dans les fichiers `.lng` (`app/Languages/`).
 5. Ajouter un cas à `tests/test_core.cpp`. `tests/test_panel.cpp` détecte un `setFromAction` oublié.
-6. Documentation : pages d'aide (`app/help/actions_*.html`), `docs/USER_GUIDE*.md`, `docs/WHATS_NEW*.md`, `CHANGELOG.md`.
+6. Documentation : pages d'aide (`app/help/actions_*.md`), `docs/USER_GUIDE*.md`, `docs/WHATS_NEW*.md`, `CHANGELOG.md`.
 
 **Ajouter un réglage à une opération existante.** Un champ dans la classe (avec sa valeur par défaut), `save` / `load` (un attribut XML ; prendre la valeur par défaut s'il manque pour que les anciens jobs se lisent encore), l'usage dans `makeNewName`, le contrôle dans `buildPages`, `makeAction` **et** `setFromAction`, le texte dans les fichiers `.lng`, un cas dans `test_core.cpp`.
 
@@ -49,7 +49,7 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 
 **Ajouter un fichier source.** Ajouter le `.cpp` à `add_library(rencore ...)` (moteur) ou à `set(SRC ...)` dans `app/CMakeLists.txt` : les listes de sources sont écrites à la main, rien n'est détecté automatiquement. Un fichier oublié se voit par une erreur « undefined reference » à l'édition de liens. Si `test_panel` en a aussi besoin, l'ajouter à sa liste.
 
-**Ajouter une langue ou corriger une traduction.** Modifier ou ajouter un fichier `.lng` dans `app/Languages/`. Pour l'aide, ajouter les pages `_<code>.html` et le `toc_<code>.hhc`, et déclarer le code dans `helpLanguageCode()` (`app/lngtranslator.cpp`).
+**Ajouter une langue ou corriger une traduction.** Suivre [docs/TRANSLATING_fr.md](docs/TRANSLATING_fr.md). Modifier ou ajouter un fichier `.lng` dans `app/Languages/`. Pour l'aide, ajouter les pages `_<code>.md` et le `toc_<code>.md`, et déclarer le code dans `helpLanguageCode()` (`app/lngtranslator.cpp`).
 
 ## À savoir
 

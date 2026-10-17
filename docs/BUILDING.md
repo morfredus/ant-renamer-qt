@@ -67,7 +67,7 @@ Do not share a build folder between systems (for example one configured from WSL
 3. **Compile** every `.cpp` into an object file.
 4. **Archive** the objects of `core/` into `librencore.a`.
 5. **Link**: `test_core` = its source + `rencore`; `antrenamer-qt` = the objects of `app/` + `rencore` + Qt; `test_panel` = its source + a few files of `app/` + `rencore`.
-6. **After the build**: `app/Languages/` and `app/help/` are copied next to the executable. On Windows, `windeployqt` then copies the Qt DLLs and plugins and `scripts/windows/deploy-mingw.sh` copies the MinGW DLLs, so `build-mingw/app/antrenamer-qt.exe` starts by double-click.
+6. **After the build**: `app/Languages/` and `app/help/` are copied next to the executable at every build (target `antrenamer-data`; the help folder is emptied first, so a deleted page does not stay; `cmake --build <dir> --target antrenamer-data` refreshes them alone, even while the program is running). On Windows, `windeployqt` then copies the Qt DLLs and plugins and `scripts/windows/deploy-mingw.sh` copies the MinGW DLLs, so `build-mingw/app/antrenamer-qt.exe` starts by double-click.
 
 ```
 core/*.cpp ── compile ──> librencore.a ─┬─> test_core
@@ -108,4 +108,4 @@ All packages are written to `dist/`.
 | `--shell path...` | Used by the Explorer context menu: add the paths to the window that is already open |
 | `--install-shell` / `--remove-shell` | Add or remove the Explorer context menu entry, then exit |
 
-Developer helpers (environment variables): `ANTREN_MISSING=1` logs the strings that have no translation in every dialog; `ANTREN_SHOT=file.png` saves a screenshot of the window and exits (with `ANTREN_TAB`, `ANTREN_DELAY`, `ANTREN_DIALOG`, `ANTREN_DTAB` and `ANTREN_HELPTOPIC` to choose the page or dialog).
+Developer helpers (environment variables): `ANTREN_MISSING=1` logs the strings that have no translation in every dialog; `ANTREN_SHOT=file.png` saves a screenshot of the window and exits (with `ANTREN_TAB`, `ANTREN_DELAY`, `ANTREN_DIALOG`, `ANTREN_DTAB` and `ANTREN_HELPTOPIC` to choose the page or dialog, `ANTREN_ACTION=n` to pick action `n` (0 to 13) on the Actions page and `ANTREN_PREVIEW=1` to refresh the preview first). With a `antrenamer-qt.ini` file next to the program (portable mode) containing `language=French`, this is how the screenshots of the help are made without touching your own settings.

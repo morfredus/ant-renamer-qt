@@ -15,7 +15,7 @@ Le code est coupé en deux :
 core/             Moteur (bibliothèque statique rencore)
 app/              Interface (exécutable antrenamer-qt)
   Languages/      Fichiers de langue de l'original (.lng, lus à l'exécution)
-  help/           Aide HTML en 4 langues, table des matières, images
+  help/           Aide Markdown en 4 langues, table des matières, images
 tests/            test_core (moteur), test_panel (éditeur d'actions)
 cmake/toolchains/ Toolchain de compilation croisée ARM64
 scripts/          windows/ (compilation MinGW, zip et installeur) et linux/ (.deb, AppImage, .desktop)
@@ -28,7 +28,7 @@ CMakeLists.txt, CMakePresets.json, VERSION   Fichiers de compilation et version,
 | Dans `app/` | Compilé ? |
 |---|---|
 | `*.cpp`, `*.h` | Oui |
-| `resources.qrc` : `renamer.ico`, les trois jeux de bitmaps de la barre d'outils, `ant.bmp`, `default.xml` | Embarqués dans l'exécutable par `rcc` de Qt |
+| `resources.qrc` : `renamer.ico`, les trois jeux de bitmaps de la barre d'outils (le quatrième, « Modern », est dessiné dans le code), `ant.bmp`, `default.xml` | Embarqués dans l'exécutable par `rcc` de Qt |
 | `app.rc`, `app.manifest` (icône, chemins longs, UTF-8, DPI par écran) | Windows seulement, compilés avec `windres` |
 | `Languages/`, `help/` | Non compilés : copiés à côté de l'exécutable (et installés par les paquets) |
 | `antrenamer-qt.png` | Non compilé : icône Linux, utilisée par les scripts de packaging |
@@ -129,7 +129,7 @@ Les réglages sont des attributs (`True` / `False`), les textes longs (table de 
 | `dialogs.h/.cpp` | Ajouter des dossiers, glisser-déposer, Options, À propos |
 | `appsettings.h/.cpp` | Options du programme dans un fichier INI |
 | `lngtranslator.h/.cpp` | Traduction avec les fichiers `.lng` de l'original |
-| `helpwindow.h/.cpp` | Visionneuse d'aide HTML intégrée |
+| `helpwindow.h/.cpp` | Visionneuse d'aide intégrée (Markdown) |
 | `icons.h/.cpp` | Icônes de la barre d'outils découpées dans les jeux de bitmaps |
 | `shellmenu.h/.cpp` | Entrée du menu contextuel de l'Explorateur Windows (registre, Windows seulement) |
 
@@ -157,7 +157,7 @@ Pendant un renommage (`worker_` non nul), l'ajout, le déplacement et l'ouvertur
 
 **Journal.** `addLog(texte, état)` garde la ligne en mémoire et l'affiche sauf si son état est filtré. Couleurs : bleu (non renommé), vert (OK), rouge (erreur), gris (information). Les filtres du journal reconstruisent l'affichage depuis les lignes gardées.
 
-**Autres fichiers.** `dialogs.*` : `AddFoldersDialog` (arbre de dossiers avec cases fichiers / dossiers / récursif), `DragDropDialog` (que faire d'un dépôt), `OptionsDialog`, `AboutDialog` ; `AddChoice` est la petite structure partagée « fichiers / dossiers / récursif ». `helpwindow.*` : visionneuse à deux volets (table des matières `toc_<langue>.hhc` dans un `QTreeWidget`, page dans un `QTextBrowser`, boutons précédent et suivant) qui lit `help/<page>_<langue>.html` ; la langue d'aide est `en`, `fr`, `hr` ou `ta`, anglais sinon. `icons.*` : charge un des trois jeux de bitmaps (icônes carrées côte à côte) et découpe l'icône n°`index`. `shellmenu.*` : écrit ou supprime `HKCU\Software\Classes\{*,Directory}\shell\AntRenamerQt` avec la commande `antrenamer-qt.exe --shell "%1"`.
+**Autres fichiers.** `dialogs.*` : `AddFoldersDialog` (arbre de dossiers avec cases fichiers / dossiers / récursif), `DragDropDialog` (que faire d'un dépôt), `OptionsDialog`, `AboutDialog` ; `AddChoice` est la petite structure partagée « fichiers / dossiers / récursif ». `helpwindow.*` : visionneuse à deux volets (table des matières `toc_<langue>.md`, une liste imbriquée de liens, dans un `QTreeWidget`, page dans un `QTextBrowser`, boutons précédent et suivant) qui lit `help/<page>_<langue>.md` (un titre écrit `## Titre {#id}` reçoit l'ancre `id`, donc les liens `page.md#id` fonctionnent) ; la langue d'aide est `en`, `fr`, `hr` ou `ta`, anglais sinon. `icons.*` : charge un des trois jeux de bitmaps (icônes carrées côte à côte) et découpe l'icône n°`index`, ou, pour le quatrième jeu (« Modern »), renvoie un `QIconEngine` qui dessine l'icône avec `QPainter` sur une grille de 24 x 24 (toute taille, couleurs du thème, aspect grisé ; aucun fichier). `shellmenu.*` : écrit ou supprime `HKCU\Software\Classes\{*,Directory}\shell\AntRenamerQt` avec la commande `antrenamer-qt.exe --shell "%1"`.
 
 ## Un renommage de bout en bout
 

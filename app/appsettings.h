@@ -19,7 +19,7 @@ struct AppOptions {
     bool forceFont = false;      // use `fontName`/`fontSize` for the whole program
     QString fontName;
     int fontSize = 9;
-    int iconSet = 0;             // 0 Scrows, 1 Windows XP, 2 Windows XP Large
+    int iconSet = 3;             // 0 Scrows, 1 Windows XP, 2 Windows XP Large, 3 Modern (default)
     int historyMax = 20;
     bool autoComplete = false;
     // Files & folders

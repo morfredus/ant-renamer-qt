@@ -3,21 +3,25 @@
 #include "appsettings.h"
 #include "lngtranslator.h"
 
+#include <QAbstractTextDocumentLayout>
 #include <QApplication>
 #include <QDesktopServices>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QHash>
 #include <QHBoxLayout>
 #include <QMessageBox>
 #include <QPointer>
 #include <QPushButton>
 #include <QRegularExpression>
+#include <QScrollBar>
 #include <QSplitter>
 #include <QStyle>
+#include <QTextBlock>
 #include <QTextBrowser>
 #include <QTextDocument>
-#include <QTextDocumentFragment>
+#include <QTimer>
 #include <QTreeWidget>
 #include <QVBoxLayout>
 
@@ -25,20 +29,55 @@ using namespace Qt::StringLiterals;
 
 namespace {
 
+// Markdown headings are written "## Title {#id}", which QTextBrowser does not know: the "{#id}" is cut out of the text
+// before it is shown, and a link to "page.md#id" (or "#id") scrolls to the heading by hand.
+class MdBrowser : public QTextBrowser {
+public:
+    using QTextBrowser::QTextBrowser;
+
+protected:
+    QVariant loadResource(int type, const QUrl& name) override {
+        QVariant v = QTextBrowser::loadResource(type, name);
+        if (type != QTextDocument::MarkdownResource) return v;
+        QString text = v.userType() == QMetaType::QByteArray ? QString::fromUtf8(v.toByteArray()) : v.toString();
+        static const QRegularExpression tag(u"^(#+ .*?) *{#([\\w-]+)}$"_s, QRegularExpression::MultilineOption);
+        titles_.clear();
+        for (auto it = tag.globalMatch(text); it.hasNext();) {
+            const auto m = it.next();
+            titles_.insert(m.captured(2), m.captured(1).section(u' ', 1));
+        }
+        return text.replace(tag, u"\\1"_s);
+    }
+
+    void doSetSource(const QUrl& url, QTextDocument::ResourceType type) override {
+        QTextBrowser::doSetSource(url, type);
+        const QString title = titles_.value(url.fragment());
+        if (title.isEmpty()) return;
+        QTimer::singleShot(0, this, [this, title] {  // after the layout
+            for (QTextBlock b = document()->begin(); b.isValid(); b = b.next())
+                if (b.blockFormat().headingLevel() && b.text() == title) {
+                    verticalScrollBar()->setValue(int(document()->documentLayout()->blockBoundingRect(b).top()));
+                    return;
+                }
+        });
+    }
+
+private:
+    QHash<QString, QString> titles_;  // anchor id -> heading text of the page shown
+};
+
 class HelpWindow : public QWidget {
 public:
     HelpWindow(const QString& dir, const QString& lang, QWidget* parent) : QWidget(parent, Qt::Window), dir_(dir) {
         setAttribute(Qt::WA_DeleteOnClose, false);
         setWindowTitle(QApplication::translate("Ren", "Help") + u" - "_s + QApplication::applicationName());
-        resize(900, 600);
+        resize(1040, 650);  // wide enough for the 680 px screenshots of the pages
 
         toc_ = new QTreeWidget;
         toc_->setHeaderHidden(true);
-        browser_ = new QTextBrowser;
+        browser_ = new MdBrowser;
         browser_->setOpenExternalLinks(true);
         browser_->setSearchPaths({dir_});
-        QFile css(QDir(dir_).filePath(u"main.css"_s));
-        if (css.open(QIODevice::ReadOnly)) browser_->document()->setDefaultStyleSheet(QString::fromUtf8(css.readAll()));
 
         auto* back = new QPushButton(style()->standardIcon(QStyle::SP_ArrowBack), QString());
         auto* forward = new QPushButton(style()->standardIcon(QStyle::SP_ArrowForward), QString());
@@ -67,7 +106,7 @@ public:
         split->addWidget(toc_);
         split->addWidget(right);
         split->setStretchFactor(1, 1);
-        split->setSizes({250, 650});
+        split->setSizes({250, 790});
         auto* l = new QVBoxLayout(this);
         l->setContentsMargins(4, 4, 4, 4);
         l->addWidget(split);
@@ -97,29 +136,20 @@ protected:
     }
 
 private:
-    // The CHM table of contents (toc_<lang>.hhc): nested <UL>/<LI> with <param name="Name"> and <param name="Local">.
+    // The table of contents (toc_<lang>.md): a nested list of "- [Title](page.md)", two spaces of indentation per level.
     void loadToc(const QString& lang) {
-        QFile f(QDir(dir_).filePath(u"toc_%1.hhc"_s.arg(lang)));
-        if (!f.open(QIODevice::ReadOnly) && !(f.setFileName(QDir(dir_).filePath(u"toc_en.hhc"_s)), f.open(QIODevice::ReadOnly))) return;
-        const QByteArray raw = f.readAll();
-        const QString text = raw.startsWith("\xEF\xBB\xBF") ? QString::fromUtf8(raw.mid(3)) : QString::fromUtf8(raw);
-        static const QRegularExpression token(u"<(/?)ul>|<param name=\"(Name|Local)\" value=\"([^\"]*)\">"_s, QRegularExpression::CaseInsensitiveOption);
-        QList<QTreeWidgetItem*> stack;
-        QTreeWidgetItem *last = nullptr, *root = toc_->invisibleRootItem();
-        stack << root;
-        QString pending;
-        auto it = token.globalMatch(text);
-        while (it.hasNext()) {
-            const auto m = it.next();
-            if (m.captured(2).isEmpty()) {  // <UL> or </UL>
-                if (m.captured(1).isEmpty()) stack << (last ? last : stack.last());
-                else if (stack.size() > 1) stack.removeLast();
-            } else if (m.captured(2).compare(u"Name", Qt::CaseInsensitive) == 0) {
-                pending = QTextDocumentFragment::fromHtml(m.captured(3)).toPlainText();
-            } else {
-                last = new QTreeWidgetItem(stack.last(), {pending});
-                last->setData(0, Qt::UserRole, m.captured(3));
-            }
+        QFile f(QDir(dir_).filePath(u"toc_%1.md"_s.arg(lang)));
+        if (!f.open(QIODevice::ReadOnly) && !(f.setFileName(QDir(dir_).filePath(u"toc_en.md"_s)), f.open(QIODevice::ReadOnly))) return;
+        static const QRegularExpression entry(u"^( *)- \\[(.*)\\]\\((.*)\\)\\s*$"_s);
+        QList<QTreeWidgetItem*> parents;  // parents[d] = the last item of depth d
+        for (const QString& line : QString::fromUtf8(f.readAll()).split(u'\n')) {
+            const auto m = entry.match(line);
+            if (!m.hasMatch()) continue;
+            const qsizetype depth = qMin<qsizetype>(m.capturedLength(1) / 2, parents.size());
+            auto* it = new QTreeWidgetItem(depth ? parents[depth - 1] : toc_->invisibleRootItem(), {m.captured(2)});
+            it->setData(0, Qt::UserRole, m.captured(3));
+            parents.resize(depth);
+            parents << it;
         }
         toc_->expandAll();
     }
@@ -138,7 +168,7 @@ private:
 
     QString dir_;
     QTreeWidget* toc_;
-    QTextBrowser* browser_;
+    MdBrowser* browser_;
 };
 
 QPointer<HelpWindow> g_window;
@@ -148,7 +178,7 @@ QPointer<HelpWindow> g_window;
 void showHelp(const QString& topic, QWidget* parent) {
     const QString dir = dataPath(u"help"_s);
     const QString lang = helpLanguageCode();
-    const QString page = u"%1_%2.html"_s.arg(topic, lang);
+    const QString page = u"%1_%2.md"_s.arg(topic, lang);
     if (!QFileInfo::exists(QDir(dir).filePath(page))) {
         // Say exactly where the program looked: installation problems are then obvious.
         const QMessageBox::StandardButton b = QMessageBox::warning(

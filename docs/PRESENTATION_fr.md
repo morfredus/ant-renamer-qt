@@ -51,7 +51,7 @@ jobs de l'autre.
   filtre du journal, la liste des jobs récents, la barre d'état avec progression, les mêmes raccourcis clavier.
 - **Les fichiers de langue d'origine** : les 27 fichiers `.lng` sont utilisés tels quels (chacun avec son encodage), et la
   langue se change dans les Options. L'interface française est entièrement construite à partir du `French.lng` d'origine.
-- **L'aide d'origine** : les pages d'aide HTML (anglais, français, croate, tamoul) et l'historique des versions sont
+- **L'aide d'origine** : les pages d'aide (anglais, français, croate, tamoul) et l'historique des versions sont
   livrés et ouverts depuis F1 et depuis les liens « aide » des notes des actions.
 - **Les graphismes d'origine** : les jeux d'icônes de barres d'outils (Scrows, Windows XP, Windows XP Large), `renamer.ico`,
   `ant.bmp` et le set prédéfini « Remove west-european accents » de `default.xml`.
@@ -128,7 +128,7 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   réglages vont dans `%APPDATA%`. Une case déplace les réglages de l'un à l'autre.
 - **Prêt pour Windows 10/11** : manifeste d'application avec chemins longs (plus de 260 caractères), page de code
   UTF-8, DPI par écran v2 et contrôles communs v6 ; Qt gère le thème sombre et la haute résolution.
-- **Jeu d'icônes, police et « redimensionnement automatique des colonnes »** appliqués immédiatement, barres d'outils
+- **Jeu d'icônes (nouveau jeu vectoriel « Modern », par défaut), police et « redimensionnement automatique des colonnes »** appliqués immédiatement, barres d'outils
   déplaçables et mémorisées, liste des langues avec version, auteurs et commentaires.
 - **Système de build** : presets CMake pour Windows (MinGW), Linux x86_64, Linux ARM64 et compilation croisée
   ARM64 ; les DLL Qt et MinGW sont déployées automatiquement à côté de l'exécutable sous Windows.
@@ -168,7 +168,7 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   boîte À propos indique qu'il s'agit d'un portage C++/Qt et renvoie vers le site d'origine.
 - Code tiers utilisé par le portage : Qt 6 (LGPL v3 / GPL), rien d'autre. Les composants Delphi de l'original ne
   sont plus nécessaires.
-- Repris de l'original sans modification : `Languages/*.lng`, `help/` (HTML, CSS, images), bitmaps des barres
+- Repris de l'original sans modification : `Languages/*.lng`, `help/` (images ; les pages ont été converties de HTML en Markdown, même texte), bitmaps des barres
   d'outils, `renamer.ico`, `ant.bmp`, `default.xml`, textes des notes des actions. Les traducteurs sont cités dans
   l'onglet Crédits comme dans la boîte À propos d'origine.
 

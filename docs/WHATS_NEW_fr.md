@@ -4,7 +4,7 @@
 Version anglaise : [WHATS_NEW.md](WHATS_NEW.md). Liste tenue à jour au fil du développement. Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le
 portage lui-même (ce qui est conservé, les différences voulues) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.0.0-rc.11**. Ce qui est marqué *(à venir)* est dans le code mais pas encore publié.
+Version courante : **3.0.0-rc.12**. Ce qui est marqué *(à venir)* est dans le code mais pas encore publié.
 
 ## Ajouts
 
@@ -30,6 +30,8 @@ Version courante : **3.0.0-rc.11**. Ce qui est marqué *(à venir)* est dans le 
 
 | Nouveauté | Depuis |
 |---|---|
+| **Jeu d'icônes « Modern »** (par défaut) : 30 icônes au trait dessinées par le programme, nettes sur tout écran et toute mise à l'échelle, thèmes clair et sombre, grisées quand elles sont désactivées. Options > Affichage > Set d'icônes le propose avec les trois sets classiques (Scrows, Windows XP, Windows XP Large) ; l'aide compare les quatre. | 3.0.0-rc.12 |
+| **Aide réécrite et vérifiée contre le programme** : pages Markdown (UTF-8, une table des matières par langue), chaque option et opération décrite, tableaux des tags et des raccourcis clavier, nouvelles captures du vrai programme en anglais et en français, liens entre pages et sections vérifiés. Le croate et le tamoul affichent le texte anglais pour les pages réécrites. | 3.0.0-rc.12 |
 | **Disposition moderne**, en option (Options > Affichage) : barre principale avec onglets indiquant le nombre de fichiers et d'actions, bouton Go bien visible, barre propre à chaque page, colonne du nouveau nom visible par défaut, thème clair ou sombre du système. La disposition classique reste celle par défaut. | 3.0.0-rc.8 |
 | **Écran unique** : Fichiers, Actions et Journal visibles en même temps, en bandes ou en colonnes, séparateurs mobiles, tailles mémorisées. Idée d'Antoine Potten. | 3.0.0-rc.8 |
 | **Modifier une action du job en place** : double-clic sur l'action pour recharger ses réglages dans l'éditeur, puis « Modifier » (ou « Valider / Annuler la modification »). | 3.0.0-rc.8 |
@@ -50,6 +52,9 @@ Version courante : **3.0.0-rc.11**. Ce qui est marqué *(à venir)* est dans le 
 
 | Amélioration | Depuis |
 |---|---|
+| **Noms de fichiers sous Linux** : un nom contenant deux-points ou antislash (`a:b.txt`) était coupé à ce caractère. Sous Linux seul `/` délimite un chemin maintenant ; les fichiers d'un dossier renommé le suivent, `%folder-N%` et les tags `%count%` fonctionnent, et « Détecter un chemin absolu » reconnaît un nom qui commence par `/`. | 3.0.0-rc.12 |
+| **Guide du traducteur** (`docs/TRANSLATING_fr.md`) : tout le processus d'un fichier `.lng`, de la copie de `English.lng` à la pull request. | 3.0.0-rc.12 |
+| **Guide d'utilisation et recettes mis à jour** : différences Windows / Linux, options de chaque opération, nouveau jeu d'icônes. | 3.0.0-rc.12 |
 | Éditeur d'actions : les longs textes des cases à cocher passent à la ligne quand le panneau est étroit (au lieu d'être coupés avec une barre de défilement). | 3.0.0-rc.9 |
 | Traductions : un texte présent deux fois dans les fichiers de langue avec deux traductions différentes recevait l'une ou l'autre au hasard ; le choix est maintenant fixe. | 3.0.0-rc.8 |
 | Liste des fichiers : le tri par clic sur un en-tête ne marchait plus après le premier clic. | 3.0.0-rc.7 |

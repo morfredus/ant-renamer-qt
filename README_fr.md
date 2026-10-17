@@ -1,6 +1,6 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.0.0--rc.11-blue)
+![version](https://img.shields.io/badge/version-3.0.0--rc.12-blue)
 
 Portage C++/Qt 6 d'[Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (Delphi 7 à l'origine,
 GPL v2). Renommage de fichiers par lots : remplacer, insérer, déplacer, supprimer, énumérer, changer
@@ -52,7 +52,7 @@ Ce qui a été conservé, modifié et ajouté par rapport à Ant Renamer 2.13 :
 
 ## Guide d'utilisation
 
-Toutes les fonctions avec leur mode d'emploi (opérations, raccourcis, masques, tags, ligne de commande, options) :
+Toutes les fonctions avec leur mode d'emploi (opérations, raccourcis, masques, tags, ligne de commande, options, jeux d'icônes, différences entre Windows et Linux) :
 [docs/USER_GUIDE_fr.md](docs/USER_GUIDE_fr.md) ([en](docs/USER_GUIDE.md)).
 Recettes pas à pas pour les cas courants et complexes (nettoyer des noms, numéroter, photos, musique, déplacer des fichiers, ligne de commande) :
 [docs/USER_RECIPES_fr.md](docs/USER_RECIPES_fr.md) ([en](docs/USER_RECIPES.md)).
@@ -63,13 +63,14 @@ Compilation, tests et paquets : [docs/BUILDING_fr.md](docs/BUILDING_fr.md) ([en]
 Systèmes sur lesquels le programme a réellement été testé : [docs/TESTED_PLATFORMS_fr.md](docs/TESTED_PLATFORMS_fr.md) ([en](docs/TESTED_PLATFORMS.md)).
 Organisation du code et déroulé d'un renommage : [docs/ARCHITECTURE_fr.md](docs/ARCHITECTURE_fr.md) ([en](docs/ARCHITECTURE.md)).
 Contribuer : [CONTRIBUTING_fr.md](CONTRIBUTING_fr.md) ([en](CONTRIBUTING.md)).
+Traduire l'interface (les fichiers `.lng`) : [docs/TRANSLATING_fr.md](docs/TRANSLATING_fr.md) ([en](docs/TRANSLATING.md)).
 
 ## Réglages
 
 Mode portable : créer un fichier `antrenamer-qt.ini` vide à côté du programme (ou cocher la case dans
-Options > Langue). Sinon les réglages sont dans `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini`.
+Options > Langue). Sinon les réglages sont dans `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) ou `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
 
-Menu contextuel de l'Explorateur : Options > Fichiers && Dossiers ajoute « Ajouter à Ant Renamer Qt » aux fichiers et
+Menu contextuel de l'Explorateur (Windows) : Options > Fichiers && Dossiers ajoute « Ajouter à Ant Renamer Qt » aux fichiers et
 dossiers (Windows 11 : « Afficher plus d'options »). Tout ce qui est sélectionné arrive dans la fenêtre déjà ouverte.
 
 Ligne de commande : `-b fichier.arb` charge un job, `-g` démarre, `-x` quitte à la fin, `-a[fFr]`

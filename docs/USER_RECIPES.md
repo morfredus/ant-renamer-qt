@@ -16,7 +16,7 @@ Each recipe gives the goal, the operations to stack in the job (in order), the s
 
 Two rules to remember:
 - An operation sees the **name already changed** by the previous ones, except the metadata operations (Date, MP3, EXIF), which always read the **real file** on disk.
-- A `\` in a new name is a **folder separator**: this is how files are moved (§5).
+- A **folder separator** in a new name moves the file into that folder (§5): write `/` (it works on Windows and on Linux; `\` also works on Windows only). On Linux `\` and `:` are ordinary characters of a file name.
 
 ---
 
@@ -102,7 +102,7 @@ Sort by name so `IMG_1234.JPG` and `IMG_1234.CR2` follow each other, then tick *
 *EXIF info* or *Date and time*, **Offset** setting in seconds; every date tag of the form `yyyy:MM:dd HH:mm:ss` is shifted. Example: camera left on winter time, offset `3600` (+1 hour); negative to go back. `-86400` removes a day.
 
 ### 3.4 Name by file date (no EXIF)
-*Date and time*: mask `yyyy'-'mm'-'dd'_'fe` → `2026-10-15_IMG_1.jpg` (`f` = original name, `e` = extension). Any fixed text goes in quotes or apostrophes. Date and time: `yyyymmdd'_'hhnnss'_'fe` → `20261015_223515_IMG_1.jpg`. For a 12-hour clock add `am/pm` (or `a/p`) to the mask: `hh'-'nn am/pm`, 22:35 → `10-35 pm`. Pick **Creation** or **Last modification**. Tick **Add suffix if more than one file with the same date/time** to avoid identical names. `nn` is always minutes; `mm` is minutes when it follows `hh` or precedes `ss`, otherwise the month.
+*Date and time*: mask `yyyy'-'mm'-'dd'_'fe` → `2026-10-15_IMG_1.jpg` (`f` = original name, `e` = extension). Any fixed text goes in quotes or apostrophes. Date and time: `yyyymmdd'_'hhnnss'_'fe` → `20261015_223515_IMG_1.jpg`. For a 12-hour clock add `am/pm` (or `a/p`) to the mask: `hh'-'nn am/pm`, 22:35 → `10-35 pm`. Pick **Creation** or **Last modification** (many Linux file systems do not store the creation date: the modification date is used then). Tick **Add suffix if more than one file with the same date/time** to avoid identical names. `nn` is always minutes; `mm` is minutes when it follows `hh` or precedes `ss`, otherwise the month.
 
 ### 3.5 Name by title or keywords (IPTC / XMP)
 *EXIF info*, mask with `$if` to take the first existing tag and avoid a stray separator:
@@ -115,18 +115,18 @@ Multiple values are joined with ", ". For a RAW, keywords and title entered in t
 Nothing to do if "Also rename the sidecar files (.xmp, .dop) of a renamed picture" (Options > Processing) is ticked, which is the default. `IMG_0001.CR2` and `IMG_0001.CR2.xmp` leave together, undo (F12) puts both back. The log says so. See also §2.4.
 
 ### 3.7 File photos into year / month folders
-*Date and time* (or EXIF if the shooting date matters): mask `yyyy'\'mm'\'fe` → `2026\10\name.jpg`. The `\` makes a subfolder, created next to the file. Tick **Force folders** (Options > Processing) so they are created automatically; otherwise the folder must exist.
+*Date and time* (or EXIF if the shooting date matters): mask `yyyy'/'mm'/'fe` → `2026/10/name.jpg`. The `/` makes a subfolder, created next to the file. Tick **Force folders** (Options > Processing) so they are created automatically; otherwise the folder must exist.
 
 ---
 
 ## 4. Music and videos
 
 ### 4.1 "Artist - Title" from ID3 tags
-*MP3 tags info*: mask `%author% - %title%%ext%`. Option "Replace forbidden characters" (`"` → `''`, `?` → `.`, the others → `-`). Handles ID3v1 and ID3v2.2 / 2.3 / 2.4. A file without tags: "not renamed" in the log.
+*MP3 tags info*: mask `%author% - %title%%ext%`. The characters that a file name cannot hold are always replaced in the tags (`"` → `'`, `?` → `.`, `\ / : * < > |` → `-`). Handles ID3v1 and ID3v2.2 / 2.3 / 2.4. A file without tags: "not renamed" in the log.
 
 ### 4.2 Track number, album, incomplete tags
 - `%track% - %title%%ext%` with the **Two-digit track number** box → `01 - Titre.mp3`.
-- `%album%\%track% - %title%%ext%` files into one folder per album (tick Force folders).
+- `%album%/%track% - %title%%ext%` files into one folder per album (tick Force folders).
 - Empty tags: `%author%$if(%title%, - %title%,)%ext%` → `Blur - Song 2.mp3` but `Vivaldi.mp3` if the title is empty (no stray "-"). Values containing a comma or parenthesis go in quotes: `%author%$if(%album%," ("%album%")",)%ext%`.
 
 ### 4.3 TV series episodes
@@ -136,16 +136,16 @@ Nothing to do if "Also rename the sidecar files (.xmp, .dop) of a renamed pictur
 
 ## 5. Folders: move, file, flatten
 
-Principle: a `\` in the new name denotes a folder. With **Force folders**, it is created if it does not exist.
+Principle: a `/` in the new name denotes a folder (on Windows `\` works too). With **Force folders**, it is created if it does not exist. The examples use `/`, valid everywhere.
 
 ### 5.1 One folder per file name
-Files `cars.doc`, `cars.xls`, `cars.jpg`, `houses.doc`... *String insertion*: text `%name%\`, position 0, from the start. Tick Force folders. Result: `cars\cars.doc`, `cars\cars.xls`... `houses\houses.doc`...
+Files `cars.doc`, `cars.xls`, `cars.jpg`, `houses.doc`... *String insertion*: text `%name%/`, position 0, from the start. Tick Force folders. Result: `cars/cars.doc`, `cars/cars.xls`... `houses/houses.doc`...
 
 ### 5.2 Bring files up from a subfolder, keeping its name
 Files `images\movies\poster1.jpg` and `images\games\poster1.jpg`: *String insertion*, text `../%folder1% `, position 0. Result in `images`: `movies poster1.jpg`, `games poster1.jpg`. Empty folders are then deleted by hand.
 
 ### 5.3 Move somewhere else (full path)
-Options > Processing: tick **Detect ":\" or "\\" as absolute paths**. *String insertion*: text `D:\Sorted\`, position 0. `a.txt` → `D:\Sorted\a.txt`. Combine with Force folders to create the tree. To keep the original, tick "Copy instead of rename".
+Options > Processing: tick **Detect ":\" or "\\" as absolute paths** (on Linux: a name that begins with `/`). *String insertion*: text `D:\Sorted\` on Windows or `/home/me/Sorted/` on Linux, position 0. `a.txt` → `D:\Sorted\a.txt` (or `/home/me/Sorted/a.txt`). Combine with Force folders to create the tree. To keep the original, tick "Copy instead of rename".
 
 ### 5.4 Rename folders
 Folders (F3): tick "add the folders" (and untick the files if needed). Folders are treated as files without an extension. If your folder names contain a dot that is not an extension (`Photos 2024.05`), leave "The last dot of a folder name delimits the extension" unticked (default). `%countfiles%` and `%countfolders%` (recursive with `r`) give the number of items in the folder: `Holidays (%countfiles%)`.
@@ -158,7 +158,7 @@ Folders (F3): tick "add the folders" (and untick the files if needed). Folders a
 *Names from a list*: paste one name per line, in the exact order of the files list (sort it first). Tick "Add the original extension" if the list has no extensions. More files than lines, or an empty line: the file is not renamed. "Use the items as extensions" changes extensions only.
 
 ### 6.2 Anonymise with random names
-*Random names*: mask `%random%%ext%`, GUID method (unique guaranteed), 8-digit number or Windows tick count.
+*Random names*: mask `%random%%ext%`, GUID method (unique guaranteed), 8-digit number or "Windows tick count" (a counter of milliseconds, so sequential names).
 
 ### 6.3 Chain several operations
 A typical full clean-up, in this order: 1) *Multiple string replacement* (accents); 2) *String replacement* (wildcards, remove `_copy`); 3) *String replacement* (spaces → `_`); 4) *Change case* (lower); 5) *Enumeration* last, since the number must apply to the final name. Check with F5, then save the job (Ctrl+S).
@@ -168,7 +168,7 @@ To fix a step already added: remove it and redo it (classic layout) or double-cl
 ```
 antrenamer-qt -b d:\jobs\cleanup.arb -af c:\import\*.* -g -x
 ```
-loads the job, adds the files of the folder, renames and exits. `-afr folder` adds recursively, `-aF` adds folders. The same call can be run by the Windows Task Scheduler or from a script. The command line's `*` and `?` select files; they have nothing to do with the wildcards of string replacement.
+loads the job, adds the files of the folder, renames and exits. `-afr folder` adds recursively, `-aF` adds folders. On Linux: `antrenamer-qt -b ~/jobs/cleanup.arb -af "/import/*" -g -x` (quote the wildcards). The same call can be run by the Windows Task Scheduler, by cron or from a script. The command line's `*` and `?` select files; they have nothing to do with the wildcards of string replacement.
 
 ### 6.5 Send files in from the file manager
 Enable "Add to Ant Renamer Qt" (Options > Files & Folders). Right-click a selection of files and folders (Windows 11: *Show more options*): everything arrives in the window that is already open.
@@ -186,6 +186,6 @@ Enable "Add to Ant Renamer Qt" (Options > Files & Folders). Right-click a select
 | Numbers do not follow the wanted order | The list is not sorted as expected: sort or reorder before starting. |
 | "Name already used" (red) | Two files give the same new name: add a counter (`%num%`) or the Date and time suffix option. |
 | A file is not renamed (blue) | New name identical to the old one, missing tag (MP3, EXIF) or missing file: read the log message. |
-| A `\` makes the rename fail | The target folder does not exist: tick Force folders. |
+| A folder separator (`/`) makes the rename fail | The target folder does not exist: tick Force folders. |
 | Accents are wrong in capitals | Keep the locale option of the Change case operation ticked. |
 | The regular expression finds nothing | It applies to the full name, extension included; also check the `\` before `.` `(` `)` `[`. |
