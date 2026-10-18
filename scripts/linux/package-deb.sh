@@ -190,7 +190,7 @@ Homepage: https://www.antp.be/software/renamer/
 Description: Batch file renamer (Qt port of Ant Renamer)
  Ant Renamer Qt renames many files and folders at once: replace, insert, move or
  delete text, enumerate, change case, regular expressions, names from a list,
- file dates, MP3 (ID3v1/v2) and EXIF tags.
+ file dates, MP3 (ID3v1/v2) tags and EXIF, IPTC and XMP metadata.
  .
  C++/Qt 6 port of Ant Renamer by Antoine Potten, developed in parallel with the
  original program, with its language files and help.

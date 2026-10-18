@@ -6,7 +6,8 @@
 # L'utilisateur le rend executable et le lance, sans compilation ni installation de Qt.
 #
 # Prerequis : le programme compile (cmake --preset linux && cmake --build --preset linux) et, au premier
-# appel, une connexion internet (linuxdeploy + son greffon Qt, mis en cache dans .cache/appimage-tools).
+# appel, une connexion internet (linuxdeploy + son greffon Qt, versions epinglees et verifiees par SHA-256, mis en cache
+# dans .cache/appimage-tools).
 #
 # Usage : scripts/linux/package-appimage.sh [--build <dossier>]
 set -euo pipefail
@@ -48,29 +49,31 @@ TOOLS_DIR="$ROOT/.cache/appimage-tools"
 mkdir -p "$TOOLS_DIR"
 LINUXDEPLOY="$TOOLS_DIR/linuxdeploy-$ARCH.AppImage"
 PLUGIN_QT="$TOOLS_DIR/linuxdeploy-plugin-qt-$ARCH.AppImage"
-BASE_URL="https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous"
-QT_URL="https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous"
+# Outils epingles : une version precise et son SHA-256 (le canal "continuous" change sans prevenir et n'est pas verifiable).
+# Pour changer de version : mettre les deux tags a jour, telecharger les fichiers, puis recalculer avec sha256sum
+# (linuxdeploy : la page de la release affiche aussi l'empreinte).
+LD_TAG="1-alpha-20251107-1"
+LD_SHA256="c20cd71e3a4e3b80c3483cef793cda3f4e990aca14014d23c544ca3ce1270b4d"
+QT_TAG="1-alpha-20250213-1"
+QT_SHA256="15106be885c1c48a021198e7e1e9a48ce9d02a86dd0a1848f00bdbf3c1c92724"
+BASE_URL="https://github.com/linuxdeploy/linuxdeploy/releases/download/$LD_TAG"
+QT_URL="https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/$QT_TAG"
 
-# Un AppImage est un ELF : on valide chaque outil (magie ELF + taille plancher) avant de le reutiliser,
-# pour ne pas garder indefiniment un telechargement tronque.
-appimage_ok() {
-    [ -s "$1" ] || return 1
-    [ "$(od -An -tx1 -N4 "$1" 2>/dev/null | tr -d ' \n')" = "7f454c46" ] || return 1
-    [ "$(stat -c%s "$1" 2>/dev/null || echo 0)" -gt 4000000 ] || return 1
-}
+# Un outil n'est utilise que si son empreinte est exactement celle attendue (telechargement tronque ou modifie : refuse).
+sha_ok() { [ -s "$1" ] && [ "$(sha256sum "$1" | cut -d' ' -f1)" = "$2" ]; }
 fetch() {
-    local url="$1" dst="$2"
-    [ -f "$dst" ] && appimage_ok "$dst" && return 0
+    local url="$1" dst="$2" sha="$3"
+    [ -f "$dst" ] && sha_ok "$dst" "$sha" && return 0
     rm -f "$dst"
     echo "Telechargement : $(basename "$dst")"
     if command -v wget >/dev/null 2>&1; then wget -q -O "$dst" "$url" || die "echec du telechargement de $url"
     elif command -v curl >/dev/null 2>&1; then curl -fsSL -o "$dst" "$url" || die "echec du telechargement de $url"
     else die "ni wget ni curl disponible."; fi
+    sha_ok "$dst" "$sha" || { rm -f "$dst"; die "empreinte SHA-256 inattendue pour $(basename "$dst") (telechargement corrompu ou fichier modifie)."; }
     chmod +x "$dst"
-    appimage_ok "$dst" || die "outil AppImage corrompu apres telechargement : $dst (relancer pour re-telecharger)"
 }
-fetch "$BASE_URL/linuxdeploy-$ARCH.AppImage"          "$LINUXDEPLOY"
-fetch "$QT_URL/linuxdeploy-plugin-qt-$ARCH.AppImage"  "$PLUGIN_QT"
+fetch "$BASE_URL/linuxdeploy-$ARCH.AppImage"          "$LINUXDEPLOY" "$LD_SHA256"
+fetch "$QT_URL/linuxdeploy-plugin-qt-$ARCH.AppImage"  "$PLUGIN_QT"   "$QT_SHA256"
 
 # Le staging se fait dans le systeme de fichiers natif : sous WSL, /mnt/c (DrvFs) ignore les droits.
 WORK="$(mktemp -d)"
@@ -78,6 +81,7 @@ trap 'rm -rf "$WORK"' EXIT
 APPDIR="$WORK/AppDir"
 install -Dm755 "$BINARY" "$APPDIR/usr/bin/$CMD"
 mkdir -p "$APPDIR/usr/share/antrenamer-qt"
+install -Dm644 "$ROOT/LICENSE" "$APPDIR/usr/share/doc/antrenamer-qt/copyright"  # GPL v2 or later
 cp -r "$APP_DIR/Languages" "$APP_DIR/help" "$APPDIR/usr/share/antrenamer-qt/"
 
 # .desktop en LF : un CRLF ferait chercher a linuxdeploy une icone litteralement nommee « antrenamer-qt\r ».
