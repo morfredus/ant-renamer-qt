@@ -14,7 +14,7 @@ Il lit les informations stockées à l'intérieur de certains fichiers pour cons
 - les données EXIF, IPTC et XMP des images (JPEG, et fichiers basés sur TIFF comme la plupart des fichiers RAW ; XMP aussi depuis les PNG, WebP... et depuis les fichiers `.xmp`) ;
 - la date et l'heure des fichiers.
 
-Quand une image est renommée, ses fichiers annexes (`.xmp`, `.dop` de DxO) peuvent être renommés avec elle, voir les [options](options_fr.md#processing).
+Quand une image est renommée, ses fichiers associés (`.xmp`, `.dop` de DxO) peuvent être renommés avec elle, voir les [options](options_fr.md#processing).
 
 Ant Renamer Qt fonctionne sous Windows et sous Linux.
 
@@ -35,8 +35,8 @@ Notez que le contenu de cette liste n'est pas définitif. À part pour ce qui es
 ## Limitations connues
 
 - Le bouton Annuler n'a qu'un niveau : il ne restaure que le dernier renommage.
-- EXIF : une quarantaine de tags sont lus, et la MakerNote (données privées des fabricants d'appareils) n'est pas décodée. L'IPTC n'est lu que dans les fichiers JPEG. Voir [Tags EXIF, IPTC et XMP](metadata_tags_fr.md).
+- EXIF : 36 tags sont lus, et la MakerNote (données privées des fabricants d'appareils) n'est pas décodée. L'IPTC n'est lu que dans les fichiers JPEG. Voir [Tags EXIF, IPTC et XMP](metadata_tags_fr.md).
 - Les tags audio sont les tags ID3 des fichiers MP3 ; les autres formats (FLAC, OGG, M4A...) ne sont pas lus.
 - La date de création d'un fichier n'est pas conservée par tous les systèmes de fichiers (elle manque souvent sous Linux) : la date de modification est alors utilisée.
-- L'aide existe en anglais, français, croate et tamoul ; l'interface elle-même existe en 27 langues. Les pages écrites pour Ant Renamer Qt (disposition moderne, tags, fichiers annexes...) peuvent n'exister qu'en anglais et en français, les autres langues affichent alors le texte anglais.
+- L'aide existe en anglais, français, croate et tamoul ; l'interface elle-même existe en 28 langues (l'anglais et 27 traductions). Les pages écrites pour Ant Renamer Qt (disposition moderne, tags, fichiers associés...) peuvent n'exister qu'en anglais et en français, les autres langues affichent alors le texte anglais.
 - Windows 11 : l'entrée ajoutée au menu contextuel de l'Explorateur est dans le menu « Afficher plus d'options » (ou Maj+F10), le menu court n'est pas pris en charge.

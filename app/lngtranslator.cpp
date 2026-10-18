@@ -16,6 +16,7 @@
 #include <QStringDecoder>
 #include <QSettings>
 #include <QXmlStreamReader>
+#include <cstdio>
 
 using namespace Qt::StringLiterals;
 
@@ -35,12 +36,19 @@ QString decode1252(const QByteArray& b) {
 }
 
 // Each .lng declares its own encoding (windows-1250, gb2312, ...); fall back to windows-1252.
-QString decodeLng(const QByteArray& bytes) {
+QString decodeLng(QByteArray bytes, const QString& fileName = {}) {
+    if (bytes.startsWith("\xEF\xBB\xBF")) bytes.remove(0, 3);  // an editor may add a UTF-8 BOM: it is not part of the XML
     static const QRegularExpression re(u"^<\\?xml[^>]*encoding=[\"']([^\"']+)[\"']"_s);
     const auto m = re.match(QString::fromLatin1(bytes.left(200)));
     if (m.hasMatch()) {
         const QString name = m.captured(1);
-        if (name.compare(u"utf-8", Qt::CaseInsensitive) == 0) return QString::fromUtf8(bytes);
+        if (name.compare(u"utf-8", Qt::CaseInsensitive) == 0) {
+            QStringDecoder utf8(QStringDecoder::Utf8);
+            const QString out = utf8(bytes);
+            if (!utf8.hasError()) return out;
+            if (!fileName.isEmpty()) std::fprintf(stderr, "Language file %s: declared UTF-8 but it is not valid UTF-8, read as windows-1252\n", qPrintable(fileName));
+            return decode1252(bytes);
+        }
         QStringDecoder dec(name.toLatin1().constData());
         if (dec.isValid()) {
             const QString out = dec(bytes);
@@ -53,14 +61,14 @@ QString decodeLng(const QByteArray& bytes) {
 QString readLng(const QString& path) {
     QFile f(path);
     if (!f.open(QIODevice::ReadOnly)) return {};
-    QString s = decodeLng(f.readAll());
+    QString s = decodeLng(f.readAll(), QFileInfo(path).fileName());
     // QString input ignores the declared encoding, but strip it anyway to be safe
     s.replace(QRegularExpression(u"^<\\?xml[^>]*\\?>"_s), QString());
     return s;
 }
 
 // Flattens the file: "MainForm/ActionAddFiles/Caption" -> value. Item elements are told apart by Name/Index.
-QHash<QString, QString> parse(const QString& xml) {
+QHash<QString, QString> parse(const QString& xml, const QString& fileName = {}) {
     QHash<QString, QString> out;
     QXmlStreamReader r(xml);
     QStringList path;
@@ -80,6 +88,10 @@ QHash<QString, QString> parse(const QString& xml) {
             path.removeLast();
         }
     }
+    // What was read before the error is kept (a damaged file still translates what it can), but it must not go unnoticed
+    if (r.hasError() && !fileName.isEmpty())
+        std::fprintf(stderr, "Language file %s: XML error at line %lld: %s (%zu texts read before it)\n", qPrintable(fileName),
+                     static_cast<long long>(r.lineNumber()), qPrintable(r.errorString()), size_t(out.size()));
     return out;
 }
 
@@ -162,8 +174,8 @@ bool LngTranslator::loadLanguage(const QString& dir, const QString& language) {
     controls_.clear();
     language_ = language;
     if (language == u"English") return false;
-    const auto en = parse(readLng(QDir(dir).filePath(u"English.lng"_s)));
-    const auto tr = parse(readLng(QDir(dir).filePath(language + u".lng"_s)));
+    const auto en = parse(readLng(QDir(dir).filePath(u"English.lng"_s)), u"English.lng"_s);
+    const auto tr = parse(readLng(QDir(dir).filePath(language + u".lng"_s)), language + u".lng"_s);
     if (en.isEmpty() || tr.isEmpty()) return false;
     // QHash order changes from one run to the next, and the same English text can be in several places (the caption and
     // the hint of a button): a fixed order makes the translation of such a text the same every time (caption first).
@@ -174,10 +186,17 @@ bool LngTranslator::loadLanguage(const QString& dir, const QString& language) {
         const auto t = tr.constFind(it.key());
         if (t == tr.constEnd() || it.value().isEmpty() || t.value().isEmpty()) continue;
         const QString key = it.key();
-        auto add = [this](const QString& e, const QString& f) {
+        // Pieces of text are glued by the code (" at position %1", " using creation date"): the English text decides
+        // whether the translation starts or ends with spaces, whatever the translator typed.
+        auto edge = [](const QString& s, bool leading) {
+            qsizetype n = 0;
+            while (n < s.size() && s[leading ? n : s.size() - 1 - n].isSpace()) ++n;
+            return leading ? s.left(n) : s.right(n);
+        };
+        auto add = [this, &edge](const QString& e, const QString& f) {
             if (e.isEmpty() || f.isEmpty() || e == f) return;
             const QString k = normalize(e);
-            if (!map_.contains(k)) map_.insert(k, toQtPlaceholders(f));
+            if (!map_.contains(k)) map_.insert(k, toQtPlaceholders(edge(e, true) + f.trimmed() + edge(e, false)));
         };
         if (key.endsWith(u"/Hint")) {  // "Short|Long": both halves are used on their own
             const int a = int(it.value().indexOf(u'|')), b = int(t.value().indexOf(u'|'));
@@ -200,78 +219,6 @@ QString LngTranslator::translate(const char* /*context*/, const char* sourceText
     const QString src = QString::fromUtf8(sourceText);
     const auto it = map_.constFind(normalize(src));
     if (it != map_.constEnd()) return *it;
-    if (language_ == u"French") {  // strings that do not exist in the original program
-        static const QHash<QString, QString> extra = {
-            {u"Portable mode: keep the settings in the program folder"_s,
-             u"Mode portable : conserver les réglages dans le dossier du programme"_s},
-            {u"Settings storage"_s, u"Stockage des réglages"_s},
-            {u"Could not write the settings in the program folder."_s,
-             u"Impossible d'écrire les réglages dans le dossier du programme."_s},
-            {u"The new language is used the next time the program starts."_s,
-             u"La nouvelle langue sera utilisée au prochain démarrage du programme."_s},
-            {u"History"_s, u"Historique"_s},
-            {u"Natural sort in files list (2 before 10) instead of alphabetical"_s,
-             u"Tri naturel dans la liste des fichiers (2 avant 10) au lieu du tri alphabétique"_s},
-            {u"Modern interface layout (used at the next start)"_s,
-             u"Disposition moderne de l'interface (prise en compte au prochain démarrage)"_s},
-            {u"The new interface is used the next time the program starts."_s,
-             u"La nouvelle interface sera utilisée au prochain démarrage du programme."_s},
-            {u"Modify"_s, u"Modifier"_s},
-            {u"Pages layout (modern interface):"_s, u"Disposition des pages (interface moderne) :"_s},
-            {u"Tabs"_s, u"Onglets"_s},
-            {u"Single screen, in bands"_s, u"Écran unique, en bandes"_s},
-            {u"Single screen, in columns"_s, u"Écran unique, en colonnes"_s},
-            {u"Validate the modification"_s, u"Valider la modification"_s},
-            {u"Cancel the modification"_s, u"Annuler la modification"_s},
-            {u"Modification of action %1"_s, u"Modification de l'action %1"_s},
-            {u"Replace the selected action with the current settings (double-click an action to load its settings)"_s,
-             u"Remplacer l'action sélectionnée par les réglages actuels (double-cliquez sur une action pour charger ses réglages)"_s},
-            {u"Settings loaded: change them, then validate the modification"_s,
-             u"Réglages chargés : modifiez-les, puis validez la modification"_s},
-            {u"Windows Explorer"_s, u"Explorateur Windows"_s},
-            {u"Add to Ant Renamer Qt"_s, u"Ajouter à Ant Renamer Qt"_s},
-            {u"Add \"Add to Ant Renamer Qt\" to the context menu of files and folders"_s,
-             u"Ajouter « Ajouter à Ant Renamer Qt » au menu contextuel des fichiers et dossiers"_s},
-            {u"On Windows 11 the entry is in \"Show more options\" (or Shift+F10)."_s,
-             u"Sous Windows 11, l'entrée se trouve dans « Afficher plus d'options » (ou Maj+F10)."_s},
-            {u"Could not change the Explorer context menu."_s, u"Impossible de modifier le menu contextuel de l'Explorateur."_s},
-            {u"seconds"_s, u"secondes"_s},
-            {u"Also rename the sidecar files (.xmp, .dop) of a renamed picture"_s,
-             u"Renommer aussi les fichiers associés (.xmp, .dop) d'une image renommée"_s},
-            {u"sidecar file %1 renamed to %2"_s, u"fichier associé %1 renommé en %2"_s},
-            {u"sidecar file %1 not renamed: %2"_s, u"fichier associé %1 non renommé : %2"_s},
-            {u"%IptcKeywords%, %XmpTitle%... = IPTC and XMP data (keywords, title, author, place...)"_s,
-             u"%IptcKeywords%, %XmpTitle%... = données IPTC et XMP (mots-clés, titre, auteur, lieu...)"_s},
-            {u"Position:"_s, u"Position :"_s},
-            {u"String:"_s, u"Chaîne :"_s},
-            {u"License:"_s, u"Licence :"_s},
-            {u"Web site address: "_s, u"Adresse du site web : "_s},
-            {u"E-mail address: "_s, u"Adresse e-mail : "_s},
-            {u"Ant Renamer Qt is a C++/Qt port of Ant Renamer by Antoine Potten, developed in parallel with the original program. Port (Windows and Linux): Frédéric Biron."_s,
-             u"Ant Renamer Qt est un portage C++/Qt d'Ant Renamer d'Antoine Potten, développé en parallèle du programme d'origine. Portage (Windows et Linux) : Frédéric Biron."_s},
-            {u"Ant Renamer Qt support: "_s, u"Assistance pour Ant Renamer Qt : "_s},
-            {u"issues and discussions"_s, u"issues et discussions"_s},
-            {u"Port:"_s, u"Portage :"_s},
-            {u"C++/Qt 6 port and Linux port: "_s, u"Portage C++/Qt 6 et portage Linux : "_s},
-            {u"Components:"_s, u"Composants :"_s},
-            {u"Translations:"_s, u"Traductions :"_s},
-            {u"Thanks to:"_s, u"Remerciements :"_s},
-            {u"...and all the people that sent me suggestions and comments"_s,
-             u"...et toutes les personnes qui m'ont envoyé des suggestions et des commentaires"_s},
-            {u"This program is free software; you can redistribute it and/or modify it under the terms of the GNU General "
-             "Public License as published by the Free Software Foundation; either version 2 of the License, or (at your "
-             "option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY "
-             "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the "
-             "<a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'>GNU General Public License</a> for more details."_s,
-             u"Ce programme est un logiciel libre ; vous pouvez le redistribuer et/ou le modifier selon les termes de la "
-             "Licence Publique Générale GNU telle que publiée par la Free Software Foundation ; soit la version 2 de la "
-             "licence, soit (à votre convenance) toute version ultérieure. Ce programme est distribué dans l'espoir qu'il "
-             "sera utile, mais SANS AUCUNE GARANTIE, sans même la garantie implicite de COMMERCIALISATION ou "
-             "d'ADÉQUATION À UN USAGE PARTICULIER. Consultez la <a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'>"
-             "Licence Publique Générale GNU</a> pour plus de détails."_s},
-        };
-        if (const auto e = extra.constFind(src); e != extra.constEnd()) return *e;
-    }
     if (qEnvironmentVariableIsSet("ANTREN_MISSING")) {  // developer aid: list strings without a translation
         std::fprintf(stderr, "MISSING: %s\n", sourceText);
     }

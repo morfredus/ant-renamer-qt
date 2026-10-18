@@ -131,7 +131,7 @@ Replace the English text by the correct translation, and once done you can send 
     <lblMoveStrTo Caption="Alla posizione:"/>
     <rbtMoveStrToBegin Caption="Dall'inizio"/>
     <rbtMoveStrToEnd Caption="Dalla fine"/>
-    <lblMoveStrNotes Caption="Note:&lt;br&gt;- Se vuoi spostare una stringa specifica ma non è sempre nella stessa posizione, usa la &lt;link&gt;Sostituzione stringa&lt;/link&gt; per eliminarla, e la &lt;link&gt;Inserimento stringa&lt;/link&gt; per inserirla&lt;BR&gt;- Il valore &#34;Alla posizione&#34; non include i caratteri spostati"/>
+    <lblMoveStrNotes Caption="Note:&lt;br&gt;- Se vuoi spostare una stringa specifica ma non è sempre nella stessa posizione, usa la &lt;link&gt;Sostituisci stringa&lt;/link&gt; per eliminarla, e la &lt;link&gt;Inserisci stringa&lt;/link&gt; per inserirla&lt;BR&gt;- Il valore &#34;Alla posizione&#34; non include i caratteri spostati"/>
     <lblCharDel Caption="Numero di caratteri da eliminare:"/>
     <rbtCharDelPos Caption="Dalla posizione:"/>
     <rbtCharDelBegin Caption="Dall'inizio"/>

@@ -2,6 +2,16 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.0.0-rc.15 (18/10/2026)
+  - Language files: the texts that only French had (portable mode, theme, About window...) are now in the language files, so every translator can translate them.
+  - Packaging: the AppImage tools are pinned to a release and checked by SHA-256; the Windows build tries a second time when a file is locked.
+- 3.0.0-rc.14 (18/10/2026)
+  - New light / dark button in the toolbar and a Theme option (follow the system, light, dark): works everywhere, including an AppImage that cannot detect the desktop theme.
+  - The log is readable on a dark background (lighter colours), and the toolbar highlight too.
+- 3.0.0-rc.13 (18/10/2026)
+  - Robustness: invalid regular expressions rename nothing, damaged MP3 tags no longer cut names or crash, the buttons are disabled during a renaming, "*.*" also matches files without extension, saved sets are no longer wiped by a bad "Delete".
+  - Language files: German is valid and fully translated again, errors in a language file are reported, broken links and tags repaired in a dozen languages, credits completed.
+  - Help corrected against the program (log colours, tags, history, date mask) and documentation brought up to date; licence stated as GPL v2 or later everywhere.
 - 3.0.0-rc.12 (17/10/2026)
   - Fixed (Linux): a file name containing a colon or a backslash was cut at that character; on Linux only "/" delimits a path now. Also fixed on Linux: the files inside a renamed folder follow it, %folder-N% and the %count% tags work. Tested on Linux Mint 22.3 and Debian 13.
   - New icon set "Modern" (the default): line icons drawn by the program, sharp on any screen, light and dark theme. The other sets stay in Options, Display.
@@ -28,7 +38,7 @@ Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in pa
   - New help chapter "Modern interface layout".
   - Fixed: a text present twice in the language files with two translations got one or the other at random.
 - 3.0.0-rc.7 (14/10/2026)
-  - New option "Natural sort in files list" (Options, Display), enabled by default: "file 2" is sorted before "file 10". Untick it for the alphabetical sort.
+  - New option "Natural sort in files list" (Options, Files & Folders), enabled by default: "file 2" is sorted before "file 10". Untick it for the alphabetical sort.
   - Fixed: in the Files list, clicking a column header sorted only the first time.
 - 3.0.0-rc.6 (14/10/2026)
   - The copyright now reads 2000-2026 Antoine Potten - Frédéric Biron (About window, installer, packages).

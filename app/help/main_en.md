@@ -14,11 +14,13 @@ The icons of the buttons are those of the "Modern" set, the default since versio
 
 The buttons show the number of files in the list and the number of planned actions, for example "Files (100)" and "Actions (2)", when the modern layout is used (see below).
 
-Once you defined the [files to rename](files_en.md) and [how to rename them](actions_en.md), click the ![Go](img/go.png) "Go" button (F9). The [log](log_en.md) indicates you what happened to each file. The renaming runs in the background: the window stays usable and the progress bar at the bottom shows how far it is. The ![Stop](img/stop.png) "Stop" button (Esc) interrupts it; the files already processed stay renamed.
+Once you defined the [files to rename](files_en.md) and [how to rename them](actions_en.md), click the ![Go](img/go.png) "Go" button (F9). The [log](log_en.md) indicates you what happened to each file. The renaming runs in the background: the window stays usable, the progress bar at the bottom shows how far it is, and the buttons that would modify the list, the batch or the options (add or remove files, move, batch commands, Options, Undo...) are disabled until it ends. The ![Stop](img/stop.png) "Stop" button (Esc) interrupts it; the files already processed stay renamed.
 
 The ![Undo](img/undo.png) "Undo" button (F12) reverts to the old names. It only has one level of undo, so you can only undo the last change that has been made. The sidecar files renamed with the pictures get their old names back too.
 
 The ![Always on top](img/ontop.png) "Always on top" button (F11), when checked, allows to keep the window always on top of other windows when it is not active.
+
+The "Light / dark" button (half-filled circle, next to "Always on top") switches at once between the light and the dark theme. The choice is kept; "Follow the system" can be set back in the [Options](options_en.md#display).
 
 The ![Options](img/options.png) "Options" button (F10) opens the [options window](options_en.md).
 

@@ -3,19 +3,19 @@
 *How to reach a specific result, from the simplest to the most complex.*
 French version: [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Reference of every function: [USER_GUIDE.md](USER_GUIDE.md).
 
-Each recipe gives the goal, the operations to stack in the job (in order), the settings and a before/after. The sample names were checked with the program's engine, except those reading metadata (EXIF, ID3, XMP), which follow the help.
+Each recipe gives the goal, the actions to stack in the batch (in order), the settings and a before/after. The sample names were checked with the program's engine, except those reading metadata (EXIF, ID3, XMP), which follow the help.
 
 ## 0. Before you start
 
 1. **Add the files** (F2 / F3 / drag and drop). The **list order is the processing order**: sort by name before an enumeration.
-2. **Pick the operation**, set it, then **Add to job** (Ctrl+F2). Repeat for each operation: they apply one after the other, each on the result of the previous one.
+2. **Pick the action**, set it, then **Add to batch** (Ctrl+F2). Repeat for each action: they apply one after the other, each on the result of the previous one.
 3. **Check the preview**: the "Preview of the selected file" frame shows one file; **F5** fills the Preview column for the whole list. "Changed only" hides unchanged files so you only review the others.
 4. **Go** (F9), then read the **Log**. **Undo** (F12) reverts the last run, and only that one.
 5. **Caution on a big batch**: try a few copies first, or tick "Copy instead of rename" (Options > Processing): the originals stay untouched, the copies carry the new names. Remember to untick it afterwards.
-6. **Save the job** (Ctrl+S) as soon as it works: it reloads (Ctrl+O) and runs from the command line (§6.4).
+6. **Save the batch** (Ctrl+S) as soon as it works: it reloads (Ctrl+O) and runs from the command line (§6.4).
 
 Two rules to remember:
-- An operation sees the **name already changed** by the previous ones, except the metadata operations (Date, MP3, EXIF), which always read the **real file** on disk.
+- An action sees the **name already changed** by the previous ones, except the metadata actions (Date, MP3, EXIF), which always read the **real file** on disk.
 - A **folder separator** in a new name moves the file into that folder (§5): write `/` (it works on Windows and on Linux; `\` also works on Windows only). On Linux `\` and `:` are ordinary characters of a file name.
 
 ---
@@ -28,7 +28,7 @@ Two rules to remember:
 
 ### 1.2 Remove a piece of variable length (wildcards)
 *String replacement*, "Use wildcards" ticked. Search `_*_final`, Replace by (empty).
-`Film_ABC123_final.mov` → `Film.mov`. `*` stands for any text, `?` for one character. The text found is as short as possible. Wildcards exist only in this operation: to clean up before another operation, put this replacement before it in the job.
+`Film_ABC123_final.mov` → `Film.mov`. `*` stands for any text, `?` for one character. The text found is as short as possible. Wildcards exist only in this action: to clean up before another action, put this replacement before it in the batch.
 
 ### 1.3 Remove accents
 *Multiple string replacement*: pick the **Remove west-european accents** set in the drop-down list. `Éte été.txt` → `Ete ete.txt`. For other characters (`&` → `and`, `œ` → `oe`), add lines to the grid (Ctrl++), name the set and **Save**. Copy / Paste lets you edit the grid in Excel.
@@ -160,15 +160,15 @@ Folders (F3): tick "add the folders" (and untick the files if needed). Folders a
 ### 6.2 Anonymise with random names
 *Random names*: mask `%random%%ext%`, GUID method (unique guaranteed), 8-digit number or "Windows tick count" (a counter of milliseconds, so sequential names).
 
-### 6.3 Chain several operations
-A typical full clean-up, in this order: 1) *Multiple string replacement* (accents); 2) *String replacement* (wildcards, remove `_copy`); 3) *String replacement* (spaces → `_`); 4) *Change case* (lower); 5) *Enumeration* last, since the number must apply to the final name. Check with F5, then save the job (Ctrl+S).
+### 6.3 Chain several actions
+A typical full clean-up, in this order: 1) *Multiple string replacement* (accents); 2) *String replacement* (wildcards, remove `_copy`); 3) *String replacement* (spaces → `_`); 4) *Change case* (lower); 5) *Enumeration* last, since the number must apply to the final name. Check with F5, then save the batch (Ctrl+S).
 To fix a step already added: remove it and redo it (classic layout) or double-click it in the modern layout.
 
-### 6.4 Run a saved job from the command line
+### 6.4 Run a saved batch from the command line
 ```
-antrenamer-qt -b d:\jobs\cleanup.arb -af c:\import\*.* -g -x
+antrenamer-qt -b d:\batches\cleanup.arb -af c:\import\*.* -g -x
 ```
-loads the job, adds the files of the folder, renames and exits. `-afr folder` adds recursively, `-aF` adds folders. On Linux: `antrenamer-qt -b ~/jobs/cleanup.arb -af "/import/*" -g -x` (quote the wildcards). The same call can be run by the Windows Task Scheduler, by cron or from a script. The command line's `*` and `?` select files; they have nothing to do with the wildcards of string replacement.
+loads the batch, adds the files of the folder, renames and exits. `-afr folder` adds recursively, `-aF` adds folders. On Linux: `antrenamer-qt -b ~/batches/cleanup.arb -af "/import/*" -g -x` (quote the wildcards). The same call can be run by the Windows Task Scheduler, by cron or from a script. The command line's `*` and `?` select files; they have nothing to do with the wildcards of string replacement.
 
 ### 6.5 Send files in from the file manager
 Enable "Add to Ant Renamer Qt" (Options > Files & Folders). Right-click a selection of files and folders (Windows 11: *Show more options*): everything arrives in the window that is already open.
@@ -187,5 +187,5 @@ Enable "Add to Ant Renamer Qt" (Options > Files & Folders). Right-click a select
 | "Name already used" (red) | Two files give the same new name: add a counter (`%num%`) or the Date and time suffix option. |
 | A file is not renamed (blue) | New name identical to the old one, missing tag (MP3, EXIF) or missing file: read the log message. |
 | A folder separator (`/`) makes the rename fail | The target folder does not exist: tick Force folders. |
-| Accents are wrong in capitals | Keep the locale option of the Change case operation ticked. |
+| Accents are wrong in capitals | Keep the locale option of the Change case action ticked. |
 | The regular expression finds nothing | It applies to the full name, extension included; also check the `\` before `.` `(` `)` `[`. |

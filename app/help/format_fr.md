@@ -23,7 +23,7 @@ Par exemple, l'opération d'[Infos des tags mp3](actions_fr.md#mp3) supporte des
 | `%DateTimeOriginal%`, `%Make%`, `%IptcKeywords%`, `%XmpTitle%`... | Données EXIF, IPTC et XMP, voir [la liste](metadata_tags_fr.md) | EXIF |
 | `$if(...)` | Texte conditionnel, voir [plus bas](#if) | mp3, EXIF |
 
-Les noms de tags ne tiennent pas compte de la casse. Un tag inconnu (par exemple à cause d'une faute de frappe) est laissé tel quel dans le nom, caractères "%" compris : c'est ainsi que vous le remarquez dans l'aperçu.
+Les tags doivent être écrits exactement comme dans le tableau (en minuscules : `%name%`, pas `%Name%`) ; seuls les tags EXIF, IPTC et XMP sont reconnus quelle que soit leur casse. Un tag inconnu (par exemple à cause d'une faute de frappe) est laissé tel quel dans le nom, caractères "%" compris : c'est ainsi que vous le remarquez dans l'aperçu.
 
 ## Le tag folder {#folder}
 

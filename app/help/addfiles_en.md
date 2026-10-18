@@ -29,9 +29,9 @@ To add the files of a folder located on the network, the [drag & drop](#dragdrop
 
 You can drag & drop files and folders from the file manager (Windows Explorer and other programs that are compatible with it, like Total Commander, or the file manager of your Linux desktop) directly to the main window of Ant Renamer. This is usually a much easier way to add files than selecting them in the "Add files" window.
 
-By default, when you drop the files a window appears. It allows you to choose how you want to add the files. These options are the same than those available in the ["Add folders" window](#addfolders). An option labelled "Do not show this window again" allows to keep the select options for future drag & drop, so the window is not displayed again. If you check this option and want to discard it (or change the options), you can do that in the "Files & Folders" page of the [Options window](options_en.md#files). To bring back this window one time without changing its default behaviour, you can hold down the Ctrl or Shift key while dropping the files. This allows, for example, to add a folder to the list when the default behaviour that you select is to only add files.
+By default, when you drop the files a window appears. It allows you to choose how you want to add the files. These options are the same as those available in the ["Add folders" window](#addfolders). An option labelled "Do not show this window again" allows to keep the select options for future drag & drop, so the window is not displayed again. If you check this option and want to discard it (or change the options), you can do that in the "Files & Folders" page of the [Options window](options_en.md#files).
 
-The same limitations than for the "Add files" window apply (files order and speed problems with lots of files).
+The same limitations as for the "Add files" window apply (files order and speed problems with lots of files).
 
 ## Context menu of the file manager (Windows) {#explorer}
 

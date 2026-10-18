@@ -105,7 +105,7 @@ Replace the English text by the correct translation, and once done you can send 
     </lstActions>
     <lblChangeExt Caption="Αλλαγη σηματων σε:"/>
     <cbxChangeExtNoRepl Caption="Κρατηση του παλιου σηματος + ενσωματωση καινουργιου σηματος"/>
-    <lblChangeExtNotes Caption="  Πληροφοριες:&lt;br&gt;- Δεν υπαρχει τελεια&lt;br&gt;- Για δειρακεις αλαγες, &lt;LINK&gt;Εκδωση νουμερων&lt;/ΛΙΝΚ&gt; χρησιμοποιηση"/>
+    <lblChangeExtNotes Caption="  Πληροφοριες:&lt;br&gt;- Δεν υπαρχει τελεια&lt;br&gt;- Για δειρακεις αλαγες, &lt;LINK&gt;Εκδωση νουμερων&lt;/LINK&gt; χρησιμοποιηση"/>
     <lblStrReplSearch Caption="Ψαξε σε:"/>
     <lblStrReplBy Caption="Αντικατασταση με:"/>
     <cbxStrReplAll Caption="Αντικατασταση ολων"/>
@@ -123,7 +123,7 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtStrInsBegin Caption="Απο την αρχη"/>
     <rbtStrInsEnd Caption="Απο το τελος"/>
     <cbxStrInsExt Caption="Αλλαγη μονο του σηματος"/>
-<n/>    <lblStrInsNotes Caption="Notes:&lt;br&gt;- If you want to insert a string after or before another one, use the &lt;LINK&gt;String replacement&lt;/LINK&gt; action&lt;br&gt;- %name% = Original file name (without extension)&lt;BR&gt;- %ext% = Original extension (including the dot)&lt;BR&gt;- - %folderN% = Folder name, where N is the level (1 = current, 2 = parent, etc.)&lt;BR&gt;- %% = % character&lt;BR&gt;see &lt;LINK&gt;Help&lt;/LINK&gt; for more information"/>
+<n/>    <lblStrInsNotes Caption="Notes:&lt;br&gt;- If you want to insert a string after or before another one, use the &lt;LINK&gt;Αλλαγη στοιχειων&lt;/LINK&gt; action&lt;br&gt;- %name% = Original file name (without extension)&lt;BR&gt;- %ext% = Original extension (including the dot)&lt;BR&gt;- - %folderN% = Folder name, where N is the level (1 = current, 2 = parent, etc.)&lt;BR&gt;- %% = % character&lt;BR&gt;see &lt;LINK&gt;Help&lt;/LINK&gt; for more information"/>
     <lblMoveStrFrom Caption="Απο την θεση:"/>
     <rbtMoveStrFromBegin Caption="Απο την αρχη"/>
     <rbtMoveStrFromEnd Caption="Απο το τελος"/>
@@ -131,7 +131,7 @@ Replace the English text by the correct translation, and once done you can send 
     <lblMoveStrTo Caption="Στην θεση:"/>
     <rbtMoveStrToBegin Caption="Απο την αρχη"/>
     <rbtMoveStrToEnd Caption="Απο το τελος"/>
-    <lblMoveStrNotes Caption="Πληροφοριες:&lt;br&gt;- Αν θελετε να κινηθη ενα στοιχειο, που δεν ειναι συνεχεια στην ιδια θεση, τοτε χρησιμοποιηστε &lt;λινκ&gt;Αλλαγη στοιχειου&lt;/λινκ&gt; για να το διωξετε&lt;λινκ&gt;Ενσωματωση σηματος&lt;/λινκ&gt; , για καινουργια θεση&lt;BR&gt;- &#34;Στην θεση&#34; δεν περιεχετε το κινουμενο σημα (ειναι, σαν να διωχθηκε)"/>
+    <lblMoveStrNotes Caption="Πληροφοριες:&lt;br&gt;- Αν θελετε να κινηθη ενα στοιχειο, που δεν ειναι συνεχεια στην ιδια θεση, τοτε χρησιμοποιηστε &lt;LINK&gt;Αλλαγη στοιχειων&lt;/LINK&gt; για να το διωξετε&lt;LINK&gt;Ενσωματωση στοιχειων&lt;/LINK&gt; , για καινουργια θεση&lt;BR&gt;- &#34;Στην θεση&#34; δεν περιεχετε το κινουμενο σημα (ειναι, σαν να διωχθηκε)"/>
     <lblCharDel Caption="Σηματα που θελετε να διωχθουν:"/>
     <rbtCharDelPos Caption="Απο την θεση:"/>
     <rbtCharDelBegin Caption="Απο την αρχη"/>
@@ -139,7 +139,7 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtCharDelStr Caption="Μετα τα σηματα:"/>
     <rbtCharDelStr2 Caption="Before the string:"/>
     <cbxCharDelExt Caption="Αλλαγη μονο του στοιχειου"/>
-    <lblCharDelNotes Caption="Προσοχη:&lt;br&gt;- Για να διωξετε ενα μονο γραμμα χρησιμοποιηστε &lt;ΛΙΝΚ&gt;Ανταλλαγη γραμματων&lt;/ΛΙΝΚ&gt; "/>
+    <lblCharDelNotes Caption="Προσοχη:&lt;br&gt;- Για να διωξετε ενα μονο γραμμα χρησιμοποιηστε &lt;LINK&gt;Αλλαγη στοιχειων&lt;/LINK&gt; "/>
     <lblEnumMask Caption="Μασκα:"/>
     <lblEnumStart Caption="Αρχη απο:"/>
     <lblEnumDigits Caption="Θεσεις:"/>
@@ -149,7 +149,7 @@ Replace the English text by the correct translation, and once done you can send 
     <lblMP3Mask Caption="Μασκα:"/>
     <cbxMP3TwoDigit Caption="Διπλο νουμερο (ενσωματωση ενος '0' μπροστα)"/>
     <cbxMP3Convert Caption="Αλλα μη επιτρεπομενα σηματα  / \ : &lt; &gt; | ¦ *"/>
-    <lblMP3Notes Caption="Πληροφορια:&lt;br&gt;- %προγραμματιστης% = Προγραμματιστης&lt;BR&gt;- %τιτλος% =Τιτλος &lt;BR&gt;- %αλμπουμ% = Αλμπουμ&lt;BR&gt;- %χρονος% = ρονος&lt;BR&gt;- %Στιλμουσικης% = Στιλ μουσικης&lt;BR&gt;- %σχολιο% = Σχολιο&lt;BR&gt;- %νουμεροτραγουδι% = Νουμερο τραγουδιου (ID3V1.1)&lt;BR&gt;- %αυθεντικοονομααρχειου% = Αυθεντικο ονομα αρχειου&lt;BR&gt;- %σημα% = Κανονικο σημα (με τελεια)&lt;BR&gt;- %χωροςαποθηκευσης&lt;i&gt;N&lt;/i&gt;% = Ονομα αρχειου&lt;BR&gt;- %% = % Σημα&lt;BR&gt;- $if(Αναγκαιο,σωστη αξια,λαθος αξια)&lt;BR&gt;&lt;ΛΙΝΚ&gt;Βοηθεια&lt;/ΛΙΝΚ&gt; για περισσοτερες πληροφοριες"/>
+    <lblMP3Notes Caption="Πληροφορια:&lt;br&gt;- %author% = Προγραμματιστης&lt;BR&gt;- %title% =Τιτλος &lt;BR&gt;- %album% = Αλμπουμ&lt;BR&gt;- %year% = ρονος&lt;BR&gt;- %genre% = Στιλ μουσικης&lt;BR&gt;- %comm% = Σχολιο&lt;BR&gt;- %track% = Νουμερο τραγουδιου (ID3V1.1)&lt;BR&gt;- %name% = Αυθεντικο ονομα αρχειου&lt;BR&gt;- %ext% = Κανονικο σημα (με τελεια)&lt;BR&gt;- %folderN% = Ονομα αρχειου&lt;BR&gt;- %% = % Σημα&lt;BR&gt;- $if(Αναγκαιο,σωστη αξια,λαθος αξια)&lt;BR&gt;&lt;LINK&gt;Βοηθεια&lt;/LINK&gt; για περισσοτερες πληροφοριες"/>
     <lblDTMask Caption="Μασκα:"/>
     <cbxDTSuffix Caption="Βγαλε το σημα οταν υπαρχουν αρχεια με την ιδια//er Ημερομηνια/Ωρα"/>
     <lblDTWhich Caption="Διαλεγμενα:"/>
@@ -248,7 +248,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
       <Item Name="stradCharDelPos" Value=" απο την θεση %d"/>
       <Item Name="stradCharDelStr" Value=" μετα το συμβολο %s"/>
 <n/>      <Item Name="stradCharDelStr2" Value=" before the string &#34;%s&#34;"/>
-      <Item Name="stradEnum" Value="Δημιουργια μετρησης %s απο %d μεχρι %d"/>
+      <Item Name="stradEnum" Value="Δημιουργια μετρησης %s απο %d μεχρι %d με βημα %d"/>
       <Item Name="stradMP3" Value="Δημιουργια ονοματος σε MP3 tag, με τη μασκα %s"/>
       <Item Name="stradMP3TwoDigit" Value=", ενσωματωση '0' στο νουμερο τραγουδιου"/>
       <Item Name="stradMP3Convert" Value=", αλλαγη μη επιτρεπωμενων συμβολων"/>

@@ -16,7 +16,7 @@ Pour l'opération "Expressions rationnelles", vous devez fournir deux informatio
 - Chaque partie du nom qui correspond à l'expression est remplacée par le nouveau nom ; ce qui ne correspond pas est conservé tel quel. Ainsi `[0-9]+` avec un nouveau nom `X` transforme "a12b345.txt" en "aXbX.txt". Utilisez `^` pour indiquer le début du nom et `$` pour la fin du nom afin de ne retenir que le nom entier.
 - Dans le nouveau nom, `$1`, `$2`... `$9` insèrent le texte trouvé par le groupe correspondant, `$&` (ou `$0`) insère tout ce qui a été trouvé, et `${10}` permet d'atteindre les groupes au-delà du 9 (`$10` signifie le groupe 1 suivi d'un "0"). Un groupe qui n'a rien trouvé donne un texte vide.
 - Beaucoup de caractères non-alphanumériques ont une signification spéciale dans les expressions rationnelles. Pour les utiliser, le caractère devant les précéder est le *backslash* ("\\"). Ceci s'applique aussi au "$" qui a une signification spéciale dans le champ "nouveau nom" : écrivez `\$` pour obtenir un "$". Si vous devez utiliser le backslash comme caractère (par ex. comme délimiteur dans un chemin pour envoyer le fichier dans un autre dossier) vous devez le doubler ("\\\\"), voir l'[option « Forcer les dossiers »](options_fr.md#processing).
-- Si l'expression n'est pas valide, l'aperçu affiche le nom "<RegExp Error>" suivi du message de la bibliothèque, et les fichiers ne sont pas renommés correctement : corrigez l'expression avant de cliquer sur "Démarrer".
+- Si l'expression n'est pas valide, l'aperçu affiche le nom `<RegExp Error>` suivi du message de la bibliothèque, et un vrai renommage ne renomme rien : chaque fichier reçoit une ligne bleue dans le journal qui en donne la raison. Une expression vide ne change rien.
 
 ## Exemples
 

@@ -123,7 +123,7 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtStrInsBegin Caption="Od pocz¹tku"/>
     <rbtStrInsEnd Caption="Od koñca"/>
     <cbxStrInsExt Caption="Dotyczy rozszerzenia zamiast nazwy"/>
-    <lblStrInsNotes Caption="Uwagi:&lt;br&gt;- Je¿eli chcesz umieœciæ ci¹g znaków przed lub po innym ci¹gu znaków,u¿yj &lt;LINK&gt;Zmiana ci¹gu znaków&lt;/LINK&gt; akcja&lt;br&gt;- %nazwa% = Oryginalna nazwa pliku (bez rozszerzenia)&lt;BR&gt;- %ext% = Oryginalne rozszerzenie (zawieraj¹ce kropkê)&lt;BR&gt;- %folderN% = Nazwê folderu &lt;BR&gt;- %% = % znak &lt;BR&gt;zobacz &lt;LINK&gt;Pomoc&lt;/LINK&gt; aby zobaczyæ wiêcej informacji"/>
+    <lblStrInsNotes Caption="Uwagi:&lt;br&gt;- Je¿eli chcesz umieœciæ ci¹g znaków przed lub po innym ci¹gu znaków,u¿yj &lt;LINK&gt;Zmiana ci¹gu znaków&lt;/LINK&gt; akcja&lt;br&gt;- %name% = Oryginalna nazwa pliku (bez rozszerzenia)&lt;BR&gt;- %ext% = Oryginalne rozszerzenie (zawieraj¹ce kropkê)&lt;BR&gt;- %folderN% = Nazwê folderu &lt;BR&gt;- %% = % znak &lt;BR&gt;zobacz &lt;LINK&gt;Pomoc&lt;/LINK&gt; aby zobaczyæ wiêcej informacji"/>
     <lblMoveStrFrom Caption="Od pozycji:"/>
     <rbtMoveStrFromBegin Caption="Od pocz¹tku"/>
     <rbtMoveStrFromEnd Caption="Od koñca"/>
@@ -131,7 +131,7 @@ Replace the English text by the correct translation, and once done you can send 
     <lblMoveStrTo Caption="Do pozycji:"/>
     <rbtMoveStrToBegin Caption="Od pocz¹tku"/>
     <rbtMoveStrToEnd Caption="Od koñca"/>
-    <lblMoveStrNotes Caption="Uwagi:&lt;br&gt;- Je¿eli chcesz przesun¹æ wyszczególniony ci¹g znaków ale nie jest ona w tym samym miejscu zawsze, u¿yj &lt;link&gt;Zamiana ci¹gu znaków&lt;/link&gt; aby usun¹æ, a póŸniej &lt;link&gt;Wstawianie ci¹gu znaków&lt;/link&gt; aby wstawiæ ci¹g znaków w nowe miejsce&lt;BR&gt;- &#34;Do pozycji&#34; wartoœæ nie zawiera przesuniêtych znaków (np. jest to wtedy gdy znaki zosta³y ju¿ usuniête)"/>
+    <lblMoveStrNotes Caption="Uwagi:&lt;br&gt;- Je¿eli chcesz przesun¹æ wyszczególniony ci¹g znaków ale nie jest ona w tym samym miejscu zawsze, u¿yj &lt;link&gt;Zmiana ci¹gu znaków&lt;/link&gt; aby usun¹æ, a póŸniej &lt;link&gt;Wstawianie ci¹gu znaków&lt;/link&gt; aby wstawiæ ci¹g znaków w nowe miejsce&lt;BR&gt;- &#34;Do pozycji&#34; wartoœæ nie zawiera przesuniêtych znaków (np. jest to wtedy gdy znaki zosta³y ju¿ usuniête)"/>
     <lblCharDel Caption="Liczba znaków do usuniêcia:"/>
     <rbtCharDelPos Caption="Od pozycji:"/>
     <rbtCharDelBegin Caption="Od pocz¹tku"/>
@@ -139,17 +139,17 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtCharDelStr Caption="Po ci¹gu znaków:"/>
     <rbtCharDelStr2 Caption="Before the string:"/>
     <cbxCharDelExt Caption="Dotyczy rozszerzenia zamiast nazwy"/>
-    <lblCharDelNotes Caption="Uwagi:&lt;BR&gt;- Aby wymieniæ wyszczególniony ci¹g znaków, u¿yj &lt;LINK&gt;Wymiana ci¹gu znaków&lt;/LINK&gt; akcja i wymiana ci¹gu znaków przy pustym ci¹gu znaków"/>
+    <lblCharDelNotes Caption="Uwagi:&lt;BR&gt;- Aby wymieniæ wyszczególniony ci¹g znaków, u¿yj &lt;LINK&gt;Zmiana ci¹gu znaków&lt;/LINK&gt; akcja i wymiana ci¹gu znaków przy pustym ci¹gu znaków"/>
     <lblEnumMask Caption="Maska:"/>
     <lblEnumStart Caption="Rozpocznij od:"/>
     <lblEnumDigits Caption="Liczba cyfr:"/>
     <lblEnumIncr Caption="Wzrost o:"/>
     <cbxEnumRestart Caption="Powróæ do wartoœci pocz¹tkowej kiedy zmienisz folder"/>
-    <lblEnumNotes Caption="Uwagi:&lt;BR&gt;- %nazwa% = Oryginalna nazwa pliku (bez rozszerzenia)&lt;BR&gt;- %ext% = Oryginalne rozszerzenie (zawieraj¹ce kropkê)&lt;BR&gt;- %num% = Numer&lt;BR&gt;- %folderN% = Nazwa folderu&lt;BR&gt;- %% = % znak&lt;BR&gt;zobacz &lt;LINK&gt;Pomoc&lt;/LINK&gt; aby uzyskaæ wiêcej informacji"/>
+    <lblEnumNotes Caption="Uwagi:&lt;BR&gt;- %name% = Oryginalna nazwa pliku (bez rozszerzenia)&lt;BR&gt;- %ext% = Oryginalne rozszerzenie (zawieraj¹ce kropkê)&lt;BR&gt;- %num% = Numer&lt;BR&gt;- %folderN% = Nazwa folderu&lt;BR&gt;- %% = % znak&lt;BR&gt;zobacz &lt;LINK&gt;Pomoc&lt;/LINK&gt; aby uzyskaæ wiêcej informacji"/>
     <lblMP3Mask Caption="Maska:"/>
     <cbxMP3TwoDigit Caption="Dwucyfrowy numer œcie¿ki (wprowadŸ '0' na pocz¹tku numeru je¿eli potrzebne)"/>
     <cbxMP3Convert Caption="Konwertowaæ nieautoryzowane znaki jak ? / \ : &lt; &gt; | ¦ *"/>
-    <lblMP3Notes Caption="Uwagi:&lt;BR&gt;- %autor% = Autor&lt;BR&gt;- %tytu³% = Tytu³&lt;BR&gt;- %album% = Album&lt;BR&gt;- %rok% = Rok&lt;BR&gt;- %rodzaj% = Rodzaj&lt;BR&gt;- %komen% = Komentarz&lt;BR&gt;- %œcie¿ka% = Numer œcie¿ki (ID3V1.1)&lt;BR&gt;- %nazwa% = Oryginalna nazwa pliku (bez rozszerzenia)&lt;BR&gt;- %ext% = Oryginalne rozszerzenie (zawiera kropkê)&lt;BR&gt;- %folderN% = Nazwa folderu&lt;BR&gt;- %% = % znak&lt;BR&gt;- $je¿eli(warunki,wartoœæ-prawda,wartoœæ-fa³sz)&lt;BR&gt;zobacz &lt;LINK&gt;Pomoc&lt;/LINK&gt; aby uzyskaæ wiêcej informacji"/>
+    <lblMP3Notes Caption="Uwagi:&lt;BR&gt;- %author% = Autor&lt;BR&gt;- %title% = Tytu³&lt;BR&gt;- %album% = Album&lt;BR&gt;- %year% = Rok&lt;BR&gt;- %genre% = Rodzaj&lt;BR&gt;- %comm% = Komentarz&lt;BR&gt;- %track% = Numer œcie¿ki (ID3V1.1)&lt;BR&gt;- %name% = Oryginalna nazwa pliku (bez rozszerzenia)&lt;BR&gt;- %ext% = Oryginalne rozszerzenie (zawiera kropkê)&lt;BR&gt;- %folderN% = Nazwa folderu&lt;BR&gt;- %% = % znak&lt;BR&gt;- $if(warunki,wartoœæ-prawda,wartoœæ-fa³sz)&lt;BR&gt;zobacz &lt;LINK&gt;Pomoc&lt;/LINK&gt; aby uzyskaæ wiêcej informacji"/>
     <lblDTMask Caption="Maska:"/>
     <cbxDTSuffix Caption="Dodaj przedrostek je¿eli wiêcej ni¿ jeden plik z t¹ sam¹ dat¹/czasem"/>
     <lblDTWhich Caption="Data u¿ycia:"/>
@@ -195,7 +195,7 @@ Je¿eli m lub mm bezpoœrednio nastêpuje po h lub hh, wówczas bêdzie u¿yta minuta 
     <rbtRandomNumber Caption="Numer losowy (8 cyfr)"/>
     <rbtRandomTick Caption="Znak wygenerowany przez Windows"/>
     <rbtRandomGUID Caption="GUID"/>
-    <lblRandomNotes Caption="Uwagi:&lt;BR&gt;- %nazwa% = Oryginalna nazwa pliku (bez rozszerzenia)&lt;BR&gt;- %ext% = Oryginalne rozszerzenie (zawiera kropkê)&lt;BR&gt;- %losowe% = Losowe generowane ci¹gu znaków&lt;BR&gt;- %% = % znak&lt;BR&gt;zobacz &lt;LINK&gt;Pomoc&lt;/LINK&gt; aby uzyskaæ wiêcej informacji"/>
+    <lblRandomNotes Caption="Uwagi:&lt;BR&gt;- %name% = Oryginalna nazwa pliku (bez rozszerzenia)&lt;BR&gt;- %ext% = Oryginalne rozszerzenie (zawiera kropkê)&lt;BR&gt;- %random% = Losowe generowane ci¹gu znaków&lt;BR&gt;- %% = % znak&lt;BR&gt;zobacz &lt;LINK&gt;Pomoc&lt;/LINK&gt; aby uzyskaæ wiêcej informacji"/>
     <rbtCaseWords Caption="Du¿a pierwsza litera nastêpuj¹ca po ka¿dym z tych znaków:"/>
     <rbtCaseFirst Caption="Du¿a pierwsza litera nazwy pliku"/>
     <rbtCaseUpper Caption="Du¿e litery"/>

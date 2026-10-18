@@ -196,7 +196,7 @@ Wenn m oder mm unmittelbar auf h oder hh folgt, dann wird Minute statt Monat ben
     <rbtRandomTick Caption="Windows Zähler"/>
     <rbtRandomGUID Caption="Buchstaben-Zahlen-Reihe"/>
     <lblRandomNotes Caption="  Info:&lt;br&gt;- %name% = Original Datei-Name (ohne Suffix)&lt;BR&gt;- %ext% = Original Suffix (einschließlich Punkt)&lt;BR&gt;- %random% = Zufallszeichen&lt;BR&gt;- %% = % Zeichen&lt;BR&gt;&lt;LINK&gt;Hilfe&lt;/LINK&gt; für mehr Informationen"/>
-    <rbtCaseWords Caption="Erster Buchstabe nach einem der folgenden Zeichen GROSS: &#34;%s&#34"/>
+    <rbtCaseWords Caption="Erster Buchstabe nach einem der folgenden Zeichen GROSS: &#34;%s&#34;"/>
     <rbtCaseFirst Caption="Erster Buchstabe des Dateinamens GROSS"/>
     <rbtCaseUpper Caption="Großbuchstaben"/>
     <rbtCaseLower Caption="Kleinbuchstaben"/>

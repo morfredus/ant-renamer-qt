@@ -1,20 +1,20 @@
 ---
-name: Question
-about: Posez une question sur l'utilisation, la construction ou la contribution au
-  projet.
+name: Question / Question
+about: Ask about using, building or contributing (English or French) / Poser une question (anglais ou francais)
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-Utilisez ce formulaire si vous avez une question concernant le projet.
+Questions and ideas are also welcome in [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions). / Les questions sont aussi les bienvenues dans les Discussions.
 
-Veuillez inclure :
+**What do you want to achieve? / Quel est votre objectif ?**
 
-Quel est votre objectif ?
-Qu'avez-vous déjà essayé ?
-Quelle version utilisez-vous ?
-Votre système d'exploitation ou environnement (le cas échéant)
-Tout message d'erreur, journal ou capture d'écran pouvant être utile.
-Si votre question concerne un bug ou une nouvelle fonctionnalité, veuillez utiliser le modèle de rapport de problème approprié.
+**What did you try? / Qu'avez-vous deja essaye ?**
+
+**Version and system / Version et systeme**
+
+**Error message or screenshot / Message d'erreur ou capture** (optional / facultatif)
+
+For a bug or a feature request, please use the matching template. / Pour un bug ou une demande de fonctionnalite, utilisez le modele correspondant.

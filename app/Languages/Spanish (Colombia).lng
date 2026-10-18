@@ -123,7 +123,7 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtStrInsBegin Caption="Desde el inicio"/>
     <rbtStrInsEnd Caption="Desde el final"/>
     <cbxStrInsExt Caption="Aplicar la extensión en lugar del nombre"/>
-    <lblStrInsNotes Caption="Notas:&lt;br&gt;- Si desea insertar una cadena antes o después de otra, utilice &lt;LINK&gt;Reemplazar cadena&lt;/LINK&gt; action&lt;br&gt;- %name% = Nombre original de archivo (sin extensión)&lt;BR&gt;- %ext% = Extensión original (incluyendo punto)&lt;BR&gt;- %folderN% = Nombre de carpeta&lt;BR&gt;- %% = % character&lt;BR&gt;ver &lt;LINK&gt;Ayuda&lt;/LINK&gt; para más información"/>
+    <lblStrInsNotes Caption="Notas:&lt;br&gt;- Si desea insertar una cadena antes o después de otra, utilice &lt;LINK&gt;Cadena de sustitución&lt;/LINK&gt; action&lt;br&gt;- %name% = Nombre original de archivo (sin extensión)&lt;BR&gt;- %ext% = Extensión original (incluyendo punto)&lt;BR&gt;- %folderN% = Nombre de carpeta&lt;BR&gt;- %% = % character&lt;BR&gt;ver &lt;LINK&gt;Ayuda&lt;/LINK&gt; para más información"/>
     <lblMoveStrFrom Caption="Desde la posición:"/>
     <rbtMoveStrFromBegin Caption="Desde el inicio"/>
     <rbtMoveStrFromEnd Caption="Desde el final"/>
@@ -131,7 +131,7 @@ Replace the English text by the correct translation, and once done you can send 
     <lblMoveStrTo Caption="A la posición:"/>
     <rbtMoveStrToBegin Caption="Desde el inicio"/>
     <rbtMoveStrToEnd Caption="Desde el final"/>
-    <lblMoveStrNotes Caption="Notas:&lt;br&gt;- Si desea mover una cadena específica, pero que no es siempre en la misma posición, use  &lt;link&gt;Reemplazar cadenareplacement&lt;/link&gt; para eliminarlo, y a continuación &lt;link&gt;Insertar cadena&lt;/link&gt; para insertar en el nuevo lugar&lt;BR&gt;- El &#34;To position&#34; valor no incluye los caracteres movidos (es decir, es como de los que ya han sido suprimidas)"/>
+    <lblMoveStrNotes Caption="Notas:&lt;br&gt;- Si desea mover una cadena específica, pero que no es siempre en la misma posición, use  &lt;link&gt;Cadena de sustitución&lt;/link&gt; para eliminarlo, y a continuación &lt;link&gt;Cadena de inserción&lt;/link&gt; para insertar en el nuevo lugar&lt;BR&gt;- El &#34;To position&#34; valor no incluye los caracteres movidos (es decir, es como de los que ya han sido suprimidas)"/>
     <lblCharDel Caption="Número de caracteres a eliminar:"/>
     <rbtCharDelPos Caption="Desde la posición:"/>
     <rbtCharDelBegin Caption="Desde el inicio"/>
@@ -139,7 +139,7 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtCharDelStr Caption="Después de la cadena:"/>
     <rbtCharDelStr2 Caption="Antes de la cadena:"/>
     <cbxCharDelExt Caption="Aplicar a la extensión en lugar del nombre"/>
-    <lblCharDelNotes Caption="Notas:&lt;BR&gt;- Para eliminar una cadena específica, utilice &lt;LINK&gt;Reemplazar cadena replacement&lt;/LINK&gt; action and sustituya la cadena por una vacía"/>
+    <lblCharDelNotes Caption="Notas:&lt;BR&gt;- Para eliminar una cadena específica, utilice &lt;LINK&gt;Cadena de sustitución&lt;/LINK&gt; action and sustituya la cadena por una vacía"/>
     <lblEnumMask Caption="Máscara:"/>
     <lblEnumStart Caption="Comenzar en:"/>
     <lblEnumDigits Caption="Número de dígitos:"/>

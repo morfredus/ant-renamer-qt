@@ -5,9 +5,9 @@ Version anglaise : [PRESENTATION.md](PRESENTATION.md). Guide d'utilisation : [US
 
 ## À propos de ce document
 
-Ant Renamer 2 est un programme Delphi 7, né en 2002 et dont la dernière version est la 2.13 (décembre 2024).
-Je (Frédéric Biron, morfredus) voulais continuer à l'utiliser sur les Windows récents et disposer d'une version qui se
-compile avec les outils libres actuels. Je l'ai donc porté en C++ avec Qt 6. Le portage est publié sous la même
+Ant Renamer 2 est un programme Delphi 7, dont la dernière version est la 2.13 (décembre 2024).
+L'auteur du portage (Frédéric Biron, morfredus) voulait continuer à l'utiliser sur les Windows récents et disposer d'une version qui se
+compile avec les outils libres actuels. Il l'a donc porté en C++ avec Qt 6. Le portage est publié sous la même
 licence que les sources d'origine (GPL v2 ou ultérieure) et réutilise plusieurs des fichiers d'origine tels quels. Ce
 document liste ce qui a été fait, conservé, modifié et pourquoi, pour que chacun puisse juger le travail.
 
@@ -28,11 +28,11 @@ jobs de l'autre.
 
 | | Original (Delphi 7) | Portage (C++20 / Qt 6) |
 |---|---|---|
-| Taille | environ 14 700 lignes de Pascal | environ 2 000 lignes (moteur) + 3 300 lignes (interface) + tests |
+| Taille | environ 14 700 lignes de Pascal | environ 2 400 lignes (moteur) + 4 400 lignes (interface) + 600 lignes de tests |
 | Prérequis | Delphi 7 + 5 paquets de composants tiers | un compilateur C++20 et Qt 6, rien d'autre |
-| Plateformes | Windows | Windows (MinGW, testé), Linux x86_64 (installé depuis les paquets et utilisé, testé), ARM64 (presets, non testé) |
+| Plateformes | Windows | Windows (MinGW, testé), Linux x86_64 et ARM64 (Raspberry Pi ; installé depuis les paquets et utilisé, testé) |
 | Unicode | WideString + contrôles Tnt | `QString` (UTF-16), mêmes positions de caractères |
-| Distribution | installeur Inno Setup | zip portable + installeur Inno Setup 6 |
+| Distribution | installeur Inno Setup | zip portable + installeur Inno Setup 6 (Windows), `.deb` et AppImage (Linux) |
 
 ## Ce qui a été conservé (compatibilité)
 
@@ -49,8 +49,8 @@ jobs de l'autre.
   leurs icônes, la liste des actions avec sa page de réglages, l'aperçu en direct du fichier sélectionné, le
   contenu du job repliable, le glisser-déposer avec sa fenêtre d'options, la fenêtre Options et ses onglets, le
   filtre du journal, la liste des jobs récents, la barre d'état avec progression, les mêmes raccourcis clavier.
-- **Les fichiers de langue d'origine** : les 27 fichiers `.lng` sont utilisés tels quels (chacun avec son encodage), et la
-  langue se change dans les Options. L'interface française est entièrement construite à partir du `French.lng` d'origine.
+- **Les fichiers de langue d'origine** : les 28 fichiers `.lng` (l'anglais et 27 traductions) sont utilisés tels quels (chacun avec son encodage), et la
+  langue se change dans les Options. L'interface française est construite à partir du `French.lng` d'origine, plus quelques textes ajoutés par le portage.
 - **L'aide d'origine** : les pages d'aide (anglais, français, croate, tamoul) et l'historique des versions sont
   livrés et ouverts depuis F1 et depuis les liens « aide » des notes des actions.
 - **Les graphismes d'origine** : les jeux d'icônes de barres d'outils (Scrows, Windows XP, Windows XP Large), `renamer.ico`,
@@ -106,7 +106,7 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
 9. **Dates dans `FormatDateTime`** : réécriture du sous-ensemble documenté par l'aide (d, m, y, h, n, s, z, `ampm`,
    guillemets, « m veut dire minutes après h ou avant s »). Les noms de jours et de mois suivent la langue du système.
 10. **Valeurs EXIF** : formatage simple (texte tel quel, rationnels en décimal, `ExposureTime` en `1/250`) ; dEXIF
-    décode plus de balises et en formate certaines autrement. Seule une quarantaine de balises courantes sont connues.
+    décode plus de balises et en formate certaines autrement. Seules 36 balises courantes sont connues.
 11. **Réglages** : un fichier INI à la place de `Renamer.xml`. Les anciennes préférences ne sont pas importées.
 12. **Barres d'outils** : les options « Color type » et « Office XP style » des thèmes TBX n'ont pas d'équivalent
     et ont été laissées de côté ; les états survol, enfoncé et coché sont dessinés par une feuille de style.
@@ -120,7 +120,7 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   désynchronisation et les formes de genre `(17)` / `Rock` ; l'ID3v1 complète ce que la v2 ne donne pas.
 - **Compteur `%num%` dans l'action EXIF** (départ, chiffres, incrément, retour au départ par dossier), mêmes réglages
   que l'action Énumération, enregistrés dans le fichier de job.
-- **Menu contextuel de l'Explorateur** « Ajouter à Ant Renamer » sur les fichiers et dossiers (Options, ou tâche de
+- **Menu contextuel de l'Explorateur** « Ajouter à Ant Renamer Qt » sur les fichiers et dossiers (Options, ou tâche de
   l'installeur). Les éléments sélectionnés ensemble arrivent dans la fenêtre déjà ouverte (instance unique via un
   socket local et un fichier verrou). C'est l'entrée du menu classique : sous Windows 11 elle se trouve dans
   « Afficher plus d'options ».
@@ -143,23 +143,23 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   annulation), aller-retour XML des jobs, ID3v2.3 avec repli sur la v1, réglages du compteur EXIF.
 - À la main : des jobs avec remplacement de chaîne et EXIF + énumération ont été exécutés sur de vrais fichiers ;
   l'interface a été comparée page par page à des captures de la 2.13 ; l'installeur a été installé et retiré en
-  mode silencieux ; le zip portable a été lancé avec un `PATH` minimal ; le menu « Ajouter à Ant Renamer » a été
+  mode silencieux ; le zip portable a été lancé avec un `PATH` minimal ; le menu « Ajouter à Ant Renamer Qt » a été
   cliqué dans l'Explorateur sur un ou plusieurs fichiers et sur un ou plusieurs dossiers (contenu compris) ; les
   paquets Linux ont été installés et le programme fonctionne.
 - Pas encore couvert : très grosses listes, disques réseau, un vrai fichier `.arb` enregistré par la version
-  Delphi, fichiers ID3v2.2/2.4, exécution de l'interface sous ARM64, installation pour tous les utilisateurs
+  Delphi, fichiers ID3v2.2/2.4, installation pour tous les utilisateurs
   (administrateur).
 
 ## Limites connues
 
-- Environ trente-cinq balises EXIF (IFD0 et IFD Exif seulement, MakerNote non décodé) ; l'IPTC n'est lu que dans les
-  JPEG ; les fichiers XMP annexes sont lus et renommés avec leur image (IMG.xmp, IMG.CR2.xmp et `.dop` de DxO ; pas les
-  autres types de fichiers annexes).
+- 36 balises EXIF (IFD0 et IFD Exif seulement, MakerNote non décodé) ; l'IPTC n'est lu que dans les
+  JPEG ; les fichiers XMP associés sont lus et renommés avec leur image (IMG.xmp, IMG.CR2.xmp et `.dop` de DxO ; pas les
+  autres types de fichiers associés).
 - Seulement les tags ID3 ; pas d'autres formats de tags audio.
 - Le menu court de Windows 11 demande un composant COM empaqueté et signé, non réalisé.
 - L'exécutable n'est pas signé, donc SmartScreen peut avertir au premier téléchargement.
-- L'interface est traduite par les fichiers `.lng` d'origine ; les textes qui n'y existent pas (À propos, mode portable, menu
-  de l'Explorateur) ne sont traduits à la main qu'en français.
+- L'interface est traduite par les fichiers `.lng` d'origine ; les textes ajoutés par le portage (À propos, mode portable, menu
+  de l'Explorateur, thème) sont dans la section `<QtPort>` des fichiers de langue, traduits seulement en français pour l'instant.
 
 ## Licence et crédits
 
@@ -168,7 +168,7 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   boîte À propos indique qu'il s'agit d'un portage C++/Qt et renvoie vers le site d'origine.
 - Code tiers utilisé par le portage : Qt 6 (LGPL v3 / GPL), rien d'autre. Les composants Delphi de l'original ne
   sont plus nécessaires.
-- Repris de l'original sans modification : `Languages/*.lng`, `help/` (images ; les pages ont été converties de HTML en Markdown, même texte), bitmaps des barres
+- Repris de l'original sans modification : `Languages/*.lng`, `help/` (images ; les pages ont été converties de HTML en Markdown et révisées pour le portage), bitmaps des barres
   d'outils, `renamer.ico`, `ant.bmp`, `default.xml`, textes des notes des actions. Les traducteurs sont cités dans
   l'onglet Crédits comme dans la boîte À propos d'origine.
 

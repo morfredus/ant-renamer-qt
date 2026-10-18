@@ -123,7 +123,7 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtStrInsBegin Caption="A partir do começo"/>
     <rbtStrInsEnd Caption="A partir do final"/>
     <cbxStrInsExt Caption="Aplicar à extensão em vez do nome"/>
-    <lblStrInsNotes Caption="Notas:&lt;br&gt;- Se deseja inserir um caractere depois ou antes de outro, use a ação &lt;LINK&gt;Trocar caractere&lt;/LINK&gt;&lt;br&gt;- %name% = Nome original do arquivo (sem extensão)&lt;BR&gt;- %ext% = Extensão original (inclusive o ponto)&lt;BR&gt;- %folderN% = Nome da pasta&lt;BR&gt;- %% = % caractere&lt;BR&gt;veja &lt;LINK&gt;Auxílio&lt;/LINK&gt; para obter mais informações"/>
+    <lblStrInsNotes Caption="Notas:&lt;br&gt;- Se deseja inserir um caractere depois ou antes de outro, use a ação &lt;LINK&gt;Substituir caracteres&lt;/LINK&gt;&lt;br&gt;- %name% = Nome original do arquivo (sem extensão)&lt;BR&gt;- %ext% = Extensão original (inclusive o ponto)&lt;BR&gt;- %folderN% = Nome da pasta&lt;BR&gt;- %% = % caractere&lt;BR&gt;veja &lt;LINK&gt;Auxílio&lt;/LINK&gt; para obter mais informações"/>
     <lblMoveStrFrom Caption="A partir da posição:"/>
     <rbtMoveStrFromBegin Caption="A partir do início"/>
     <rbtMoveStrFromEnd Caption="A partir do final"/>
@@ -131,7 +131,7 @@ Replace the English text by the correct translation, and once done you can send 
     <lblMoveStrTo Caption="Para a posição:"/>
     <rbtMoveStrToBegin Caption="A partir do início"/>
     <rbtMoveStrToEnd Caption="A partir do final"/>
-    <lblMoveStrNotes Caption="Notas:&lt;br&gt;- Se desejar mover caracteres específicos, mas que não estão sempre em uma mesma posição, use a ação &lt;link&gt;Trocar caracteres&lt;/link&gt; para deletá-los, e depois a  &lt;link&gt;Inserir caracteres&lt;/link&gt; para inserí-los no novo lugar&lt;BR&gt;- Os valores de &#34;Para a posição&#34; não se incluirão os caracteres movidos (ex. é como se já tivessem sido excluídos)"/>
+    <lblMoveStrNotes Caption="Notas:&lt;br&gt;- Se desejar mover caracteres específicos, mas que não estão sempre em uma mesma posição, use a ação &lt;link&gt;Substituir caracteres&lt;/link&gt; para deletá-los, e depois a  &lt;link&gt;Inserir caracteres&lt;/link&gt; para inserí-los no novo lugar&lt;BR&gt;- Os valores de &#34;Para a posição&#34; não se incluirão os caracteres movidos (ex. é como se já tivessem sido excluídos)"/>
     <lblCharDel Caption="Número de caracteres a eliminar:"/>
     <rbtCharDelPos Caption="A partir da posição:"/>
     <rbtCharDelBegin Caption="A partir do início"/>
@@ -139,7 +139,7 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtCharDelStr Caption="Após os caracteres:"/>
     <rbtCharDelStr2 Caption="Antes dos caracteres:"/>
     <cbxCharDelExt Caption="Aplicar à extensão em vez do nome"/>
-    <lblCharDelNotes Caption="Notas:&lt;BR&gt;- Para excluir caracteres específicos, use a ação &lt;LINK&gt;Trocar caracteres&lt;/LINK&gt; e substitua os caracteres por um vazio"/>
+    <lblCharDelNotes Caption="Notas:&lt;BR&gt;- Para excluir caracteres específicos, use a ação &lt;LINK&gt;Substituir caracteres&lt;/LINK&gt; e substitua os caracteres por um vazio"/>
     <lblEnumMask Caption="Máscara:"/>
     <lblEnumStart Caption="Iniciar em:"/>
     <lblEnumDigits Caption="Número de dígitos:"/>

@@ -24,7 +24,7 @@ Tag names are not case-sensitive. A tag that the file does not contain gives an 
 |---|---|
 | `%DateTimeOriginal%` | Date and time the picture was taken |
 | `%DateTimeDigitized%` | Date and time the picture was digitized |
-| `%DateTime%` | Date and time of the last modification of the file |
+| `%DateTime%` | Date and time of the last change of the image, written by the software that edited it (not the date of the file on the disk) |
 | `%Make%` | Camera manufacturer |
 | `%Model%` | Camera model |
 | `%BodySerialNumber%` | Camera serial number |

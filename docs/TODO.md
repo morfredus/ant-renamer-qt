@@ -1,6 +1,8 @@
 # TODO
 
-## Ideas (not for 3.0.0)
+## Ideas for after 3.0.0
+
+French version: [TODO_fr.md](TODO_fr.md).
 
 - More sidecar types (for example RawTherapee `.pp3`): add the extension to `sidecarExtensions()` in `core/ren_exif.cpp`.
 - Read `.dop` data? Not planned: it is a DxO-only format.

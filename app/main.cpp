@@ -1,6 +1,7 @@
 #include "dialogs.h"
 #include "helpwindow.h"
 #include "lngtranslator.h"
+#include "icons.h"
 #include "mainwindow.h"
 #include "shellmenu.h"
 
@@ -109,6 +110,11 @@ int main(int argc, char** argv) {
             QTimer::singleShot(0, &w, [&w] {
                 for (auto* a : w.findChildren<QAction*>())
                     if (a->shortcut() == QKeySequence(Qt::Key_F5)) { a->trigger(); break; }
+            });
+        if (const int n = qEnvironmentVariableIntValue("ANTREN_THEME_TOGGLE"); n > 0)  // presses the light / dark button n times
+            QTimer::singleShot(0, &w, [&w, n] {
+                for (auto* a : w.findChildren<QAction*>())
+                    if (a->data().toInt() == TbTheme && a->data().isValid()) { for (int i = 0; i < n; ++i) a->trigger(); break; }
             });
         if (const QByteArray size = qgetenv("ANTREN_SIZE"); size.contains('x'))  // e.g. 900x640
             w.resize(size.split('x')[0].toInt(), size.split('x')[1].toInt());

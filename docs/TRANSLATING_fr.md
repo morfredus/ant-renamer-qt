@@ -15,7 +15,7 @@ Ant Renamer Qt n'utilise pas les fichiers `.ts` de Qt. Il lit les fichiers de la
 ## 2. Créer une nouvelle langue
 
 1. **Copiez `app/Languages/English.lng`** vers `app/Languages/<Nom de la langue>.lng`. Le nom du fichier est le nom de la langue en anglais, tel qu'il sera affiché dans le programme et comparé à la langue du système : `Italian.lng`, `Portuguese (Brazil).lng`, `Spanish (Spain).lng`. Quand une langue a plusieurs variantes, le nom est « Langue (variante) ».
-2. **Choisissez l'encodage** et déclarez-le sur la première ligne, `<?xml version="1.0" encoding="..."?>`. Le programme lit l'encodage écrit là : `UTF-8` (recommandé pour un nouveau fichier), mais aussi `windows-1250`, `windows-1251`, `windows-1252`, `windows-1253`, `shift_jis`, `gb2312`, `big5`... Sans déclaration il suppose `windows-1252`. Enregistrez le fichier dans l'encodage que vous avez déclaré (un éditeur de texte qui l'affiche, comme VS Code ou Notepad++, évite les erreurs).
+2. **Choisissez l'encodage** et déclarez-le sur la première ligne, `<?xml version="1.0" encoding="..."?>`. Le programme lit l'encodage écrit là : `UTF-8` (recommandé pour un nouveau fichier), mais aussi `windows-1250`, `windows-1251`, `windows-1252`, `windows-1253`, `shift_jis`, `gb2312`, `big5`... Sans déclaration il suppose `windows-1252`. Enregistrez le fichier dans l'encodage que vous avez déclaré (un éditeur de texte qui l'affiche, comme VS Code ou Notepad++, évite les erreurs). Une marque d'ordre des octets UTF-8 ajoutée par l'éditeur est acceptée ; un fichier déclaré UTF-8 qui n'est pas de l'UTF-8 valide est lu comme du windows-1252 et le programme le dit sur sa sortie d'erreur.
 3. **Remplissez l'en-tête**, le commentaire `<!-- ... -->` en haut. Le programme montre ces champs dans *Options > Langue* :
 
    | Champ | Contenu |
@@ -28,7 +28,7 @@ Ant Renamer Qt n'utilise pas les fichiers `.ts` de Qt. Il lit les fichiers de la
    | `Icon` | Drapeau BMP 16 x 16 facultatif en base64 : laissez celui du modèle ou supprimez la ligne |
 
 4. **Traduisez les textes** : dans chaque élément, remplacez la valeur de `Caption`, `Hint`, `Text`... par la traduction (règles à la section 4). Ne changez ni les noms d'éléments, ni les attributs `Name=` / `Index=`, ni la structure.
-5. **Vérifiez que le fichier est du XML valide** (un seul guillemet mal placé rend tout le fichier inutilisable, et le programme retombe alors silencieusement sur l'anglais) : `xmllint --noout "Italian.lng"` sous Linux, ou ouvrez le fichier dans un navigateur ou VS Code.
+5. **Vérifiez que le fichier est du XML valide** (un seul guillemet mal placé rend la suite du fichier inutilisable : le programme écrit `Language file <nom>: XML error at line N: ...` sur sa sortie d'erreur, voir la section 5, et ne traduit que ce qu'il a lu avant l'erreur) : `xmllint --noout "Italian.lng"` sous Linux, ou ouvrez le fichier dans un navigateur ou VS Code.
 6. **Essayez-le** (section 5), puis ajoutez-vous aux crédits (section 6) et envoyez le fichier (section 7).
 
 ## 3. Corriger ou compléter une traduction existante
@@ -42,8 +42,9 @@ Modifiez le texte de la clé dans le fichier existant `app/Languages/<Langue>.ln
 - **Notes sous les opérations** (éléments `lbl...Notes`) : le texte contient de petits codes HTML (`&lt;BR&gt;` pour un saut de ligne, `&lt;LINK&gt;...&lt;/LINK&gt;` pour un lien). Gardez-les, sous la forme utilisée dans le fichier. **Important** : le texte entre les codes `LINK` qui nomme une autre opération (par exemple « Remplacement de chaîne ») doit être **exactement le nom traduit de cette opération dans la liste des opérations**, sinon un clic sur le lien ne fait rien. Le lien « Aide » (`<LINK>Help</LINK>`) ouvre la page d'aide.
 - **Caractères XML** : écrivez `&amp;` pour `&`, `&lt;` pour `<`, `&gt;` pour `>`, `&quot;` pour `"` dans un attribut. Dans le modèle, `&#38;&#38;` dans un titre est la façon d'afficher un seul `&`.
 - **Tags** comme `%name%`, `%ext%`, `%folderN%`, `%num%`, `%author%` ou les lettres du masque de date (`yyyy`, `mm`...) : **ne se traduisent pas**, ce sont eux que le programme reconnaît.
+- **Espaces aux extrémités** : certains textes sont collés par le programme (" at position %1", " using creation date"). Le texte anglais décide : s'il commence ou finit par une espace, la traduction aussi, quoi que vous ayez tapé.
 - **Longueur** : les boutons des barres d'outils ont peu de place, préférez des titres courts.
-- **Tous les textes anglais ne sont pas dans le fichier** : quelques textes ne sont encore que dans le code du programme (la fenêtre *À propos*, par exemple). Ils restent en anglais, ou le projet les traduit dans le code (français seulement pour l'instant).
+- **Textes ajoutés par Ant Renamer Qt** (mode portable, thème, fenêtre *À propos*, fichiers associés...) : ils sont dans la dernière section de `English.lng`, `<QtPort>`, avec leur traduction française dans `French.lng`. Un traducteur ajoute les mêmes lignes `<Item Name="..." Value="..."/>` à son fichier ; en attendant ces textes restent en anglais.
 
 ## 5. Tester
 
@@ -68,7 +69,7 @@ Les traducteurs de l'Ant Renamer d'origine peuvent envoyer leur fichier tel quel
 
 L'aide est séparée du fichier `.lng` : des pages Markdown dans `app/help/`, **anglais, français, croate et tamoul** pour l'instant (`<page>_en.md`, `_fr.md`, `_hr.md`, `_ta.md`, avec la table des matières `toc_<code>.md`). Pour les autres langues de l'interface, l'aide s'affiche en anglais.
 
-Pour ajouter une langue à l'aide : copiez les pages anglaises et `toc_en.md` vers `<page>_<code>.md` et `toc_<code>.md`, traduisez-les (gardez les noms de fichiers des liens et les `{#id}` après les titres : ce sont les cibles des liens entre pages), puis ajoutez la langue à `helpLanguageCode()` dans `app/lngtranslator.cpp` (nom de langue du fichier `.lng` -> code). L'aide est longue (une vingtaine de pages) : une traduction de l'interface seule est déjà très utile, l'aide peut venir plus tard.
+Pour ajouter une langue à l'aide : copiez les pages anglaises et `toc_en.md` vers `<page>_<code>.md` et `toc_<code>.md`, traduisez-les (gardez les noms de fichiers des liens et les `{#id}` après les titres : ce sont les cibles des liens entre pages), puis ajoutez la langue à `helpLanguageCode()` dans `app/lngtranslator.cpp` (nom de langue du fichier `.lng` -> code). L'aide est longue (18 pages) : une traduction de l'interface seule est déjà très utile, l'aide peut venir plus tard.
 
 ## 9. Liste de contrôle
 

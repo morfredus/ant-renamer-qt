@@ -10,7 +10,7 @@
     - [சரங்களை வடிவமைத்தல்](format_ta.md)
     - [EXIF, IPTC and XMP tags](metadata_tags_ta.md)
     - [வழக்கமான வெளிப்பாடுகள் ](regexp_ta.md)
-  - [பதிப்பு](log_ta.md)
+  - [பதிவு](log_ta.md)
 - [விருப்பங்கள்](options_ta.md)
   - [எழுத்துருகள்](fonts_ta.md)
 - [கட்டளை-வரி வாதங்கள்](params_ta.md)

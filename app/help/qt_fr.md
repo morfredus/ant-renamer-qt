@@ -30,7 +30,7 @@
 ## Petites différences à connaître
 
 - Les expressions rationnelles utilisent le moteur PCRE2 (Qt) à la place de TRegExpr : des constructions très inhabituelles peuvent se comporter différemment.
-- Le lecteur EXIF connaît trente-cinq tags EXIF courants (plus ceux de l'IPTC et du XMP), pas toute la liste du programme d'origine.
+- Le lecteur EXIF connaît 36 tags EXIF courants (plus ceux de l'IPTC et du XMP), pas toute la liste du programme d'origine.
 
 ## Assistance
 

@@ -16,13 +16,14 @@ core/             Engine (static library rencore)
 app/              Interface (executable antrenamer-qt)
   Languages/      Language files of the original (.lng, read at run time)
   help/           Markdown help in 4 languages, table of contents, images
-tests/            test_core (engine), test_panel (actions editor)
+tests/            test_core (engine; includes id3_check.h, robust_check.h), test_panel (actions editor, language loader)
 cmake/toolchains/ ARM64 cross-compilation toolchain
 scripts/          windows/ (MinGW build helper, zip and installer) and linux/ (.deb, AppImage, .desktop)
 installer/        Inno Setup script of the Windows installer
 docs/             Guides, presentation, release notes
 .github/          CI workflow, Dependabot, issue templates
 CMakeLists.txt, CMakePresets.json, VERSION   Build files and the version, the single source
+LICENSE           GNU General Public License
 ```
 
 | In `app/` | Compiled? |
@@ -56,7 +57,7 @@ CMakeLists.txt, CMakePresets.json, VERSION   Build files and the version, the si
 | `ren_id3.h/.cpp` | ID3 reader (MP3) |
 | `ren_path.h` | Delphi-style path helpers (header only) |
 
-**Paths.** The helpers of `ren_path.h` treat `\`, `/` and `:` as separators, whatever the system, so the engine handles paths with mixed separators. Normalise them (`QDir::fromNativeSeparators`) before comparing two paths.
+**Paths.** The helpers of `ren_path.h` follow the rules of the system: on Windows `\`, `/` and `:` are separators (`isDelim`) and `\` is the one the helpers add (`kSep`); on Linux only `/` is, and `\` or `:` are ordinary characters of a name. On Windows paths may therefore mix separators: normalise them (`QDir::fromNativeSeparators`) before comparing two paths.
 
 **`File`.** `rename(newName)` computes the target path, refuses an identical name, creates missing folders when asked, then moves the file. On Windows it uses `MoveFileW` and not `QFile::rename`, because the latter refuses case-only renames (`a.txt` to `A.txt`) on case-insensitive disks and the Case operation needs them. `revert()` puts the old name back. After a successful rename, `moveSidecars` moves the sidecar files of the old name (`sidecarCandidates()`: `IMG.xmp`, `IMG.XMP`, `IMG.CR2.xmp`..., same with `.dop`) to match the new name. A problem with a sidecar never fails the picture: it is only added to the log text. `FileList::add` plugs two callbacks on each file: when a **folder** is renamed the files below follow it, and when a sidecar that is also in the list is moved by its picture, its list entry follows (`followPath`).
 
@@ -105,7 +106,7 @@ An operation can report a problem without failing (`setInfo`): the file keeps it
 **Job file (`.arb`).** XML written with `QXmlStreamWriter`:
 
 ```xml
-<AntRenamer Version="3.0.0-rc.10" Date="2026-10-16">
+<AntRenamer Version="3.0.0-rc.15" Date="2026-10-18">
  <Batch>
   <StrRepl Search="old" Repl="new" AllOccurences="True" CaseSensitive="True" .../>
   <Enum Mask="File %num%%ext%" Start="1" Digits="3" Incr="1" Restart="False" SharePairs="False"/>
@@ -117,7 +118,7 @@ Settings are attributes (`True` / `False`), long texts (replacement table, list 
 
 **EXIF, IPTC, XMP** (`readExif`). Fills a name-to-value table (names are case-insensitive): first the XMP sidecar of the file (it wins over embedded data), then the first 512 KB of the file itself. JPEG: the "Exif" APP1 segment gives the TIFF block, the "Photoshop 3.0" APP13 segment gives the IPTC. TIFF and DNG: the IFDs are read directly. XMP is found by content (`<x:xmpmeta` ... `</x:xmpmeta>`), which covers JPEG, PNG, WebP, TIFF, DNG and `.xmp` files. The tables `tagNames()`, `iptcNames()` and `xmpProps()` list the known tags, and `sidecarExtensions()` lists the sidecar extensions (`xmp`, `dop`): it is the only place to change to add one.
 
-**ID3.** `readId3` reads ID3v2.3 (Latin-1 and UTF-16 frames) and completes it with ID3v1.
+**ID3.** `readId3` reads ID3v2.2, 2.3 and 2.4 (Latin-1, UTF-16 and UTF-8 frames) and completes it with ID3v1/1.1.
 
 ## The interface (`app/`)
 
@@ -139,7 +140,7 @@ Settings are attributes (`True` / `False`), long texts (replacement table, list 
 
 **Settings.** `appSettings()` is a `QSettings` in INI format: next to the executable if `antrenamer-qt.ini` exists (portable), otherwise in the user profile. `AppOptions` holds every option of the Options dialog with the defaults of the original; a macro `KEYS(...)` lists each field once to generate `load()` and `save()` (keys `options/name`), and `applyToCore()` copies the processing options to `ren::options()`. Other keys: `window/*` (geometry, columns, splitters, per layout), `last/*` (last values of the operation settings), `history/*`, `mru/batch`, `view/changedOnly`, `log/*`.
 
-**Main window.** Three pages: Files, Operations, Log. Depending on an option: tabs (classic) or the modern single-screen layout (bands or columns). `files_` (`FileList`) and `batch_` (`ActionList`) are the real data; the views (`fileView_`, `batchView_`, `QTreeWidget`s that accept drag and drop) only mirror them: each row carries a pointer to its `File` or `Action`, and `updateItem` copies a file's state into the columns (and hides the row when "Changed only" is on and the preview equals the name).
+**Main window.** Three pages: Files, Actions, Log. Depending on an option: tabs (classic) or the modern single-screen layout (bands or columns). `files_` (`FileList`) and `batch_` (`ActionList`) are the real data; the views (`fileView_`, `batchView_`, `QTreeWidget`s that accept drag and drop) only mirror them: each row carries a pointer to its `File` or `Action`, and `updateItem` copies a file's state into the columns (and hides the row when "Changed only" is on and the preview equals the name).
 
 **The Operations panel** (`ActionPanel`) owns **one** action being configured. The list on the left holds the 14 types (the row index **is** the `ActionType` value), with one page of controls per type. Every control is created by a helper (`combo`, `spin`, `check`, `radios`) that registers it with a key, a getter and a setter, which is how the last values are saved and restored. Two functions are the reverse of each other: `makeAction()` reads the controls and builds the `Action`; `setFromAction()` loads an existing action into the controls (to edit an action of the job). `test_panel` checks that they round-trip for every field and every type: **adding a field to an action without updating `setFromAction` makes it fail**.
 

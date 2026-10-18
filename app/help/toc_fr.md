@@ -5,7 +5,7 @@
   - [Disposition moderne de l'interface](modernui_fr.md)
   - [Fichiers](files_fr.md)
     - [Ajout de fichiers & dossiers](addfiles_fr.md)
-  - [Actions](actions_fr.md)
+  - [Opérations](actions_fr.md)
     - [Listes prédéfinies (jobs)](batch_fr.md)
     - [Formatage de chaînes](format_fr.md)
     - [Tags EXIF, IPTC et XMP](metadata_tags_fr.md)

@@ -82,7 +82,7 @@ $env:MSYS2_PATH_TYPE = "inherit"
 
 $command = switch ($Action) {
     "configure" { "cd $quotedRoot && cmake --preset mingw" }
-    "build" { "cd $quotedRoot && { test -f build-mingw/build.ninja || cmake --preset mingw; } && cmake --build --preset mingw" }
+    "build" { "cd $quotedRoot && { test -f build-mingw/build.ninja || cmake --preset mingw; } && { cmake --build --preset mingw || { echo 'Nouvel essai de la compilation (lien refuse, antivirus ?)'; cmake --build --preset mingw; }; }" }
     "run" { "cd $quotedRoot && ./build-mingw/app/antrenamer-qt.exe" }
     "clean" { "cd $quotedRoot && cmake --build --preset mingw --target clean" }
 }

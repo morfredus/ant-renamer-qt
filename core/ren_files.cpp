@@ -85,6 +85,11 @@ bool File::rename(QString newName) {
         status_ = State::NotRenamed;
         return false;
     }
+    if (newName.contains(QChar(0))) {  // the system would cut the name at the NUL: refuse instead of renaming to something else
+        description_ = tr("Could not rename %1 to %2: %3").arg(source, newName.remove(QChar(0)), tr("the new name contains an invalid character"));
+        status_ = State::Error;
+        return false;
+    }
     if (o.forceDir) QDir().mkpath(extractFilePath(newName));
     QString err;
     bool ok;

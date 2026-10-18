@@ -8,7 +8,7 @@ In addition to the Files toolbar which is always visible, a toolbar to manage th
 
 Here are the commands:
 
-- ![Add to batch](img/batchadd.png) "Add action to batch" button (Ctrl+F2) will add currently selected action and its parameters to the list.
+- ![Add to batch](img/batchadd.png) "Add to batch" button (Ctrl+F2) will add currently selected action and its parameters to the list.
 - ![Remove from batch](img/batchdel.png) "Remove selected actions" button (Shift+F6) will remove from the list the items that are selected.
 - ![Clear](img/clear.png) "Clear batch" button (Shift+F7) will remove from the list all the predefined actions.
 - ![Open](img/open.png) "Open" button (Ctrl+O) will display a standard file selection window, so you can select a batch file to load in the list.

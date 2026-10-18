@@ -1,6 +1,6 @@
 # Ant Renamer Qt: function guide
 
-*Every function of Ant Renamer Qt 3.0.0-rc.12 with instructions.*
+*Every function of Ant Renamer Qt 3.0.0-rc.15 with instructions.*
 French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use cases): [USER_RECIPES.md](USER_RECIPES.md). Full details, page by page, with screenshots: the built-in help (F1). Differences between Windows and Linux: §13.
 
 ## 1. General principle
@@ -8,10 +8,10 @@ French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use 
 The work is done in three steps, one page each:
 
 1. **Files**: build the list of files (and folders) to rename.
-2. **Operations**: choose one or more renaming operations (the "job").
+2. **Actions**: choose one or more renaming actions (the "batch").
 3. **Log**: read what happened after clicking **Go**.
 
-The preview at the bottom of the Operations page shows the current and future name of the selected file, live. The **Preview** column of the Files list (F5) shows it for the whole list.
+The preview at the bottom of the Actions page shows the current and future name of the selected file, live. The **Preview** column of the Files list (F5) shows it for the whole list.
 
 The program only changes **names** (or copies the files under a new name); it never modifies the contents or the dates of the files. It handles Unicode names (Greek, Japanese, Cyrillic...), files and folders.
 
@@ -25,8 +25,8 @@ The program only changes **names** (or copies the files under a new name); it ne
 | F3 | Add folders | F11 | Always on top |
 | F5 | Refresh preview | F12 | Undo |
 | F6 / F7 / F8 | Remove selected / all / dead | Alt+F4 | Exit |
-| Ctrl+1 / 2 / 3 | Files / Operations / Log page | Ctrl+F2 | Add to job |
-| Shift+F6 / Shift+F7 | Remove selected / clear the job | Ctrl+O / Ctrl+S | Open / save a job |
+| Ctrl+1 / 2 / 3 | Files / Actions / Log page | Ctrl+F2 | Add to batch |
+| Shift+F6 / Shift+F7 | Remove selected / clear the batch | Ctrl+O / Ctrl+S | Open / save a batch |
 | Ctrl+↑ / Ctrl+↓ | Move up / down | Ctrl+Shift+↑ / ↓ | Move to top / bottom |
 
 ## 3. Files page
@@ -44,7 +44,7 @@ The program only changes **names** (or copies the files under a new name); it ne
 | Remove selected (F6) | removes the selected files from the list (not from disk) |
 | Remove all (F7) | empties the list |
 | Remove dead (F8) | removes files that no longer exist on disk |
-| Refresh preview (F5) | fills the Preview column (not automatic, for performance). It uses the job, or the action displayed if the job is empty |
+| Refresh preview (F5) | fills the Preview column (not automatic, for performance). It uses the batch, or the action displayed if the batch is empty |
 | Changed only | hides the files whose name does not change in the preview (a display filter only: they are still renamed, and a hidden file is never hit by "Remove selected" or the move buttons); refresh the preview first |
 | Up / Down / Top / Bottom | changes the processing order (drag and drop in the list works too) |
 
@@ -61,15 +61,15 @@ When a photo is renamed, its sidecar files are renamed with it, with nothing mor
 - **Undo** (F12): the sidecars get their old name back with the photo.
 - **Log**: the photo's line mentions the renamed sidecar.
 - **Special cases**: if a file with the new name already exists, the sidecar is left alone and the log says so (the photo is renamed anyway); a sidecar that is also in the list follows without being renamed twice; no effect in "Copy instead of rename" mode and for folders.
-- The neighbouring `.xmp` file is also read by the EXIF / IPTC / XMP operation (§7).
+- The neighbouring `.xmp` file is also read by the EXIF / IPTC / XMP action (§7).
 
-## 4. Operations page: the 14 operations
+## 4. Actions page: the 14 actions
 
-Pick the operation in the list, set its parameters (the *Notes* area under the parameters recalls the available tags; the names of other operations in the notes are links, and "see Help" opens the help), then **Add to job** (Ctrl+F2). Several operations can be stacked: they apply in order, each on the name already changed by the previous ones (except the metadata operations, which read the real file). If the job is empty, **Go** and the preview use the operation currently displayed, once.
+Pick the action in the list, set its parameters (the *Notes* area under the parameters recalls the available tags; the names of other actions in the notes are links, and "see Help" opens the help), then **Add to batch** (Ctrl+F2). Several actions can be stacked: they apply in order, each on the name already changed by the previous ones (except the metadata actions, which read the real file). If the batch is empty, **Go** and the preview use the action currently displayed, once.
 
-**Folders and extensions.** By default a folder name is treated like a file name without extension: operations that work on the extension do nothing on a folder, and `%ext%` is empty. Options > Processing ("The last dot of a folder name delimits the extension") changes that.
+**Folders and extensions.** By default a folder name is treated like a file name without extension: actions that work on the extension do nothing on a folder, and `%ext%` is empty. Options > Processing ("The last dot of a folder name delimits the extension") changes that.
 
-| # | Operation | Purpose | How to use it |
+| # | Action | Purpose | How to use it |
 |---|---|---|---|
 | 1 | **Change extension** | Replace or add an extension | Enter the new extension (without the dot). Empty field = removes the extension. Option: add after the existing one instead of replacing. |
 | 2 | **String replacement** | Replace one text with another | "Search" / "Replace by" fields. Empty = deletes the text. Options: replace all occurrences (on by default, otherwise only the first), case sensitive (on by default), include the extension in the search, apply to the extension instead of the name, **wildcards** (see below). |
@@ -83,34 +83,35 @@ Pick the operation in the list, set its parameters (the *Notes* area under the p
 | 10 | **Random names** | Generate a name with a random part | Mask with `%random%` (+ `%name%`, `%ext%`, `%folderN%`). Type: random number (8 digits), "Windows tick count" (a counter of milliseconds, so sequential) or GUID (`{...}`, unique). |
 | 11 | **Change case** | Upper / lower case | Four choices: upper the first letter following given characters (space, hyphen, dot... to type in; the rest goes lower), upper the first letter of the name, all upper, all lower. Keep "use locale" on to convert accents (é → É). Options: also apply to the extension, or only to the extension (by default the extension is left alone). On Linux "a.txt" and "A.txt" are two different names. |
 | 12 | **Names from a list** | Apply a list of names | One line per file, in list order (typed, or loaded/saved with *Open...* / *Save...*; *Clear* empties it). Options: add the original extension; use the list as extensions. A file without a matching line, or with an empty line, is not renamed. |
-| 13 | **Regular expressions** | Advanced splitting / rearranging | *Expression* (PCRE2, not case-sensitive by default; `(?-i)` makes it case-sensitive) and *New name* with `$1`, `$2`..., `$&` (all that was found), `${10}`, `\$` for a literal dollar. It applies to the whole name including the extension, and to every match in it. E.g. `(.*) - (.*)\.mp3` → `$2 - $1.mp3` swaps artist and title. An invalid expression shows `<RegExp Error>` in the preview. |
+| 13 | **Regular expressions** | Advanced splitting / rearranging | *Expression* (PCRE2, not case-sensitive by default; `(?-i)` makes it case-sensitive) and *New name* with `$1`, `$2`..., `$&` (all that was found), `${10}`, `\$` for a literal dollar. It applies to the whole name including the extension, and to every match in it. E.g. `(.*) - (.*)\.mp3` → `$2 - $1.mp3` swaps artist and title. An invalid expression shows `<RegExp Error>` in the preview and renames nothing; an empty one changes nothing. |
 | 14 | **EXIF / IPTC / XMP** | Name photos from their metadata | Mask with the tags of §7, plus `%num%` (same settings as Enumeration) and `$if`. **Offset** in seconds shifts the date tags. A file without any metadata is not renamed ("No EXIF info found"). |
 
 #### Wildcards in string replacement
-- **Enabling**: tick "Use wildcards (* = any text, ? = any character)", off by default. It only concerns the *String replacement* operation.
+- **Enabling**: tick "Use wildcards (* = any text, ? = any character)", off by default. It only concerns the *String replacement* action.
 - **In the "Search" field**: `*` stands for any text (even empty), `?` for exactly one character. Every other character is searched as it is (`.`, `(`, `[`... have no special meaning).
 - **The "Replace by" field stays literal**: `*` and `?` are written as they are.
 - **The text found is as short as possible**: `a*b` in `a1b2b` finds `a1b`, not `a1b2b`. With "all occurrences", the search then continues in the rest of the name.
 - **Example**: search `IMG_*_copy`, replace by `Photo`: `IMG_001_copy (1).jpg` becomes `Photo (1).jpg`.
-- The choice is saved in job files (`.arb`); an older job loads with wildcards off. The other operations have no wildcards: put a *String replacement* with wildcards before them in the same job. For more complex patterns, use the *Regular expressions* operation.
+- The choice is saved in batch files (`.arb`); an older batch loads with wildcards off. The other actions have no wildcards: put a *String replacement* with wildcards before them in the same batch. For more complex patterns, use the *Regular expressions* action.
 - Not to be confused with the `*` and `?` wildcards of the **command line** (§8), which select the files to add.
 
-### Managing the job
-The **Job contents** panel lists the planned operations (tick box to show/hide it).
-- **Add to job** (Ctrl+F2), **Remove selected** (Shift+F6), **Clear** (Shift+F7).
+### Managing the batch
+The **Batch contents** panel lists the planned actions (tick box to show/hide it).
+- **Add to batch** (Ctrl+F2), **Remove selected** (Shift+F6), **Clear** (Shift+F7).
 - **Open** (Ctrl+O) / **Save** (Ctrl+S): `.arb` files (XML), compatible with Ant Renamer 2 in both directions.
 - Reorder by drag and drop or with the 4 move buttons.
-- In the classic layout an added operation cannot be edited (remove it and redo it). In the modern layout: double-click to reload it in the editor, then *Validate the modification* (or the *Modify* button).
+- In the classic layout an added action cannot be edited (remove it and redo it). In the modern layout: double-click to reload it in the editor, then *Validate the modification* (or the *Modify* button).
 
 ## 5. Start, stop, undo
 
-- **Go** (F9): renames in a separate thread; the window stays usable.
+- **Go** (F9): renames in a separate thread; the window stays usable, but what would modify the list, the batch or the options is disabled until the end.
 - **Stop** (Esc): interrupts the processing; the files already processed stay renamed.
 - **Undo** (F12): restores the old names of the **last** run only (one level), sidecar files included.
 - **Always on top** (F11): keeps the window above the others.
+- **Light / dark** (half-filled circle): switches the theme at once; *Options > Display > Theme* also offers "Follow the system" (default).
 - **Copy instead of rename** (Options > Processing): the originals stay, the copies carry the new names.
 
-## 6. Format masks (operations 4, 7, 8, 10, 14)
+## 6. Format masks (actions 4, 7, 8, 10, 14)
 
 | Syntax | Meaning |
 |---|---|
@@ -126,7 +127,7 @@ An unknown tag (typing error) stays as it is in the name, "%" included: you noti
 `$if` example (MP3): `%author%$if(%title%, - %title%,)%ext%` only adds " - title" when the title exists.
 A folder delimiter in the result moves the file into that folder (*Force folders* option creates it): `\` on Windows, **`/` on Linux** (it works on Windows too). `%name%/` puts each file in a folder named after it; `../%folder1% ` goes up one level.
 
-## 7. EXIF, IPTC, XMP tags (operation 14)
+## 7. EXIF, IPTC, XMP tags (action 14)
 
 - **EXIF** (JPEG and TIFF/RAW files): `DateTimeOriginal`, `DateTimeDigitized`, `DateTime`, `Make`, `Model`, `BodySerialNumber`, `LensMake`, `LensModel`, `ExposureTime`, `FNumber`, `ISOSpeedRatings`, `FocalLength`, `FocalLengthIn35mmFilm`, `ExposureBiasValue`, `ShutterSpeedValue`, `ApertureValue`, `ExposureProgram`, `ExposureMode`, `MeteringMode`, `Flash`, `WhiteBalance`, `SceneCaptureType`, `Orientation`, `ExifImageWidth`, `ExifImageLength`, `XResolution`, `YResolution`, `ResolutionUnit`, `ColorSpace`, `Software`, `Artist`, `Copyright`, `ImageDescription`, `UserComment`, `ExifVersion`, `MakerNote`.
 - **IPTC** (JPEG): `IptcKeywords`, `IptcCaption`, `IptcHeadline`, `IptcObjectName`, `IptcByline`, `IptcBylineTitle`, `IptcCopyright`, `IptcCredit`, `IptcSource`, `IptcCity`, `IptcSublocation`, `IptcState`, `IptcCountry`, `IptcCountryCode`, `IptcDateCreated`, `IptcTimeCreated`, `IptcCategory`, `IptcSupplementalCategories`, `IptcSpecialInstructions`, `IptcUrgency`, `IptcWriter`, `IptcTransmissionReference`.
@@ -138,15 +139,15 @@ Good to know: a missing tag gives an empty text; multiple values are joined with
 
 | Parameter | Effect |
 |---|---|
-| `-b file.arb` | loads a job |
-| `-g` | starts the processing once files and job are loaded |
+| `-b file.arb` | loads a batch |
+| `-g` | starts the processing once files and batch are loaded |
 | `-x` | exits when the processing is done |
 | `-af` / `-aF` / `-afr` | adds the following files / folders / recursive content of folders (wildcards `*` `?` accepted) |
 | `--shell path` | adds the path to the window that is already open (used by the Explorer menu) |
 | `--install-shell` / `--remove-shell` | adds / removes the Explorer menu entry (Windows), then exits |
 
 Examples: `antrenamer-qt.exe -b d:\test.arb -af c:\data\*.* -g -x` (Windows), `antrenamer-qt -b ~/test.arb -af "/data/*" -g -x` (Linux, quote the wildcards so that the shell does not expand them).
-Without `-a`, 2.07 behaviour: a name ending in `.arb` is a job, a folder is added recursively.
+Without `-a`, 2.07 behaviour: a name ending in `.arb` is a batch, a folder is added recursively.
 
 ## 9. Log page
 
@@ -160,23 +161,23 @@ Changes apply when you click OK; a few (language, modern layout) at the next sta
 
 | Page | Settings |
 |---|---|
-| **Display** | live update, automatic column resizing, icons by extension, modern layout and its page arrangement (Tabs, Single screen in bands, Single screen in columns), forced font and size, history size of the drop-down lists (0 = none), auto-completion, **icon set** (§12) |
+| **Display** | live update, automatic column resizing, icons by extension, modern layout and its page arrangement (Tabs, Single screen in bands, Single screen in columns), forced font and size, history size of the drop-down lists (1 to 200), **theme** (system, light, dark), auto-completion, **icon set** (§12) |
 | **Files & Folders** | do not ask on drag and drop and the options to use, natural sort, open the file on double-click, Explorer menu entry (Windows) |
 | **Processing** | copy instead of rename, generate a log, daylight saving by file date, also rename sidecar files (`.xmp`, DxO `.dop`; they get their old name back on undo), force folders (creates them), detect `x:\` and `\\` (Linux: `/`) as absolute paths, last dot of a folder name = extension |
-| **Events** | at the start of a run: switch to a page, clear the log; at the end: switch to a page, clear the files list, clear the job, save the log to a file (with "append") |
+| **Events** | at the start of a run: switch to a page, clear the log; at the end: switch to a page, clear the files list, clear the batch, save the log to a file (with "append") |
 | **Language** | interface language (27 `.lng` files; translator and version shown), portable mode |
 
 Settings are stored in your profile (`%APPDATA%\AntRenamerQt` on Windows, `~/.local/share/AntRenamerQt` on Linux). Portable mode: an `antrenamer-qt.ini` file next to the program keeps all settings in that folder (the checkbox in Options > Language creates or removes it; an empty file is enough).
 
 ## 11. Modern layout (optional)
 
-Same engine, other presentation, enabled in Options > Display (next start). Counters "Files (100)", "Operations (2)" on the page buttons; a thin toolbar per page; in single-screen modes Ctrl+1/2/3 shows or hides a pane; splitters can be dragged and are remembered; the columns layout falls back to bands below ~900 pixels wide; job operations can be edited by double-click.
+Same engine, other presentation, enabled in Options > Display (next start). Counters "Files (100)", "Actions (2)" on the page buttons; a thin toolbar per page; in single-screen modes Ctrl+1/2/3 shows or hides a pane; splitters can be dragged and are remembered; the columns layout falls back to bands below ~900 pixels wide; batch actions can be edited by double-click.
 
 ## 12. Icons, help and languages
 
 - **Icon set** (Options > Display): four sets, **Modern** (default since 3.0: line icons drawn by the program, sharp on any screen, light and dark theme), Scrows, Windows XP and Windows XP Large. The help shows the four sets side by side (Options page). The choice applies at once.
-- **Help** (F1): about 20 pages with screenshots, in English, French, Croatian and Tamil (other languages see English). The pages written for Ant Renamer Qt may be only in English and French; Croatian and Tamil then show English.
-- **Interface languages**: 27 language files. To add or fix one, see [TRANSLATING.md](TRANSLATING.md).
+- **Help** (F1): 18 pages with screenshots, in English, French, Croatian and Tamil (other languages see English). The pages written for Ant Renamer Qt may be only in English and French; Croatian and Tamil then show English.
+- **Interface languages**: 28 language files (English and 27 translations). To add or fix one, see [TRANSLATING.md](TRANSLATING.md).
 
 ## 13. Windows and Linux
 
@@ -193,7 +194,7 @@ Same engine, other presentation, enabled in Options > Display (next start). Coun
 
 ## 14. Known limits
 
-- EXIF: about forty tags only, MakerNote not decoded; IPTC read only in JPEG.
+- EXIF: 36 tags only, MakerNote not decoded; IPTC read only in JPEG.
 - Audio tags: ID3 only (MP3); FLAC, OGG, M4A are not read.
 - Undo: one level.
 - The short Windows 11 context menu is not supported (use "Show more options").

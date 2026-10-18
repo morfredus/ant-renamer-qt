@@ -51,7 +51,7 @@ bool setPortable(bool on) {
 // --- options ----------------------------------------------------------------------------------------------
 #define KEYS(X)                                                                                  \
     X(realtime) X(resizeCols) X(fileIcons) X(forceFont) X(fontName) X(fontSize) X(iconSet)       \
-    X(historyMax) X(autoComplete) X(dragNoAsk) X(launchFile) X(naturalSort) X(newUi) X(pageLayout)                                   \
+    X(historyMax) X(autoComplete) X(dragNoAsk) X(launchFile) X(naturalSort) X(newUi) X(pageLayout) X(theme)                                   \
     X(addFiles) X(addFolders) X(recursive) X(forceDir) X(detectAbsDir) X(folderExt) X(renameSidecar) X(copy)      \
     X(genLog) X(dstRelativeToFile) X(startSwitch) X(finishSwitch) X(startClearLog)               \
     X(finishClearFiles) X(finishClearBatch) X(saveLog) X(saveLogAppend) X(saveLogFile)
@@ -62,8 +62,16 @@ void AppOptions::load() {
     KEYS(LOAD)
 #undef LOAD
     // Settings written before the "Modern" set existed carry iconSet=0 although nobody chose it (every key is saved):
-    // they take the new default once. From the first save of this version on the choice is the user's own.
-    if (!s.contains(QStringLiteral("options/iconSetChosen"))) iconSet = 3;
+    // that stale value takes the new default once. A deliberate choice of another set (Windows XP, XP Large) is kept.
+    // From the first save of this version on the choice is the user's own.
+    if (!s.contains(QStringLiteral("options/iconSetChosen")) && iconSet == 0) iconSet = kDefaultIconSet;
+    // values read from an INI file are never trusted: an index out of range would reach the interface as is
+    iconSet = qBound(0, iconSet, iconSetCount() - 1);
+    historyMax = qBound(1, historyMax, 200);
+    fontSize = qBound(6, fontSize, 32);
+    startSwitch = qBound(-1, startSwitch, 2);
+    finishSwitch = qBound(-1, finishSwitch, 2);
+    pageLayout = qBound(0, pageLayout, 2);
     applyToCore();
 }
 

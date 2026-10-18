@@ -1,14 +1,18 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.0.0--rc.12-blue)
+![version](https://img.shields.io/badge/version-3.0.0--rc.15-blue)
 
 C++/Qt 6 port of [Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (originally Delphi 7,
-GPL v2). Batch file renaming: replace, insert, move, delete, enumerate, change case, regular
+GPL v2 or later). Batch file renaming: replace, insert, move, delete, enumerate, change case, regular
 expressions, names from a list, file date, MP3 tags (ID3v1/v2), EXIF / IPTC / XMP.
 
 **Ant Renamer Qt** is the official name of this port, agreed with the author of the original program. It is
 developed in parallel with the original Ant Renamer and has its own executable, installation folder, settings and
 package names, so both can be installed side by side without confusion.
+
+## Download
+
+Windows installer and portable zip, Linux `.deb` (x86_64, arm64) and AppImage: [Releases](https://github.com/morfredus/ant-renamer-qt/releases).
 
 The project is **self-contained**: Qt 6 and a C++20 compiler are the only requirements.
 
@@ -33,7 +37,7 @@ Linux packages (on Linux or in WSL): `scripts/linux/package-deb.sh` builds `dist
 On aarch64 use the `linux-arm64` preset; from x86_64, `linux-arm64-cross` builds the arm64 package with an arm64 sysroot
 (`ARM64_SYSROOT`), then `package-deb.sh --build build-arm64-cross`.
 
-Windows prerequisites: MSYS2 with `mingw-w64-x86_64-{gcc,cmake,ninja,qt6-base}`.
+Windows prerequisites: MSYS2 with `mingw-w64-x86_64-{gcc,cmake,ninja,qt6-base,qt6-tools}`.
 
 ## Layout
 
@@ -43,7 +47,11 @@ Windows prerequisites: MSYS2 with `mingw-w64-x86_64-{gcc,cmake,ninja,qt6-base}`.
 | `app/` | Qt Widgets interface, `Languages/` and `help/` from the original program |
 | `tests/` | core checks (`ctest`) |
 | `cmake/toolchains/` | ARM64 cross toolchain |
-| `scripts/windows/` | MinGW DLL deployment, VS Code helper |
+| `scripts/windows/` | MinGW DLL deployment, VS Code helper, zip and installer |
+| `scripts/linux/` | `.deb`, AppImage, `.desktop` file |
+| `installer/` | Inno Setup script (Windows installer) |
+| `docs/` | guides, presentation, release notes |
+| `.github/` | CI workflow, Dependabot, issue templates |
 
 ## About this port
 
@@ -52,7 +60,7 @@ What was kept, changed and added compared with Ant Renamer 2.13:
 
 ## User guide
 
-Every function with instructions (operations, shortcuts, masks, tags, command line, options, icon sets, differences between Windows and Linux):
+Every function with instructions (actions, shortcuts, masks, tags, command line, options, icon sets, differences between Windows and Linux):
 [docs/USER_GUIDE.md](docs/USER_GUIDE.md) ([fr](docs/USER_GUIDE_fr.md)).
 Step-by-step recipes for common and complex cases (cleaning names, numbering, photos, music, moving files, command line):
 [docs/USER_RECIPES.md](docs/USER_RECIPES.md) ([fr](docs/USER_RECIPES_fr.md)).
@@ -70,7 +78,7 @@ Translating the interface (the `.lng` files): [docs/TRANSLATING.md](docs/TRANSLA
 Portable mode: create an empty `antrenamer-qt.ini` next to the program (or tick the box in
 Options > Language). Otherwise settings live in `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) or `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
 
-Explorer context menu (Windows): Options > Files && Folders adds "Add to Ant Renamer Qt" to files and folders (Windows 11:
+Explorer context menu (Windows): Options > Files & Folders adds "Add to Ant Renamer Qt" to files and folders (Windows 11:
 "Show more options"). Everything selected is sent to the window that is already open.
 
 Command line: `-b file.arb` load a batch, `-g` start, `-x` exit when done, `-a[fFr]` choose what the
@@ -82,7 +90,7 @@ Support for Ant Renamer Qt is provided on GitHub: [Issues](https://github.com/mo
 
 ## Credits
 
-- Original program: Antoine Potten, [Ant Renamer](https://www.antp.be/software/renamer/) (Delphi 7, GPL v2).
+- Original program: Antoine Potten, [Ant Renamer](https://www.antp.be/software/renamer/) (Delphi 7, GPL v2 or later).
 - C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/morfredus)).
 
 ## License

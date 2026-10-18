@@ -1,6 +1,6 @@
 # Ant Renamer Qt : guide des fonctions
 
-*Toutes les fonctions d'Ant Renamer Qt 3.0.0-rc.12, avec le mode d'emploi.*
+*Toutes les fonctions d'Ant Renamer Qt 3.0.0-rc.15, avec le mode d'emploi.*
 English version : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détails complets, page par page, avec captures d'écran : l'aide intégrée (F1). Différences entre Windows et Linux : §13.
 
 ## 1. Principe général
@@ -54,13 +54,13 @@ Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau 
 - Double-clic sur un fichier : l'ouvre avec son programme associé, si « Exécuter le fichier lors d'un double clic » est coché (Options > Fichiers & Dossiers).
 - Des dossiers peuvent aussi être dans la liste : ils sont renommés comme les fichiers (dans l'ordre de la liste) ; les fichiers de la liste qui se trouvent dans un dossier renommé le suivent.
 
-### Fichiers annexes d'une photo
-Quand une photo est renommée, ses fichiers annexes sont renommés avec elle, sans rien faire de plus :
+### Fichiers associés d'une photo
+Quand une photo est renommée, ses fichiers associés sont renommés avec elle, sans rien faire de plus :
 - **Reconnus** : `.xmp` (Lightroom, Capture One : `IMG.xmp` ; digiKam, darktable : `IMG.CR2.xmp`) et `.dop` de DxO PhotoLab (`IMG.dop`, `IMG.CR2.dop`), extensions en majuscules comprises.
 - **Méthode** : dans Options > Traitement, cocher « Renommer aussi les fichiers associés (.xmp, .dop) d'une image renommée » (activé par défaut). Puis renommer la photo comme d'habitude (par exemple `IMG_0001.CR2` → `Paris 001.CR2`) : `IMG_0001.xmp` ou `IMG_0001.CR2.xmp` devient `Paris 001.xmp` ou `Paris 001.CR2.xmp`.
-- **Annuler** (F12) : les fichiers annexes retrouvent leur ancien nom avec la photo.
-- **Journal** : la ligne de la photo mentionne le fichier annexe renommé.
-- **Cas particuliers** : si un fichier portant le nouveau nom existe déjà, le fichier annexe n'est pas touché et le journal le dit (la photo est renommée quand même) ; un fichier annexe qui est aussi dans la liste suit sans être renommé deux fois ; sans effet en mode « Copier plutôt que renommer » et pour les dossiers.
+- **Annuler** (F12) : les fichiers associés retrouvent leur ancien nom avec la photo.
+- **Journal** : la ligne de la photo mentionne le fichier associé renommé.
+- **Cas particuliers** : si un fichier portant le nouveau nom existe déjà, le fichier associé n'est pas touché et le journal le dit (la photo est renommée quand même) ; un fichier associé qui est aussi dans la liste suit sans être renommé deux fois ; sans effet en mode « Copier plutôt que renommer » et pour les dossiers.
 - Le fichier `.xmp` voisin est aussi lu par l'opération EXIF / IPTC / XMP (§7).
 
 ## 4. Page Opérations : les 14 opérations
@@ -83,7 +83,7 @@ Choisir l'opération dans la liste, régler ses paramètres (la zone *Notes* sou
 | 10 | **Noms aléatoires** | Générer un nom avec une partie aléatoire | Masque avec `%random%` (+ `%name%`, `%ext%`, `%folderN%`). Type : nombre aléatoire (8 chiffres), « Compteur Windows » (un compteur de millisecondes, donc séquentiel) ou GUID (`{...}`, unique). |
 | 11 | **Changement de casse** | Majuscules / minuscules | Quatre choix : majuscule à la première lettre suivant des caractères donnés (espace, tiret, point... à saisir ; le reste passe en minuscules), majuscule à la première lettre du nom, tout en majuscules, tout en minuscules. Garder « utiliser les options régionales » pour convertir les accents (é → É). Options : appliquer aussi à l'extension, ou seulement à l'extension (par défaut l'extension est laissée telle quelle). Sous Linux « a.txt » et « A.txt » sont deux noms différents. |
 | 12 | **Noms à partir d'une liste** | Appliquer une liste de noms | Une ligne par fichier, dans l'ordre de la liste (saisie, ou chargée/sauvée avec *Ouvrir...* / *Sauver...* ; *Vider* l'efface). Options : ajouter l'extension d'origine ; utiliser la liste comme extensions. Un fichier sans ligne correspondante, ou avec une ligne vide, n'est pas renommé. |
-| 13 | **Expressions rationnelles** | Découpage / réarrangement avancé | *Expression* (PCRE2, insensible à la casse par défaut ; `(?-i)` la rend sensible) et *Nouveau nom* avec `$1`, `$2`..., `$&` (tout ce qui a été trouvé), `${10}`, `\$` pour un dollar littéral. Elle s'applique au nom entier, extension comprise, et à chaque correspondance. Ex. `(.*) - (.*)\.mp3` → `$2 - $1.mp3` échange artiste et titre. Une expression invalide affiche `<RegExp Error>` dans l'aperçu. |
+| 13 | **Expressions rationnelles** | Découpage / réarrangement avancé | *Expression* (PCRE2, insensible à la casse par défaut ; `(?-i)` la rend sensible) et *Nouveau nom* avec `$1`, `$2`..., `$&` (tout ce qui a été trouvé), `${10}`, `\$` pour un dollar littéral. Elle s'applique au nom entier, extension comprise, et à chaque correspondance. Ex. `(.*) - (.*)\.mp3` → `$2 - $1.mp3` échange artiste et titre. Une expression invalide affiche `<RegExp Error>` dans l'aperçu et ne renomme rien ; une expression vide ne change rien. |
 | 14 | **EXIF / IPTC / XMP** | Nommer les photos d'après leurs métadonnées | Masque avec les tags du §7, plus `%num%` (mêmes réglages que l'Énumération) et `$if`. Le **Décalage** en secondes décale les tags de date. Un fichier sans aucune métadonnée n'est pas renommé (« No EXIF info found »). |
 
 #### Jokers dans le remplacement de chaîne
@@ -104,10 +104,11 @@ Le panneau **Contenu du job** liste les opérations planifiées (case à cocher 
 
 ## 5. Démarrer, arrêter, annuler
 
-- **Démarrer** (F9) : renomme dans un fil séparé ; la fenêtre reste utilisable.
+- **Démarrer** (F9) : renomme dans un fil séparé ; la fenêtre reste utilisable, mais ce qui modifierait la liste, le job ou les options est désactivé jusqu'à la fin.
 - **Arrêter** (Échap) : interrompt le traitement ; les fichiers déjà traités restent renommés.
-- **Annuler** (F12) : restaure les anciens noms de la **dernière** exécution seulement (un niveau), fichiers annexes compris.
+- **Annuler** (F12) : restaure les anciens noms de la **dernière** exécution seulement (un niveau), fichiers associés compris.
 - **Avant-plan** (F11) : garde la fenêtre au-dessus des autres.
+- **Clair / sombre** (cercle à moitié plein) : change aussitôt de thème ; *Options > Affichage > Thème* propose aussi « Suivre le système » (par défaut).
 - **Copier plutôt que renommer** (Options > Traitement) : les originaux restent, les copies portent les nouveaux noms.
 
 ## 6. Masques de formatage (opérations 4, 7, 8, 10, 14)
@@ -150,7 +151,7 @@ Sans `-a`, comportement de la 2.07 : un nom finissant par `.arb` est un job, un 
 
 ## 9. Page Journal
 
-Chaque fichier traité donne une ligne : **verte** (renommé, ancien → nouveau nom ; le chemin complet quand le dossier change ; fichiers annexes mentionnés), **bleue** (non renommé : nom identique, tag absent, ligne vide ou fin de liste, fichier manquant), **rouge** (erreur : nom déjà pris, caractère invalide, fichier verrouillé).
+Chaque fichier traité donne une ligne : **verte** (renommé, ancien → nouveau nom ; le chemin complet quand le dossier change ; fichiers associés mentionnés), **bleue** (non renommé : nom identique, tag absent, ligne vide ou fin de liste, fichier manquant), **rouge** (erreur : nom déjà pris, caractère invalide, fichier verrouillé).
 Boutons : **Filtrer** (Succès / Erreurs / Non renommés), **Vider**, **Sauver** (fichier texte), **Copier** (presse-papiers).
 L'option *Stocker le journal* (Options > Événements) l'enregistre automatiquement après chaque exécution en UTF-8, deux colonnes séparées par une tabulation (`v` succès, `x` erreur), avec une option pour ajouter à un fichier existant.
 
@@ -160,7 +161,7 @@ Les changements s'appliquent en cliquant sur OK ; quelques-uns (langue, disposit
 
 | Page | Réglages |
 |---|---|
-| **Affichage** | mise à jour en temps réel, redimensionnement automatique des colonnes, icônes selon l'extension, disposition moderne et son arrangement des pages (Onglets, Écran unique en bandes, Écran unique en colonnes), police et taille forcées, taille de l'historique des listes déroulantes (0 = aucun), complétion automatique, **set d'icônes** (§12) |
+| **Affichage** | mise à jour en temps réel, redimensionnement automatique des colonnes, icônes selon l'extension, disposition moderne et son arrangement des pages (Onglets, Écran unique en bandes, Écran unique en colonnes), police et taille forcées, taille de l'historique des listes déroulantes (1 à 200), **thème** (système, clair, sombre), complétion automatique, **set d'icônes** (§12) |
 | **Fichiers & Dossiers** | ne pas demander lors d'un glisser-déposer et options à utiliser, tri naturel, ouvrir le fichier au double-clic, entrée du menu de l'Explorateur (Windows) |
 | **Traitement** | copier plutôt que renommer, générer un journal, heure d'été selon la date du fichier, renommer aussi les fichiers associés (`.xmp`, `.dop` de DxO ; ils retrouvent leur ancien nom à l'annulation), forcer les dossiers (les crée), détecter `x:\` et `\\` (Linux : `/`) comme chemins absolus, dernier point d'un nom de dossier = extension |
 | **Événements** | au début d'une exécution : basculer vers une page, vider le journal ; à la fin : basculer vers une page, vider la liste de fichiers, vider le job, stocker le journal dans un fichier (avec « ajouter ») |
@@ -175,8 +176,8 @@ Même moteur, autre présentation, activée dans Options > Affichage (au prochai
 ## 12. Icônes, aide et langues
 
 - **Set d'icônes** (Options > Affichage) : quatre sets, **Modern** (par défaut depuis la 3.0 : icônes au trait dessinées par le programme, nettes sur tout écran, thèmes clair et sombre), Scrows, Windows XP et Windows XP Large. L'aide montre les quatre sets côte à côte (page des Options). Le choix s'applique tout de suite.
-- **Aide** (F1) : une vingtaine de pages avec captures d'écran, en anglais, français, croate et tamoul (les autres langues voient l'anglais). Les pages écrites pour Ant Renamer Qt peuvent n'exister qu'en anglais et en français ; le croate et le tamoul affichent alors l'anglais.
-- **Langues de l'interface** : 27 fichiers de langue. Pour en ajouter ou en corriger une, voir [TRANSLATING_fr.md](TRANSLATING_fr.md).
+- **Aide** (F1) : 18 pages avec captures d'écran, en anglais, français, croate et tamoul (les autres langues voient l'anglais). Les pages écrites pour Ant Renamer Qt peuvent n'exister qu'en anglais et en français ; le croate et le tamoul affichent alors l'anglais.
+- **Langues de l'interface** : 28 fichiers de langue (l'anglais et 27 traductions). Pour en ajouter ou en corriger une, voir [TRANSLATING_fr.md](TRANSLATING_fr.md).
 
 ## 13. Windows et Linux
 
@@ -193,7 +194,7 @@ Même moteur, autre présentation, activée dans Options > Affichage (au prochai
 
 ## 14. Limites connues
 
-- EXIF : une quarantaine de tags seulement, MakerNote non décodée ; IPTC lu seulement dans les JPEG.
+- EXIF : 36 tags seulement, MakerNote non décodée ; IPTC lu seulement dans les JPEG.
 - Tags audio : ID3 seulement (MP3) ; FLAC, OGG, M4A ne sont pas lus.
 - Annuler : un seul niveau.
 - Le menu contextuel court de Windows 11 n'est pas pris en charge (utiliser « Afficher plus d'options »).

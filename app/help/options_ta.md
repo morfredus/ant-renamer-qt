@@ -12,8 +12,9 @@ This window is accessible through the ![Options](img/options.png) "Options" icon
 - **Modern interface layout (used at the next start)** : (Ant Renamer Qt) Shows the modern layout of the main window instead of the classic one. See [modern interface layout](modernui_ta.md).
 - **Pages layout (modern interface)** : (Ant Renamer Qt) Only available with the modern layout: *Tabs*, *Single screen, in bands* or *Single screen, in columns*. Used the next time the program starts. See [pages layout](modernui_ta.md#layouts).
 - **Force the following font for controls that have to display special characters** : Replaces the font of the program by the font and the size chosen below it. Useful if some characters (Asian languages, symbols) are displayed as squares: [click here for more information](fonts_ta.md). By default the font of your system is used.
-- **Number of values to keep in history** : The drop-down lists of the actions remember the last text strings that you used. You can specify here how much strings have to be kept (0 = none).
+- **Number of values to keep in history** : The drop-down lists of the actions remember the last text strings that you used. You can specify here how much strings have to be kept (1 to 200).
 - **Autocomplete with history values while typing** : When you type the text, if it has the same beginning than an existing item of the history this item will be copied in the field (the part you did not type is selected, so you can continue to type to overwrite it).
+- **Theme** : (Ant Renamer Qt) "Follow the system" (default), "Light" or "Dark". Light and dark use the same look on every system; this is useful where the system theme is not detected (an AppImage, for instance). The "Light / dark" button of the toolbar changes it too.
 - **Icon set** : Icon set to use for toolbars. Four sets are included: "Scrows", "Windows XP", "Windows XP Large" (the same as the second one, with larger icons) and "Modern" (Ant Renamer Qt, the default): line icons drawn by the program, sharp on high-resolution screens, which follow the light or dark theme of your system. The set is applied immediately.
 
 ### The toolbar icons {#icons}

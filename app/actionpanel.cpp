@@ -150,8 +150,10 @@ QCheckBox* ActionPanel::check(Page& p, const QString& key, const QString& label,
     // A QCheckBox never wraps its text: use a bare box plus a wrapping label that toggles it when clicked.
     struct Toggle : QObject {
         QCheckBox* box;
-        bool eventFilter(QObject*, QEvent* e) override {
+        bool eventFilter(QObject* o, QEvent* e) override {
             if (e->type() != QEvent::MouseButtonRelease) return false;
+            const auto* me = static_cast<QMouseEvent*>(e);  // the left button, released over the label
+            if (me->button() != Qt::LeftButton || !static_cast<QWidget*>(o)->rect().contains(me->position().toPoint())) return false;
             box->toggle();
             return true;
         }
@@ -437,14 +439,16 @@ void ActionPanel::buildMultstr(Page& p) {
     };
     add(tr("Clear Table"), [this] { setTableText({}); emit changed(); });
     add(tr("Save"), [this] {
-        const QString n = setName_->currentText().trimmed();
+        const QString n = setName_->currentText().trimmed().replace(u'/', u'-').replace(u'\\', u'-');  // "/" would open a settings sub-group
         if (n.isEmpty()) return;
         appSettings().setValue(u"multstr/sets/"_s + n, tableText());
         multstrSets();
         setName_->setCurrentText(n);
     });
     add(tr("Delete"), [this] {
-        appSettings().remove(u"multstr/sets/"_s + setName_->currentText());
+        const QString n = setName_->currentText().trimmed().replace(u'/', u'-').replace(u'\\', u'-');
+        if (n.isEmpty()) return;  // an empty name would remove "multstr/sets/" itself: every saved set
+        appSettings().remove(u"multstr/sets/"_s + n);
         multstrSets();
     });
     add(tr("Copy/Export"), [this] { QApplication::clipboard()->setText(tableText()); });

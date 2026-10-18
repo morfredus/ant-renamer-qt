@@ -105,7 +105,7 @@ Replace the English text by the correct translation, and once done you can send 
     </lstActions>
     <lblChangeExt Caption="変更後の拡張子名:"/>
     <cbxChangeExtNoRepl Caption="拡張子を末尾に追加"/>
-    <lblChangeExtNotes Caption="注意:&lt;br&gt;- 拡張子名にドットは不要です&lt;br&gt;- 連番を付加したい場合は&lt;LINK&gt;[連番付加]&lt;/LINK&gt;を使用してください"/>
+    <lblChangeExtNotes Caption="注意:&lt;br&gt;- 拡張子名にドットは不要です&lt;br&gt;- 連番を付加したい場合は&lt;LINK&gt;連番付加&lt;/LINK&gt;を使用してください"/>
     <lblStrReplSearch Caption="検索文字列:"/>
     <lblStrReplBy Caption="置換文字列:"/>
     <cbxStrReplAll Caption="該当する箇所は全て置換"/>
@@ -123,7 +123,7 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtStrInsBegin Caption="先頭から。"/>
     <rbtStrInsEnd Caption="末尾から"/>
     <cbxStrInsExt Caption="拡張子のみを対象に"/>
-    <lblStrInsNotes Caption="注意:&lt;br&gt;- - 特定文字列の前後への文字列挿入は &lt;LINK&gt;[文字列置換]&lt;/LINK&gt;を使用してください&lt;br&gt;- %name% = 元のファイル名（拡張子ぬき）&lt;BR&gt;- %ext% = 元の拡張子（ドットも含める）&lt;BR&gt;- %folderN% = フォルダ名（&lt;b&gt;N&lt;/b&gt; は階層、1=親フォルダ名、2=2階層上のフォルダ名等）&lt;BR&gt;- %% = %（パーセント）を名称中に使用するとき&lt;BR&gt;・詳しい情報は&lt;LINK&gt;[ヘルプ]&lt;/LINK&gt;をご覧ください"/>
+    <lblStrInsNotes Caption="注意:&lt;br&gt;- - 特定文字列の前後への文字列挿入は &lt;LINK&gt;文字列置換&lt;/LINK&gt;を使用してください&lt;br&gt;- %name% = 元のファイル名（拡張子ぬき）&lt;BR&gt;- %ext% = 元の拡張子（ドットも含める）&lt;BR&gt;- %folderN% = フォルダ名（&lt;b&gt;N&lt;/b&gt; は階層、1=親フォルダ名、2=2階層上のフォルダ名等）&lt;BR&gt;- %% = %（パーセント）を名称中に使用するとき&lt;BR&gt;・詳しい情報は&lt;LINK&gt;[ヘルプ]&lt;/LINK&gt;をご覧ください"/>
     <lblMoveStrFrom Caption="移動元:"/>
     <rbtMoveStrFromBegin Caption="先頭から"/>
     <rbtMoveStrFromEnd Caption="末尾から"/>
@@ -131,7 +131,7 @@ Replace the English text by the correct translation, and once done you can send 
     <lblMoveStrTo Caption="移動先:"/>
     <rbtMoveStrToBegin Caption="先頭から"/>
     <rbtMoveStrToEnd Caption="末尾から"/>
-    <lblMoveStrNotes Caption="注意:&lt;br&gt;- 位置が不定な特定文字列の移動には、&lt;br&gt;　まず&lt;link&gt;[文字列置換]&lt;/link&gt;で削除の後、希望位置に&lt;link&gt;[文字列挿入]&lt;/link&gt;を行ってください&lt;BR&gt;- - &#34;移動先&#34;の値に移動される文字数は含まれません（文字は既に削除されているものとして扱います）"/>
+    <lblMoveStrNotes Caption="注意:&lt;br&gt;- 位置が不定な特定文字列の移動には、&lt;br&gt;　まず&lt;link&gt;文字列置換&lt;/link&gt;で削除の後、希望位置に&lt;link&gt;文字列挿入&lt;/link&gt;を行ってください&lt;BR&gt;- - &#34;移動先&#34;の値に移動される文字数は含まれません（文字は既に削除されているものとして扱います）"/>
     <lblCharDel Caption="削除する文字数:"/>
     <rbtCharDelPos Caption="起点:"/>
     <rbtCharDelBegin Caption="先頭から"/>
@@ -139,7 +139,7 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtCharDelStr Caption="文字列の前を:"/>
     <rbtCharDelStr2 Caption="文字列の後を:"/>
     <cbxCharDelExt Caption="拡張子のみを対象に"/>
-    <lblCharDelNotes Caption="注意:&lt;BR&gt;- 特定文字列の削除は&lt;LINK&gt;[文字列置換]&lt;/LINK&gt;を使用して、置換文字列は空欄（未入力）のままで置換してください"/>
+    <lblCharDelNotes Caption="注意:&lt;BR&gt;- 特定文字列の削除は&lt;LINK&gt;文字列置換&lt;/LINK&gt;を使用して、置換文字列は空欄（未入力）のままで置換してください"/>
     <lblEnumMask Caption="マスク:"/>
     <lblEnumStart Caption="開始値:"/>
     <lblEnumDigits Caption="桁数:"/>

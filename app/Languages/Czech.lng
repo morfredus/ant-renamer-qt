@@ -123,7 +123,7 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtStrInsBegin Caption="Od zaèátku"/>
     <rbtStrInsEnd Caption="Od konce"/>
     <cbxStrInsExt Caption="Použít na pøíponu místo na jméno"/>
-    <lblStrInsNotes Caption="Poznámky:&lt;br&gt;- %name% = Originální jméno souboru (bez pøípony)&lt;BR&gt;- %ext% = Originální pøípona (vèetnì teèky)&lt;BR&gt;- %folderN% = Jméno složky&lt;BR&gt;- %% = % znak&lt;BR&gt;podívejte se na &lt;LINK&gt;Nápovìdu&lt;/LINK&gt; pro více informací"/>
+    <lblStrInsNotes Caption="Poznámky:&lt;br&gt;- %name% = Originální jméno souboru (bez pøípony)&lt;BR&gt;- %ext% = Originální pøípona (vèetnì teèky)&lt;BR&gt;- %folderN% = Jméno složky&lt;BR&gt;- %% = % znak&lt;BR&gt;podívejte se na &lt;LINK&gt;Nahradit øetìzec&lt;/LINK&gt; pro více informací"/>
     <lblMoveStrFrom Caption="Od pozice:"/>
     <rbtMoveStrFromBegin Caption="Od zaèátku"/>
     <rbtMoveStrFromEnd Caption="Od konce"/>

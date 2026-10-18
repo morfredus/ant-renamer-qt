@@ -1,6 +1,6 @@
-# எறும்பு மறுபெயரிடு 2
+# Ant Renamer Qt
 
-பதிப்பு 2.13
+Ant Renamer Qt (C++/Qt 6 port, version 3.x), based on the help of Ant Renamer 2.13
 
 ---
 

@@ -4,7 +4,7 @@
 Version anglaise : [WHATS_NEW.md](WHATS_NEW.md). Liste tenue à jour au fil du développement. Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le
 portage lui-même (ce qui est conservé, les différences voulues) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.0.0-rc.12**. Ce qui est marqué *(à venir)* est dans le code mais pas encore publié.
+Version courante : **3.0.0-rc.15**. Ce qui est marqué *(à venir)* est dans le code mais pas encore publié.
 
 ## Ajouts
 
@@ -30,6 +30,7 @@ Version courante : **3.0.0-rc.12**. Ce qui est marqué *(à venir)* est dans le 
 
 | Nouveauté | Depuis |
 |---|---|
+| **Thème clair / sombre** : un bouton de la barre d'outils change aussitôt, et *Options > Affichage > Thème* peut suivre le système, forcer le clair ou forcer le sombre (le journal reste lisible dans les deux). | 3.0.0-rc.14 |
 | **Jeu d'icônes « Modern »** (par défaut) : 30 icônes au trait dessinées par le programme, nettes sur tout écran et toute mise à l'échelle, thèmes clair et sombre, grisées quand elles sont désactivées. Options > Affichage > Set d'icônes le propose avec les trois sets classiques (Scrows, Windows XP, Windows XP Large) ; l'aide compare les quatre. | 3.0.0-rc.12 |
 | **Aide réécrite et vérifiée contre le programme** : pages Markdown (UTF-8, une table des matières par langue), chaque option et opération décrite, tableaux des tags et des raccourcis clavier, nouvelles captures du vrai programme en anglais et en français, liens entre pages et sections vérifiés. Le croate et le tamoul affichent le texte anglais pour les pages réécrites. | 3.0.0-rc.12 |
 | **Disposition moderne**, en option (Options > Affichage) : barre principale avec onglets indiquant le nombre de fichiers et d'actions, bouton Go bien visible, barre propre à chaque page, colonne du nouveau nom visible par défaut, thème clair ou sombre du système. La disposition classique reste celle par défaut. | 3.0.0-rc.8 |
@@ -37,7 +38,7 @@ Version courante : **3.0.0-rc.12**. Ce qui est marqué *(à venir)* est dans le 
 | **Modifier une action du job en place** : double-clic sur l'action pour recharger ses réglages dans l'éditeur, puis « Modifier » (ou « Valider / Annuler la modification »). | 3.0.0-rc.8 |
 | **Mode portable** : un fichier `antrenamer-qt.ini` à côté du programme garde tous les réglages dans ce dossier. | 3.0.0-rc.1 |
 | **Prêt pour Windows 10/11** : chemins de plus de 260 caractères, UTF-8, écrans haute résolution, thème sombre. | 3.0.0-rc.1 |
-| **Menu contextuel de l'Explorateur** « Ajouter à Ant Renamer » sur les fichiers et dossiers, envoyé à la fenêtre déjà ouverte. | 3.0.0-rc.1 |
+| **Menu contextuel de l'Explorateur** « Ajouter à Ant Renamer Qt » sur les fichiers et dossiers, envoyé à la fenêtre déjà ouverte. | 3.0.0-rc.1 |
 
 ### Plateformes et distribution
 
@@ -52,6 +53,7 @@ Version courante : **3.0.0-rc.12**. Ce qui est marqué *(à venir)* est dans le 
 
 | Amélioration | Depuis |
 |---|---|
+| **Robustesse** : une expression régulière invalide ne renomme rien, des tags MP3 abîmés (année vide, en-tête corrompu) ne coupent plus les noms et ne font plus planter, les boutons sont désactivés pendant un renommage, `*.*` accepte aussi les fichiers sans extension, un fichier de langue en erreur est signalé au lieu d'être ignoré en silence (l'allemand est maintenant entièrement traduit). | 3.0.0-rc.13 |
 | **Noms de fichiers sous Linux** : un nom contenant deux-points ou antislash (`a:b.txt`) était coupé à ce caractère. Sous Linux seul `/` délimite un chemin maintenant ; les fichiers d'un dossier renommé le suivent, `%folder-N%` et les tags `%count%` fonctionnent, et « Détecter un chemin absolu » reconnaît un nom qui commence par `/`. | 3.0.0-rc.12 |
 | **Guide du traducteur** (`docs/TRANSLATING_fr.md`) : tout le processus d'un fichier `.lng`, de la copie de `English.lng` à la pull request. | 3.0.0-rc.12 |
 | **Guide d'utilisation et recettes mis à jour** : différences Windows / Linux, options de chaque opération, nouveau jeu d'icônes. | 3.0.0-rc.12 |

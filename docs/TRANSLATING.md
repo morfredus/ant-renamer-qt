@@ -15,7 +15,7 @@ Ant Renamer Qt does not use Qt `.ts` files. It reads the language files of the o
 ## 2. Create a new language
 
 1. **Copy `app/Languages/English.lng`** to `app/Languages/<Language name>.lng`. The file name is the name of the language in English, as it will be shown in the program and matched with the language of the system: `Italian.lng`, `Portuguese (Brazil).lng`, `Spanish (Spain).lng`. When a language has several variants, the name is "Language (variant)".
-2. **Choose the encoding** and declare it on the first line, `<?xml version="1.0" encoding="..."?>`. The program reads the encoding written there: `UTF-8` (recommended for a new file), but also `windows-1250`, `windows-1251`, `windows-1252`, `windows-1253`, `shift_jis`, `gb2312`, `big5`... Without a declaration it assumes `windows-1252`. Save the file in the encoding you declared (a text editor that shows it, such as VS Code or Notepad++, avoids mistakes).
+2. **Choose the encoding** and declare it on the first line, `<?xml version="1.0" encoding="..."?>`. The program reads the encoding written there: `UTF-8` (recommended for a new file), but also `windows-1250`, `windows-1251`, `windows-1252`, `windows-1253`, `shift_jis`, `gb2312`, `big5`... Without a declaration it assumes `windows-1252`. Save the file in the encoding you declared (a text editor that shows it, such as VS Code or Notepad++, avoids mistakes). A UTF-8 byte order mark added by the editor is accepted; a file declared UTF-8 that is not valid UTF-8 is read as windows-1252 and the program says so on its error output.
 3. **Fill the header**, the comment `<!-- ... -->` at the top. The program shows these fields in *Options > Language*:
 
    | Field | Content |
@@ -28,7 +28,7 @@ Ant Renamer Qt does not use Qt `.ts` files. It reads the language files of the o
    | `Icon` | Optional 16 x 16 BMP flag in base64: leave the model's or delete the line |
 
 4. **Translate the texts**: in every element, replace the value of `Caption`, `Hint`, `Text`... by the translation (rules in section 4). Do not change element names, `Name=` / `Index=` attributes or the structure.
-5. **Check that the file is valid XML** (a single misplaced quote makes the whole file unusable, and the program then silently falls back to English): `xmllint --noout "Italian.lng"` on Linux, or open the file in a browser or VS Code.
+5. **Check that the file is valid XML** (a single misplaced quote makes the rest of the file unusable: the program prints `Language file <name>: XML error at line N: ...` on its error output, see section 5, and only translates what it read before the error): `xmllint --noout "Italian.lng"` on Linux, or open the file in a browser or VS Code.
 6. **Try it** (section 5), then credit yourself (section 6) and send the file (section 7).
 
 ## 3. Fix or complete an existing translation
@@ -42,8 +42,9 @@ Edit the text of the key in the existing `app/Languages/<Language>.lng`, keeping
 - **Notes under the actions** (`lbl...Notes` elements): the text contains small HTML codes (`&lt;BR&gt;` for a line break, `&lt;LINK&gt;...&lt;/LINK&gt;` for a link). Keep them, in the form used in the file. **Important**: the text between `LINK` codes that names another action (for example "String replacement") must be **exactly the translated name of that action in the actions list**, otherwise a click on the link does nothing. The "Help" link (`<LINK>Help</LINK>`) opens the help page.
 - **XML characters**: write `&amp;` for `&`, `&lt;` for `<`, `&gt;` for `>`, `&quot;` for `"` inside an attribute. In the model, `&#38;&#38;` in a title is the way to show a single `&`.
 - **Tags** such as `%name%`, `%ext%`, `%folderN%`, `%num%`, `%author%` or the letters of the date mask (`yyyy`, `mm`...) are **not translated**: they are what the program recognises.
+- **Spaces at the ends**: some texts are glued together by the program (" at position %1", " using creation date"). The English text decides: if it starts or ends with a space, so does the translation, whatever you typed.
 - **Same length**: toolbar buttons have little room, prefer short captions to long ones.
-- **Not every English text is in the file**: a few texts are still only in the program code (the *About* window, for example). They stay in English, or the project translates them in the code (French only for now).
+- **Texts added by Ant Renamer Qt** (portable mode, theme, *About* window, sidecar files...) are in the last section of `English.lng`, `<QtPort>`, with their French translation in `French.lng`. A translator adds the same `<Item Name="..." Value="..."/>` lines to their file; until then these texts stay in English.
 
 ## 5. Test
 
@@ -68,7 +69,7 @@ The translators of the original Ant Renamer can send their file as it is: the fo
 
 The help is separate from the `.lng` file: Markdown pages in `app/help/`, **English, French, Croatian and Tamil** for now (`<page>_en.md`, `_fr.md`, `_hr.md`, `_ta.md`, with the table of contents `toc_<code>.md`). For the other languages of the interface the help is displayed in English.
 
-To add a language to the help: copy the English pages and `toc_en.md` to `<page>_<code>.md` and `toc_<code>.md`, translate them (keep the file names of the links and the `{#id}` after the headings: they are the targets of the links between pages), then add the language to `helpLanguageCode()` in `app/lngtranslator.cpp` (language name of the `.lng` file -> code). The help is long (about 20 pages): a translation of the interface alone is already very useful, the help can come later.
+To add a language to the help: copy the English pages and `toc_en.md` to `<page>_<code>.md` and `toc_<code>.md`, translate them (keep the file names of the links and the `{#id}` after the headings: they are the targets of the links between pages), then add the language to `helpLanguageCode()` in `app/lngtranslator.cpp` (language name of the `.lng` file -> code). The help is long (18 pages): a translation of the interface alone is already very useful, the help can come later.
 
 ## 9. Quick checklist
 

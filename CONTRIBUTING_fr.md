@@ -53,7 +53,7 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 
 ## À savoir
 
-- **Séparateurs de chemin.** `\` et `/` cohabitent dans le moteur. Normalisez les chemins avant d'en comparer deux.
+- **Séparateurs de chemin.** Sous Windows `\` et `/` cohabitent dans le moteur (sous Linux seul `/` est un séparateur). Normalisez les chemins avant d'en comparer deux.
 - **Fils d'exécution.** Le moteur tourne dans un fil de travail (`RenWorker`). L'interface ne doit lire que les copies `Snapshot` qu'elle reçoit, jamais un `File` pendant un renommage.
 - **Un job renomme réellement à chaque opération**, pas une seule fois à la fin. L'annulation ne remonte que d'un niveau (l'ancien nom de chaque fichier).
 - **Traductions.** Le texte anglais du code doit être identique à une entrée de `English.lng` pour être traduit, sinon il reste en anglais. `ANTREN_MISSING=1` liste les textes sans traduction.
@@ -61,4 +61,4 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 
 ## Licence
 
-Ant Renamer Qt est publié sous licence GPL v2, comme le programme d'origine. En contribuant, vous acceptez que votre contribution soit distribuée sous la même licence.
+Ant Renamer Qt est publié sous licence GPL v2 ou ultérieure, comme le programme d'origine. En contribuant, vous acceptez que votre contribution soit distribuée sous la même licence.

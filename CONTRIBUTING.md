@@ -31,7 +31,7 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 
 ## How to...
 
-**Add an operation (a 15th type).**
+**Add an action (a 15th type).**
 1. `core/ren_actions.h`: add the value at the **end** of `enum class ActionType` (the numbers are those of the original and are the row numbers of the list on screen) and declare `class ActionXxx : public Action` with its fields, `description`, `makeNewName`, `save`, `load` (and `getTag` / `init` if needed).
 2. `core/ren_actions.cpp`: implement them, add the XML tag to the `kNames` table and the type to `ActionList::create`.
 3. `app/actionpanel.cpp`: add the page in `buildPages` (the order of the pages is the type index), then the branch in `makeAction` and in `setFromAction`.
@@ -39,7 +39,7 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 5. Add a case to `tests/test_core.cpp`. `tests/test_panel.cpp` catches a forgotten `setFromAction`.
 6. Documentation: help pages (`app/help/actions_*.md`), `docs/USER_GUIDE*.md`, `docs/WHATS_NEW*.md`, `CHANGELOG.md`.
 
-**Add a setting to an existing operation.** A field in the class (with its default), `save` / `load` (an XML attribute; use the default when it is missing so older jobs still load), the use in `makeNewName`, the control in `buildPages`, `makeAction` **and** `setFromAction`, the text in the `.lng` files, a case in `test_core.cpp`.
+**Add a setting to an existing action.** A field in the class (with its default), `save` / `load` (an XML attribute; use the default when it is missing so older batches still load), the use in `makeNewName`, the control in `buildPages`, `makeAction` **and** `setFromAction`, the text in the `.lng` files, a case in `test_core.cpp`.
 
 **Add a program option.** A field in `AppOptions` (`app/appsettings.h`), its name in the `KEYS` macro (`app/appsettings.cpp`), the control in `OptionsDialog` (`app/dialogs.cpp`); if the engine needs it, a field in `ren::Options` and the copy in `applyToCore()`.
 
@@ -53,12 +53,12 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 
 ## Things to know
 
-- **Path separators.** `\` and `/` live together in the engine. Normalise paths before comparing two of them.
+- **Path separators.** On Windows `\` and `/` live together in the engine (on Linux only `/` is a separator). Normalise paths before comparing two of them.
 - **Threads.** The engine runs in a worker thread (`RenWorker`). The interface must only read the `Snapshot` copies it receives, never a `File` while a renaming runs.
-- **A job renames for real at each operation**, not once at the end. The revert goes back one level only (the previous name of each file).
+- **A batch renames for real at each action**, not once at the end. The revert goes back one level only (the previous name of each file).
 - **Translations.** The English text in the code must be identical to an entry of `English.lng` to be translated, otherwise it stays in English. `ANTREN_MISSING=1` lists the texts without translation.
 - **Line endings.** Every text file is LF, in the repository and in the working tree (`.gitattributes`). If your editor or a script writes CRLF, Git converts it back, but fix the tool when you can. Encodings are not touched: the help pages and the `.lng` files keep theirs, so do not re-save them with another encoding.
 
 ## License
 
-Ant Renamer Qt is released under the GPL v2, like the original program. By contributing you agree that your contribution is distributed under the same license.
+Ant Renamer Qt is released under the GPL v2 or later, like the original program. By contributing you agree that your contribution is distributed under the same license.

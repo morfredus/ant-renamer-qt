@@ -26,6 +26,7 @@ struct Snapshot {
     QString description;
     int state = 0;
     int batchPos = 0, index = 0;
+    QString folder, name, preview;  // the row as the worker left it: the GUI never reads a File that is being modified
 };
 Q_DECLARE_METATYPE(Snapshot)
 
@@ -106,6 +107,7 @@ private:
     void loadSettings();
     void saveSettings();
     void applyOptionsLive();
+    int theme_ = -1;  // theme in use (see theme.h)
 
     // navigation / status
     void setStatus();
@@ -159,6 +161,7 @@ private:
     void run(ren::Op op);
     void onProgress(const Snapshot& s);
     void onFinished();
+    void setBusy(bool busy);  // disables what would modify the lists, the batch or the options while a run is in progress
 
     // log
     void addLog(const QString& text, ren::State st);
@@ -174,6 +177,7 @@ private:
 
     struct LogEntry { QString text; ren::State state; };
     std::vector<LogEntry> logEntries_;
+    size_t runLogStart_ = 0;  // first log entry of the current run (the auto-saved log holds this run only)
     bool logShowOk_ = true, logShowError_ = true, logShowNot_ = true;
 
     // widgets
@@ -191,7 +195,7 @@ private:
     QMenu* recentMenu_;
     int currentTab_ = 0;
 
-    QAction *aGo_, *aStop_, *aUndo_, *aOnTop_, *aOptions_, *aHelp_, *aAbout_, *aExit_;
+    QAction *aGo_, *aStop_, *aUndo_, *aOnTop_, *aTheme_, *aOptions_, *aHelp_, *aAbout_, *aExit_;
     QAction *aTab_[3];
     QAction *aAddFiles_, *aAddFolders_, *aRemoveSel_, *aRemoveAll_, *aRemoveDead_, *aPreview_, *aChangedOnly_;
     QAction *aBatchAdd_, *aBatchEdit_, *aBatchRemoveSel_, *aBatchClear_, *aBatchOpen_, *aBatchSave_;

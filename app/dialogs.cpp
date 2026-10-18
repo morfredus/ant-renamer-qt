@@ -116,6 +116,7 @@ struct OptionsDialog::Ui {
     QCheckBox *dropFiles, *dropFolders, *dropRecursive;
     QComboBox* pageLayout = nullptr;
     QSpinBox *historyMax, *fontSize;
+    QComboBox* theme;
     QFontComboBox* font;
     QComboBox* iconSet;
     QCheckBox *startSwitch, *startClearLog, *finishSwitch, *finishClearFiles, *finishClearBatch, *saveLog, *saveLogAppend;
@@ -170,6 +171,15 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         pl->addWidget(ui_->pageLayout);
         pl->addStretch();
         l->addLayout(pl);
+
+        auto* th = new QHBoxLayout;
+        th->addWidget(new QLabel(tr("Theme:")));
+        ui_->theme = new QComboBox;
+        ui_->theme->addItems({tr("Follow the system"), tr("Light"), tr("Dark")});
+        ui_->theme->setCurrentIndex(qBound(0, o.theme, 2));
+        th->addWidget(ui_->theme);
+        th->addStretch();
+        l->addLayout(th);
 
         header(l, tr("Fonts"));
         ui_->forceFont = box(l, tr("Force the following font for controls that have to display special characters:"), o.forceFont);
@@ -340,6 +350,7 @@ void OptionsDialog::accept() {
         QMessageBox::information(this, windowTitle(), tr("The new interface is used the next time the program starts."));
     o.newUi = ui_->newUi->isChecked();
     o.pageLayout = ui_->pageLayout->currentIndex();
+    o.theme = ui_->theme->currentIndex();
     o.realtime = ui_->realtime->isChecked();
     o.resizeCols = ui_->resizeCols->isChecked();
     o.fileIcons = ui_->icons->isChecked();
@@ -420,8 +431,10 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
         u"<b>"_s + tr("Port:") + u"</b><br>"_s + tr("C++/Qt 6 port and Linux port: ") + u"Frédéric Biron<br><br>"_s +
         u"<b>"_s + tr("Thanks to:") + u"</b><br>Sebastien Buysse, Grégory Zicot, Michel Potten, "_s +
         tr("...and all the people that sent me suggestions and comments") + u"<br><br><b>"_s + tr("Translations:") + u"</b><br>"_s +
-        u"Arek Czak, Asabukuro, GVG, Hiro5, Ivo Blaauw, Jim Liu, Kari Eveli, Karin Andersson, Lin Fan, N.Nedelev, "
-        u"Nazar Tychkivskyi, Roberto Paiva, Salvatore Meschini, Sepp Winkler, Seunghoe Yang<br><br><b>"_s +
+        u"Arek Czak, Asabukuro, Carlos A Medina R, Damir13, Denny, dzmitry[li], elega, GVG, Hiro5, Ivo Blaauw, Jim Liu, "
+        u"Kari Eveli, Karin Andersson, Lin Fan (林繁), N.Nedelev, Nazar Tychkivskyi, Roberto Paiva, Salvatore Meschini, "
+        u"Sepp Winkler, Seunghoe Yang, Ulisses F Braga, Vico//Koby, Volker Schmidt, Wasilis Mandratzis, Zoltán Danhauser, "
+        u"大眼仔~旭, 无名用户, தமிழ்நேரக்குழு<br><br><b>"_s +
         tr("Components:") + u"</b><br>Qt (<a href='https://www.qt.io'>www.qt.io</a>)"_s),
         tr("Credits"));
 

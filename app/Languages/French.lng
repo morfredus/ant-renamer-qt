@@ -278,6 +278,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
       <Item Name="straeFromListEmpty" Value="Ligne vide"/>
       <Item Name="straeFromListEnd" Value="Fin de la liste"/>
       <Item Name="straeExifNoInfo" Value="Pas d'info EXIF trouvée"/>
+      <Item Name="straeDateTimeNoDate" Value="Impossible d'obtenir la date du fichier"/>
       <Item Name="strfsNotRenamed" Value="%s n'a pas été renommé : %s"/>
       <Item Name="strfsRenamed" Value="%s renommé en %s"/>
       <Item Name="strfsReverted" Value="%s a repris l'ancien nom %s"/>
@@ -431,4 +432,56 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     </Options>
     <cbxNotAgain Caption="Ne plus afficher cette fenêtre (conserver les options choisies)"/>
   </DragdropOptionsForm>
+  <!-- Texts added by Ant Renamer Qt (not in the original program). Same names in every language file. -->
+  <QtPort>
+    <Item Name="portableModeKeepThe" Value="Mode portable : conserver les réglages dans le dossier du programme"/>
+    <Item Name="settingsStorage" Value="Stockage des réglages"/>
+    <Item Name="couldNotWriteThe" Value="Impossible d'écrire les réglages dans le dossier du programme."/>
+    <Item Name="theNewLanguageIs" Value="La nouvelle langue sera utilisée au prochain démarrage du programme."/>
+    <Item Name="history" Value="Historique"/>
+    <Item Name="naturalSortInFiles" Value="Tri naturel dans la liste des fichiers (2 avant 10) au lieu du tri alphabétique"/>
+    <Item Name="modernInterfaceLayoutUsed" Value="Disposition moderne de l'interface (prise en compte au prochain démarrage)"/>
+    <Item Name="theNewInterfaceIs" Value="La nouvelle interface sera utilisée au prochain démarrage du programme."/>
+    <Item Name="modify" Value="Modifier"/>
+    <Item Name="pagesLayoutModernInterface" Value="Disposition des pages (interface moderne) :"/>
+    <Item Name="tabs" Value="Onglets"/>
+    <Item Name="theme" Value="Thème :"/>
+    <Item Name="followTheSystem" Value="Suivre le système"/>
+    <Item Name="light" Value="Clair"/>
+    <Item Name="dark" Value="Sombre"/>
+    <Item Name="lightDark" Value="Clair / sombre"/>
+    <Item Name="switchBetweenTheLight" Value="Basculer entre le thème clair et le thème sombre"/>
+    <Item Name="singleScreenInBands" Value="Écran unique, en bandes"/>
+    <Item Name="singleScreenInColumns" Value="Écran unique, en colonnes"/>
+    <Item Name="validateTheModification" Value="Valider la modification"/>
+    <Item Name="cancelTheModification" Value="Annuler la modification"/>
+    <Item Name="modificationOfAction" Value="Modification de l'action %1"/>
+    <Item Name="replaceTheSelectedAction" Value="Remplacer l'action sélectionnée par les réglages actuels (double-cliquez sur une action pour charger ses réglages)"/>
+    <Item Name="settingsLoadedChangeThem" Value="Réglages chargés : modifiez-les, puis validez la modification"/>
+    <Item Name="windowsExplorer" Value="Explorateur Windows"/>
+    <Item Name="addToAntRenamer" Value="Ajouter à Ant Renamer Qt"/>
+    <Item Name="addAddToAnt" Value="Ajouter « Ajouter à Ant Renamer Qt » au menu contextuel des fichiers et dossiers"/>
+    <Item Name="onWindowsTheEntry" Value="Sous Windows 11, l'entrée se trouve dans « Afficher plus d'options » (ou Maj+F10)."/>
+    <Item Name="couldNotChangeThe" Value="Impossible de modifier le menu contextuel de l'Explorateur."/>
+    <Item Name="seconds" Value="secondes"/>
+    <Item Name="alsoRenameTheSidecar" Value="Renommer aussi les fichiers associés (.xmp, .dop) d'une image renommée"/>
+    <Item Name="sidecarFileRenamedTo" Value="fichier associé %1 renommé en %2"/>
+    <Item Name="sidecarFileNotRenamed" Value="fichier associé %1 non renommé : %2"/>
+    <Item Name="iptckeywordsXmptitleIptcAnd" Value="%IptcKeywords%, %XmpTitle%... = données IPTC et XMP (mots-clés, titre, auteur, lieu...)"/>
+    <Item Name="position" Value="Position :"/>
+    <Item Name="string" Value="Chaîne :"/>
+    <Item Name="license" Value="Licence :"/>
+    <Item Name="webSiteAddress" Value="Adresse du site web : "/>
+    <Item Name="eMailAddress" Value="Adresse e-mail : "/>
+    <Item Name="antRenamerQtIs" Value="Ant Renamer Qt est un portage C++/Qt d'Ant Renamer d'Antoine Potten, développé en parallèle du programme d'origine. Portage (Windows et Linux) : Frédéric Biron."/>
+    <Item Name="antRenamerQtSupport" Value="Assistance pour Ant Renamer Qt : "/>
+    <Item Name="issuesAndDiscussions" Value="issues et discussions"/>
+    <Item Name="port" Value="Portage :"/>
+    <Item Name="cQtPortAnd" Value="Portage C++/Qt 6 et portage Linux : "/>
+    <Item Name="components" Value="Composants :"/>
+    <Item Name="translations" Value="Traductions :"/>
+    <Item Name="thanksTo" Value="Remerciements :"/>
+    <Item Name="andAllThePeople" Value="...et toutes les personnes qui m'ont envoyé des suggestions et des commentaires"/>
+    <Item Name="thisProgramIsFree" Value="Ce programme est un logiciel libre ; vous pouvez le redistribuer et/ou le modifier selon les termes de la Licence Publique Générale GNU telle que publiée par la Free Software Foundation ; soit la version 2 de la licence, soit (à votre convenance) toute version ultérieure. Ce programme est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE GARANTIE, sans même la garantie implicite de COMMERCIALISATION ou d'ADÉQUATION À UN USAGE PARTICULIER. Consultez la &lt;a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'&gt;Licence Publique Générale GNU&lt;/a&gt; pour plus de détails."/>
+  </QtPort>
 </Application>

@@ -94,18 +94,18 @@ All packages are written to `dist/`.
 
 - `package-win.ps1` builds, stages the files that are needed at run time, then runs Inno Setup with `installer/antrenamer-qt.iss` for the installer. The zip contains an empty `antrenamer-qt.ini`, which switches the portable mode on.
 - `package-deb.sh` expects a finished build (`--build <folder>` to choose it). The package depends on the system Qt (the dependencies are detected from the binary, or from the sysroot when cross-compiling) and installs the program in `/usr/bin` and the languages and help in `/usr/share/antrenamer-qt`.
-- `package-appimage.sh` downloads `linuxdeploy` and its Qt plugin into `.cache/` the first time (an Internet connection is needed once).
+- `package-appimage.sh` downloads `linuxdeploy` and its Qt plugin into `.cache/` the first time (an Internet connection is needed once). Both are pinned to a release and checked against a SHA-256 in the script (`LD_TAG`/`LD_SHA256`, `QT_TAG`/`QT_SHA256`): a file with another hash is refused. To update them, change the tags, download the files and recompute the hashes with `sha256sum`.
 - `.github/workflows/build.yml` builds on Linux and Windows for every push and pull request, runs the tests, and keeps the Windows packages as workflow artifacts.
 
 ## Command line options of the program
 
 | Option | Effect |
 |---|---|
-| `-b file.arb` (or a `.arb` file alone) | Load a job |
+| `-b file.arb` (or a `.arb` file alone) | Load a batch |
 | `-g` | Start renaming |
 | `-x` | Exit when finished |
 | `-a[fFr]` | What the following paths add: `f` files, `F` folders, `r` recursive; wildcards allowed |
 | `--shell path...` | Used by the Explorer context menu: add the paths to the window that is already open |
 | `--install-shell` / `--remove-shell` | Add or remove the Explorer context menu entry, then exit |
 
-Developer helpers (environment variables): `ANTREN_MISSING=1` logs the strings that have no translation in every dialog; `ANTREN_SHOT=file.png` saves a screenshot of the window and exits (with `ANTREN_TAB`, `ANTREN_DELAY`, `ANTREN_DIALOG`, `ANTREN_DTAB` and `ANTREN_HELPTOPIC` to choose the page or dialog, `ANTREN_ACTION=n` to pick action `n` (0 to 13) on the Actions page and `ANTREN_PREVIEW=1` to refresh the preview first). With a `antrenamer-qt.ini` file next to the program (portable mode) containing `language=French`, this is how the screenshots of the help are made without touching your own settings.
+Developer helpers (environment variables): `ANTREN_MISSING=1` logs the strings that have no translation in every dialog; `ANTREN_SHOT=file.png` saves a screenshot of the window and exits (with `ANTREN_TAB`, `ANTREN_DELAY`, `ANTREN_DIALOG`, `ANTREN_DTAB` and `ANTREN_HELPTOPIC` to choose the page or dialog, `ANTREN_SIZE=WxH` to set the window size, `ANTREN_THEME_TOGGLE=n` to press the light / dark button n times, `ANTREN_ACTION=n` to pick action `n` (0 to 13) on the Actions page and `ANTREN_PREVIEW=1` to refresh the preview first). With a `antrenamer-qt.ini` file next to the program (portable mode) containing `language=French`, this is how the screenshots of the help are made without touching your own settings.

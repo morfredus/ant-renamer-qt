@@ -1,7 +1,7 @@
 find_package(Qt6 REQUIRED COMPONENTS Widgets Network)
 set(CMAKE_AUTORCC ON)
 
-set(SRC main.cpp mainwindow.cpp actionpanel.cpp appsettings.cpp dialogs.cpp icons.cpp lngtranslator.cpp helpwindow.cpp shellmenu.cpp resources.qrc)
+set(SRC main.cpp mainwindow.cpp actionpanel.cpp appsettings.cpp dialogs.cpp icons.cpp lngtranslator.cpp helpwindow.cpp shellmenu.cpp theme.cpp resources.qrc)
 if(WIN32)
     enable_language(RC)
     list(APPEND SRC app.rc)   # icone + manifeste (chemins longs, UTF-8, DPI par ecran)
@@ -16,8 +16,9 @@ endif()
 
 # Test d'aller-retour du panneau d'actions (charger une action dans l'editeur puis la relire), sans fenetre.
 # Echoue si un champ ou un type d'action est ajoute sans mettre a jour ActionPanel::setFromAction.
-add_executable(test_panel ../tests/test_panel.cpp actionpanel.cpp appsettings.cpp lngtranslator.cpp helpwindow.cpp)
+add_executable(test_panel ../tests/test_panel.cpp actionpanel.cpp appsettings.cpp icons.cpp lngtranslator.cpp helpwindow.cpp)
 target_include_directories(test_panel PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_definitions(test_panel PRIVATE LNG_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Languages")
 target_link_libraries(test_panel PRIVATE rencore Qt6::Widgets Qt6::Network)
 add_test(NAME panel COMMAND test_panel)
 

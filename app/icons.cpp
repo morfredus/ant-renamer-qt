@@ -12,7 +12,7 @@
 
 namespace {
 
-constexpr int kVectorSet = 3;  // the "Modern" set: drawn in code, not read from a bitmap strip
+constexpr int kVectorSet = kModernIconSet;  // the "Modern" set: drawn in code, not read from a bitmap strip
 int g_set = 0;
 
 const char* const kFiles[] = {":/Scrows.bmp", ":/Windows XP.bmp", ":/Windows XP Large.bmp"};
@@ -222,6 +222,18 @@ void drawVectorIcon(QPainter& p, int index, QIcon::Mode mode) {
         p.setBrush(fg);
         p.drawEllipse(QPointF(12, 7.6), 1.15, 1.15);
         break;
+    case TbTheme:  // a circle, half filled: the usual light / dark symbol
+        p.drawEllipse(QPointF(12, 12), 8, 8);
+        {
+            QPainterPath half;
+            half.moveTo(12, 4);
+            half.arcTo(QRectF(4, 4, 16, 16), 90, -180);
+            half.closeSubpath();
+            p.setPen(Qt::NoPen);
+            p.setBrush(fg);
+            p.drawPath(half);
+        }
+        break;
     case TbExit:
         open({{10, 4}, {5, 4}, {5, 20}, {10, 20}});
         p.setPen(QPen(red, 1.9, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
@@ -267,7 +279,7 @@ QStringList iconSetNames() {
 int iconCell() { return g_set == kVectorSet ? 20 : strip(g_set).cell; }
 
 QIcon tbIcon(int index) {
-    if (g_set == kVectorSet) return QIcon(new VectorIconEngine(index));
+    if (g_set == kVectorSet || index >= TbTheme) return QIcon(new VectorIconEngine(index));
     const Strip& s = strip(g_set);
     return QIcon(QPixmap::fromImage(s.image.copy(index * s.cell, 0, s.cell, s.cell)));
 }

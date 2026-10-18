@@ -1,6 +1,6 @@
 # Actions page
 
-This page displays the actions that can be applied to the files. Choose an action in the list on the left, set its parameters on the right, then click ![Add to batch](img/batchadd.png) "Add" (Ctrl+F2) to put it in the [batch](batch_en.md). Several actions can be stacked: they are applied one after the other, in the order of the batch. The batch can also be empty: in that case the action currently displayed is the one that is applied (and previewed).
+This page displays the actions that can be applied to the files. Choose an action in the list on the left, set its parameters on the right, then click ![Add to batch](img/batchadd.png) "Add to batch" (Ctrl+F2) to put it in the [batch](batch_en.md). Several actions can be stacked: they are applied one after the other, in the order of the batch. The batch can also be empty: in that case the action currently displayed is the one that is applied (and previewed).
 
 ![Actions page](img/actions_page_en.png)
 
@@ -58,9 +58,9 @@ With the "Use wildcards" option, `*` in the search field stands for any text (ev
 
 You can enter here multiple strings to replace. The left column contain the strings to search in names, the right column contains the text to put instead (which can be an empty string). The replacements are done line after line, from the top to the bottom of the table. The options **Include extension in search** (off by default) and **Case sensitive** (on by default) apply to the whole table.
 
-It can be used for single characters replacement, like replacing all accentuated characters by their latin equivalent (a set called "Remove west-european accents" is provided), or to replace whole strings, of different lengths.
+It can be used for single characters replacement, like replacing all accented characters by their latin equivalent (a set called "Remove west-european accents" is provided), or to replace whole strings, of different lengths.
 
-You can save the table contents to retrieve it later from the "Predefined sets" drop-down list. Type a name in this field and click "Save"; "Delete" removes the set whose name is displayed and "Clear Table" empties the table.
+You can save the table contents to retrieve it later from the "Predefined sets" drop-down list. Type a name in this field and click "Save"; "Delete" removes the set whose name is displayed (nothing happens if the name is empty) and "Clear Table" empties the table. A "/" or a "\" in a set name is replaced by a dash.
 
 To add a line in the table, press "Ctrl" and "Plus" (+) keys. The new line will be added before the selected cell. In the same way, pressing "Ctrl" and "Minus" (-) keys will remove current line.
 
@@ -132,7 +132,7 @@ Here again you have to enter a mask. The tags are read from the ID3 information 
 
 `%name%`, `%ext%`, `%folderN%` and `%%` tags are also available, as well as the `$if` function (see ["Formatting"](format_en.md#if)).
 
-Since a mp3 tag can contain any character, the characters that are forbidden in a file name are always replaced in the values of the tags: quotation marks (") become apostrophes ('), question marks become a dot, and the characters `\ / : * < > |` become a dash.
+Since an mp3 tag can contain any character, the characters that are forbidden in a file name are always replaced in the values of the tags: quotation marks (") become apostrophes ('), question marks become a dot, and the characters `\ / : * < > |` and the control characters become a dash (a NUL character is simply dropped).
 
 The option "Two-digit track number" adds a zero in front of the track number when it has only one digit ("1" becomes "01").
 
@@ -172,9 +172,9 @@ The "c", "ddddd" and "dddddd" tags of the original program (date in the format o
 
 Be careful with date and time formats: the "/" and ":" cannot be used in a filename. So if you want delimiters between the numbers, insert them between quotes, as explained in next paragraphs.
 
-Here all the characters that are not part of the mask should be put inside quotes (single or double). I recommend to use double quotes (quotation marks "...") instead of single (apostrophes '...') so you can put apostrophes inside the quotes.
+Here all the characters that are not part of the mask should be put inside quotes (single or double). I recommend to use double quotes (quotation marks "...") instead of single (apostrophes '...') so you can put apostrophes inside the quotes. One exception: the letters "f" (file name) and "e" (extension) are replaced even between single quotes, so text that contains an "f" or an "e" must be put between double quotes.
 
-Here are few valid examples:
+Here are a few valid examples:
 
 - `yyyy'-'mm'-'dde` : Uses yyyy-mm-dd date format, forces separator to be "-", and keeps original extension.
 - `"a'b" yyyymmdd".txt"` : Here is an example of including an apostrophe inside a quote. A ".txt" extension is forced.
@@ -189,7 +189,7 @@ Since multiple files can have the same date (or time), the option "Add suffix if
 
 ## Random names {#random}
 
-Using the same mask system than [Enumeration](#enum) and [Use mp3](#mp3), you can generate here new names that will contain a random part. Like in these two actions, %name% and %ext% tags are also available.
+Using the same mask system as [Enumeration](#enum) and [Use mp3](#mp3), you can generate here new names that will contain a random part. Like in these two actions, %name% and %ext% tags are also available.
 
 The `%random%` tag will put a random string, generated according to one of these options:
 
@@ -199,7 +199,7 @@ The `%random%` tag will put a random string, generated according to one of these
 
 ## Change case {#case}
 
-With this action it's only the case (uppercase/lowercase) of the letters that will change, so the name will not really change on systems where names are case-insensitive (Windows). On Linux "photo.jpg" and "Photo.jpg" are two different names.
+With this action it's only the case (uppercase/lowercase) of the letters that will change, so only the spelling of the name changes. The file is renamed on Windows too ("photo.jpg" becomes "Photo.jpg"), although Windows considers both as the same name; on Linux they are two different names.
 
 You can make different kinds of changes:
 
@@ -208,7 +208,7 @@ You can make different kinds of changes:
 - **Upper**: everything in uppercase.
 - **Lower**: everything in lowercase.
 
-Usually it is better to keep the option "Use locale settings to change accentuated characters" checked: all the letters, accentuated ones included, are then converted (é to É). If this option is not checked, only standard latin letters (a..z) are modified.
+Usually it is better to keep the option "Use locale settings to change accented characters" checked: all the letters, accented ones included, are then converted (é to É). If this option is not checked, only standard latin letters (a..z) are modified.
 
 By default the extension is left alone. "Also apply to extension" changes the case of the extension too, and "Apply to extension instead of name" changes only the extension.
 
@@ -232,7 +232,7 @@ For more information about the syntax of the regular expression, with examples, 
 
 ## Use EXIF info {#exif}
 
-Using the same mask system than several actions described above, you can generate with this action a new file name based on the EXIF data contained in pictures (JPEG, and TIFF-based files such as most RAW files). This can be, for example, very useful as replacement of the [Use date & time](#datetime) action if the dates of your photos are not kept when you transfer them from your digital camera.
+Using the same mask system as several actions described above, you can generate with this action a new file name based on the EXIF data contained in pictures (JPEG, and TIFF-based files such as most RAW files). This can be, for example, very useful as replacement of the [Use date & time](#datetime) action if the dates of your photos are not kept when you transfer them from your digital camera.
 
 See ["Formatting"](format_en.md) page for more information, including the `$if` function. Besides the EXIF tags, the IPTC and XMP data (keywords, title, author, place, rating...) can also be used. All the available tags are listed [on this dedicated page](metadata_tags_en.md). The tag `%datetime%` (or `%datetimeoriginal%`) is the date and time when the picture was taken.
 
@@ -240,6 +240,6 @@ See ["Formatting"](format_en.md) page for more information, including the `$if` 
 
 The `%num%` tag is a counter, like in the [Enumeration](#enum) action (same options, including "Go back to start value..." and "Same number for files with the same name...", handy to give a JPEG and its RAW file the same number).
 
-A file that contains no EXIF, IPTC or XMP information is not renamed: the log says "No EXIF info found".
+A file that contains no EXIF, IPTC or XMP information is not renamed: the log says "No EXIF info found" ("Pas d'info EXIF trouvée" in French).
 
 The XMP sidecar file of a picture (`IMG.xmp` or `IMG.CR2.xmp`) is read with the picture and wins over the XMP embedded in it, which is how the keywords and the rating of a RAW file become available. When the picture is renamed, its sidecar files (`.xmp`, and DxO `.dop`) are renamed with it: see the option in [Options](options_en.md), *Processing*.

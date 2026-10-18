@@ -157,9 +157,9 @@ bool readV1(QFile& f, Id3Info& out) {
     out.title = v1field(b, 3, 30);
     out.author = v1field(b, 33, 30);
     out.album = v1field(b, 63, 30);
-    out.year = QString::fromLatin1(b.mid(93, 4));
+    out.year = v1field(b, 93, 4);  // blank years are NUL padded: they must not reach a file name
     out.comment = v1field(b, 97, 30);
-    out.track = static_cast<quint8>(b[97 + 29]);  // ID3v1.1: last comment byte
+    out.track = b[125] == '\0' ? static_cast<quint8>(b[126]) : 0;  // ID3v1.1 only: byte 125 is 0 and byte 126 the track (v1.0 has comment text there)
     out.genre = static_cast<quint8>(b[127]);
     out.genreText = id3Genre(out.genre);
     return true;
@@ -244,8 +244,11 @@ bool readV2(QFile& f, Id3Info& out) {
     QByteArray body = f.read(qMin<qint64>(size, 16 * 1024 * 1024));
     if (ver < 4 && (flags & 0x80)) body = unsync(body);  // whole-tag unsynchronisation (v2.2/2.3)
     int pos = 0;
-    if (ver >= 3 && (flags & 0x40) && body.size() >= 4)  // extended header: skip it
-        pos = ver == 4 ? int(synchsafe(body.constData())) : int(be32(body.constData()) + 4);
+    if (ver >= 3 && (flags & 0x40) && body.size() >= 4) {  // extended header: skip it
+        // 64-bit arithmetic: a hostile size field must not wrap around to a negative offset (read before the buffer)
+        const qint64 skip = ver == 4 ? qint64(synchsafe(body.constData())) : qint64(be32(body.constData())) + 4;
+        pos = int(qMin<qint64>(skip, body.size()));
+    }
     const int idLen = ver == 2 ? 3 : 4, hdr = ver == 2 ? 6 : 10;
     bool any = false;
     while (pos + hdr <= body.size() && body[pos] != 0) {

@@ -2,6 +2,16 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.0.0-rc.15 (18/10/2026)
+  - Fichiers de langue : les textes que seul le français avait (mode portable, thème, fenêtre À propos...) sont maintenant dans les fichiers de langue : chaque traducteur peut les traduire.
+  - Paquets : les outils de l'AppImage sont épinglés à une version et vérifiés par SHA-256 ; la compilation Windows réessaie une fois quand un fichier est verrouillé.
+- 3.0.0-rc.14 (18/10/2026)
+  - Nouveau bouton clair / sombre dans la barre d'outils et option Thème (suivre le système, clair, sombre) : fonctionne partout, y compris dans une AppImage qui ne détecte pas le thème du bureau.
+  - Le journal est lisible sur fond sombre (couleurs plus claires), ainsi que la surbrillance de la barre d'outils.
+- 3.0.0-rc.13 (18/10/2026)
+  - Robustesse : une expression régulière invalide ne renomme rien, des tags MP3 abîmés ne coupent plus les noms et ne font plus planter, les boutons sont désactivés pendant un renommage, « *.* » accepte aussi les fichiers sans extension, les jeux sauvegardés ne sont plus effacés par un « Supprimer » erroné.
+  - Fichiers de langue : l'allemand est de nouveau valide et entièrement traduit, les erreurs d'un fichier de langue sont signalées, liens et tags cassés réparés dans une douzaine de langues, crédits complétés.
+  - Aide corrigée d'après le programme (couleurs du journal, tags, historique, masque de date) et documentation mise à jour ; licence indiquée GPL v2 ou ultérieure partout.
 - 3.0.0-rc.12 (17/10/2026)
   - Corrigé (Linux) : un nom de fichier contenant deux-points ou antislash était coupé à ce caractère ; sous Linux seul « / » délimite un chemin maintenant. Corrigé aussi sous Linux : les fichiers d'un dossier renommé le suivent, %folder-N% et les tags %count% fonctionnent. Testé sous Linux Mint 22.3 et Debian 13.
   - Nouveau jeu d'icônes « Modern » (par défaut) : icônes au trait dessinées par le programme, nettes sur tout écran, thèmes clair et sombre. Les autres sets restent dans Options, Affichage.
@@ -28,7 +38,7 @@ Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé
   - Nouveau chapitre d'aide « Disposition moderne de l'interface ».
   - Corrigé : un texte présent deux fois dans les fichiers de langue avec deux traductions recevait l'une ou l'autre au hasard.
 - 3.0.0-rc.7 (14/10/2026)
-  - Nouvelle option « Tri naturel dans la liste des fichiers » (Options, Affichage), activée par défaut : « fichier 2 » est trié avant « fichier 10 ». Décochez-la pour le tri alphabétique.
+  - Nouvelle option « Tri naturel dans la liste des fichiers » (Options, Fichiers & Dossiers), activée par défaut : « fichier 2 » est trié avant « fichier 10 ». Décochez-la pour le tri alphabétique.
   - Corrigé : dans la liste des fichiers, un clic sur un en-tête de colonne ne triait que la première fois.
 - 3.0.0-rc.6 (14/10/2026)
   - Le copyright devient 2000-2026 Antoine Potten - Frédéric Biron (fenêtre À propos, installeur, paquets).

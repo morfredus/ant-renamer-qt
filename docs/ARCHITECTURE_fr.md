@@ -16,13 +16,14 @@ core/             Moteur (bibliothèque statique rencore)
 app/              Interface (exécutable antrenamer-qt)
   Languages/      Fichiers de langue de l'original (.lng, lus à l'exécution)
   help/           Aide Markdown en 4 langues, table des matières, images
-tests/            test_core (moteur), test_panel (éditeur d'actions)
+tests/            test_core (moteur ; inclut id3_check.h, robust_check.h), test_panel (éditeur d'actions, chargeur de langues)
 cmake/toolchains/ Toolchain de compilation croisée ARM64
 scripts/          windows/ (compilation MinGW, zip et installeur) et linux/ (.deb, AppImage, .desktop)
 installer/        Script Inno Setup de l'installeur Windows
 docs/             Guides, présentation, notes de version
 .github/          Workflow d'intégration continue, Dependabot, modèles de tickets
 CMakeLists.txt, CMakePresets.json, VERSION   Fichiers de compilation et version, source unique
+LICENSE           Licence publique générale GNU
 ```
 
 | Dans `app/` | Compilé ? |
@@ -56,7 +57,7 @@ CMakeLists.txt, CMakePresets.json, VERSION   Fichiers de compilation et version,
 | `ren_id3.h/.cpp` | Lecteur ID3 (MP3) |
 | `ren_path.h` | Fonctions de chemins à la Delphi (en-tête seul) |
 
-**Chemins.** Les fonctions de `ren_path.h` considèrent `\`, `/` et `:` comme séparateurs, quel que soit le système : le moteur manipule donc des chemins aux séparateurs mélangés. Il faut les normaliser (`QDir::fromNativeSeparators`) avant de comparer deux chemins.
+**Chemins.** Les fonctions de `ren_path.h` suivent les règles du système : sous Windows `\`, `/` et `:` sont des séparateurs (`isDelim`) et `\` est celui que les fonctions ajoutent (`kSep`) ; sous Linux seul `/` en est un, `\` et `:` sont des caractères ordinaires d'un nom. Sous Windows les chemins peuvent donc mélanger les séparateurs : il faut les normaliser (`QDir::fromNativeSeparators`) avant de comparer deux chemins.
 
 **`File`.** `rename(nouveauNom)` calcule le chemin cible, refuse un nom identique, crée les dossiers manquants si demandé, puis déplace le fichier. Sous Windows, il utilise `MoveFileW` et pas `QFile::rename`, car ce dernier refuse de changer seulement la casse (`a.txt` vers `A.txt`) sur un disque insensible à la casse et l'opération Casse en a besoin. `revert()` remet l'ancien nom. Après un renommage réussi, `moveSidecars` déplace les fichiers associés de l'ancien nom (`sidecarCandidates()` : `IMG.xmp`, `IMG.XMP`, `IMG.CR2.xmp`..., idem pour `.dop`) pour qu'ils correspondent au nouveau. Un problème sur un sidecar n'échoue jamais l'image : il est seulement ajouté au texte du journal. `FileList::add` branche deux rappels sur chaque fichier : quand un **dossier** est renommé, les fichiers dessous le suivent ; quand un sidecar qui est aussi dans la liste est déplacé par son image, son entrée suit (`followPath`).
 
@@ -105,7 +106,7 @@ Une opération peut signaler un problème sans échouer (`setInfo`) : le fichier
 **Fichier de job (`.arb`).** XML écrit avec `QXmlStreamWriter` :
 
 ```xml
-<AntRenamer Version="3.0.0-rc.10" Date="2026-10-16">
+<AntRenamer Version="3.0.0-rc.15" Date="2026-10-18">
  <Batch>
   <StrRepl Search="old" Repl="new" AllOccurences="True" CaseSensitive="True" .../>
   <Enum Mask="File %num%%ext%" Start="1" Digits="3" Incr="1" Restart="False" SharePairs="False"/>
@@ -117,7 +118,7 @@ Les réglages sont des attributs (`True` / `False`), les textes longs (table de 
 
 **EXIF, IPTC, XMP** (`readExif`). Remplit une table nom vers valeur (noms insensibles à la casse) : d'abord le XMP associé au fichier (il l'emporte sur les données intégrées), puis les 512 premiers Ko du fichier lui-même. JPEG : le segment APP1 « Exif » donne le bloc TIFF, le segment APP13 « Photoshop 3.0 » donne l'IPTC. TIFF et DNG : les IFD sont lus directement. Le XMP est trouvé par son contenu (`<x:xmpmeta` ... `</x:xmpmeta>`), ce qui couvre JPEG, PNG, WebP, TIFF, DNG et les fichiers `.xmp`. Les tables `tagNames()`, `iptcNames()` et `xmpProps()` listent les tags connus, et `sidecarExtensions()` les extensions de fichiers associés (`xmp`, `dop`) : c'est le seul endroit à modifier pour en ajouter une.
 
-**ID3.** `readId3` lit l'ID3v2.3 (trames Latin-1 et UTF-16) et le complète avec l'ID3v1.
+**ID3.** `readId3` lit l'ID3v2.2, 2.3 et 2.4 (trames Latin-1, UTF-16 et UTF-8) et le complète avec l'ID3v1/1.1.
 
 ## L'interface (`app/`)
 

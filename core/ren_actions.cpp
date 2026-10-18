@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QRandomGenerator>
+#include <QSaveFile>
 #include <QRegularExpression>
 #include <QThread>
 #include <QUuid>
@@ -40,10 +41,13 @@ void pasInsert(const QString& what, QString& s, int idx) {
 
 qint64 tickCount() { return QDateTime::currentMSecsSinceEpoch() & 0xFFFFFFFF; }
 
-// Characters that cannot appear in a Windows file name; empty stays empty.
+// Characters that cannot appear in a Windows file name; empty stays empty. NUL is dropped (the system would cut the
+// name there and the file would lose its extension) and the other control characters become a dash.
 QString validateFileName(QString s) {
+    s.remove(QChar(0));
     for (QChar& c : s) {
-        if (c == u'"') c = u'\'';
+        if (c.unicode() < 0x20 || c.unicode() == 0x7F) c = u'-';
+        else if (c == u'"') c = u'\'';
         else if (c == u'?') c = u'.';
         else if (c == u'\\' || c == u':' || c == u'/' || c == u'*' || c == u'<' || c == u'>' || c == u'|') c = u'-';
     }
@@ -72,6 +76,11 @@ int countFolderContents(const QString& folder, bool countFolders, bool countFile
         }
     }
     return n;
+}
+
+// The name of `fn` with `ext` (without its dot) as extension; no dot at all when `ext` is empty.
+QString withExt(const QString& fn, const QString& ext) {
+    return changeFileExt(extractFileName(fn), ext.isEmpty() ? QString() : u'.' + ext);
 }
 
 QString padNum(int v, int digits) {  // Delphi '%.Nd'
@@ -331,7 +340,7 @@ QString ActionStringRepl::makeNewName(const QString& fn, bool isFolder) {
         if (all) r.replace(search, replace, cs);
         else if (int p = r.indexOf(search, 0, cs); p >= 0) r.replace(p, search.size(), replace);
     }
-    if (onlyExt) return changeFileExt(extractFileName(fn), u'.' + r);
+    if (onlyExt) return withExt(fn, r);
     if (!inclExt && !plainFolder()) r += extractFileExt(fn);
     return r;
 }
@@ -404,7 +413,7 @@ QString ActionStringIns::makeNewName(const QString& fn, bool isFolder) {
     const int insPos = fromBegin ? pos + 1 : int(r.size()) - pos + 1;
     pasInsert(advancedFormat(newString, [this](auto& t, auto& v) { return getTag(t, v); }), r, insPos);
     if (!plainFolder())
-        return ext ? changeFileExt(extractFileName(fn), u'.' + r) : r + extractFileExt(fn);
+        return ext ? withExt(fn, r) : r + extractFileExt(fn);
     return r;
 }
 void ActionStringIns::save(QXmlStreamWriter& w) const {
@@ -413,7 +422,7 @@ void ActionStringIns::save(QXmlStreamWriter& w) const {
 }
 void ActionStringIns::load(const XmlElem& e) {
     newString = e.str("Str", "new");
-    pos = e.num("Pos", 0);
+    pos = qBound(0, e.num("Pos", 0), 1000);
     fromBegin = e.flag("FromBegin", true);
     ext = e.flag("Ext", false);
 }
@@ -439,10 +448,10 @@ void ActionMoveStr::save(QXmlStreamWriter& w) const {
     w.writeEndElement();
 }
 void ActionMoveStr::load(const XmlElem& e) {
-    fromPos = e.num("FromPos", 0);
+    fromPos = qBound(0, e.num("FromPos", 0), 1000);
     fromBegin = e.flag("FromBegin", true);
-    count = e.num("Count", 1);
-    toPos = e.num("ToPos", 0);
+    count = qBound(1, e.num("Count", 1), 1000);
+    toPos = qBound(0, e.num("ToPos", 0), 1000);
     toBegin = e.flag("ToBegin", true);
 }
 
@@ -484,7 +493,7 @@ QString ActionCharDel::makeNewName(const QString& fn, bool isFolder) {
         pasDelete(r, fromBegin ? pos + 1 : int(r.size()) - pos - nbChar + 1, nbChar);
     }
     if (!plainFolder())
-        return ext ? changeFileExt(extractFileName(fn), u'.' + r) : r + extractFileExt(fn);
+        return ext ? withExt(fn, r) : r + extractFileExt(fn);
     return r;
 }
 void ActionCharDel::save(QXmlStreamWriter& w) const {
@@ -493,9 +502,9 @@ void ActionCharDel::save(QXmlStreamWriter& w) const {
     w.writeEndElement();
 }
 void ActionCharDel::load(const XmlElem& e) {
-    nbChar = e.num("Nb", 1);
-    afterString = e.num("AfterString", 0);
-    pos = e.num("Pos", 0);
+    nbChar = qBound(1, e.num("Nb", 1), 1000);
+    afterString = qBound(0, e.num("AfterString", 0), 2);
+    pos = qBound(0, e.num("Pos", 0), 1000);
     fromBegin = e.flag("FromBegin", true);
     str = e.str("Str", "str");
     ext = e.flag("Ext", false);
@@ -536,16 +545,16 @@ void ActionEnum::save(QXmlStreamWriter& w) const {
 }
 void ActionEnum::load(const XmlElem& e) {
     mask = e.str("Mask", "File %num%%ext%");
-    startAt = e.num("Start", 1);
-    digits = e.num("Digits", 3);
-    increment = e.num("Incr", 1);
+    startAt = qBound(-999999999, e.num("Start", 1), 999999999);
+    digits = qBound(1, e.num("Digits", 3), 20);
+    increment = qBound(-999999, e.num("Incr", 1), 999999);
     restart = e.flag("Restart", false);
     sharePairs = e.flag("SharePairs", false);
 }
 
 // --- MP3 ----------------------------------------------------------------------------------
 QString ActionMP3::description() const {
-    QString r = tr("Generate namees with MP3 tags, based on the mask \"%1\"").arg(mask);
+    QString r = tr("Generate names with MP3 tags, based on the mask \"%1\"").arg(mask);
     if (twoDigit) r += tr(", insert '0' in track number if required");
     return r;
 }
@@ -586,7 +595,7 @@ QString ActionDateTime::description() const {
     if (whichDate == 0) r += tr(" using creation date");
     else if (whichDate == 1) r += tr(" using last modification date");
     if (addSuffix) r += tr(", add a suffix if required");
-    if (offset != 0) r += tr(" with %1 min offset").arg(offset);
+    if (offset != 0) r += tr(" with %1 s offset").arg(offset);
     return r;
 }
 QString ActionDateTime::makeNewName(const QString& fn, bool isFolder) {
@@ -623,8 +632,8 @@ void ActionDateTime::save(QXmlStreamWriter& w) const {
 void ActionDateTime::load(const XmlElem& e) {
     mask = e.str("Mask", "yyyy'-'mm'-'dde");
     addSuffix = e.flag("AddSuffix", false);
-    whichDate = e.num("WhichDate", 1);
-    offset = e.num("Offset", 0);
+    whichDate = qBound(0, e.num("WhichDate", 1), 1);
+    offset = qBound(-999999999, e.num("Offset", 0), 999999999);
 }
 
 // --- Random -------------------------------------------------------------------------------
@@ -657,7 +666,7 @@ void ActionRandom::save(QXmlStreamWriter& w) const {
 }
 void ActionRandom::load(const XmlElem& e) {
     mask = e.str("Mask", "%random%%ext%");
-    method = e.num("Method", 0);
+    method = qBound(0, e.num("Method", 0), 2);
 }
 
 // --- Case ---------------------------------------------------------------------------------
@@ -709,7 +718,7 @@ void ActionCase::save(QXmlStreamWriter& w) const {
     w.writeEndElement();
 }
 void ActionCase::load(const XmlElem& e) {
-    caseType = e.num("Option", 0);
+    caseType = qBound(0, e.num("Option", 0), 3);
     afterChars = e.str("AfterChars", "- .+(");
     useLocale = e.flag("UseLocale", true);
     includeExt = e.flag("IncludeExt", false);
@@ -759,9 +768,14 @@ void ActionFromList::load(const XmlElem& e) {
 QString ActionRegexp::description() const { return tr("Rename files using a regular expression"); }
 QString ActionRegexp::makeNewName(const QString& fn, bool isFolder) {
     Action::makeNewName(fn, isFolder);
-    const QRegularExpression re = makeRegex(expr);
-    if (!re.isValid()) return QStringLiteral("<RegExp Error> ") + re.errorString();
     const QString name = extractFileName(fn);
+    if (expr.isEmpty()) return name;  // an empty expression matches everywhere: nothing to do
+    const QRegularExpression re = makeRegex(expr);
+    if (!re.isValid()) {
+        // The preview shows the error as the name; a real run leaves the file alone (setInfo: "not renamed")
+        setInfo(tr("Invalid regular expression: %1").arg(re.errorString()));
+        return QStringLiteral("<RegExp Error> ") + re.errorString();
+    }
     QString out;
     qsizetype last = 0;
     auto it = re.globalMatch(name);
@@ -784,7 +798,7 @@ void ActionRegexp::load(const XmlElem& e) {
 // --- Exif ---------------------------------------------------------------------------------
 QString ActionExif::description() const {
     QString r = tr("Generate names with EXIF info, based on the mask \"%1\"").arg(mask);
-    if (offset != 0) r += tr(" with %1 min offset").arg(offset);
+    if (offset != 0) r += tr(" with %1 s offset").arg(offset);
     return r;
 }
 bool ActionExif::getTag(const QString& tag, QString& v) {
@@ -797,10 +811,16 @@ bool ActionExif::getTag(const QString& tag, QString& v) {
         v.clear();
         for (auto it = tags_.constBegin(); it != tags_.constEnd(); ++it)
             if (it.key().compare(tag, Qt::CaseInsensitive) == 0) v = it.value();
-        if (offset != 0) {
-            static const QString f = QStringLiteral("yyyy:MM:dd HH:mm:ss");
-            QDateTime dt = QDateTime::fromString(v, f);
-            if (dt.isValid()) v = dt.addSecs(offset).toString(f);
+        if (offset != 0 && v.size() == 19) {  // "yyyy:MM:dd HH:mm:ss": shifted as plain calendar fields, whatever the local time zone
+            const QDate d = QDate::fromString(v.left(10), QStringLiteral("yyyy:MM:dd"));
+            const QTime tm = QTime::fromString(v.mid(11), QStringLiteral("HH:mm:ss"));
+            if (d.isValid() && tm.isValid()) {
+                const qint64 s = qint64(d.toJulianDay()) * 86400 + QTime(0, 0).secsTo(tm) + offset;
+                const qint64 days = s >= 0 ? s / 86400 : -((-s + 86399) / 86400);
+                const QDate nd = QDate::fromJulianDay(days);
+                const QTime nt = QTime(0, 0).addSecs(int(s - days * 86400));
+                if (nd.isValid()) v = nd.toString(QStringLiteral("yyyy:MM:dd")) + u' ' + nt.toString(QStringLiteral("HH:mm:ss"));
+            }
         }
     } else {
         ok = Action::getTag(tag, v);
@@ -831,10 +851,10 @@ void ActionExif::save(QXmlStreamWriter& w) const {
 }
 void ActionExif::load(const XmlElem& e) {
     mask = e.str("Mask", QString());
-    offset = e.num("Offset", 0);
-    numStart = e.num("Start", 1);
-    numDigits = e.num("Digits", 3);
-    numIncr = e.num("Incr", 1);
+    offset = qBound(-999999999, e.num("Offset", 0), 999999999);
+    numStart = qBound(-999999999, e.num("Start", 1), 999999999);
+    numDigits = qBound(1, e.num("Digits", 3), 20);
+    numIncr = qBound(-999999, e.num("Incr", 1), 999999);
     numRestart = e.flag("Restart", false);
     numSharePairs = e.flag("SharePairs", false);
 }
@@ -897,7 +917,7 @@ void ActionList::perform(FileList& files, Op op, const Progress& progress) {
 }
 
 bool ActionList::save(const QString& path) const {
-    QFile f(path);
+    QSaveFile f(path);  // written aside and moved over the old file at the end: a failure leaves the old batch intact
     if (!f.open(QIODevice::WriteOnly)) return false;
     QXmlStreamWriter w(&f);
     w.setAutoFormatting(true);
@@ -911,7 +931,11 @@ bool ActionList::save(const QString& path) const {
     w.writeEndElement();
     w.writeEndElement();
     w.writeEndDocument();
-    return !w.hasError();
+    if (w.hasError()) {
+        f.cancelWriting();
+        return false;
+    }
+    return f.commit();
 }
 
 bool ActionList::load(const QString& path) {
@@ -919,13 +943,15 @@ bool ActionList::load(const QString& path) {
     if (!f.open(QIODevice::ReadOnly)) return false;
     QXmlStreamReader r(&f);
     std::vector<std::unique_ptr<Action>> loaded;
-    bool inBatch = false;
+    bool inBatch = false, sawRoot = false, sawBatch = false;
     while (!r.atEnd()) {
         r.readNext();
+        if (r.isEndElement() && inBatch && r.name() == u"Batch") break;
         if (!r.isStartElement()) continue;
         if (!inBatch) {
-            if (r.name() == u"Batch") inBatch = true;
-            else if (r.name() != u"AntRenamer") break;
+            if (r.name() == u"AntRenamer") sawRoot = true;
+            else if (r.name() == u"Batch" && sawRoot) inBatch = sawBatch = true;
+            else break;  // not a batch file
             continue;
         }
         XmlElem e;
@@ -948,7 +974,7 @@ bool ActionList::load(const QString& path) {
             }
         }
     }
-    if (r.hasError()) return false;
+    if (r.hasError() || !sawRoot || !sawBatch) return false;  // a foreign XML file must not wipe the current batch
     items_ = std::move(loaded);
     return true;
 }

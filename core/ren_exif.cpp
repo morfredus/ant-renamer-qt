@@ -114,16 +114,18 @@ void readXmp(const QByteArray& packet, QMap<QString, QString>& out) {
 
 // IPTC-IIM block inside a Photoshop "8BIM" APP13 payload (`d` starts after "Photoshop 3.0\0").
 void readIptc(const QByteArray& d, QMap<QString, QString>& out) {
-    auto be16 = [&](int o) { return int(uchar(d[o])) << 8 | uchar(d[o + 1]); };
-    int p = 0;
-    while (p + 12 <= d.size() && d.mid(p, 4) == "8BIM") {
+    // All offsets and sizes are 64-bit: a size read from the file must not wrap around (signed overflow is undefined).
+    const qint64 total = d.size();
+    auto be16 = [&](qint64 o) { return int(uchar(d[o])) << 8 | uchar(d[o + 1]); };
+    qint64 p = 0;
+    while (p + 12 <= total && d.mid(p, 4) == "8BIM") {
         const int id = be16(p + 4);
-        const int nameLen = 1 + uchar(d[p + 6]);
-        int q = p + 6 + nameLen + (nameLen % 2);  // pascal name is padded to an even length
-        if (q + 4 > d.size()) return;
-        const int size = int(uchar(d[q])) << 24 | uchar(d[q + 1]) << 16 | uchar(d[q + 2]) << 8 | uchar(d[q + 3]);
+        const qint64 nameLen = 1 + uchar(d[p + 6]);
+        qint64 q = p + 6 + nameLen + (nameLen % 2);  // pascal name is padded to an even length
+        if (q + 4 > total) return;
+        const quint32 size = quint32(uchar(d[q])) << 24 | quint32(uchar(d[q + 1])) << 16 | quint32(uchar(d[q + 2])) << 8 | uchar(d[q + 3]);
         q += 4;
-        if (size < 0 || q + size > d.size()) return;
+        if (qint64(size) > total - q) return;
         if (id == 0x0404) {
             const QByteArray iim = d.mid(q, size);
             const bool utf8 = iim.contains(QByteArray("\x1c\x01\x5a\x00\x03\x1b%G", 8));  // 1:90 CodedCharacterSet = ESC % G
@@ -144,31 +146,34 @@ void readIptc(const QByteArray& d, QMap<QString, QString>& out) {
                 if (!v.isEmpty()) out.insert(it.key(), v);
             }
         }
-        p = q + size + (size % 2);
+        p = q + qint64(size) + (size % 2);
     }
 }
 
 struct Reader {
     QByteArray d;
-    int base = 0;       // offset of the TIFF header inside d
+    qint64 base = 0;    // offset of the TIFF header inside d (all offsets are 64-bit: values read from the file cannot overflow)
     bool le = true;
 
-    quint16 u16(int o) const {
-        if (o < 0 || o + 2 > d.size()) return 0;
+    // True when [o, o + n) lies inside the buffer; written so that o + n is never computed.
+    bool has(qint64 o, qint64 n) const { return o >= 0 && n >= 0 && o <= qint64(d.size()) - n; }
+
+    quint16 u16(qint64 o) const {
+        if (!has(o, 2)) return 0;
         const uchar b0 = uchar(d.at(o)), b1 = uchar(d.at(o + 1));
         return le ? quint16(b0 | b1 << 8) : quint16(b1 | b0 << 8);
     }
-    quint32 u32(int o) const {
-        if (o < 0 || o + 4 > d.size()) return 0;
+    quint32 u32(qint64 o) const {
+        if (!has(o, 4)) return 0;
         return le ? u16(o) | quint32(u16(o + 2)) << 16 : quint32(u16(o)) << 16 | u16(o + 2);
     }
 
-    QString value(int type, quint32 count, int entryOff) const {
+    QString value(int type, quint32 count, qint64 entryOff) const {
         static const int sz[] = {0, 1, 1, 2, 4, 8, 1, 1, 2, 4, 8, 4, 8};
         if (type < 1 || type > 12 || count == 0 || count > 4096) return {};
         const quint64 bytes = quint64(sz[type]) * count;
-        const int off = bytes <= 4 ? entryOff + 8 : base + int(u32(entryOff + 8));
-        if (off < 0 || off + int(bytes) > d.size()) return {};
+        const qint64 off = bytes <= 4 ? entryOff + 8 : base + qint64(u32(entryOff + 8));
+        if (!has(off, qint64(bytes))) return {};
         switch (type) {
         case 2: {  // ASCII
             QByteArray s = d.mid(off, int(count));
@@ -187,19 +192,20 @@ struct Reader {
         }
     }
 
-    void ifd(int off, QMap<QString, QString>& out, int depth = 0) const {
+    void ifd(qint64 off, QMap<QString, QString>& out, int depth = 0) const {
         if (depth > 2 || off <= 0) return;
         const int n = u16(base + off);
         for (int i = 0; i < n && i < 512; ++i) {
-            const int e = base + off + 2 + i * 12;
+            const qint64 e = base + off + 2 + qint64(i) * 12;
+            if (!has(e, 12)) break;
             const int tag = u16(e), type = u16(e + 2);
             const quint32 count = u32(e + 4);
-            if (tag == 0x8769) { ifd(int(u32(e + 8)), out, depth + 1); continue; }
+            if (tag == 0x8769) { ifd(qint64(u32(e + 8)), out, depth + 1); continue; }
             auto it = tagNames().constFind(tag);
             if (it == tagNames().constEnd()) continue;
             QString v = value(type, count, e);
             if (tag == 0x829A && type == 5) {  // ExposureTime reads better as 1/N
-                const int o = base + int(u32(e + 8));
+                const qint64 o = base + qint64(u32(e + 8));
                 quint32 nu = u32(o), de = u32(o + 4);
                 if (nu && de > nu) v = QStringLiteral("1/%1").arg(qRound(double(de) / nu));
             }
@@ -252,18 +258,18 @@ bool readExif(const QString& path, QMap<QString, QString>& tags) {
             const int marker = uchar(r.d[p + 1]);
             const int len = uchar(r.d[p + 2]) << 8 | uchar(r.d[p + 3]);
             if (marker == 0xE1 && tiff < 0 && r.d.mid(p + 4, 6) == QByteArray("Exif\0\0", 6)) tiff = p + 10;
-            if (marker == 0xED && r.d.mid(p + 4, 14) == QByteArray("Photoshop 3.0\0", 14))
+            if (marker == 0xED && len >= 16 && r.d.mid(p + 4, 14) == QByteArray("Photoshop 3.0\0", 14))
                 readIptc(r.d.mid(p + 18, len - 16), tags);
             if (marker == 0xDA || len < 2) break;
             p += 2 + len;
         }
-    } else if (r.d.startsWith("II*") || r.d.startsWith("MM")) {
+    } else if (r.d.startsWith(QByteArray("II*\0", 4)) || r.d.startsWith(QByteArray("MM\0*", 4))) {  // TIFF magic, not just "MM"
         tiff = 0;
     }
     if (tiff >= 0 && tiff + 8 <= r.d.size()) {
         r.base = tiff;
         r.le = r.d[tiff] == 'I';
-        r.ifd(int(r.u32(tiff + 4)), tags);
+        r.ifd(qint64(r.u32(tiff + 4)), tags);
     }
     // XMP is plain XML, found by content: this also covers PNG, WebP, TIFF, DNG and .xmp files
     const int xs = r.d.indexOf("<x:xmpmeta");

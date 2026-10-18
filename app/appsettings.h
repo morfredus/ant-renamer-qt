@@ -3,6 +3,8 @@
 //
 // Storage: portable when "antrenamer-qt.ini" sits next to the program (everything stays in that folder),
 // otherwise in the user's profile (%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini).
+#include "icons.h"
+
 #include <QSettings>
 #include <QString>
 
@@ -19,13 +21,14 @@ struct AppOptions {
     bool forceFont = false;      // use `fontName`/`fontSize` for the whole program
     QString fontName;
     int fontSize = 9;
-    int iconSet = 3;             // 0 Scrows, 1 Windows XP, 2 Windows XP Large, 3 Modern (default)
+    int iconSet = kDefaultIconSet;  // 0 Scrows, 1 Windows XP, 2 Windows XP Large, 3 Modern (default)
     int historyMax = 20;
     bool autoComplete = false;
     // Files & folders
     bool dragNoAsk = false;
     int pageLayout = 0;          // modern layout: 0 tabs, 1 single screen in bands, 2 single screen in columns
     bool newUi = false;          // modern layout (taken into account at the next start)
+    int theme = 0;               // 0 system, 1 light, 2 dark (see theme.h)
     bool naturalSort = true;     // files list sort: natural (2 < 10) instead of alphabetical
     bool launchFile = false;     // double click opens the file
     bool addFiles = true, addFolders = false, recursive = true;  // last "add folders" choices

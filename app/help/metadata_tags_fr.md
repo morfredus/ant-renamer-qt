@@ -6,7 +6,7 @@ L'action [Utiliser les informations EXIF](actions_fr.md#exif) lit les informatio
 - **IPTC** : ce qui est saisi dans un logiciel de gestion de photos (mots-clés, légende, auteur, lieu...). Les tags commencent par `Iptc`. Lu dans les fichiers JPEG.
 - **XMP** : l'équivalent moderne de l'IPTC, écrit par Lightroom, Capture One, Photoshop, digiKam... Les tags commencent par `Xmp`. Lu dans tout fichier contenant un bloc XMP (JPEG, PNG, WebP, TIFF, DNG...) et dans les fichiers `.xmp`.
 
-Les noms de tags ne tiennent pas compte des majuscules. Un tag absent du fichier donne un texte vide ; l'action n'indique « Aucune info EXIF trouvée » que si le fichier ne contient aucun des trois types de métadonnées.
+Les noms de tags ne tiennent pas compte des majuscules. Un tag absent du fichier donne un texte vide ; l'action n'indique « Pas d'info EXIF trouvée » que si le fichier ne contient aucun des trois types de métadonnées.
 
 ## À savoir
 
@@ -15,7 +15,7 @@ Les noms de tags ne tiennent pas compte des majuscules. Un tag absent du fichier
 - **Dates.** Les dates EXIF, IPTC et XMP sont toutes données sous la forme `aaaa:MM:jj HH:mm:ss`. Les caractères interdits dans un nom de fichier (comme « : ») sont remplacés par « - » : `2024:05:17 14:30:05` donne `2024-05-17 14-30-05`. Le réglage « Décalage » de l'action décale tous les tags date ayant cette forme.
 - **Codes.** Des tags comme `Flash`, `Orientation` ou `MeteringMode` donnent le nombre stocké dans le fichier (voir la spécification EXIF pour la signification de chaque valeur).
 - **Caractères interdits.** Les valeurs sont nettoyées comme tout nom de fichier : `/ \ : * ? " < > |` sont remplacés.
-- **Fichiers XMP annexes.** Le fichier `.xmp` à côté d'une image (`IMG.xmp` ou `IMG.CR2.xmp`) est lu avec l'image et l'emporte sur le XMP intégré : les mots-clés, le titre et la note donnés à un fichier RAW dans votre logiciel photo sont utilisables. Le fichier annexe (et un fichier `.dop` de DxO) est aussi renommé avec l'image (Options, Traitement).
+- **Fichiers XMP associés.** Le fichier `.xmp` à côté d'une image (`IMG.xmp` ou `IMG.CR2.xmp`) est lu avec l'image et l'emporte sur le XMP intégré : les mots-clés, le titre et la note donnés à un fichier RAW dans votre logiciel photo sont utilisables. Le fichier associé (et un fichier `.dop` de DxO) est aussi renommé avec l'image (Options, Traitement).
 - **Limites.** Seuls les 512 premiers Ko de chaque fichier sont examinés. L'IPTC n'est lu que dans les JPEG.
 
 ## Tags EXIF {#exif}
@@ -24,7 +24,7 @@ Les noms de tags ne tiennent pas compte des majuscules. Un tag absent du fichier
 |---|---|
 | `%DateTimeOriginal%` | Date et heure de la prise de vue |
 | `%DateTimeDigitized%` | Date et heure de numérisation |
-| `%DateTime%` | Date et heure de dernière modification du fichier |
+| `%DateTime%` | Date et heure de la dernière modification de l'image, écrites par le logiciel qui l'a retouchée (pas la date du fichier sur le disque) |
 | `%Make%` | Fabricant de l'appareil |
 | `%Model%` | Modèle de l'appareil |
 | `%BodySerialNumber%` | Numéro de série de l'appareil |

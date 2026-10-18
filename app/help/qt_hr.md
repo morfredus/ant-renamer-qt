@@ -30,7 +30,7 @@
 ## Small differences to know
 
 - Regular expressions use the PCRE2 engine (Qt) instead of TRegExpr: very unusual constructs may behave differently.
-- The EXIF reader knows about thirty-five common EXIF tags (plus the IPTC and XMP ones), not the whole list of the original program.
+- The EXIF reader knows 36 common EXIF tags (plus the IPTC and XMP ones), not the whole list of the original program.
 
 ## Support
 

@@ -17,11 +17,11 @@ Here are the commands:
 
 When the renaming was fine, a line in the log is added specifying the old and new name of the file. It is written in green. If the file moved to another folder, the full new path is shown. When a picture takes its sidecar files along, the line mentions them.
 
-In the case the file was not renamed, either an simple message (in blue) or an error (in red) is displayed.
+In the case the file was not renamed, a message in blue is displayed. It is caused by an identical destination name (no need to rename the file), by a file that does not contain the information that the action needs (no ID3 info for the mp3 action, no EXIF info for the EXIF action), by an empty line or the end of the list in the "Take names from list" action, or when the source file does not exist anymore (e.g. you moved it manually). The message says which one.
 
-The first case is caused by identical destination name (no need to rename the file), by a file that does not contain the information that the action needs (no ID3 info for the mp3 action, no EXIF info for the EXIF action), by an empty line or the end of the list in the "Take names from list" action, or when the source file does not exist anymore (e.g. you moved it manually).
+When the system refuses the renaming, an error is displayed in red. The errors can be caused by lots of things. For example, if the new target name is already used by another file, if the name contains invalid characters or if the file is locked by a program. Usually the message written is the one that the operating system returns.
 
-The errors can be caused by lots of things. For example, if the new target name is already used by another file, if the name contains invalid characters or if the file is locked by a program. Usually the message written is the one that the operating system returns.
+The messages of the program itself (start and end of a process, the list of the actions of the batch, "Operation stopped by user") are written in grey. They are always shown, whatever the filter.
 
 If you click on "Undo", the lines of the log tell which files got their old name back.
 
@@ -31,8 +31,8 @@ This can be done with the "Save log to file" option from the [Options window](op
 
 If the option is enabled, after the renaming operation the contents of the log will be stored in a text file (encoded in UTF-8).
 
-This file has two columns (delimited by a tab character). The first one contains a "v" for successful operations and a "x" for errors. The second one contains the message.
+This file has two columns (delimited by a tab character). The first one contains a "v" for successful operations, a "x" for errors and a space for the files that were not renamed. The second one contains the message. The grey messages of the program are not written. The lines end with CR+LF and a new file starts with a UTF-8 byte order mark.
 
-If the "Append to current file" option is also enabled, the file will not be overwritten: new log entries will be added at the end.
+If the "Append to current file" option is also enabled, the file will not be overwritten: new log entries will be added at the end. Only the entries of the run that has just ended are written, so several runs in a row do not repeat each other. If the file cannot be written, a red line in the log says so.
 
 The "Generate log" option of the [Options window](options_ta.md#processing) can be unchecked to not fill the log at all.

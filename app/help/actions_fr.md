@@ -60,7 +60,7 @@ Vous pouvez entrer ici plusieurs chaînes à remplacer. La colonne de gauche con
 
 Ceci peut être utilisé pour remplacer des caractères individuels, par exemple remplacer les caractères accentués par leur équivalent latin (un set appelé « Remove west-european accents » est fourni), ou remplacer des chaînes complètes de différentes longueurs.
 
-Vous pouvez sauver le contenu de la grille pour le récupérer plus tard depuis la liste déroulante « Sets prédéfinis ». Tapez un nom dans ce champ et cliquez « Sauver » ; « Supprimer » enlève le set dont le nom est affiché et « Effacer » vide la grille.
+Vous pouvez sauver le contenu de la grille pour le récupérer plus tard depuis la liste déroulante « Sets prédéfinis ». Tapez un nom dans ce champ et cliquez « Sauver » ; « Supprimer » enlève le set dont le nom est affiché (rien ne se passe si le nom est vide) et « Effacer » vide la grille. Un « / » ou un « \ » dans le nom d'un set est remplacé par un tiret.
 
 Pour ajouter une ligne à la grille, pressez les touches "Ctrl" et "Plus" (+). La nouvelle ligne sera ajoutée avant la ligne sélectionnée. De la même manière, presser les touches "Ctrl" et "Moins" (-) supprimera la ligne courante.
 
@@ -132,7 +132,7 @@ Ici encore vous devez entrer un masque. Les tags sont lus dans les informations 
 
 Les tags `%name%`, `%ext%`, `%folderN%` et `%%` sont aussi disponibles, ainsi que la fonction `$if` (voir ["Formatage de chaînes"](format_fr.md#if)).
 
-Comme un tag mp3 peut contenir n'importe quel caractère, les caractères interdits dans un nom de fichier sont toujours remplacés dans les valeurs des tags : les guillemets (") deviennent des apostrophes ('), les points d'interrogation un point, et les caractères `\ / : * < > |` un tiret.
+Comme un tag mp3 peut contenir n'importe quel caractère, les caractères interdits dans un nom de fichier sont toujours remplacés dans les valeurs des tags : les guillemets (") deviennent des apostrophes ('), les points d'interrogation un point, et les caractères `\ / : * < > |` ainsi que les caractères de contrôle un tiret (un caractère NUL est simplement supprimé).
 
 L'option « Numéro de piste sur deux chiffres » ajoute un zéro devant le numéro de piste quand il n'a qu'un chiffre ("1" devient "01").
 
@@ -172,7 +172,7 @@ Les tags "c", "ddddd" et "dddddd" du programme d'origine (date au format de Wind
 
 Faites attention avec les formats de date et d'heure : les caractères "/" et ":" ne peuvent pas être utilisés dans un nom de fichier. Si vous voulez des séparateurs entre les nombres, insérez-les entre guillemets, comme expliqué dans les paragraphes suivants.
 
-Ici tous les caractères qui ne font pas partie du masque devraient être mis entre guillemets (simples ou doubles). Je recommande d'utiliser les guillemets doubles ("...") plutôt que les simples (apostrophes '...') pour pouvoir mettre des apostrophes à l'intérieur.
+Ici tous les caractères qui ne font pas partie du masque devraient être mis entre guillemets (simples ou doubles). Je recommande d'utiliser les guillemets doubles ("...") plutôt que les simples (apostrophes '...') pour pouvoir mettre des apostrophes à l'intérieur. Une exception : les lettres « f » (nom du fichier) et « e » (extension) sont remplacées même entre guillemets simples, donc un texte qui contient un « f » ou un « e » doit être mis entre guillemets doubles.
 
 Voici quelques exemples valides :
 
@@ -199,7 +199,7 @@ Le tag `%random%` mettra une chaîne aléatoire, générée selon une de ces opt
 
 ## Changement de casse {#case}
 
-Avec cette opération, seule la casse (majuscules/minuscules) des lettres change, donc le nom ne change pas vraiment sur les systèmes où les noms ne tiennent pas compte de la casse (Windows). Sous Linux "photo.jpg" et "Photo.jpg" sont deux noms différents.
+Avec cette opération, seule la casse (majuscules/minuscules) des lettres change, donc seule l'écriture du nom change. Le fichier est renommé aussi sous Windows ("photo.jpg" devient "Photo.jpg"), même si Windows considère les deux comme le même nom ; sous Linux ce sont deux noms différents.
 
 Vous pouvez faire différents types de changements :
 
@@ -240,6 +240,6 @@ Consultez la page ["Formatage de chaînes"](format_fr.md) pour plus d'informatio
 
 Le tag `%num%` est un compteur, comme dans l'opération [Énumération](#enum) (mêmes options, y compris « Retour à la valeur de démarrage... » et « Même numéro pour les fichiers de même nom... », pratique pour donner le même numéro à un JPEG et à son fichier RAW).
 
-Un fichier qui ne contient aucune information EXIF, IPTC ou XMP n'est pas renommé : le journal indique « No EXIF info found » (ce message n'est pas traduit).
+Un fichier qui ne contient aucune information EXIF, IPTC ou XMP n'est pas renommé : le journal indique « Pas d'info EXIF trouvée ».
 
-Le fichier annexe XMP d'une image (`IMG.xmp` ou `IMG.CR2.xmp`) est lu avec l'image et l'emporte sur le XMP intégré, ce qui rend disponibles les mots-clés et la note d'un fichier RAW. Quand l'image est renommée, ses fichiers annexes (`.xmp`, et `.dop` de DxO) sont renommés avec elle : voir l'option dans les [Options](options_fr.md), page *Traitement*.
+Le fichier XMP associé d'une image (`IMG.xmp` ou `IMG.CR2.xmp`) est lu avec l'image et l'emporte sur le XMP intégré, ce qui rend disponibles les mots-clés et la note d'un fichier RAW. Quand l'image est renommée, ses fichiers associés (`.xmp`, et `.dop` de DxO) sont renommés avec elle : voir l'option dans les [Options](options_fr.md), page *Traitement*.

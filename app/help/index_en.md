@@ -4,6 +4,6 @@ Help of Ant Renamer Qt (C++/Qt 6 port, version 3.x), based on the help of Ant Re
 
 ---
 
-Use the index on the left to naviguate through this help file
+Use the index on the left to navigate through this help file
 
 [Ant Renamer Qt: news and support](qt_en.md)

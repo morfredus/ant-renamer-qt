@@ -14,7 +14,7 @@ For the "Regular expression" action, you have to provide two values:
 - Every part of the name that matches the expression is replaced by the new name; what does not match is kept as it is. So `[0-9]+` with a new name of `X` turns "a12b345.txt" into "aXbX.txt". Use `^` to indicate the beginning of the name and `$` for the end of the name to match the whole name only.
 - In the new name, `$1`, `$2`... `$9` insert the text found by the corresponding group, `$&` (or `$0`) inserts everything that was found, and `${10}` is the way to reach groups beyond 9 (`$10` means group 1 followed by a "0"). A group that found nothing gives an empty text.
 - Lots of non-alphanumeric characters have a special meaning in regular expressions. To use them, the escape character is the backslash ("\\"). This also applies to the "$" sign that has a special meaning in the "new name" field: write `\$` to get a "$". If you need to use the backslash as a character (e.g. as path delimiter to send the file to another folder) you have to double it ("\\\\"), see the ["Force directories" option](options_ta.md#processing).
-- If the expression is not valid, the preview shows the name "<RegExp Error>" followed by the message of the library, and the files are not renamed correctly: fix the expression before clicking "Go".
+- If the expression is not valid, the preview shows the name `<RegExp Error>` followed by the message of the library, and a real run does not rename anything: each file gets a blue line in the log saying why. An empty expression changes nothing.
 
 ## Examples
 

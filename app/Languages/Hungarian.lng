@@ -131,7 +131,7 @@ Replace the English text by the correct translation, and once done you can send 
     <lblMoveStrTo Caption="Pozicióig:"/>
     <rbtMoveStrToBegin Caption="Elejétõl"/>
     <rbtMoveStrToEnd Caption="Végétõl"/>
-    <lblMoveStrNotes Caption="Megjegyzés:&lt;br&gt;- Ha el akarsz mozgatni egy karaktersorozatot de az nem mindíg ugyanabban a pozicióban van, használd a &lt;link&gt;Karakter cserét&lt;/link&gt; hogy töröld azután a &lt;link&gt;Szöveg beillesztése&lt;/link&gt; mûveletet hogy új helyre illeszd be&lt;BR&gt;- A &#34;Poziciótól&#34; beállítás ne tartalmazza a mozgatott karakter értékét "/>
+    <lblMoveStrNotes Caption="Megjegyzés:&lt;br&gt;- Ha el akarsz mozgatni egy karaktersorozatot de az nem mindíg ugyanabban a pozicióban van, használd a &lt;link&gt;Karakter csere&lt;/link&gt; hogy töröld azután a &lt;link&gt;Szöveg beillesztése&lt;/link&gt; mûveletet hogy új helyre illeszd be&lt;BR&gt;- A &#34;Poziciótól&#34; beállítás ne tartalmazza a mozgatott karakter értékét "/>
     <lblCharDel Caption="Hány karatert töröljön:"/>
     <rbtCharDelPos Caption="Poziciótól:"/>
     <rbtCharDelBegin Caption="Elejétõl"/>

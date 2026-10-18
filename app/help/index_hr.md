@@ -1,6 +1,6 @@
 # Ant Renamer Qt
 
-Help taken from Ant Renamer 2.13 (C++/Qt 6 port, version 3.x)
+Help of Ant Renamer Qt (C++/Qt 6 port, version 3.x), based on the help of Ant Renamer 2.13
 
 ---
 

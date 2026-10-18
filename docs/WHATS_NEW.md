@@ -5,7 +5,7 @@ French version: [WHATS_NEW_fr.md](WHATS_NEW_fr.md). This list is kept up to date
 technical detail: [CHANGELOG](../CHANGELOG.md). For the port itself (what is kept, the deliberate differences):
 [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.0.0-rc.12**. Items marked *(upcoming)* are in the code but not published yet.
+Current version: **3.0.0-rc.15**. Items marked *(upcoming)* are in the code but not published yet.
 
 ## Additions
 
@@ -31,6 +31,7 @@ Current version: **3.0.0-rc.12**. Items marked *(upcoming)* are in the code but 
 
 | What is new | Since |
 |---|---|
+| **Light / dark theme**: a toolbar button switches at once, and *Options > Display > Theme* can follow the system, force light or force dark (the log is readable in both). | 3.0.0-rc.14 |
 | **"Modern" icon set** (default): 30 line icons drawn by the program, sharp on any screen and screen scaling, light and dark theme, greyed when disabled. Options > Display > Icon set offers it with the three classic sets (Scrows, Windows XP, Windows XP Large); the help compares the four. | 3.0.0-rc.12 |
 | **Help rewritten and checked against the program**: Markdown pages (UTF-8, one table of contents per language), every option and action described, tables of tags and keyboard shortcuts, new screenshots of the real program in English and French, links between pages and sections verified. Croatian and Tamil show the English text for the rewritten pages. | 3.0.0-rc.12 |
 | **Modern layout**, as an option (Options > Display): one main bar with tabs showing the number of files and actions, a prominent Go button, a bar per page, the new-name column visible by default, the system light or dark theme. The classic layout stays the default. | 3.0.0-rc.8 |
@@ -38,7 +39,7 @@ Current version: **3.0.0-rc.12**. Items marked *(upcoming)* are in the code but 
 | **Edit an action of the batch in place**: double-click the action to load its settings in the editor, then "Modify" (or "Validate / Cancel the modification"). | 3.0.0-rc.8 |
 | **Portable mode**: an `antrenamer-qt.ini` file next to the program keeps all settings in that folder. | 3.0.0-rc.1 |
 | **Ready for Windows 10/11**: paths over 260 characters, UTF-8, high-resolution screens, dark theme. | 3.0.0-rc.1 |
-| **Explorer context menu** "Add to Ant Renamer" on files and folders, sent to the window that is already open. | 3.0.0-rc.1 |
+| **Explorer context menu** "Add to Ant Renamer Qt" on files and folders, sent to the window that is already open. | 3.0.0-rc.1 |
 
 ### Platforms and distribution
 
@@ -53,9 +54,10 @@ Current version: **3.0.0-rc.12**. Items marked *(upcoming)* are in the code but 
 
 | Improvement | Since |
 |---|---|
+| **Robustness**: invalid regular expressions rename nothing, damaged MP3 tags (blank year, corrupt header) no longer cut names or crash, buttons are disabled during a renaming, `*.*` also matches files without extension, a language file with an error is reported instead of silently ignored (German is now fully translated). | 3.0.0-rc.13 |
 | **Linux file names**: a name containing a colon or a backslash (`a:b.txt`) was cut at that character. On Linux only `/` delimits a path now; files inside a renamed folder follow it, `%folder-N%` and the `%count%` tags work, and "Detect absolute path" recognises a name that begins with `/`. | 3.0.0-rc.12 |
 | **Guide for translators** (`docs/TRANSLATING.md`): the whole process of a `.lng` file, from the copy of `English.lng` to the pull request. | 3.0.0-rc.12 |
-| **User guide and recipes brought up to date**: Windows / Linux differences, the options of every operation, the new icon set. | 3.0.0-rc.12 |
+| **User guide and recipes brought up to date**: Windows / Linux differences, the options of every action, the new icon set. | 3.0.0-rc.12 |
 | Actions editor: the long texts of the check boxes wrap to the next line when the panel is narrow (instead of being cut off with a scroll bar). | 3.0.0-rc.9 |
 | Translations: a text appearing twice in the language files with two different translations got one or the other at random; the choice is now fixed. | 3.0.0-rc.8 |
 | Files list: sorting by clicking a column header stopped working after the first click. | 3.0.0-rc.7 |

@@ -10,9 +10,9 @@ Au début, j'ai fait ce programme parce que les seuls renommeurs de fichiers que
 
 ---
 
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+Ce programme est un logiciel libre ; vous pouvez le redistribuer et/ou le modifier selon les termes de la Licence Publique Générale GNU telle que publiée par la Free Software Foundation ; soit la version 2 de la licence, soit (à votre convenance) toute version ultérieure.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the [GNU General Public License](https://www.gnu.org/licenses/gpl-2.0.html) for more details.
+Ce programme est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE GARANTIE, sans même la garantie implicite de COMMERCIALISATION ou d'ADÉQUATION À UN USAGE PARTICULIER. Consultez la [Licence Publique Générale GNU](https://www.gnu.org/licenses/gpl-2.0.html) pour plus de détails.
 
 ---
 
@@ -54,10 +54,10 @@ Composants utilisés par le programme d'origine (Delphi), dont le portage repren
 - Biélorusse : dzmitry\[li\]
 - Bulgare : N.Nedelev
 - Catalan : Hiro5
-- Chinese (simplifié) : 林繁 (Lin Fan), 大眼仔\~旭, 无名用户
-- Chinese (traditionnel) : Jim Liu
+- Chinois (simplifié) : 林繁 (Lin Fan), 大眼仔\~旭, 无名用户
+- Chinois (traditionnel) : Jim Liu
 - Coréen : Seunghoe Yang
-- Croatian: Damir13
+- Croate : Damir13
 - Espagnol : Vico//Koby, Roberto Paiva & elega, Carlos A Medina R
 - Finnois : Kari Eveli
 - Français : Antoine Potten
@@ -65,12 +65,12 @@ Composants utilisés par le programme d'origine (Delphi), dont le portage repren
 - Hongrois : Zoltán Danhauser
 - Italien : Salvatore Meschini
 - Japonais : 日本語 (Asabukuro)
-- Néerlandais: Ivo Blaauw
+- Néerlandais : Ivo Blaauw
 - Polonais : Arek Czak
 - Portugais (Brésil) : Ulisses F Braga
 - Russe : Denny
 - Slovaque : Sepp Winkler
 - Suédois : Karin Andersson
-- Tamil: தமிழ்நேரக்குழு
-- Tchèque : CVG
+- Tamoul : தமிழ்நேரக்குழு
+- Tchèque : GVG
 - Ukrainien : Nazar Tychkivskyi

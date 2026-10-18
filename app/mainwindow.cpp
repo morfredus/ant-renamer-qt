@@ -3,6 +3,7 @@
 #include "appsettings.h"
 #include "icons.h"
 #include "lngtranslator.h"
+#include "theme.h"
 #include "ren_path.h"
 
 #include <QApplication>
@@ -110,7 +111,7 @@ void ItemTree::dropEvent(QDropEvent* e) {
 void RenWorker::run() {
     try {
         actions_->perform(*files_, op_, [this](File& f, int batchPos, int idx) {
-            emit progress({quintptr(&f), f.description(), int(f.status()), batchPos, idx});
+            emit progress({quintptr(&f), f.description(), int(f.status()), batchPos, idx, f.fileFolder(), f.fileName(), f.preview});
         });
     } catch (const std::exception& e) {
         emit progress({0, QStringLiteral("Thread error caught: ") + QString::fromLocal8Bit(e.what()), int(State::Error), 0, 0});
@@ -137,11 +138,12 @@ MainWindow::MainWindow() {
 
     appOptions().load();
     newUi_ = appOptions().newUi;
+    theme_ = appOptions().theme;
+    applyTheme(theme_, newUi_);  // the modern layout uses Fusion, which follows the system palette, light or dark
     pageLayout_ = newUi_ ? qBound(0, appOptions().pageLayout, 2) : 0;
     singleScreen_ = pageLayout_ > 0;
     singleMode_ = pageLayout_ == 2 ? 2 : 1;
     if (newUi_) {
-        QApplication::setStyle(QStringLiteral("Fusion"));  // follows the system palette, light or dark
         const QSize room = QGuiApplication::primaryScreen()->availableGeometry().size() - QSize(40, 60);
         resize((pageLayout_ == 2 ? QSize(1500, 850) : singleScreen_ ? QSize(1280, 800) : QSize(980, 640)).boundedTo(room));
     }
@@ -204,6 +206,7 @@ void MainWindow::createActions() {
     aUndo_ = makeAction(tr_("Undo"), tr_("Undo last renaming"), TbUndo, K(Qt::Key_F12));
     aOnTop_ = makeAction(tr_("On top"), tr_("Keep window always on top"), TbAlwaysOnTop, K(Qt::Key_F11));
     aOnTop_->setCheckable(true);
+    aTheme_ = makeAction(tr_("Light / dark"), tr_("Switch between the light and the dark theme"), TbTheme);
     aOptions_ = makeAction(tr_("Options..."), tr_("Change program options"), TbOptions, K(Qt::Key_F10));
     aHelp_ = makeAction(tr_("Help"), tr_("Open help contents"), TbHelp, K(Qt::Key_F1));
     aAbout_ = makeAction(tr_("About..."), tr_("About this program"), TbAbout, K(Qt::SHIFT | Qt::Key_F1));
@@ -286,6 +289,11 @@ void MainWindow::createActions() {
         const bool vis = isVisible();
         setWindowFlag(Qt::WindowStaysOnTopHint, on);
         if (vis) show();
+    });
+    connect(aTheme_, &QAction::triggered, this, [this] {
+        appOptions().theme = isDarkPalette(QGuiApplication::palette()) ? 1 : 2;
+        appOptions().save();
+        applyOptionsLive();
     });
     connect(aOptions_, &QAction::triggered, this, [this] {
         OptionsDialog dlg(this);
@@ -423,7 +431,7 @@ void MainWindow::createToolbars() {
     if (!newUi_) {  // classic: bars on the window, movable; the move buttons have their own bar
         tbTabs_ = bar(u"Pages"_s, tabs);
         addToolBar(Qt::TopToolBarArea, tbTabs_);
-        tbProgram_ = bar(u"Program"_s, {T(aGo_), T(aStop_), A(aUndo_), sep, A(aOnTop_), A(aOptions_), sep, A(aHelp_), A(aAbout_), sep, A(aExit_)});
+        tbProgram_ = bar(u"Program"_s, {T(aGo_), T(aStop_), A(aUndo_), sep, A(aOnTop_), A(aTheme_), A(aOptions_), sep, A(aHelp_), A(aAbout_), sep, A(aExit_)});
         addToolBar(Qt::TopToolBarArea, tbProgram_);
         addToolBarBreak();
         tbFiles_ = bar(u"Files"_s, files);
@@ -439,7 +447,7 @@ void MainWindow::createToolbars() {
 
     // modern: tabs + program buttons in one main bar, a slim bar (with the move buttons) in each page
     Items mainBar = tabs;
-    append(mainBar, {spacer, T(aGo_), T(aStop_), A(aUndo_), A(aOptions_), A(aHelp_), sep, A(aOnTop_), A(aAbout_), A(aExit_)});
+    append(mainBar, {spacer, T(aGo_), T(aStop_), A(aUndo_), A(aOptions_), A(aHelp_), sep, A(aOnTop_), A(aTheme_), A(aAbout_), A(aExit_)});
     tbProgram_ = bar(u"Main"_s, mainBar);
     if (auto* b = tbProgram_->widgetForAction(aGo_)) b->setObjectName(u"goButton"_s);  // the one coloured button
     addToolBar(Qt::TopToolBarArea, tbProgram_);
@@ -672,6 +680,21 @@ void MainWindow::loadSettings() {
 // Options that can change while the program runs (the others are read when used).
 void MainWindow::applyOptionsLive() {
     const AppOptions& o = appOptions();
+    if (o.theme != theme_) {
+        theme_ = o.theme;
+        applyTheme(theme_, newUi_);
+        // The widgets under a style sheet keep the palette they were polished with: clear and set the sheet again.
+        const QString sheet = styleSheet();
+        setStyleSheet(QString());
+        setStyleSheet(sheet);
+        // A label with links keeps the link colour it was laid out with (dark blue on a dark background): lay it out again.
+        for (QLabel* l : findChildren<QLabel*>())
+            if (const QString html = l->text(); html.contains(u"<a "_s)) {  // (setText ignores the same text)
+                l->clear();
+                l->setText(html);
+            }
+        rebuildLog();  // the colours of the lines depend on the theme
+    }
     setIconSet(o.iconSet);
     for (QAction* a : findChildren<QAction*>()) {
         bool ok = false;
@@ -943,6 +966,7 @@ void MainWindow::addFolderContents(const QString& dir, const AddChoice& c) {
 
 // Port of TMainForm.AddFiles: with no choice, every path is added as is; otherwise folders are expanded.
 void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice) {
+    if (worker_) return;  // the list belongs to the worker thread during a run
     setStatus(0, tr_("Adding files"));
     QApplication::setOverrideCursor(Qt::WaitCursor);
     fileView_->setUpdatesEnabled(false);
@@ -1043,6 +1067,7 @@ void MainWindow::removeDeadFiles() {
 }
 
 void MainWindow::fileHeaderMenu(const QPoint& pos) {
+    if (worker_) return;
     QMenu m;
     for (int c = 0; c < ColCount; ++c) {
         QAction* a = m.addAction(fileView_->headerItem()->text(c));
@@ -1066,6 +1091,7 @@ void MainWindow::fileHeaderMenu(const QPoint& pos) {
 }
 
 void MainWindow::sortFilesBy(int column) {
+    if (worker_) return;
     // Own state: Qt's header may already have toggled its indicator by the time sectionClicked fires.
     auto* h = fileView_->header();
     sortOrder_ = (sortColumn_ == column && sortOrder_ == Qt::AscendingOrder) ? Qt::DescendingOrder : Qt::AscendingOrder;
@@ -1076,6 +1102,7 @@ void MainWindow::sortFilesBy(int column) {
 }
 
 void MainWindow::unsortFiles() {
+    if (worker_) return;
     sortColumn_ = -1;
     fileView_->header()->setSortIndicatorShown(false);
 }
@@ -1198,6 +1225,7 @@ void MainWindow::openBatchFile(const QString& path) {
 }
 
 void MainWindow::saveBatch() {
+    if (worker_) return;  // saving renumbers (re-sorts) the batch the worker is walking
     QSettings s = appSettings();
     QString p = QFileDialog::getSaveFileName(this, tr_("Save"), s.value(u"folders/batch"_s).toString(),
                                              tr_("Ant Renamer batch files (*.arb)"));
@@ -1308,6 +1336,7 @@ void MainWindow::run(Op op) {
             }
         }
     }
+    runLogStart_ = logEntries_.size();
     addLog(op == Op::Rename ? tr_("Renaming process started") : op == Op::Preview ? tr_("Refreshing preview") : tr_("Revert to previous names"), State::Info);
 
     renumberFiles();
@@ -1334,6 +1363,7 @@ void MainWindow::run(Op op) {
     worker_ = new RenWorker(&batch_, &files_, op);
     connect(worker_, &RenWorker::progress, this, &MainWindow::onProgress, Qt::QueuedConnection);
     connect(worker_, &QThread::finished, this, &MainWindow::onFinished);
+    setBusy(true);
     worker_->start();
 }
 
@@ -1344,11 +1374,21 @@ void MainWindow::onProgress(const Snapshot& s) {
         return;
     }
     if (o.realtime) {
-        if (QTreeWidgetItem* it = rows_.value(s.file)) updateItem(it);
+        if (QTreeWidgetItem* it = rows_.value(s.file)) {  // texts from the snapshot: the worker may already be editing this File again
+            it->setText(ColFolder, s.folder);
+            it->setText(ColFileName, s.name);
+            it->setText(ColFullPath, s.folder + s.name);
+            it->setText(ColExt, extractFileExt(s.name));
+            it->setText(ColPreview, s.preview);
+            const bool hide = aChangedOnly_->isChecked() && !s.preview.isEmpty() && s.preview == s.name;
+            it->setHidden(hide);
+            if (hide) it->setSelected(false);
+        }
     }
     if (o.genLog) addLog(s.description, State(s.state));
     if (o.realtime) {
-        const int div = int(files_.size() * batch_.size());
+        const bool undo = worker_ && worker_->op() == Op::Revert;  // an undo makes one pass, whatever the batch holds
+        const int div = int(files_.size() * (undo ? 1 : batch_.size()));
         if (div > 0) setStatus(int(((qint64(s.batchPos) * int(files_.size())) + s.index + 1) * 100 / div), {});
     }
 }
@@ -1359,6 +1399,7 @@ void MainWindow::onFinished() {
     const Op op = worker_->op();
     worker_->deleteLater();
     worker_ = nullptr;
+    setBusy(false);
     const AppOptions& o = appOptions();
 
     if (stopFlag()) addLog(tr_("Operation stopped by user"), State::Info);
@@ -1370,10 +1411,13 @@ void MainWindow::onFinished() {
         QFile f(o.saveLogFile);
         if (f.open(QIODevice::WriteOnly | (o.saveLogAppend ? QIODevice::Append : QIODevice::Truncate))) {
             if (f.size() == 0) f.write("\xEF\xBB\xBF");
-            for (const LogEntry& e : logEntries_) {
+            for (size_t i = qMin(runLogStart_, logEntries_.size()); i < logEntries_.size(); ++i) {  // this run only
+                const LogEntry& e = logEntries_[i];
                 const char* mark = e.state == State::NotRenamed ? " " : e.state == State::Ok ? "v" : e.state == State::Error ? "x" : nullptr;
                 if (mark) f.write(QByteArray(mark) + '\t' + e.text.toUtf8() + "\r\n");
             }
+        } else {
+            addLog(tr_("Could not write %1").arg(native(o.saveLogFile)), State::Error);  // a log line, not a dialog: -g -x runs unattended
         }
     }
     aGo_->setEnabled(true);
@@ -1384,6 +1428,15 @@ void MainWindow::onFinished() {
     if (exitAfterRun_) close();
 }
 
+// While a run is in progress the lists, the batch and the options belong to the worker thread. The handlers also test
+// worker_; disabling the actions makes it visible (and keeps their shortcuts from firing).
+void MainWindow::setBusy(bool busy) {
+    for (QAction* a : {aUndo_, aOptions_, aAddFiles_, aAddFolders_, aRemoveSel_, aRemoveAll_, aRemoveDead_, aPreview_, aChangedOnly_,
+                       aBatchAdd_, aBatchRemoveSel_, aBatchClear_, aBatchOpen_, aBatchSave_, aUp_, aDown_, aTop_, aBottom_, aUnsort_})
+        a->setEnabled(!busy);
+    aBatchEdit_->setEnabled(!busy && newUi_ && batchView_->selectedItems().size() == 1);
+}
+
 // --- log ------------------------------------------------------------------------------------------------------------------
 void MainWindow::addLog(const QString& text, State st) {
     if (text.isEmpty()) return;
@@ -1392,7 +1445,10 @@ void MainWindow::addLog(const QString& text, State st) {
                        (st == State::NotRenamed && logShowNot_) || st == State::Info;
     if (!shown) return;
     auto* item = new QListWidgetItem(text, logView_);
-    static const QColor colors[] = {QColor(0, 0, 128), QColor(0, 128, 0), QColor(128, 0, 0), QColor(128, 128, 128)};
+    // dark red or navy on a dark background cannot be read: lighter shades there
+    static const QColor light[] = {QColor(0, 0, 128), QColor(0, 128, 0), QColor(128, 0, 0), QColor(128, 128, 128)};
+    static const QColor dark[] = {QColor(0x7a, 0xb4, 0xff), QColor(0x6f, 0xd0, 0x6f), QColor(0xff, 0x7b, 0x7b), QColor(0xaa, 0xaa, 0xaa)};
+    const QColor* colors = isDarkPalette(logView_->palette()) ? dark : light;
     item->setForeground(colors[int(st)]);
     if (currentTab_ == 2 || singleScreen_) logView_->scrollToItem(item);
 }
@@ -1417,7 +1473,9 @@ void MainWindow::logAction(int which) {
     } else {
         const QString p = QFileDialog::getSaveFileName(this, tr_("Save log"), {}, tr_("Text files (*.log *.txt)"));
         QFile f(p);
-        if (!p.isEmpty() && f.open(QIODevice::WriteOnly | QIODevice::Text)) f.write(lines.join(u"\r\n"_s).toUtf8());
+        if (p.isEmpty()) return;
+        if (f.open(QIODevice::WriteOnly | QIODevice::Text)) f.write(lines.join(u"\r\n"_s).toUtf8());
+        else QMessageBox::critical(this, windowTitle(), tr_("Could not write %1").arg(native(p)));
     }
 }
 
@@ -1453,7 +1511,8 @@ void MainWindow::processCommandLine(const QStringList& args) {
             }
         } else {
             const QFileInfo fi(QDir(start).absoluteFilePath(a));
-            const auto found = QDir(fi.absolutePath()).entryInfoList({fi.fileName()}, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden);
+            const QString mask = fi.fileName() == u"*.*" ? u"*"_s : fi.fileName();  // "*.*" is "everything" for the user; for Qt it needs a dot
+            const auto found = QDir(fi.absolutePath()).entryInfoList({mask}, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden);
             for (const QFileInfo& m : found) {
                 if (m.isDir()) {
                     if (add.folders) addFile(native(m.absoluteFilePath()));

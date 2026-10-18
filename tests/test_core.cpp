@@ -41,6 +41,8 @@ static QString prev(const QString& name, Fn setup, bool isFolder = false) {
 #endif
 }
 
+#include "robust_check.h"
+
 int main(int argc, char** argv) {
     QCoreApplication app(argc, argv);
 
@@ -107,13 +109,13 @@ int main(int argc, char** argv) {
         ActionList l;
         auto& x = static_cast<ActionExif&>(l.add(ActionType::Exif));
         x.mask = u"%num%"_s; x.numStart = 5; x.numDigits = 2; x.numIncr = 3; x.numRestart = true;
-        const QString xp = QDir::temp().filePath(u"ren_exif_test.arb"_s);
+        QTemporaryDir xd;  // not a fixed name in the shared temp folder: ctest may run the tests in parallel
+        const QString xp = xd.filePath(u"ren_exif_test.arb"_s);
         l.save(xp);
         ActionList l2;
         l2.load(xp);
         auto& y = static_cast<ActionExif&>(l2.at(0));
         CHECK_EQ(QString::number(y.numStart) + u"/"_s + QString::number(y.numDigits) + u"/"_s + QString::number(y.numIncr) + (y.numRestart ? u"/r"_s : u""_s), u"5/2/3/r"_s);
-        QFile::remove(xp);
     }
 
     // IPTC + XMP: a synthetic JPEG with an APP13 (UTF-8 IPTC) and an APP1 XMP packet
@@ -201,11 +203,21 @@ int main(int argc, char** argv) {
     }
 
     id3Checks();
+    robustnessChecks();
 
 
     // real files: enum + case-only rename + revert + batch round-trip
     QTemporaryDir tmp;
     const QString dir = tmp.path() + u'/';
+    {   // date action: f and e stand for the name and the extension outside double quotes, whatever the quotes around
+        touch(dir + u"stamp.txt"_s);
+        ActionDateTime d;
+        d.mask = u"\"x\"f\"y\"e"_s;
+        CHECK_EQ(d.makeNewName(dir + u"stamp.txt"_s, false), u"xstampy.txt"_s);
+        d.mask = u"yyyy'-'e"_s;  // e is replaced even between single quotes (documented in the help)
+        CHECK_EQ(d.makeNewName(dir + u"stamp.txt"_s, false).mid(4), u"-.txt"_s);
+        QFile::remove(dir + u"stamp.txt"_s);
+    }
     touch(dir + u"b.txt"_s);
     touch(dir + u"a.txt"_s);
 

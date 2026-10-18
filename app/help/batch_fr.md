@@ -8,7 +8,7 @@ En plus de la barre d'outils Fichiers qui est toujours visible, une barre d'outi
 
 Voici ses commandes :
 
-- Le bouton ![Ajouter au job](img/batchadd.png) "Ajouter" (Ctrl+F2) ajoutera l'action sélectionnée et ses paramètres à la liste.
+- Le bouton ![Ajouter au job](img/batchadd.png) "Ajouter" (Ctrl+F2, « Ajouter au job » dans l'info-bulle) ajoutera l'opération sélectionnée et ses paramètres à la liste.
 - Le bouton ![Retirer du job](img/batchdel.png) "Suppr. sél." (Maj+F6) retirera de la liste les éléments qui sont sélectionnés.
 - Le bouton ![Vider](img/clear.png) "Vider" (Maj+F7) retirera de la liste toutes les actions prédéfinies.
 - Le bouton ![Ouvrir](img/open.png) "Ouvrir..." (Ctrl+O) affichera une fenêtre standard de sélection de fichier, vous permettant de sélectionner un fichier de job à charger dans la liste.

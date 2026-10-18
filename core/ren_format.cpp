@@ -128,7 +128,7 @@ QString formatDateTime(const QString& f, const QDateTime& dt) {
                   if (f.mid(i, 3).toLower() == u"a/p") { out += cased(pm ? u"p"_s : u"a"_s); i += 3; lastWasHour = false; continue; }
               }
               if (f.mid(i, 4).toLower() == u"ampm") { piece = t.hour() < 12 ? u"AM"_s : u"PM"_s; out += piece; i += 4; lastWasHour = false; continue; }
-                  piece = QString(1, f[i]); break;
+                  piece = f.mid(i, n); break;
         case 'm': {
             int k = i + n;  // minutes if it follows an hour or precedes seconds
             while (k < L && !f[k].isLetter()) ++k;

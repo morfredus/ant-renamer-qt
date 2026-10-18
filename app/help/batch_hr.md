@@ -16,7 +16,7 @@ Ovdje se naredbe:
 
 Ove datotekame za skupne obrade se mogu koristiti za kombiniranje više radnji u jednom procesu preimenovanja. One se mogu spremiti za buduću uporabu, ili ih koristiti iz [naredbenog retka](params_hr.md).
 
-Pohranjene su u XML datotekama, ali imaju "??.arb" datotečni nastavak (sa značenjem "Ant Renamer Batch").
+Pohranjene su u XML datotekama, ali imaju ".arb" datotečni nastavak (sa značenjem "Ant Renamer Batch").
 
 Popis trenutnih planiranih akcija prikazuje se u donjem dijelu, pod nazivom "Sadržaj serije". Ako nije vidljivo, može se prikazati klikom na kućicu na lijevoj strani njenog naziva.
 

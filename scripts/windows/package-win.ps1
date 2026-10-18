@@ -27,10 +27,10 @@ $stage = Join-Path $dist "AntRenamerQt-$version-win64"
 if (Test-Path $stage) { Remove-Item -LiteralPath $stage -Recurse -Force }
 New-Item -ItemType Directory -Path $stage -Force | Out-Null
 
-# Uniquement ce qui sert a l'execution : exe, DLL, plugins Qt, langues, aide (pas les fichiers CMake).
+# Uniquement ce qui sert a l'execution : exe, DLL, plugins Qt, langues, aide (pas les fichiers CMake ni les dossiers *_autogen, y compris ceux des programmes de test).
 Copy-Item (Join-Path $app "antrenamer-qt.exe") $stage
 Get-ChildItem $app -Filter *.dll -File | Copy-Item -Destination $stage
-Get-ChildItem $app -Directory | Where-Object { $_.Name -notmatch '^(CMakeFiles|antrenamer-qt_autogen)$' } |
+Get-ChildItem $app -Directory | Where-Object { $_.Name -notmatch '^(CMakeFiles|.*_autogen)$' } |
     ForEach-Object { Copy-Item $_.FullName (Join-Path $stage $_.Name) -Recurse }
 Copy-Item (Join-Path $root "LICENSE") (Join-Path $stage "license.txt")
 Copy-Item (Join-Path $root "README.md") $stage

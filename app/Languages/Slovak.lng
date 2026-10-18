@@ -105,7 +105,7 @@ Replace the English text by the correct translation, and once done you can send 
     </lstActions>
     <lblChangeExt Caption="Nahradi príponou:"/>
     <cbxChangeExtNoRepl Caption="Nenahradzova príponu, prida ju do názvu"/>
-    <lblChangeExtNotes Caption="Poznámky:&lt;br&gt;- Nezadávajte bodku, len vložte novú príponu&lt;br&gt;- Ak chcete vytvori èíslovanú príponu, použite akciu &lt;LINK&gt;Vypoèíta&lt;/LINK&gt;"/>
+    <lblChangeExtNotes Caption="Poznámky:&lt;br&gt;- Nezadávajte bodku, len vložte novú príponu&lt;br&gt;- Ak chcete vytvori èíslovanú príponu, použite akciu &lt;LINK&gt;Èíslovanie&lt;/LINK&gt;"/>
     <lblStrReplSearch Caption="H¾ada:"/>
     <lblStrReplBy Caption="Nahradi týmto:"/>
     <cbxStrReplAll Caption="Nahradi všetky výskyty"/>
@@ -123,7 +123,7 @@ Replace the English text by the correct translation, and once done you can send 
     <rbtStrInsBegin Caption="Od zaèiatku"/>
     <rbtStrInsEnd Caption="Od konca"/>
     <cbxStrInsExt Caption="Použi na príponu namiesto na názov"/>
-    <lblStrInsNotes Caption="Poznámky:&lt;br&gt;- %name% = Pôvodný názov súboru (bez prípony)&lt;BR&gt;- %ext% = Pôvodná prípona (aj s bodkou)&lt;BR&gt;- %folderN% = Názov prieèinku&lt;BR&gt;- %% = % Znak&lt;BR&gt;pozrite se do &lt;LINK&gt;Pomocníka&lt;/LINK&gt; pre viac informácií"/>
+    <lblStrInsNotes Caption="Poznámky:&lt;br&gt;- %name% = Pôvodný názov súboru (bez prípony)&lt;BR&gt;- %ext% = Pôvodná prípona (aj s bodkou)&lt;BR&gt;- %folderN% = Názov prieèinku&lt;BR&gt;- %% = % Znak&lt;BR&gt;pozrite se do &lt;LINK&gt;Nahradi reazec&lt;/LINK&gt; pre viac informácií"/>
     <lblMoveStrFrom Caption="Od pozície:"/>
     <rbtMoveStrFromBegin Caption="Od zaèiatku"/>
     <rbtMoveStrFromEnd Caption="Od konca"/>

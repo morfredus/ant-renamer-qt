@@ -56,7 +56,7 @@ Components used by the original program (Delphi), whose ideas and code the port 
 - Chinese (Simplified): 林繁 (Lin Fan), 大眼仔\~旭, 无名用户
 - Chinese (Traditional): Jim Liu
 - Croatian: Damir13
-- Czech: CVG
+- Czech: GVG
 - Dutch: Ivo Blaauw
 - Finnish: Kari Eveli
 - French: Antoine Potten

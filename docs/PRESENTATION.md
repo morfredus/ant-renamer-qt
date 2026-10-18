@@ -5,7 +5,7 @@ French version: [PRESENTATION_fr.md](PRESENTATION_fr.md). User guide: [USER_GUID
 
 ## About this document
 
-Ant Renamer 2 is a Delphi 7 program, built in 2002 and last released as 2.13 (December 2024). I
+Ant Renamer 2 is a Delphi 7 program, last released as 2.13 (December 2024). The author of the port
 (Frédéric Biron, morfredus) wanted to keep using it on recent Windows and to have a version that can be built
 with today's free tools. I ported it to C++ with Qt 6. The port is released under the same licence as
 the original sources (GPL v2 or later) and reuses several of the original files unchanged. This document lists
@@ -27,11 +27,11 @@ common, on purpose: both programs read each other's batches.
 
 | | Original (Delphi 7) | Port (C++20 / Qt 6) |
 |---|---|---|
-| Size | about 14,700 lines of Pascal | about 2,000 lines (engine) + 3,300 lines (interface) + tests |
+| Size | about 14,700 lines of Pascal | about 2,400 lines (engine) + 4,400 lines (interface) + 600 lines of tests |
 | Needs | Delphi 7 + 5 third-party component packs | a C++20 compiler and Qt 6, nothing else |
-| Platforms | Windows | Windows (MinGW, tested), Linux x86_64 (installed from the packages and run, tested), ARM64 (presets, untested) |
+| Platforms | Windows | Windows (MinGW, tested), Linux x86_64 and ARM64 (Raspberry Pi; installed from the packages and run, tested) |
 | Unicode | WideString + Tnt controls | `QString` (UTF-16), same semantics for positions |
-| Distribution | Inno Setup installer | portable zip + Inno Setup 6 installer |
+| Distribution | Inno Setup installer | portable zip + Inno Setup 6 installer (Windows), `.deb` and AppImage (Linux) |
 
 ## What was kept (compatibility)
 
@@ -48,8 +48,8 @@ common, on purpose: both programs read each other's batches.
   action list with its settings page, the live preview of the selected file, the collapsible batch list,
   drag and drop with the options window, the Options dialog with its tabs, the log filter, the MRU list of
   batches, the status bar with progress, the same keyboard shortcuts.
-- **The original language files**: the 27 `.lng` files are used as they are (each with its own encoding), and the
-  language can be changed in Options. The French interface is built entirely from the original `French.lng`.
+- **The original language files**: the 28 `.lng` files (English and 27 translations) are used as they are (each with its own encoding), and the
+  language can be changed in Options. The French interface is built from the original `French.lng`, plus a few strings added by the port.
 - **The original help**: the help pages (English, French, Croatian, Tamil) and the version history are shipped
   and opened from F1 and from the "Help" links of the action notes.
 - **The original graphics**: toolbar icon sets (Scrows, Windows XP, Windows XP Large), `renamer.ico`, `ant.bmp`,
@@ -104,7 +104,7 @@ These are the places where the port does not do exactly what version 2.13 does. 
 9. **Dates in `FormatDateTime`**: a re-implementation of the subset the help documents (d, m, y, h, n, s,
    z, `ampm`, quotes, "m means minutes after h or before s"). Locale names use the system locale.
 10. **EXIF values** are formatted simply (text as is, rationals as decimals, `ExposureTime` as `1/250`);
-    dEXIF decodes more tags and formats some of them differently. Only about forty common tags are known.
+    dEXIF decodes more tags and formats some of them differently. Only 36 common tags are known.
 11. **Settings**: an INI file instead of `Renamer.xml`. Old preferences are not imported.
 12. **Toolbars**: the "Color type" and "Office XP style" options of the TBX themes have no equivalent and
     were left out; hover, pressed and checked states are drawn with a style sheet instead.
@@ -118,7 +118,7 @@ These are the places where the port does not do exactly what version 2.13 does. 
   encodings, unsynchronisation and the `(17)` / `Rock` genre forms; ID3v1 fills what v2 lacks.
 - **`%num%` counter in the EXIF action** (start, digits, increment, restart per folder), the same
   settings as the Enumeration action, saved in the batch file.
-- **Windows Explorer context menu** "Add to Ant Renamer" on files and folders (Options, or installer task).
+- **Windows Explorer context menu** "Add to Ant Renamer Qt" on files and folders (Options, or installer task).
   Items selected together arrive in the window that is already open (single instance through a local
   socket and a lock file). It is the classic menu entry: on Windows 11 it sits under "Show more options".
 - **Portable mode**: an empty `antrenamer-qt.ini` next to the program keeps everything in that folder;
@@ -140,21 +140,21 @@ These are the places where the port does not do exactly what version 2.13 does. 
   round trip, ID3v2.3 with fallback to v1, EXIF counter settings.
 - By hand: batches with string replacement and EXIF + enumeration were run on real files; the interface
   was compared page by page with screenshots of version 2.13; the installer was installed and removed
-  silently; the portable zip was run with a minimal `PATH`; the Explorer menu "Add to Ant Renamer" was
+  silently; the portable zip was run with a minimal `PATH`; the Explorer menu "Add to Ant Renamer Qt" was
   clicked in Explorer on one or several files and on one or several folders (contents included); the Linux
   packages were installed and the program runs.
 - Not covered yet: very large lists, network drives, a real `.arb` file saved by the Delphi version,
-  ID3v2.2/2.4 files, ARM64 interface runs, administrator (all users) installation.
+  ID3v2.2/2.4 files, administrator (all users) installation.
 
 ## Known limits
 
-- About thirty-five EXIF tags (IFD0 and Exif IFD only, no MakerNote decoding); IPTC is read from JPEG only; XMP
+- 36 EXIF tags (IFD0 and Exif IFD only, no MakerNote decoding); IPTC is read from JPEG only; XMP
   sidecar files are read and renamed with their picture (IMG.xmp, IMG.CR2.xmp and DxO `.dop`; other sidecar types are not).
 - Only ID3 tags; no other audio tag formats.
 - The Windows 11 short context menu needs a packaged COM component and a signed package, not done.
 - The executable is not code-signed, so SmartScreen may warn on the first download.
-- The interface is translated through the original `.lng` files; strings that do not exist there (About text,
-  portable mode, Explorer menu) are translated by hand for French only.
+- The interface is translated through the original `.lng` files; the strings added by the port (About text,
+  portable mode, Explorer menu, theme) are in the `<QtPort>` section of the language files, translated for French only so far.
 
 ## Licence and credits
 
@@ -163,7 +163,7 @@ These are the places where the port does not do exactly what version 2.13 does. 
   About box states that this is a C++/Qt port and links to the original site.
 - Third-party code used by the port: Qt 6 (LGPL v3 / GPL), nothing else. The Delphi components of the
   original are not needed.
-- Reused from the original, unchanged: `Languages/*.lng`, `help/` (images; the pages were converted from HTML to Markdown, same text), toolbar bitmaps,
+- Reused from the original, unchanged: `Languages/*.lng`, `help/` (images; the pages were converted from HTML to Markdown and revised for the port), toolbar bitmaps,
   `renamer.ico`, `ant.bmp`, `default.xml`, texts of the action notes. Translators are credited in the
   Credits tab as in the original About box.
 

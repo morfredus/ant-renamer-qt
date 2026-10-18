@@ -35,8 +35,8 @@ Note that the contents of this list is not fixed. Except modifying the contents 
 ## Known limitations
 
 - The Undo button has only one level: it reverts the last renaming only.
-- EXIF: about forty tags are read, and the MakerNote (private data of the camera makers) is not decoded. IPTC is read from JPEG files only. See [EXIF, IPTC and XMP tags](metadata_tags_en.md).
+- EXIF: 36 tags are read, and the MakerNote (private data of the camera makers) is not decoded. IPTC is read from JPEG files only. See [EXIF, IPTC and XMP tags](metadata_tags_en.md).
 - The audio tags are the ID3 tags of MP3 files; other formats (FLAC, OGG, M4A...) are not read.
 - The creation date of a file is not stored by every file system (it is often missing on Linux): the modification date is then used.
-- The help is available in English, French, Croatian and Tamil; the interface itself exists in 27 languages. The pages written for Ant Renamer Qt (modern layout, tags, sidecar files...) may exist only in English and French, the other languages then show the English text.
+- The help is available in English, French, Croatian and Tamil; the interface itself exists in 28 languages (English and 27 translations). The pages written for Ant Renamer Qt (modern layout, tags, sidecar files...) may exist only in English and French, the other languages then show the English text.
 - Windows 11: the entry added to the Explorer context menu is in the "Show more options" menu (or Shift+F10), the short menu is not supported.

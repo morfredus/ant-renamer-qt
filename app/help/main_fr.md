@@ -14,11 +14,13 @@ Les icônes des boutons sont celles du set « Modern », par défaut depuis la v
 
 Avec la disposition moderne (voir plus bas), les boutons indiquent le nombre de fichiers de la liste et le nombre d'opérations planifiées, par exemple « Fichiers (100) » et « Opérations (2) ».
 
-Une fois que vous avez défini les [fichiers à renommer](files_fr.md) et [comment les renommer](actions_fr.md), cliquez le bouton ![Démarrer](img/go.png) "Démarrer" (F9). Le [journal](log_fr.md) indique ce qui est arrivé à chaque fichier. Le renommage s'exécute en arrière-plan : la fenêtre reste utilisable et la barre de progression en bas montre où il en est. Le bouton ![Arrêter](img/stop.png) "Arrêter" (Échap) l'interrompt ; les fichiers déjà traités restent renommés.
+Une fois que vous avez défini les [fichiers à renommer](files_fr.md) et [comment les renommer](actions_fr.md), cliquez le bouton ![Démarrer](img/go.png) "Démarrer" (F9). Le [journal](log_fr.md) indique ce qui est arrivé à chaque fichier. Le renommage s'exécute en arrière-plan : la fenêtre reste utilisable, la barre de progression en bas montre où il en est, et les boutons qui modifieraient la liste, le job ou les options (ajouter ou retirer des fichiers, déplacer, commandes du job, Options, Annuler...) sont désactivés jusqu'à la fin. Le bouton ![Arrêter](img/stop.png) "Arrêter" (Échap) l'interrompt ; les fichiers déjà traités restent renommés.
 
-Le bouton ![Annuler](img/undo.png) "Annuler" (F12) restaure les anciens noms. Il n'y a qu'un niveau d'annulation, donc vous ne pouvez annuler que la dernière opération effectuée. Les fichiers annexes renommés avec les images retrouvent eux aussi leur ancien nom.
+Le bouton ![Annuler](img/undo.png) "Annuler" (F12) restaure les anciens noms. Il n'y a qu'un niveau d'annulation, donc vous ne pouvez annuler que la dernière opération effectuée. Les fichiers associés renommés avec les images retrouvent eux aussi leur ancien nom.
 
 Le bouton ![Avant-plan](img/ontop.png) "Avant-plan" (F11), lorsqu'il est actif, permet de conserver la fenêtre au-dessus des autres fenêtres lorsqu'elle n'est pas active.
+
+Le bouton « Clair / sombre » (cercle à moitié plein, à côté de « Avant-plan ») passe aussitôt du thème clair au thème sombre. Le choix est conservé ; « Suivre le système » se remet dans les [Options](options_fr.md#display).
 
 Le bouton ![Options](img/options.png) "Options" (F10) ouvre la [fenêtre des options](options_fr.md).
 

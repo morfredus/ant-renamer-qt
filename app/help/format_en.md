@@ -23,7 +23,7 @@ For example, the [Use mp3](actions_en.md#mp3) action supports ID3-related tags, 
 | `%DateTimeOriginal%`, `%Make%`, `%IptcKeywords%`, `%XmpTitle%`... | EXIF, IPTC and XMP data, see [the list](metadata_tags_en.md) | EXIF |
 | `$if(...)` | Conditional text, see [below](#if) | mp3, EXIF |
 
-Tag names are not case-sensitive. A tag that is not known (for example because of a typing error) is left as it is in the name, "%" characters included: this is how you notice it in the preview.
+Tags must be written exactly as in the table (in lowercase: `%name%`, not `%Name%`); only the EXIF, IPTC and XMP tags are recognised whatever their case. A tag that is not known (for example because of a typing error) is left as it is in the name, "%" characters included: this is how you notice it in the preview.
 
 ## The folder tag {#folder}
 
