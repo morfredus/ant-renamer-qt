@@ -17,6 +17,7 @@
 - **IPTC and XMP in the EXIF action**: keywords, title, caption, author, place, rating... can be used in the mask (`%IptcKeywords%`, `%XmpTitle%`...), see [EXIF, IPTC and XMP tags](metadata_tags_en.md). The XMP sidecar file of a picture is read too.
 - **Sidecar files follow their picture**: renaming a picture also renames its `.xmp` and DxO `.dop` files (IMG.xmp, IMG.CR2.xmp, IMG.dop...), and the revert puts them back ([Options](options_en.md) \> *Processing*, enabled by default).
 - **Wildcards** in [String replacement](actions_en.md#stringrepl) (`*` and `?`), and an option to give **the same number to files with the same name** and different extensions (JPG + RAW) in the Enumeration and EXIF actions.
+- **History of the renamings**: every action of the batch is a pass that can be undone, always from the last one, and the *History* button (Shift+F12) lets you go back to a given pass. The Undo button can open it instead (*Options* \> *Files & Folders*). See [the main window](main_en.md).
 - **"Changed only" button** in the [Files list](files_en.md): hides the files whose name does not change in the preview.
 
 ## Corrections compared with 2.13

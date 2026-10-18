@@ -16,7 +16,9 @@ The buttons show the number of files in the list and the number of planned actio
 
 Once you defined the [files to rename](files_en.md) and [how to rename them](actions_en.md), click the ![Go](img/go.png) "Go" button (F9). The [log](log_en.md) indicates you what happened to each file. The renaming runs in the background: the window stays usable, the progress bar at the bottom shows how far it is, and the buttons that would modify the list, the batch or the options (add or remove files, move, batch commands, Options, Undo...) are disabled until it ends. The ![Stop](img/stop.png) "Stop" button (Esc) interrupts it; the files already processed stay renamed.
 
-The ![Undo](img/undo.png) "Undo" button (F12) reverts to the old names. It only has one level of undo, so you can only undo the last change that has been made. The sidecar files renamed with the pictures get their old names back too.
+The ![Undo](img/undo.png) "Undo" button (F12) reverts to the old names. Every action of the batch you run with "Go" is kept as a *pass* in the history of the session, so you can undo several times in a row, going back pass after pass, always from the last one: a batch of three actions leaves three passes. The sidecar files renamed with the pictures get their old names back too.
+
+The "History" button (a clock) (Shift+F12) lists the passes of the session, the most recent first, with the time, the number of files moved and the action. Choose a pass and click "Undo up to this pass": it is undone, with all the passes made after it. A pass in the middle cannot be undone alone. If a file was moved or renamed outside the program, the undo stops there and the pass stays in the list. The history keeps the last 50 passes and is forgotten when the program is closed. In [Options](options_en.md#files) you can make the Undo button open the history instead of undoing the last pass.
 
 The ![Always on top](img/ontop.png) "Always on top" button (F11), when checked, allows to keep the window always on top of other windows when it is not active.
 
@@ -39,6 +41,7 @@ In Ant Renamer Qt the main window can also be shown with a modern layout, with t
 | F2 | Add files | F10 | Options |
 | F3 | Add folders | F11 | Always on top |
 | F5 | Refresh preview | F12 | Undo |
+| Shift+F12 | History | | |
 | F6 | Remove selected files | Alt+F4 | Exit |
 | F7 | Remove all files | Ctrl+1 / 2 / 3 | Files / Actions / Log page |
 | F8 | Remove dead files | Ctrl+F2 | Add action to batch |

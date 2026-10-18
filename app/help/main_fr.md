@@ -16,7 +16,9 @@ Avec la disposition moderne (voir plus bas), les boutons indiquent le nombre de 
 
 Une fois que vous avez défini les [fichiers à renommer](files_fr.md) et [comment les renommer](actions_fr.md), cliquez le bouton ![Démarrer](img/go.png) "Démarrer" (F9). Le [journal](log_fr.md) indique ce qui est arrivé à chaque fichier. Le renommage s'exécute en arrière-plan : la fenêtre reste utilisable, la barre de progression en bas montre où il en est, et les boutons qui modifieraient la liste, le job ou les options (ajouter ou retirer des fichiers, déplacer, commandes du job, Options, Annuler...) sont désactivés jusqu'à la fin. Le bouton ![Arrêter](img/stop.png) "Arrêter" (Échap) l'interrompt ; les fichiers déjà traités restent renommés.
 
-Le bouton ![Annuler](img/undo.png) "Annuler" (F12) restaure les anciens noms. Il n'y a qu'un niveau d'annulation, donc vous ne pouvez annuler que la dernière opération effectuée. Les fichiers associés renommés avec les images retrouvent eux aussi leur ancien nom.
+Le bouton ![Annuler](img/undo.png) "Annuler" (F12) restaure les anciens noms. Chaque opération du job lancé avec "Démarrer" est conservée comme une *passe* dans l'historique de la session : vous pouvez annuler plusieurs fois de suite, en remontant passe après passe, toujours à partir de la dernière. Un job de trois opérations laisse trois passes. Les fichiers associés renommés avec les images retrouvent eux aussi leur ancien nom.
+
+Le bouton "Historique" (une horloge) (Maj+F12) liste les passes de la session, la plus récente en premier, avec l'heure, le nombre de fichiers déplacés et l'opération. Choisissez une passe et cliquez "Annuler jusqu'à cette passe" : elle est annulée, ainsi que toutes les passes faites après elle. Une passe au milieu ne peut pas être annulée seule. Si un fichier a été déplacé ou renommé en dehors du programme, l'annulation s'arrête là et la passe reste dans la liste. L'historique garde les 50 dernières passes et disparaît à la fermeture du programme. Dans les [Options](options_fr.md#files), vous pouvez faire ouvrir l'historique par le bouton Annuler plutôt que d'annuler la dernière passe.
 
 Le bouton ![Avant-plan](img/ontop.png) "Avant-plan" (F11), lorsqu'il est actif, permet de conserver la fenêtre au-dessus des autres fenêtres lorsqu'elle n'est pas active.
 
@@ -39,6 +41,7 @@ Dans Ant Renamer Qt, la fenêtre principale peut aussi être affichée avec une 
 | F2 | Ajouter des fichiers | F10 | Options |
 | F3 | Ajouter des dossiers | F11 | Avant-plan |
 | F5 | Actualiser l'aperçu | F12 | Annuler |
+| Maj+F12 | Historique | | |
 | F6 | Retirer les fichiers sélectionnés | Alt+F4 | Quitter |
 | F7 | Retirer tous les fichiers | Ctrl+1 / 2 / 3 | Page Fichiers / Opérations / Journal |
 | F8 | Retirer les fichiers manquants | Ctrl+F2 | Ajouter l'opération au job |

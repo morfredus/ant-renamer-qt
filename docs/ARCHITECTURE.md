@@ -51,7 +51,7 @@ LICENSE           GNU General Public License
 | File | Role |
 |---|---|
 | `ren_actions.h/.cpp` | The 14 operations, loading and saving of jobs, the run loop (`Action::perform`) |
-| `ren_files.h/.cpp` | `File` (rename, revert, sidecars), `FileList`, `Options` |
+| `ren_files.h/.cpp` | `File` (rename, revert, sidecars), `FileList`, `Journal` (passes of the session, undo), `Options` |
 | `ren_format.h/.cpp` | The mask language and the date format |
 | `ren_exif.h/.cpp` | EXIF, IPTC and XMP reader, sidecar file names |
 | `ren_id3.h/.cpp` | ID3 reader (MP3) |
@@ -95,13 +95,13 @@ The values are those of the original and are the row numbers of the operations l
 
 **Running.** `Action::perform(list, op, progress)` loops over **all the files for one operation**:
 1. `init()` (not for a revert).
-2. For each file, according to `op`: `Rename` checks that the file still exists, calls `makeNewName`, then `File::rename` (a sidecar whose picture is also in the list is skipped: its picture renames it); `Preview` does not touch the disk and builds on the preview left by the previous operation; `Revert` calls `File::revert()`.
+2. For each file, according to `op`: `Rename` checks that the file still exists, calls `makeNewName`, then `File::rename` (a sidecar whose picture is also in the list is skipped: its picture renames it); `Preview` does not touch the disk and builds on the preview left by the previous operation; `Revert` calls `File::revert()` (kept for the tests); `Undo` is handled by `FileList::undoPasses`.
 3. Calls `progress(file, operationPosition, fileIndex)`.
 4. `finish()`.
 
 An operation can report a problem without failing (`setInfo`): the file keeps its name and the log shows a message such as "No EXIF info found".
 
-`ActionList::perform` runs **each operation in turn over all the files**. In `Rename` mode every operation really renames the files on the disk and the next one starts from the new names; it is not one rename at the end. A revert calls `File::revert()` on every file, one level only (the previous name is kept in each `File`).
+`ActionList::perform` runs **each operation in turn over all the files**. In `Rename` mode every operation really renames the files on the disk and the next one starts from the new names; it is not one rename at the end. `Op::Revert` calls `File::revert()` on every file, one level only (the previous name is kept in each `File`). The interface does not use it any more: each action of the batch is a **pass** of the `Journal` (`beginPass` / `record` / `endPass`; a pass without any move is dropped, 50 passes at most), fed by the `onMoved` callback of `File::rename`. `Op::Undo` calls `FileList::undoPasses(n)`, which undoes the last `n` passes move by move, newest first (`File::undoMove`, on the list entry or on a temporary one when the file left the list). It stops at the first move that fails: the pass keeps the moves that remain. Copies are not recorded.
 
 **Job file (`.arb`).** XML written with `QXmlStreamWriter`:
 

@@ -498,5 +498,18 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="renameHiddenWarning" Value="%1 hidden or system file(s) are in the list and will be renamed. Renaming them can break programs or the system. Continue?"/>
     <Item Name="showHiddenCaption" Value="Hidden files"/>
     <Item Name="showHiddenHint" Value="Show the hidden and system files of the list; hidden, they are not renamed"/>
+    <Item Name="undoHistoryCaption" Value="History"/>
+    <Item Name="undoHistoryHint" Value="Renaming passes of this session: go back to a given pass"/>
+    <Item Name="undoHistoryTitle" Value="Renaming history"/>
+    <Item Name="undoHistoryInfo" Value="Passes of this session, newest first. Passes are undone one after the other from the last one: choosing a pass undoes it and all the passes made after it."/>
+    <Item Name="undoHistoryRow" Value="#%1  %2  -  %3 move(s)  -  %4"/>
+    <Item Name="undoHistoryButton" Value="Undo up to this pass"/>
+    <Item Name="undoHistoryConfirm" Value="Undo %1 passes?"/>
+    <Item Name="undoNothing" Value="Nothing to undo: no renaming pass was made in this session."/>
+    <Item Name="undoLogStart" Value="Undoing the last renaming passes"/>
+    <Item Name="undoOptHeader" Value="Undo button"/>
+    <Item Name="undoOptLabel" Value="The Undo button:"/>
+    <Item Name="undoOptLast" Value="undoes the last pass"/>
+    <Item Name="undoOptHistory" Value="opens the history of the passes"/>
   </QtPort>
 </Application>

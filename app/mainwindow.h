@@ -52,7 +52,7 @@ private:
 class RenWorker : public QThread {
     Q_OBJECT
 public:
-    RenWorker(ren::ActionList* a, ren::FileList* f, ren::Op op) : actions_(a), files_(f), op_(op) {}
+    RenWorker(ren::ActionList* a, ren::FileList* f, ren::Op op, int undoCount = 1) : actions_(a), files_(f), op_(op), undoCount_(undoCount) {}
     ren::Op op() const { return op_; }
 signals:
     void progress(const Snapshot& s);
@@ -64,6 +64,7 @@ private:
     ren::ActionList* actions_;
     ren::FileList* files_;
     ren::Op op_;
+    int undoCount_;
 };
 
 class MainWindow : public QMainWindow {
@@ -161,7 +162,9 @@ private:
 
     // running
     void updateSamplePreview();
-    void run(ren::Op op);
+    void run(ren::Op op, int undoCount = 1);
+    void showHistory();
+    void updateUndoState();
     void onProgress(const Snapshot& s);
     void onFinished();
     void setBusy(bool busy);  // disables what would modify the lists, the batch or the options while a run is in progress
@@ -171,6 +174,7 @@ private:
     void rebuildLog();
     void logAction(int which);
 
+    ren::Journal journal_;  // the passes of this session, for Undo and the history window
     ren::FileList files_;
     ren::ActionList batch_;
     RenWorker* worker_ = nullptr;
@@ -198,7 +202,7 @@ private:
     QMenu* recentMenu_;
     int currentTab_ = 0;
 
-    QAction *aGo_, *aStop_, *aUndo_, *aOnTop_, *aTheme_, *aOptions_, *aHelp_, *aAbout_, *aExit_;
+    QAction *aGo_, *aStop_, *aUndo_, *aHistory_, *aOnTop_, *aTheme_, *aOptions_, *aHelp_, *aAbout_, *aExit_;
     QAction *aTab_[3];
     QAction *aAddFiles_, *aAddFolders_, *aRemoveSel_, *aRemoveAll_, *aRemoveDead_, *aPreview_, *aChangedOnly_, *aShowHidden_;
     QAction *aBatchAdd_, *aBatchEdit_, *aBatchRemoveSel_, *aBatchClear_, *aBatchOpen_, *aBatchSave_;

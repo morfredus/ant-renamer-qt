@@ -24,6 +24,7 @@ Current version: **3.0.0-rc.15**. Items marked *(upcoming)* are in the code but 
 
 | What is new | Since |
 |---|---|
+| **History of the renamings**: every action of the batch run by Go is a *pass*; **Undo** (F12) goes back pass after pass (the original had one level), and the **History** button (Shift+F12) lists the passes of the session and goes back to a chosen one, undoing it and all the passes after it. Always linear, the last 50 passes are kept for the session. An option makes the Undo button open the history instead. | (upcoming) |
 | **Hidden and system files** (`desktop.ini`, `.git`...) of an added folder are skipped by default (*Options > Files & Folders* to include them); a **Hidden files** button shows or hides those in the list, and while they are hidden no operation touches them. A warning is shown before a renaming if they are shown and the list holds some. | (upcoming) |
 | **"Changed only" button**: hides the files whose name does not change in the preview (ideal to check the 2,000 names concerned in a list of 50,000). It is only a view filter: hidden files stay in the list, are renamed as usual, and cannot be hit by "Remove sel." or the move buttons. | 3.0.0-rc.9 |
 | **Natural sort** in the files list (`file 2` before `file 10`), on by default; untick it to get the original alphabetical order. | 3.0.0-rc.7 |

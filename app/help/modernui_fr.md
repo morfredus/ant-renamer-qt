@@ -13,7 +13,7 @@ Les changements sont pris en compte au prochain démarrage du programme. La disp
 
 ## Barre principale et barres des pages {#bar}
 
-La barre principale, en haut de la fenêtre, contient les trois boutons de pages (*Fichiers*, *Opérations*, *Journal*), qui indiquent le nombre de fichiers de la liste et le nombre d'opérations planifiées, par exemple « Fichiers (100) » et « Opérations (2) ». À droite se trouvent le bouton *Démarrer* (le seul en couleur), *Arrêter*, *Annuler*, *Options*, *Aide*, *Toujours au premier plan*, *À propos* et *Quitter*.
+La barre principale, en haut de la fenêtre, contient les trois boutons de pages (*Fichiers*, *Opérations*, *Journal*), qui indiquent le nombre de fichiers de la liste et le nombre d'opérations planifiées, par exemple « Fichiers (100) » et « Opérations (2) ». À droite se trouvent le bouton *Démarrer* (le seul en couleur), *Arrêter*, *Annuler*, *Historique*, *Options*, *Aide*, *Toujours au premier plan*, *À propos* et *Quitter*.
 
 Les autres boutons ne sont plus dans la barre principale : chaque page a sa propre barre d'outils fine, en haut de la page (ajout et retrait de fichiers pour la page Fichiers, les commandes du job pour la page Opérations, le filtre et les commandes du journal pour la page Journal). Les boutons qui déplacent les éléments sont à droite des barres des pages Fichiers et Opérations. Les barres d'outils de la disposition moderne ne sont pas déplaçables. Les raccourcis clavier sont les mêmes que dans la disposition classique.
 

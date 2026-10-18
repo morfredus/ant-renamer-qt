@@ -34,7 +34,7 @@ Note that the contents of this list is not fixed. Except modifying the contents 
 
 ## Known limitations
 
-- The Undo button has only one level: it reverts the last renaming only.
+- Undo goes back pass after pass, always from the last one (an action of the batch is a pass); the history keeps the last 50 passes of the session and is lost when the program is closed. A pass in the middle cannot be undone alone, and the files copied with "Copy instead of rename" are not removed by an undo.
 - EXIF: 36 tags are read, and the MakerNote (private data of the camera makers) is not decoded. IPTC is read from JPEG files only. See [EXIF, IPTC and XMP tags](metadata_tags_en.md).
 - The audio tags are the ID3 tags of MP3 files; other formats (FLAC, OGG, M4A...) are not read.
 - The creation date of a file is not stored by every file system (it is often missing on Linux): the modification date is then used.

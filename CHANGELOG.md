@@ -12,6 +12,12 @@ Changes committed but not yet published; they get a version number and date when
 
 ### Added
 
+- Renaming history for the session: every action of the batch run by "Go" is a pass kept in a journal (a job of three actions leaves three passes, shown as 1/3, 2/3, 3/3) (the moves, with their sidecars). Undo (F12) now goes back pass after pass, and a new *History* button (Shift+F12) lists the passes and undoes the chosen one and all those made after it. The undo is strictly linear (no undoing a pass in the middle). A file moved outside the program stops the undo and the pass stays in the journal. The last 50 passes are kept.
+
+- Documentation of the renaming history (EN, FR): help (main window, options, news, limitations, modern layout), USER_GUIDE, USER_RECIPES, WHATS_NEW, ARCHITECTURE, TESTED_PLATFORMS (rc.16: tried on the four machines), draft release notes rc.16. The Croatian and Tamil help pages are not updated.
+
+- Options > List behaviour: the Undo button either undoes the last pass or opens the history window. Both texts are translated into French.
+
 - "Changed only" and "Hidden files" are icon buttons (a sheet with a pencil, a dashed sheet with an eye) instead of text, which took too much room in the toolbar; the name stays in the tool tip. Drawn in code, so they are the same in every icon set.
 
 - Drag and drop: the import options window is opened once the drop is over (not inside the drop handler, which kept it behind the file manager) and forces the focus on Windows.

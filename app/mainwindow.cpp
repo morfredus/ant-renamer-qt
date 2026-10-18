@@ -12,6 +12,8 @@
 #include <QClipboard>
 #include <QCloseEvent>
 #include <QDesktopServices>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QDir>
 #include <QDirIterator>
 #ifdef Q_OS_WIN
@@ -138,6 +140,12 @@ void ItemTree::dropEvent(QDropEvent* e) {
 // --- RenWorker ----------------------------------------------------------------------------------------
 void RenWorker::run() {
     try {
+        if (op_ == Op::Undo) {
+            files_->undoPasses(undoCount_, [this](File& f) {
+                emit progress({quintptr(&f), f.description(), int(f.status()), 0, 0, f.fileFolder(), f.fileName(), f.preview});
+            });
+            return;
+        }
         actions_->perform(*files_, op_, [this](File& f, int batchPos, int idx) {
             emit progress({quintptr(&f), f.description(), int(f.status()), batchPos, idx, f.fileFolder(), f.fileName(), f.preview});
         });
@@ -159,6 +167,7 @@ QAction* MainWindow::makeAction(const QString& text, const QString& hint, int ic
 
 MainWindow::MainWindow() {
     qRegisterMetaType<Snapshot>("Snapshot");
+    files_.setJournal(&journal_);
     setWindowTitle(tr_("Ant Renamer Qt %1").arg(QApplication::applicationVersion()));
     setAcceptDrops(true);
     setMinimumSize(300, 300);
@@ -225,6 +234,8 @@ MainWindow::MainWindow() {
     setStatus();
     showTab(0);
     aStop_->setEnabled(false);
+    aUndo_->setEnabled(false);  // nothing to undo before the first pass
+    aHistory_->setEnabled(false);
 }
 
 void MainWindow::createActions() {
@@ -232,6 +243,7 @@ void MainWindow::createActions() {
     aGo_ = makeAction(tr_("Go"), tr_("Start the renaming process"), TbGo, K(Qt::Key_F9));
     aStop_ = makeAction(tr_("Stop"), tr_("Stop the renaming process"), TbStop, K(Qt::Key_Escape));
     aUndo_ = makeAction(tr_("Undo"), tr_("Undo last renaming"), TbUndo, K(Qt::Key_F12));
+    aHistory_ = makeAction(tr_("History"), tr_("Renaming passes of this session: go back to a given pass"), TbHistory, K(Qt::SHIFT | Qt::Key_F12));
     aOnTop_ = makeAction(tr_("On top"), tr_("Keep window always on top"), TbAlwaysOnTop, K(Qt::Key_F11));
     aOnTop_->setCheckable(true);
     aTheme_ = makeAction(tr_("Light / dark"), tr_("Switch between the light and the dark theme"), TbTheme);
@@ -315,7 +327,10 @@ void MainWindow::createActions() {
     // wiring
     connect(aGo_, &QAction::triggered, this, [this] { run(Op::Rename); });
     connect(aStop_, &QAction::triggered, this, [] { stopFlag() = true; });
-    connect(aUndo_, &QAction::triggered, this, [this] { run(Op::Revert); });
+    connect(aUndo_, &QAction::triggered, this, [this] {
+        if (appOptions().undoButton == 1) showHistory(); else run(Op::Undo, 1);  // F12 follows the choice made in the options
+    });
+    connect(aHistory_, &QAction::triggered, this, &MainWindow::showHistory);
     connect(aPreview_, &QAction::triggered, this, [this] { run(Op::Preview); });
     connect(aOnTop_, &QAction::toggled, this, [this](bool on) {
         const bool vis = isVisible();
@@ -464,7 +479,7 @@ void MainWindow::createToolbars() {
     if (!newUi_) {  // classic: bars on the window, movable; the move buttons have their own bar
         tbTabs_ = bar(u"Pages"_s, tabs);
         addToolBar(Qt::TopToolBarArea, tbTabs_);
-        tbProgram_ = bar(u"Program"_s, {T(aGo_), T(aStop_), A(aUndo_), sep, A(aOnTop_), A(aTheme_), A(aOptions_), sep, A(aHelp_), A(aAbout_), sep, A(aExit_)});
+        tbProgram_ = bar(u"Program"_s, {T(aGo_), T(aStop_), A(aUndo_), A(aHistory_), sep, A(aOnTop_), A(aTheme_), A(aOptions_), sep, A(aHelp_), A(aAbout_), sep, A(aExit_)});
         addToolBar(Qt::TopToolBarArea, tbProgram_);
         addToolBarBreak();
         tbFiles_ = bar(u"Files"_s, files);
@@ -480,7 +495,7 @@ void MainWindow::createToolbars() {
 
     // modern: tabs + program buttons in one main bar, a slim bar (with the move buttons) in each page
     Items mainBar = tabs;
-    append(mainBar, {spacer, T(aGo_), T(aStop_), A(aUndo_), A(aOptions_), A(aHelp_), sep, A(aOnTop_), A(aTheme_), A(aAbout_), A(aExit_)});
+    append(mainBar, {spacer, T(aGo_), T(aStop_), A(aUndo_), A(aHistory_), A(aOptions_), A(aHelp_), sep, A(aOnTop_), A(aTheme_), A(aAbout_), A(aExit_)});
     tbProgram_ = bar(u"Main"_s, mainBar);
     if (auto* b = tbProgram_->widgetForAction(aGo_)) b->setObjectName(u"goButton"_s);  // the one coloured button
     addToolBar(Qt::TopToolBarArea, tbProgram_);
@@ -1373,14 +1388,15 @@ void MainWindow::updateSamplePreview() {
 }
 
 // --- running ---------------------------------------------------------------------------------------------------------
-void MainWindow::run(Op op) {
+void MainWindow::run(Op op, int undoCount) {
     if (worker_) {
         QMessageBox::information(this, windowTitle(), tr_("Application is busy: Renaming operation in progress."));
         return;
     }
-    if (files_.size() == 0 || (batch_.size() == 0 && panel_->currentIndex() < 0 && op != Op::Revert)) {
-        QMessageBox::warning(this, windowTitle(), tr_("Nothing to do: please select at least one file and an action to perform."));
-        showTab(1);
+    if (op == Op::Undo ? journal_.size() == 0 : (files_.size() == 0 || (batch_.size() == 0 && panel_->currentIndex() < 0 && op != Op::Revert))) {
+        QMessageBox::warning(this, windowTitle(), op == Op::Undo ? tr_("Nothing to undo: no renaming pass was made in this session.")
+                                                                  : tr_("Nothing to do: please select at least one file and an action to perform."));
+        if (op != Op::Undo) showTab(1);
         return;
     }
     if (op == Op::Rename) {  // hidden or system files are rarely meant to be renamed: ask first
@@ -1412,7 +1428,7 @@ void MainWindow::run(Op op) {
         }
     }
     runLogStart_ = logEntries_.size();
-    addLog(op == Op::Rename ? tr_("Renaming process started") : op == Op::Preview ? tr_("Refreshing preview") : tr_("Revert to previous names"), State::Info);
+    addLog(op == Op::Rename ? tr_("Renaming process started") : op == Op::Preview ? tr_("Refreshing preview") : op == Op::Undo ? tr_("Undoing the last renaming passes") : tr_("Revert to previous names"), State::Info);
 
     renumberFiles();
     renumberActions();
@@ -1420,7 +1436,7 @@ void MainWindow::run(Op op) {
     aGo_->setEnabled(false);
     setStatus(0, tr_("Renaming files"));
 
-    if (op != Op::Revert && batch_.size() == 0) {  // empty batch: run the action configured on screen, then forget it
+    if (op != Op::Revert && op != Op::Undo && batch_.size() == 0) {  // empty batch: run the action configured on screen, then forget it
         auto a = panel_->makeAction(true);
         if (a) {
             Action* raw = a.get();
@@ -1435,7 +1451,7 @@ void MainWindow::run(Op op) {
         for (size_t i = 0; i < batch_.size(); ++i) addLog(u"%1. %2"_s.arg(i + 1).arg(batch_.at(i).description()), State::Info);
 
     stopFlag() = false;
-    worker_ = new RenWorker(&batch_, &files_, op);
+    worker_ = new RenWorker(&batch_, &files_, op, undoCount);
     connect(worker_, &RenWorker::progress, this, &MainWindow::onProgress, Qt::QueuedConnection);
     connect(worker_, &QThread::finished, this, &MainWindow::onFinished);
     setBusy(true);
@@ -1464,7 +1480,7 @@ void MainWindow::onProgress(const Snapshot& s) {
     if (o.realtime) {
         const bool undo = worker_ && worker_->op() == Op::Revert;  // an undo makes one pass, whatever the batch holds
         const int div = int(files_.size() * (undo ? 1 : batch_.size()));
-        if (div > 0) setStatus(int(((qint64(s.batchPos) * int(files_.size())) + s.index + 1) * 100 / div), {});
+        if (div > 0 && !(worker_ && worker_->op() == Op::Undo)) setStatus(int(((qint64(s.batchPos) * int(files_.size())) + s.index + 1) * 100 / div), {});
     }
 }
 
@@ -1497,6 +1513,7 @@ void MainWindow::onFinished() {
     }
     aGo_->setEnabled(true);
     aStop_->setEnabled(false);
+    updateUndoState();
     setStatus();
     updateAllItems();
     updateSamplePreview();
@@ -1506,10 +1523,42 @@ void MainWindow::onFinished() {
 // While a run is in progress the lists, the batch and the options belong to the worker thread. The handlers also test
 // worker_; disabling the actions makes it visible (and keeps their shortcuts from firing).
 void MainWindow::setBusy(bool busy) {
-    for (QAction* a : {aUndo_, aOptions_, aAddFiles_, aAddFolders_, aRemoveSel_, aRemoveAll_, aRemoveDead_, aPreview_, aChangedOnly_, aShowHidden_,
+    for (QAction* a : {aOptions_, aAddFiles_, aAddFolders_, aRemoveSel_, aRemoveAll_, aRemoveDead_, aPreview_, aChangedOnly_, aShowHidden_,
                        aBatchAdd_, aBatchRemoveSel_, aBatchClear_, aBatchOpen_, aBatchSave_, aUp_, aDown_, aTop_, aBottom_, aUnsort_})
         a->setEnabled(!busy);
     aBatchEdit_->setEnabled(!busy && newUi_ && batchView_->selectedItems().size() == 1);
+    aUndo_->setEnabled(!busy && journal_.size() > 0);
+    aHistory_->setEnabled(!busy && journal_.size() > 0);
+}
+
+void MainWindow::updateUndoState() { setBusy(worker_ != nullptr); }
+
+// The passes of the session, newest first. Undo goes back linearly: choosing a pass undoes it and every pass after it.
+void MainWindow::showHistory() {
+    if (worker_ || journal_.size() == 0) return;
+    QDialog dlg(this);
+    dlg.setWindowTitle(tr_("Renaming history"));
+    auto* lay = new QVBoxLayout(&dlg);
+    lay->addWidget(new QLabel(tr_("Passes of this session, newest first. Passes are undone one after the other from the last one: "
+                                  "choosing a pass undoes it and all the passes made after it.")));
+    dynamic_cast<QLabel*>(lay->itemAt(0)->widget())->setWordWrap(true);
+    auto* list = new QListWidget;
+    const auto& passes = journal_.passes();
+    for (auto it = passes.rbegin(); it != passes.rend(); ++it)
+        list->addItem(tr_("#%1  %2  -  %3 move(s)  -  %4").arg(it->number).arg(it->when.toString(u"hh:mm:ss"_s)).arg(it->moves.size()).arg(it->summary));
+    list->setCurrentRow(0);
+    lay->addWidget(list, 1);
+    auto* box = new QDialogButtonBox(QDialogButtonBox::Close);
+    auto* undoBtn = box->addButton(tr_("Undo up to this pass"), QDialogButtonBox::AcceptRole);
+    connect(box, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+    connect(box, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
+    connect(list, &QListWidget::itemDoubleClicked, undoBtn, &QPushButton::click);
+    lay->addWidget(box);
+    dlg.resize(620, 360);
+    if (dlg.exec() != QDialog::Accepted || list->currentRow() < 0) return;
+    const int count = list->currentRow() + 1;
+    if (count > 1 && QMessageBox::question(this, windowTitle(), tr_("Undo %1 passes?").arg(count)) != QMessageBox::Yes) return;
+    run(Op::Undo, count);
 }
 
 // --- log ------------------------------------------------------------------------------------------------------------------

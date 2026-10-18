@@ -251,6 +251,10 @@ void drawVectorIcon(QPainter& p, int index, QIcon::Mode mode) {
         p.drawEllipse(QPointF(12.5, 14.5), 1.3, 1.3);
         break;
     }
+    case TbHistory:  // a clock: the passes of the session
+        p.drawEllipse(QPointF(12, 12), 8.6, 8.6);
+        open({{12, 6.8}, {12, 12}, {15.6, 14.2}});
+        break;
     case TbExit:
         open({{10, 4}, {5, 4}, {5, 20}, {10, 20}});
         p.setPen(QPen(red, 1.9, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));

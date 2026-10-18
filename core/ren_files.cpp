@@ -93,7 +93,8 @@ bool File::rename(QString newName) {
     if (o.forceDir) QDir().mkpath(extractFilePath(newName));
     QString err;
     bool ok;
-    if (copyDone_ || !o.copy) {
+    const bool moving = copyDone_ || !o.copy;
+    if (moving) {
         oldName_ = source;
         ok = moveFile(source, newName, err);
     } else {
@@ -114,6 +115,7 @@ bool File::rename(QString newName) {
         sidecarsMoved_.clear();
         if (o.renameSidecar && !o.copy && !isFolder_) moveSidecars(source, newName, false);
         status_ = State::Ok;
+        if (moving && onMoved) onMoved(Move{source, newName, sidecarsMoved_});
     } else {
         if (pathExists(newName)) err = tr("A file or a folder with this name already exists");
         description_ = tr("Could not rename %1 to %2: %3").arg(source, newName, err);
@@ -145,6 +147,12 @@ bool File::revert() {
     description_ = tr("Could not rename %1 to %2: %3").arg(source, oldName_, err);
     status_ = State::Error;
     return false;
+}
+
+bool File::undoMove(const QString& from, const std::vector<std::pair<QString, QString>>& sidecars) {
+    oldName_ = from;
+    sidecarsMoved_ = sidecars;
+    return revert();
 }
 
 void File::followPath(const QString& to) {
@@ -187,7 +195,11 @@ void File::fixPathAfterFolderRename(const QString& from, const QString& to) {
 
 File& FileList::add(const QString& path) {
     items_.push_back(std::make_unique<File>(path));
-    File& f = *items_.back();
+    wire(*items_.back());
+    return *items_.back();
+}
+
+void FileList::wire(File& f) {
     f.onRenamed = [this](File& who, const QString& src, const QString& dst) {
         if (!who.isFolder()) return;
         const QString from = includeTrailingBackslash(src), to = includeTrailingBackslash(dst);
@@ -199,7 +211,64 @@ File& FileList::add(const QString& path) {
         for (auto& it : items_)
             if (!it->isFolder() && QDir::fromNativeSeparators(it->filePath()).compare(f, Qt::CaseInsensitive) == 0) it->followPath(to);
     };
-    return f;
+    f.onMoved = [this](const Move& m) {
+        if (journal_ && journal_->recording()) journal_->record(m);
+    };
+}
+
+File* FileList::findByPath(const QString& path) {
+    const QString p = QDir::fromNativeSeparators(path);
+    File* loose = nullptr;
+    for (auto& it : items_) {
+        const QString q = QDir::fromNativeSeparators(it->filePath());
+        if (q == p) return it.get();
+        if (!loose && q.compare(p, Qt::CaseInsensitive) == 0) loose = it.get();
+    }
+    return loose;
+}
+
+int FileList::undoPasses(int count, const std::function<void(File&)>& progress) {
+    if (!journal_) return 0;
+    int done = 0;
+    while (done < count && !journal_->passes_.empty() && !stopFlag()) {
+        Pass& pass = journal_->passes_.back();
+        while (!pass.moves.empty() && !stopFlag()) {
+            const Move& m = pass.moves.back();
+            File* f = findByPath(m.to);
+            std::unique_ptr<File> loose;  // no longer in the list: undone all the same, on a temporary entry
+            if (!f) {
+                loose = std::make_unique<File>(m.to);
+                wire(*loose);
+                f = loose.get();
+            }
+            const bool ok = f->exists() ? f->undoMove(m.from, m.sidecars)
+                                        : (f->setError(tr("%1 was not renamed : %2").arg(m.to, tr("Source file not found")), State::Error), false);
+            if (progress) progress(*f);
+            if (!ok) return done;  // the pass stays, with the moves that remain
+            pass.moves.pop_back();
+        }
+        if (!pass.moves.empty()) return done;  // stopped by the user
+        journal_->passes_.pop_back();
+        ++done;
+    }
+    return done;
+}
+
+void Journal::beginPass(const QString& summary) {
+    cur_ = Pass{next_, QDateTime::currentDateTime(), summary, {}};
+    open_ = true;
+}
+
+void Journal::record(Move m) { cur_.moves.push_back(std::move(m)); }
+
+void Journal::endPass() {
+    if (!open_) return;
+    open_ = false;
+    if (cur_.moves.empty()) return;
+    ++next_;
+    passes_.push_back(std::move(cur_));
+    cur_ = Pass{};
+    trim();
 }
 
 void FileList::sort() {

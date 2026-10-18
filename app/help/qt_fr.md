@@ -17,6 +17,7 @@
 - **IPTC et XMP dans l'opération EXIF** : mots-clés, titre, légende, auteur, lieu, note... utilisables dans le masque (`%IptcKeywords%`, `%XmpTitle%`...), voir [Tags EXIF, IPTC et XMP](metadata_tags_fr.md). Le fichier XMP associé à une image est lu aussi.
 - **Les fichiers associés suivent leur image** : renommer une image renomme aussi ses fichiers `.xmp` et `.dop` de DxO (IMG.xmp, IMG.CR2.xmp, IMG.dop...), et l'annulation les remet ([Options](options_fr.md) \> *Traitement*, activé par défaut).
 - **Jokers** dans le [remplacement de chaîne](actions_fr.md#stringrepl) (`*` et `?`), et une option pour donner **le même numéro aux fichiers de même nom** et d'extensions différentes (JPG + RAW) dans les opérations Énumération et EXIF.
+- **Historique des renommages** : chaque opération du job est une passe qui peut être annulée, toujours à partir de la dernière, et le bouton *Historique* (Maj+F12) permet de revenir à une passe précise. Le bouton Annuler peut l'ouvrir à la place (*Options* \> *Fichiers & Dossiers*). Voir [la fenêtre principale](main_fr.md).
 - **Bouton "Seulement modifiés"** dans la [liste des fichiers](files_fr.md) : masque les fichiers dont le nom ne change pas dans l'aperçu.
 
 ## Corrections par rapport à la 2.13

@@ -13,7 +13,7 @@ The changes are applied the next time the program starts. The modern layout keep
 
 ## Main bar and page bars {#bar}
 
-The main bar at the top of the window contains the three pages buttons (*Files*, *Actions*, *Log*), which show how many files are in the list and how many actions are planned, for example "Files (100)" and "Actions (2)". On the right are the *Go* button (the only coloured one), *Stop*, *Undo*, *Options*, *Help*, *Always on top*, *About* and *Exit*.
+The main bar at the top of the window contains the three pages buttons (*Files*, *Actions*, *Log*), which show how many files are in the list and how many actions are planned, for example "Files (100)" and "Actions (2)". On the right are the *Go* button (the only coloured one), *Stop*, *Undo*, *History*, *Options*, *Help*, *Always on top*, *About* and *Exit*.
 
 The other buttons are not in the main bar any more: each page has its own slim toolbar at the top of the page (add and remove files for the Files page, the batch commands for the Actions page, the filter and the log commands for the Log page). The buttons that move items are at the right of the Files and Actions toolbars. The toolbars of the modern layout cannot be moved. Keyboard shortcuts are the same as in the classic layout.
 

@@ -121,6 +121,7 @@ struct OptionsDialog::Ui {
         *copy, *genLog, *folderExt, *sidecar, *dst, *portable, *shellMenu;
     QCheckBox *dropFiles, *dropFolders, *dropRecursive;
     QComboBox* pageLayout = nullptr;
+    QComboBox* undoButton = nullptr;
     QSpinBox *historyMax, *fontSize;
     QComboBox* theme;
     QCheckBox* checkUpdates;
@@ -238,6 +239,15 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         ui_->addHidden = box(l, tr("Include hidden and system files when adding a folder"), o.addHidden);
         ui_->launch = box(l, tr("Launch file on double click"), o.launchFile);
         ui_->naturalSort = box(l, tr("Natural sort in files list (2 before 10) instead of alphabetical"), o.naturalSort);
+        header(l, tr("Undo button"));
+        auto* ru = new QHBoxLayout;
+        ru->addWidget(new QLabel(tr("The Undo button:")));
+        ui_->undoButton = new QComboBox;
+        ui_->undoButton->addItems({tr("undoes the last pass"), tr("opens the history of the passes")});
+        ui_->undoButton->setCurrentIndex(qBound(0, o.undoButton, 1));
+        ru->addWidget(ui_->undoButton);
+        ru->addStretch();
+        l->addLayout(ru);
         header(l, tr("Windows Explorer"));
         ui_->shellMenu = box(l, tr("Add \"Add to Ant Renamer Qt\" to the context menu of files and folders"), shellMenuInstalled());
 #ifdef Q_OS_WIN
@@ -379,6 +389,7 @@ void OptionsDialog::accept() {
     o.addHidden = ui_->addHidden->isChecked();
     o.launchFile = ui_->launch->isChecked();
     o.naturalSort = ui_->naturalSort->isChecked();
+    o.undoButton = ui_->undoButton->currentIndex();
     o.forceDir = ui_->forceDir->isChecked();
     o.detectAbsDir = ui_->detectAbs->isChecked();
     o.copy = ui_->copy->isChecked();

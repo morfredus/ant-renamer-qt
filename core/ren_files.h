@@ -4,6 +4,7 @@
 #include <QString>
 #include <QStringList>
 #include <atomic>
+#include <deque>
 #include <functional>
 #include <memory>
 #include <vector>
@@ -31,6 +32,42 @@ Options& options();
 QDateTime adjustFileTime(const QDateTime& t);  // applies options().dstRelativeToFile
 std::atomic<bool>& stopFlag();
 
+// One real move done during a pass: the file (or folder) went from `from` to `to`, with the sidecars moved along.
+struct Move {
+    QString from, to;
+    std::vector<std::pair<QString, QString>> sidecars;  // (from, to) of each sidecar
+};
+
+// One run of the batch ("Go"): everything it moved, in order.
+struct Pass {
+    int number = 0;
+    QDateTime when;
+    QString summary;  // the actions of the batch
+    std::vector<Move> moves;
+};
+
+// What this session renamed, pass by pass. Passes can only be undone from the last one backwards.
+class Journal {
+public:
+    void beginPass(const QString& summary);
+    void endPass();  // an empty pass (nothing moved) is not kept
+    void record(Move m);
+    void clear() { passes_.clear(); open_ = false; }
+    void setMaxPasses(int n) { max_ = n < 1 ? 1 : n; trim(); }
+    bool recording() const { return open_; }
+    size_t size() const { return passes_.size(); }
+    const std::deque<Pass>& passes() const { return passes_; }  // oldest first
+
+private:
+    friend class FileList;
+    void trim() { while (int(passes_.size()) > max_) passes_.pop_front(); }
+    std::deque<Pass> passes_;
+    Pass cur_;
+    bool open_ = false;
+    int next_ = 1;
+    int max_ = 50;
+};
+
 class File {
 public:
     explicit File(const QString& path);
@@ -54,6 +91,8 @@ public:
 
     bool rename(QString newName);
     bool revert();
+    // Puts the file back to `from` after a move recorded in the journal (`sidecars` as it recorded them).
+    bool undoMove(const QString& from, const std::vector<std::pair<QString, QString>>& sidecars);
     void initBeforeJob() { preview.clear(); copyDone_ = false; }
 
     // After a folder rename, entries below it must follow the move.
@@ -65,6 +104,7 @@ public:
     // Set by FileList.
     std::function<void(File&, const QString&, const QString&)> onRenamed;
     std::function<void(const QString&, const QString&)> onSidecarMoved;
+    std::function<void(const Move&)> onMoved;  // a real move succeeded (not a copy)
 
 private:
     void moveSidecars(const QString& from, const QString& to, bool revert);
@@ -88,8 +128,18 @@ public:
     }
     void sort();  // by position
 
+    // The journal records every move made by the files of this list (optional, owned by the caller).
+    void setJournal(Journal* j) { journal_ = j; }
+    Journal* journal() const { return journal_; }
+    // Undoes the last `count` passes, newest first, each one from its last move to its first. Stops at the first pass
+    // that cannot be completely undone (the moves that failed stay in the journal). Returns the passes fully undone.
+    int undoPasses(int count, const std::function<void(File&)>& progress = {});
+
 private:
+    void wire(File& f);
+    File* findByPath(const QString& path);
     std::vector<std::unique_ptr<File>> items_;
+    Journal* journal_ = nullptr;
 };
 
 }  // namespace ren

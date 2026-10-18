@@ -51,7 +51,7 @@ LICENSE           Licence publique générale GNU
 | Fichier | Rôle |
 |---|---|
 | `ren_actions.h/.cpp` | Les 14 opérations, chargement et sauvegarde des jobs, boucle d'exécution (`Action::perform`) |
-| `ren_files.h/.cpp` | `File` (renommer, annuler, fichiers associés), `FileList`, `Options` |
+| `ren_files.h/.cpp` | `File` (renommer, annuler, fichiers associés), `FileList`, `Journal` (passes de la session, annulation), `Options` |
 | `ren_format.h/.cpp` | Le langage des masques et le format de date |
 | `ren_exif.h/.cpp` | Lecteur EXIF, IPTC et XMP, noms des fichiers associés |
 | `ren_id3.h/.cpp` | Lecteur ID3 (MP3) |
@@ -95,13 +95,13 @@ Les valeurs sont celles de l'original et sont les numéros de ligne de la liste 
 
 **Exécution.** `Action::perform(liste, op, progress)` boucle sur **tous les fichiers pour une opération** :
 1. `init()` (pas pour une annulation).
-2. Pour chaque fichier, selon `op` : `Rename` vérifie que le fichier existe encore, appelle `makeNewName` puis `File::rename` (un sidecar dont l'image est aussi dans la liste est sauté : son image le renomme) ; `Preview` ne touche pas au disque et part de l'aperçu laissé par l'opération précédente ; `Revert` appelle `File::revert()`.
+2. Pour chaque fichier, selon `op` : `Rename` vérifie que le fichier existe encore, appelle `makeNewName` puis `File::rename` (un sidecar dont l'image est aussi dans la liste est sauté : son image le renomme) ; `Preview` ne touche pas au disque et part de l'aperçu laissé par l'opération précédente ; `Revert` appelle `File::revert()` (gardé pour les tests) ; `Undo` est traité par `FileList::undoPasses`.
 3. Appelle `progress(fichier, positionDeLOperation, indexDuFichier)`.
 4. `finish()`.
 
 Une opération peut signaler un problème sans échouer (`setInfo`) : le fichier garde son nom et le journal affiche un message comme « No EXIF info found ».
 
-`ActionList::perform` fait passer **chaque opération, l'une après l'autre, sur tous les fichiers**. En mode `Rename`, chaque opération renomme réellement les fichiers sur le disque et la suivante repart des nouveaux noms : ce n'est pas un seul renommage à la fin. L'annulation appelle `File::revert()` sur chaque fichier, un seul niveau (l'ancien nom est gardé dans chaque `File`).
+`ActionList::perform` fait passer **chaque opération, l'une après l'autre, sur tous les fichiers**. En mode `Rename`, chaque opération renomme réellement les fichiers sur le disque et la suivante repart des nouveaux noms : ce n'est pas un seul renommage à la fin. `Op::Revert` appelle `File::revert()` sur chaque fichier, un seul niveau (l'ancien nom est gardé dans chaque `File`). L'interface ne l'utilise plus : chaque opération du job est une **passe** du `Journal` (`beginPass` / `record` / `endPass` ; une passe sans déplacement est abandonnée, 50 passes au plus), alimentée par le rappel `onMoved` de `File::rename`. `Op::Undo` appelle `FileList::undoPasses(n)`, qui annule les `n` dernières passes déplacement par déplacement, la plus récente d'abord (`File::undoMove`, sur l'entrée de la liste ou sur une entrée temporaire quand le fichier a quitté la liste). Elle s'arrête au premier déplacement qui échoue : la passe garde les déplacements restants. Les copies ne sont pas enregistrées.
 
 **Fichier de job (`.arb`).** XML écrit avec `QXmlStreamWriter` :
 

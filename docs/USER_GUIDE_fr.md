@@ -24,6 +24,7 @@ Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau 
 | F2 | Ajouter des fichiers | F10 | Options |
 | F3 | Ajouter des dossiers | F11 | Avant-plan |
 | F5 | Actualiser l'aperçu | F12 | Annuler |
+| Maj+F12 | Historique | | |
 | F6 / F7 / F8 | Retirer sélectionnés / tous / manquants | Alt+F4 | Quitter |
 | Ctrl+1 / 2 / 3 | Page Fichiers / Opérations / Journal | Ctrl+F2 | Ajouter au job |
 | Maj+F6 / Maj+F7 | Retirer la sélection / vider le job | Ctrl+O / Ctrl+S | Ouvrir / sauver un job |
@@ -108,7 +109,8 @@ Le panneau **Contenu du job** liste les opérations planifiées (case à cocher 
 
 - **Démarrer** (F9) : renomme dans un fil séparé ; la fenêtre reste utilisable, mais ce qui modifierait la liste, le job ou les options est désactivé jusqu'à la fin.
 - **Arrêter** (Échap) : interrompt le traitement ; les fichiers déjà traités restent renommés.
-- **Annuler** (F12) : restaure les anciens noms de la **dernière** exécution seulement (un niveau), fichiers associés compris.
+- **Annuler** (F12) : restaure les anciens noms de la **dernière passe**, fichiers associés compris. Chaque opération du job lancé par Démarrer est une passe (un job de trois opérations laisse trois passes) : vous pouvez donc annuler encore et encore, toujours à partir de la dernière.
+- **Historique** (Maj+F12, horloge) : liste les passes de la session, la plus récente en premier (heure, nombre de déplacements, opération). *Annuler jusqu'à cette passe* annule la passe choisie et toutes celles faites après ; une passe au milieu ne peut pas être annulée seule. Si un fichier a été déplacé en dehors du programme, l'annulation s'arrête là et la passe reste dans la liste. Les 50 dernières passes sont gardées, et perdues à la fermeture du programme. Dans *Options > Fichiers & Dossiers*, le bouton Annuler peut ouvrir l'historique au lieu d'annuler la dernière passe.
 - **Avant-plan** (F11) : garde la fenêtre au-dessus des autres.
 - **Clair / sombre** (cercle à moitié plein) : change aussitôt de thème ; *Options > Affichage > Thème* propose aussi « Suivre le système » (par défaut).
 - **Copier plutôt que renommer** (Options > Traitement) : les originaux restent, les copies portent les nouveaux noms.
@@ -198,6 +200,6 @@ Même moteur, autre présentation, activée dans Options > Affichage (au prochai
 
 - EXIF : 36 tags seulement, MakerNote non décodée ; IPTC lu seulement dans les JPEG.
 - Tags audio : ID3 seulement (MP3) ; FLAC, OGG, M4A ne sont pas lus.
-- Annuler : un seul niveau.
+- Annuler : passe après passe (les 50 dernières de la session), uniquement à partir de la dernière ; les fichiers copiés avec « Copier au lieu de renommer » ne sont pas supprimés.
 - Le menu contextuel court de Windows 11 n'est pas pris en charge (utiliser « Afficher plus d'options »).
 - L'aide en croate et en tamoul affiche l'anglais pour les pages écrites pour Ant Renamer Qt.

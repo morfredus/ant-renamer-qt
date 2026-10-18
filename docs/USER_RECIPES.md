@@ -10,7 +10,7 @@ Each recipe gives the goal, the actions to stack in the batch (in order), the se
 1. **Add the files** (F2 / F3 / drag and drop). The **list order is the processing order**: sort by name before an enumeration.
 2. **Pick the action**, set it, then **Add to batch** (Ctrl+F2). Repeat for each action: they apply one after the other, each on the result of the previous one.
 3. **Check the preview**: the "Preview of the selected file" frame shows one file; **F5** fills the Preview column for the whole list. "Changed only" hides unchanged files so you only review the others.
-4. **Go** (F9), then read the **Log**. **Undo** (F12) reverts the last run, and only that one.
+4. **Go** (F9), then read the **Log**. **Undo** (F12) reverts the last pass (one action of the batch); click again to go back further, or open the **History** (Shift+F12) to return to a given pass.
 5. **Caution on a big batch**: try a few copies first, or tick "Copy instead of rename" (Options > Processing): the originals stay untouched, the copies carry the new names. Remember to untick it afterwards.
 6. **Save the batch** (Ctrl+S) as soon as it works: it reloads (Ctrl+O) and runs from the command line (§6.4).
 
@@ -174,7 +174,7 @@ loads the batch, adds the files of the folder, renames and exits. `-afr folder` 
 Enable "Add to Ant Renamer Qt" (Options > Files & Folders). Right-click a selection of files and folders (Windows 11: *Show more options*): everything arrives in the window that is already open.
 
 ### 6.6 Undo a rename
-**Undo** (F12) restores the names of the last run, sidecars included. One level only: do not chain a second run before checking. When in doubt, work in "Copy instead of rename" mode and keep the log saved (Options > Events > Store the log).
+Every action of the batch run by Go is a *pass*. **Undo** (F12) restores the names of the last pass, sidecars included, and you can click again to go back pass after pass. To return to a precise moment, open the **History** (Shift+F12), choose the pass and click *Undo up to this pass*: it and all the passes after it are undone. The undo is always linear: a pass in the middle cannot be undone alone. The last 50 passes are kept, and they are lost when the program is closed; if a file was moved outside the program, the undo stops there. When in doubt, work in "Copy instead of rename" mode and keep the log saved (Options > Events > Store the log).
 
 ---
 

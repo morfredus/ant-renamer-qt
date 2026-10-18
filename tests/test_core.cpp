@@ -266,6 +266,56 @@ int main(int argc, char** argv) {
     CHECK_EQ(files.at(1).fileName(), u"b.txt"_s);
     CHECK_EQ(QFile::exists(dir + u"a.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
 
+    {   // session journal: passes are undone one after the other, newest first
+        QTemporaryDir t3;
+        const QString d3 = t3.path() + u'/';
+        for (const char* n : {"x.txt", "y.txt"}) touch(d3 + QString::fromLatin1(n));
+        touch(d3 + u"x.txt.xmp"_s);
+        FileList jf;
+        Journal journal;
+        jf.setJournal(&journal);
+        jf.add(d3 + u"x.txt"_s).position = 0;
+        jf.add(d3 + u"y.txt"_s).position = 1;
+
+        ActionList p1;  // pass 1: pic1, pic2
+        auto& e1 = static_cast<ActionEnum&>(p1.add(ActionType::Enum));
+        e1.mask = u"pic%num%%ext%"_s;
+        e1.digits = 1;
+        p1.perform(jf, Op::Rename);
+        ActionList p2;  // pass 2: upper case
+        auto& c2 = static_cast<ActionCase&>(p2.add(ActionType::Case));
+        c2.caseType = 2;
+        c2.includeExt = true;
+        p2.perform(jf, Op::Rename);
+        ActionList p3;  // pass 3: two actions in one pass
+        static_cast<ActionStringRepl&>(p3.add(ActionType::StringRepl)).search = u"PIC"_s;
+        auto& e3 = static_cast<ActionEnum&>(p3.add(ActionType::Enum));
+        e3.mask = u"z%num%%ext%"_s;
+        e3.digits = 1;
+        p3.perform(jf, Op::Rename);
+
+        CHECK_EQ(QString::number(journal.size()), u"4"_s);  // the job of pass 3 has two actions: two passes
+        CHECK_EQ(QFile::exists(d3 + u"z1.TXT"_s) ? u"y"_s : u"n"_s, u"y"_s);
+        CHECK_EQ(QFile::exists(d3 + u"z1.TXT.xmp"_s) ? u"y"_s : u"n"_s, u"y"_s);  // sidecar followed
+
+        CHECK_EQ(QString::number(jf.undoPasses(1)), u"1"_s);  // the last action of the job only
+        CHECK_EQ(jf.at(0).fileName(), u"new1.TXT"_s);
+        CHECK_EQ(QString::number(jf.undoPasses(1)), u"1"_s);  // then its first action
+        CHECK_EQ(jf.at(0).fileName(), u"PIC1.TXT"_s);
+        CHECK_EQ(QString::number(journal.size()), u"2"_s);
+        CHECK_EQ(QString::number(jf.undoPasses(5)), u"2"_s);  // back to the start, never past it
+        CHECK_EQ(jf.at(0).fileName(), u"x.txt"_s);
+        CHECK_EQ(jf.at(1).fileName(), u"y.txt"_s);
+        CHECK_EQ(QFile::exists(d3 + u"x.txt.xmp"_s) ? u"y"_s : u"n"_s, u"y"_s);
+        CHECK_EQ(QString::number(journal.size()), u"0"_s);
+
+        // a file moved outside the program stops the undo, the pass stays
+        p1.perform(jf, Op::Rename);
+        QFile::rename(d3 + u"pic1.txt"_s, d3 + u"elsewhere.txt"_s);
+        CHECK_EQ(QString::number(jf.undoPasses(1)), u"0"_s);
+        CHECK_EQ(QString::number(journal.size()), u"1"_s);
+    }
+
     ActionList upper;  // a.txt -> A.TXT must work although the volume is case-insensitive
     static_cast<ActionCase&>(upper.add(ActionType::Case)).caseType = 2;
     static_cast<ActionCase&>(upper.at(0)).includeExt = true;

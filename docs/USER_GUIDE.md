@@ -24,6 +24,7 @@ The program only changes **names** (or copies the files under a new name); it ne
 | F2 | Add files | F10 | Options |
 | F3 | Add folders | F11 | Always on top |
 | F5 | Refresh preview | F12 | Undo |
+| Shift+F12 | History | | |
 | F6 / F7 / F8 | Remove selected / all / dead | Alt+F4 | Exit |
 | Ctrl+1 / 2 / 3 | Files / Actions / Log page | Ctrl+F2 | Add to batch |
 | Shift+F6 / Shift+F7 | Remove selected / clear the batch | Ctrl+O / Ctrl+S | Open / save a batch |
@@ -108,7 +109,8 @@ The **Batch contents** panel lists the planned actions (tick box to show/hide it
 
 - **Go** (F9): renames in a separate thread; the window stays usable, but what would modify the list, the batch or the options is disabled until the end.
 - **Stop** (Esc): interrupts the processing; the files already processed stay renamed.
-- **Undo** (F12): restores the old names of the **last** run only (one level), sidecar files included.
+- **Undo** (F12): restores the old names of the **last pass**, sidecar files included. Every action of the batch run by Go is a pass (a batch of three actions leaves three passes), so you can undo again and again, always from the last one.
+- **History** (Shift+F12, clock): lists the passes of the session, newest first (time, number of moves, action). *Undo up to this pass* undoes the chosen pass and all those made after it; a pass in the middle cannot be undone alone. If a file was moved outside the program, the undo stops there and the pass stays in the list. The last 50 passes are kept, and they are lost when the program is closed. In *Options > Files & Folders* the Undo button can open the history instead of undoing the last pass.
 - **Always on top** (F11): keeps the window above the others.
 - **Light / dark** (half-filled circle): switches the theme at once; *Options > Display > Theme* also offers "Follow the system" (default).
 - **Copy instead of rename** (Options > Processing): the originals stay, the copies carry the new names.
@@ -198,6 +200,6 @@ Same engine, other presentation, enabled in Options > Display (next start). Coun
 
 - EXIF: 36 tags only, MakerNote not decoded; IPTC read only in JPEG.
 - Audio tags: ID3 only (MP3); FLAC, OGG, M4A are not read.
-- Undo: one level.
+- Undo: pass after pass (the last 50 of the session), only from the last one; files copied with "Copy instead of rename" are not removed.
 - The short Windows 11 context menu is not supported (use "Show more options").
 - The help in Croatian and Tamil shows English for the pages written for Ant Renamer Qt.

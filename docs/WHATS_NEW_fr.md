@@ -23,6 +23,7 @@ Version courante : **3.0.0-rc.15**. Ce qui est marqué *(à venir)* est dans le 
 
 | Nouveauté | Depuis |
 |---|---|
+| **Historique des renommages** : chaque opération du job lancé par Démarrer est une *passe* ; **Annuler** (F12) remonte passe après passe (l'original n'avait qu'un niveau), et le bouton **Historique** (Maj+F12) liste les passes de la session et revient à une passe choisie, en l'annulant avec toutes les suivantes. Toujours linéaire, les 50 dernières passes sont gardées pour la session. Une option fait ouvrir l'historique par le bouton Annuler. | (à venir) |
 | **Fichiers cachés et système** (`desktop.ini`, `.git`...) d'un dossier ajouté : ignorés par défaut (*Options > Fichiers & Dossiers* pour les inclure) ; un bouton **Fichiers cachés** les affiche ou les masque dans la liste, et tant qu'ils sont masqués aucune opération ne les touche. Un avertissement s'affiche avant un renommage s'ils sont affichés et que la liste en contient. | (à venir) |
 | **Bouton « Seulement modifiés »** : masque les fichiers dont le nom ne change pas dans l'aperçu (idéal pour contrôler les 2 000 noms concernés dans une liste de 50 000). Simple filtre d'affichage : les fichiers masqués restent dans la liste, sont renommés normalement et ne peuvent pas être touchés par « Retirer la sélection » ou les boutons de déplacement. | 3.0.0-rc.9 |
 | **Tri naturel** dans la liste des fichiers (`fichier 2` avant `fichier 10`), activé par défaut ; décochable pour retrouver l'ordre alphabétique d'origine. | 3.0.0-rc.7 |

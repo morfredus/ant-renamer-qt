@@ -911,9 +911,15 @@ void ActionList::perform(FileList& files, Op op, const Progress& progress) {
         Action().perform(files, Op::Revert, progress);
         return;
     }
+    // Every action of the batch is a pass of its own in the journal, so a job can be undone step by step.
+    Journal* journal = op == Op::Rename ? files.journal() : nullptr;
+    int step = 0;
     for (auto& a : items_) {
         if (stopFlag()) break;
+        ++step;
+        if (journal) journal->beginPass(items_.size() > 1 ? u"%1/%2 : %3"_s.arg(step).arg(items_.size()).arg(a->description()) : a->description());
         a->perform(files, op, progress);
+        if (journal) journal->endPass();
     }
 }
 

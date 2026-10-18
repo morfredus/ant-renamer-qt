@@ -9,7 +9,7 @@ enum TbIcon {
     TbBatchRemoveSel, TbBatchClear, TbBatchOpen, TbBatchSave, TbLogClear, TbLogSave, TbLogCopy,
     TbLogFilter, TbGo, TbStop, TbUndo, TbAlwaysOnTop, TbOptions, TbHelp, TbAbout, TbExit,
     TbTheme,  // only drawn in code (light / dark toggle), whatever the icon set
-    TbChangedOnly, TbShowHidden  // idem (view filters of the files list)
+    TbChangedOnly, TbShowHidden, TbHistory  // idem (view filters of the files list)
 };
 
 QIcon tbIcon(int index);

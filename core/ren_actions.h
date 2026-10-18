@@ -18,7 +18,7 @@ enum class ActionType {
     Enum, MP3Tag, DateTime, Random, Case, FromList, Regexp, Exif
 };
 
-enum class Op { Rename, Preview, Revert };
+enum class Op { Rename, Preview, Revert, Undo };  // Undo: passes of the session journal (FileList::undoPasses)
 
 // (file just handled, position of the action in the batch, index of the file)
 using Progress = std::function<void(File&, int batchPos, int filePos)>;

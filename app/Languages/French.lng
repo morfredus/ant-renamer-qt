@@ -494,5 +494,18 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="renameHiddenWarning" Value="%1 fichier(s) caché(s) ou système sont dans la liste et vont être renommés. Les renommer peut casser des programmes ou le système. Continuer ?"/>
     <Item Name="showHiddenCaption" Value="Fichiers cachés"/>
     <Item Name="showHiddenHint" Value="Afficher les fichiers cachés et système de la liste ; masqués, ils ne sont pas renommés"/>
+    <Item Name="undoHistoryCaption" Value="Historique"/>
+    <Item Name="undoHistoryHint" Value="Passes de renommage de cette session : revenir à une passe précise"/>
+    <Item Name="undoHistoryTitle" Value="Historique des renommages"/>
+    <Item Name="undoHistoryInfo" Value="Passes de cette session, de la plus récente à la plus ancienne. Les passes s'annulent l'une après l'autre en partant de la dernière : choisir une passe l'annule ainsi que toutes celles faites après."/>
+    <Item Name="undoHistoryRow" Value="n°%1  %2  -  %3 déplacement(s)  -  %4"/>
+    <Item Name="undoHistoryButton" Value="Annuler jusqu'à cette passe"/>
+    <Item Name="undoHistoryConfirm" Value="Annuler %1 passes ?"/>
+    <Item Name="undoNothing" Value="Rien à annuler : aucune passe de renommage n'a été faite dans cette session."/>
+    <Item Name="undoLogStart" Value="Annulation des dernières passes de renommage"/>
+    <Item Name="undoOptHeader" Value="Bouton Annuler"/>
+    <Item Name="undoOptLabel" Value="Le bouton Annuler :"/>
+    <Item Name="undoOptLast" Value="annule la dernière passe"/>
+    <Item Name="undoOptHistory" Value="ouvre l'historique des passes"/>
   </QtPort>
 </Application>

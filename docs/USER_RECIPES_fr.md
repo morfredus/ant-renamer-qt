@@ -10,7 +10,7 @@ Chaque recette donne le but, les opérations à empiler dans le job (dans l'ordr
 1. **Ajoutez les fichiers** (F2 / F3 / glisser-déposer). Le **tri de la liste décide de l'ordre de traitement** : triez par nom avant une énumération.
 2. **Choisissez l'opération**, réglez-la, puis **Ajouter au job** (Ctrl+F2). Répétez pour chaque opération : elles s'appliquent l'une après l'autre, chacune sur le résultat de la précédente.
 3. **Vérifiez l'aperçu** : le cadre « Aperçu du fichier sélectionné » montre un fichier ; **F5** remplit la colonne Aperçu pour toute la liste. « Seulement modifiés » masque les fichiers inchangés pour ne contrôler que les autres.
-4. **Démarrer** (F9), puis lisez le **Journal**. **Annuler** (F12) défait le dernier traitement, et lui seul.
+4. **Démarrer** (F9), puis lisez le **Journal**. **Annuler** (F12) défait la dernière passe (une opération du job) ; recliquez pour remonter plus loin, ou ouvrez l'**Historique** (Maj+F12) pour revenir à une passe précise.
 5. **Précaution sur un lot important** : essayez d'abord sur quelques copies, ou cochez « Copier plutôt que renommer » (Options > Traitement) : les originaux restent intacts, les copies portent les nouveaux noms. Pensez à décocher ensuite.
 6. **Enregistrez le job** (Ctrl+S) dès qu'il marche : il se recharge (Ctrl+O) et se lance en ligne de commande (§8).
 
@@ -174,7 +174,7 @@ charge le job, ajoute les fichiers du dossier, renomme et quitte. `-afr dossier`
 Activer « Ajouter à Ant Renamer Qt » (Options > Fichiers & Dossiers). Clic droit sur une sélection de fichiers et de dossiers (Windows 11 : *Afficher plus d'options*) : tout arrive dans la fenêtre déjà ouverte.
 
 ### 6.6 Défaire un renommage
-**Annuler** (F12) restaure les noms de la dernière exécution, y compris les fichiers associés. Un seul niveau : n'enchaînez pas un second traitement avant d'avoir vérifié. En cas de doute, travaillez en mode « Copier plutôt que renommer » et gardez le journal enregistré (Options > Événements > Stocker le journal).
+Chaque opération du job lancé par Démarrer est une *passe*. **Annuler** (F12) restaure les noms de la dernière passe, y compris les fichiers associés, et vous pouvez recliquer pour remonter passe après passe. Pour revenir à un moment précis, ouvrez l'**Historique** (Maj+F12), choisissez la passe et cliquez *Annuler jusqu'à cette passe* : elle et toutes les passes suivantes sont annulées. L'annulation est toujours linéaire : une passe au milieu ne peut pas être annulée seule. Les 50 dernières passes sont gardées, et perdues à la fermeture du programme ; si un fichier a été déplacé en dehors du programme, l'annulation s'arrête là. En cas de doute, travaillez en mode « Copier plutôt que renommer » et gardez le journal enregistré (Options > Événements > Stocker le journal).
 
 ---
 

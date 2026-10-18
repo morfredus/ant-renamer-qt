@@ -34,7 +34,7 @@ Notez que le contenu de cette liste n'est pas définitif. À part pour ce qui es
 
 ## Limitations connues
 
-- Le bouton Annuler n'a qu'un niveau : il ne restaure que le dernier renommage.
+- L'annulation remonte passe après passe, toujours à partir de la dernière (une opération du job est une passe) ; l'historique garde les 50 dernières passes de la session et disparaît à la fermeture du programme. Une passe au milieu ne peut pas être annulée seule, et les fichiers copiés avec « Copier au lieu de renommer » ne sont pas supprimés par une annulation.
 - EXIF : 36 tags sont lus, et la MakerNote (données privées des fabricants d'appareils) n'est pas décodée. L'IPTC n'est lu que dans les fichiers JPEG. Voir [Tags EXIF, IPTC et XMP](metadata_tags_fr.md).
 - Les tags audio sont les tags ID3 des fichiers MP3 ; les autres formats (FLAC, OGG, M4A...) ne sont pas lus.
 - La date de création d'un fichier n'est pas conservée par tous les systèmes de fichiers (elle manque souvent sous Linux) : la date de modification est alors utilisée.
