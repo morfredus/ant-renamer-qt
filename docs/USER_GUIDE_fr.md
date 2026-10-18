@@ -1,6 +1,6 @@
 # Ant Renamer Qt : guide des fonctions
 
-*Toutes les fonctions d'Ant Renamer Qt 3.0.0-rc.15, avec le mode d'emploi.*
+*Toutes les fonctions d'Ant Renamer Qt 3.0.0-rc.16, avec le mode d'emploi.*
 English version : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détails complets, page par page, avec captures d'écran : l'aide intégrée (F1). Différences entre Windows et Linux : §13.
 
 ## 1. Principe général
@@ -165,7 +165,7 @@ Les changements s'appliquent en cliquant sur OK ; quelques-uns (langue, disposit
 
 | Page | Réglages |
 |---|---|
-| **Affichage** | mise à jour en temps réel, redimensionnement automatique des colonnes, icônes selon l'extension, disposition moderne et son arrangement des pages (Onglets, Écran unique en bandes, Écran unique en colonnes), police et taille forcées, taille de l'historique des listes déroulantes (1 à 200), **thème** (système, clair, sombre), **rechercher une nouvelle version au démarrage** (*à venir, absent de la rc.15* ; désactivé par défaut : une fois par jour il interroge GitHub pour la liste des versions, rien d'autre n'est envoyé ; aussi le bouton « Rechercher une mise à jour » de la fenêtre À propos), complétion automatique, **set d'icônes** (§12) |
+| **Affichage** | mise à jour en temps réel, redimensionnement automatique des colonnes, icônes selon l'extension, disposition moderne et son arrangement des pages (Onglets, Écran unique en bandes, Écran unique en colonnes), police et taille forcées, taille de l'historique des listes déroulantes (1 à 200), **thème** (système, clair, sombre), **rechercher une nouvelle version au démarrage** (désactivé par défaut : une fois par jour il interroge GitHub pour la liste des versions, rien d'autre n'est envoyé ; aussi le bouton « Rechercher une mise à jour » de la fenêtre À propos), complétion automatique, **set d'icônes** (§12) |
 | **Fichiers & Dossiers** | ne pas demander lors d'un glisser-déposer et options à utiliser, tri naturel, ouvrir le fichier au double-clic, inclure les fichiers cachés et système des dossiers ajoutés, entrée du menu de l'Explorateur (Windows) |
 | **Traitement** | copier plutôt que renommer, générer un journal, heure d'été selon la date du fichier, renommer aussi les fichiers associés (`.xmp`, `.dop` de DxO ; ils retrouvent leur ancien nom à l'annulation), forcer les dossiers (les crée), détecter `x:\` et `\\` (Linux : `/`) comme chemins absolus, dernier point d'un nom de dossier = extension |
 | **Événements** | au début d'une exécution : basculer vers une page, vider le journal ; à la fin : basculer vers une page, vider la liste de fichiers, vider le job, stocker le journal dans un fichier (avec « ajouter ») |

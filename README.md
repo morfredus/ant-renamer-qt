@@ -1,6 +1,6 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.0.0--rc.15-blue)
+![version](https://img.shields.io/badge/version-3.0.0--rc.16-blue)
 
 C++/Qt 6 port of [Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (originally Delphi 7,
 GPL v2 or later). Batch file renaming: replace, insert, move, delete, enumerate, change case, regular
@@ -86,7 +86,7 @@ following paths add (f files, F folders, r recursive; wildcards allowed).
 
 ## Privacy
 
-The program does not use the network, except for the new-version check (**not in rc.15, planned for the next version**), which is **off by default** (Options > Display): when you turn it on, it asks `api.github.com` once a day for the list of releases of this project, and nothing else is sent. If GitHub cannot be reached, nothing happens and the program works as usual.
+The program does not use the network, except for the new-version check, which is **off by default** (Options > Display): when you turn it on, it asks `api.github.com` once a day for the list of releases of this project, and nothing else is sent. If GitHub cannot be reached, nothing happens and the program works as usual.
 
 ## Support
 

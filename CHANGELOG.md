@@ -8,7 +8,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
-Changes committed but not yet published; they get a version number and date when a release is made.
+## [3.0.0-rc.16] - 2026-10-18
 
 ### Added
 

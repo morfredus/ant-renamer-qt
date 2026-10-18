@@ -5,7 +5,7 @@ French version: [WHATS_NEW_fr.md](WHATS_NEW_fr.md). This list is kept up to date
 technical detail: [CHANGELOG](../CHANGELOG.md). For the port itself (what is kept, the deliberate differences):
 [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.0.0-rc.15**. Items marked *(upcoming)* are in the code but not published yet.
+Current version: **3.0.0-rc.16**. Items marked *(upcoming)* are in the code but not published yet.
 
 ## Additions
 
@@ -24,8 +24,8 @@ Current version: **3.0.0-rc.15**. Items marked *(upcoming)* are in the code but 
 
 | What is new | Since |
 |---|---|
-| **History of the renamings**: every action of the batch run by Go is a *pass*; **Undo** (F12) goes back pass after pass (the original had one level), and the **History** button (Shift+F12) lists the passes of the session and goes back to a chosen one, undoing it and all the passes after it. Always linear, the last 50 passes are kept for the session. An option makes the Undo button open the history instead. | (upcoming) |
-| **Hidden and system files** (`desktop.ini`, `.git`...) of an added folder are skipped by default (*Options > Files & Folders* to include them); a **Hidden files** button shows or hides those in the list, and while they are hidden no operation touches them. A warning is shown before a renaming if they are shown and the list holds some. | (upcoming) |
+| **History of the renamings**: every action of the batch run by Go is a *pass*; **Undo** (F12) goes back pass after pass (the original had one level), and the **History** button (Shift+F12) lists the passes of the session and goes back to a chosen one, undoing it and all the passes after it. Always linear, the last 50 passes are kept for the session. An option makes the Undo button open the history instead. | 3.0.0-rc.16 |
+| **Hidden and system files** (`desktop.ini`, `.git`...) of an added folder are skipped by default (*Options > Files & Folders* to include them); a **Hidden files** button shows or hides those in the list, and while they are hidden no operation touches them. A warning is shown before a renaming if they are shown and the list holds some. | 3.0.0-rc.16 |
 | **"Changed only" button**: hides the files whose name does not change in the preview (ideal to check the 2,000 names concerned in a list of 50,000). It is only a view filter: hidden files stay in the list, are renamed as usual, and cannot be hit by "Remove sel." or the move buttons. | 3.0.0-rc.9 |
 | **Natural sort** in the files list (`file 2` before `file 10`), on by default; untick it to get the original alphabetical order. | 3.0.0-rc.7 |
 
@@ -33,7 +33,7 @@ Current version: **3.0.0-rc.15**. Items marked *(upcoming)* are in the code but 
 
 | What is new | Since |
 |---|---|
-| **New-version check** (off by default): once a day, or on demand from the About window, the program asks GitHub whether a newer release exists and offers to open its page. Nothing else is sent. | (upcoming) |
+| **New-version check** (off by default): once a day, or on demand from the About window, the program asks GitHub whether a newer release exists and offers to open its page. Nothing else is sent. | 3.0.0-rc.16 |
 | **Light / dark theme**: a toolbar button switches at once, and *Options > Display > Theme* can follow the system, force light or force dark (the log is readable in both). | 3.0.0-rc.14 |
 | **"Modern" icon set** (default): 30 line icons drawn by the program, sharp on any screen and screen scaling, light and dark theme, greyed when disabled. Options > Display > Icon set offers it with the three classic sets (Scrows, Windows XP, Windows XP Large); the help compares the four. | 3.0.0-rc.12 |
 | **Help rewritten and checked against the program**: Markdown pages (UTF-8, one table of contents per language), every option and action described, tables of tags and keyboard shortcuts, new screenshots of the real program in English and French, links between pages and sections verified. Croatian and Tamil show the English text for the rewritten pages. | 3.0.0-rc.12 |

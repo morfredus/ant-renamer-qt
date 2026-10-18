@@ -2,6 +2,10 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.0.0-rc.16 (18/10/2026)
+  - Renaming history for the session: Undo (F12) goes back pass after pass, and a History button (Shift+F12) lists the passes and undoes the chosen one and those after it.
+  - Hidden and system files: skipped when adding a folder (option to include them), a Hidden files button, a warning before a renaming.
+  - New-version check against the GitHub releases (off by default), also from the About window.
 - 3.0.0-rc.15 (18/10/2026)
   - Language files: the texts that only French had (portable mode, theme, About window...) are now in the language files, so every translator can translate them.
   - Packaging: the AppImage tools are pinned to a release and checked by SHA-256; the Windows build tries a second time when a file is locked.

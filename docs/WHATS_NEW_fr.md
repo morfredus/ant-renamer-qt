@@ -4,7 +4,7 @@
 Version anglaise : [WHATS_NEW.md](WHATS_NEW.md). Liste tenue à jour au fil du développement. Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le
 portage lui-même (ce qui est conservé, les différences voulues) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.0.0-rc.15**. Ce qui est marqué *(à venir)* est dans le code mais pas encore publié.
+Version courante : **3.0.0-rc.16**. Ce qui est marqué *(à venir)* est dans le code mais pas encore publié.
 
 ## Ajouts
 
@@ -23,8 +23,8 @@ Version courante : **3.0.0-rc.15**. Ce qui est marqué *(à venir)* est dans le 
 
 | Nouveauté | Depuis |
 |---|---|
-| **Historique des renommages** : chaque opération du job lancé par Démarrer est une *passe* ; **Annuler** (F12) remonte passe après passe (l'original n'avait qu'un niveau), et le bouton **Historique** (Maj+F12) liste les passes de la session et revient à une passe choisie, en l'annulant avec toutes les suivantes. Toujours linéaire, les 50 dernières passes sont gardées pour la session. Une option fait ouvrir l'historique par le bouton Annuler. | (à venir) |
-| **Fichiers cachés et système** (`desktop.ini`, `.git`...) d'un dossier ajouté : ignorés par défaut (*Options > Fichiers & Dossiers* pour les inclure) ; un bouton **Fichiers cachés** les affiche ou les masque dans la liste, et tant qu'ils sont masqués aucune opération ne les touche. Un avertissement s'affiche avant un renommage s'ils sont affichés et que la liste en contient. | (à venir) |
+| **Historique des renommages** : chaque opération du job lancé par Démarrer est une *passe* ; **Annuler** (F12) remonte passe après passe (l'original n'avait qu'un niveau), et le bouton **Historique** (Maj+F12) liste les passes de la session et revient à une passe choisie, en l'annulant avec toutes les suivantes. Toujours linéaire, les 50 dernières passes sont gardées pour la session. Une option fait ouvrir l'historique par le bouton Annuler. | 3.0.0-rc.16 |
+| **Fichiers cachés et système** (`desktop.ini`, `.git`...) d'un dossier ajouté : ignorés par défaut (*Options > Fichiers & Dossiers* pour les inclure) ; un bouton **Fichiers cachés** les affiche ou les masque dans la liste, et tant qu'ils sont masqués aucune opération ne les touche. Un avertissement s'affiche avant un renommage s'ils sont affichés et que la liste en contient. | 3.0.0-rc.16 |
 | **Bouton « Seulement modifiés »** : masque les fichiers dont le nom ne change pas dans l'aperçu (idéal pour contrôler les 2 000 noms concernés dans une liste de 50 000). Simple filtre d'affichage : les fichiers masqués restent dans la liste, sont renommés normalement et ne peuvent pas être touchés par « Retirer la sélection » ou les boutons de déplacement. | 3.0.0-rc.9 |
 | **Tri naturel** dans la liste des fichiers (`fichier 2` avant `fichier 10`), activé par défaut ; décochable pour retrouver l'ordre alphabétique d'origine. | 3.0.0-rc.7 |
 
@@ -32,7 +32,7 @@ Version courante : **3.0.0-rc.15**. Ce qui est marqué *(à venir)* est dans le 
 
 | Nouveauté | Depuis |
 |---|---|
-| **Recherche de nouvelle version** (désactivée par défaut) : une fois par jour, ou à la demande depuis la fenêtre À propos, le programme demande à GitHub s'il existe une version plus récente et propose d'ouvrir sa page. Rien d'autre n'est envoyé. | (à venir) |
+| **Recherche de nouvelle version** (désactivée par défaut) : une fois par jour, ou à la demande depuis la fenêtre À propos, le programme demande à GitHub s'il existe une version plus récente et propose d'ouvrir sa page. Rien d'autre n'est envoyé. | 3.0.0-rc.16 |
 | **Thème clair / sombre** : un bouton de la barre d'outils change aussitôt, et *Options > Affichage > Thème* peut suivre le système, forcer le clair ou forcer le sombre (le journal reste lisible dans les deux). | 3.0.0-rc.14 |
 | **Jeu d'icônes « Modern »** (par défaut) : 30 icônes au trait dessinées par le programme, nettes sur tout écran et toute mise à l'échelle, thèmes clair et sombre, grisées quand elles sont désactivées. Options > Affichage > Set d'icônes le propose avec les trois sets classiques (Scrows, Windows XP, Windows XP Large) ; l'aide compare les quatre. | 3.0.0-rc.12 |
 | **Aide réécrite et vérifiée contre le programme** : pages Markdown (UTF-8, une table des matières par langue), chaque option et opération décrite, tableaux des tags et des raccourcis clavier, nouvelles captures du vrai programme en anglais et en français, liens entre pages et sections vérifiés. Le croate et le tamoul affichent le texte anglais pour les pages réécrites. | 3.0.0-rc.12 |
