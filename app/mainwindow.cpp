@@ -4,6 +4,7 @@
 #include "icons.h"
 #include "lngtranslator.h"
 #include "theme.h"
+#include "updatecheck.h"
 #include "ren_path.h"
 
 #include <QApplication>
@@ -34,6 +35,7 @@
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QStatusBar>
+#include <QDate>
 #include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
@@ -675,6 +677,25 @@ void MainWindow::loadSettings() {
     aLogNot_->setChecked(s.value(u"log/not"_s, true).toBool());
     if (!newUi_ && s.contains(u"window/toolbars"_s)) restoreState(s.value(u"window/toolbars"_s).toByteArray());
     applyOptionsLive();
+    QTimer::singleShot(2500, this, &MainWindow::startUpdateCheck);  // only if the user asked for it (Options > Display)
+}
+
+// Looks for a newer release once a day when the option is on. Never during a run or an unattended (-x) run.
+void MainWindow::startUpdateCheck() {
+    const AppOptions& o = appOptions();
+    const QString today = QDate::currentDate().toString(Qt::ISODate);
+    if (!o.checkUpdates || o.lastUpdateCheck == today || exitAfterRun_ || worker_ || qEnvironmentVariableIsSet("ANTREN_SHOT")) return;
+    updater_ = new UpdateChecker(this);
+    connect(updater_, &UpdateChecker::finished, this, [this, today](bool ok, const QString& version, const QString& url, const QString& error) {
+        updater_->deleteLater();
+        updater_ = nullptr;
+        if (ok) {
+            appOptions().lastUpdateCheck = today;  // a failure is tried again at the next start
+            appOptions().save();
+        }
+        reportUpdate(this, ok, version, url, error, false);
+    });
+    updater_->check();
 }
 
 // Options that can change while the program runs (the others are read when used).

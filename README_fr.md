@@ -84,6 +84,10 @@ dossiers (Windows 11 : « Afficher plus d'options »). Tout ce qui est sélectio
 Ligne de commande : `-b fichier.arb` charge un job, `-g` démarre, `-x` quitte à la fin, `-a[fFr]`
 choisit ce qu'ajoutent les chemins suivants (f fichiers, F dossiers, r récursif ; jokers acceptés).
 
+## Confidentialité
+
+Le programme n'utilise pas le réseau, sauf pour la recherche de nouvelle version (**absente de la rc.15, prévue pour la prochaine version**), **désactivée par défaut** (Options > Affichage) : si vous l'activez, il interroge `api.github.com` une fois par jour pour obtenir la liste des versions de ce projet, et rien d'autre n'est envoyé.
+
 ## Assistance
 
 L'assistance pour Ant Renamer Qt se fait sur GitHub : [Issues](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, demandes de fonctions) et [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, idées). Merci de ne pas signaler les problèmes d'Ant Renamer Qt à l'auteur du programme d'origine.

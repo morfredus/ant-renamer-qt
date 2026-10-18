@@ -31,6 +31,7 @@ Current version: **3.0.0-rc.15**. Items marked *(upcoming)* are in the code but 
 
 | What is new | Since |
 |---|---|
+| **New-version check** (off by default): once a day, or on demand from the About window, the program asks GitHub whether a newer release exists and offers to open its page. Nothing else is sent. | (upcoming) |
 | **Light / dark theme**: a toolbar button switches at once, and *Options > Display > Theme* can follow the system, force light or force dark (the log is readable in both). | 3.0.0-rc.14 |
 | **"Modern" icon set** (default): 30 line icons drawn by the program, sharp on any screen and screen scaling, light and dark theme, greyed when disabled. Options > Display > Icon set offers it with the three classic sets (Scrows, Windows XP, Windows XP Large); the help compares the four. | 3.0.0-rc.12 |
 | **Help rewritten and checked against the program**: Markdown pages (UTF-8, one table of contents per language), every option and action described, tables of tags and keyboard shortcuts, new screenshots of the real program in English and French, links between pages and sections verified. Croatian and Tamil show the English text for the rewritten pages. | 3.0.0-rc.12 |

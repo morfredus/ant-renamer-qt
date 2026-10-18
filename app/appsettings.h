@@ -28,6 +28,8 @@ struct AppOptions {
     bool dragNoAsk = false;
     int pageLayout = 0;          // modern layout: 0 tabs, 1 single screen in bands, 2 single screen in columns
     bool newUi = false;          // modern layout (taken into account at the next start)
+    bool checkUpdates = false;   // look for a new release on GitHub at start (once a day)
+    QString lastUpdateCheck;     // yyyy-MM-dd of the last successful check
     int theme = 0;               // 0 system, 1 light, 2 dark (see theme.h)
     bool naturalSort = true;     // files list sort: natural (2 < 10) instead of alphabetical
     bool launchFile = false;     // double click opens the file

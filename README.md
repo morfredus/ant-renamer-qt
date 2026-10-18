@@ -84,6 +84,10 @@ Explorer context menu (Windows): Options > Files & Folders adds "Add to Ant Rena
 Command line: `-b file.arb` load a batch, `-g` start, `-x` exit when done, `-a[fFr]` choose what the
 following paths add (f files, F folders, r recursive; wildcards allowed).
 
+## Privacy
+
+The program does not use the network, except for the new-version check (**not in rc.15, planned for the next version**), which is **off by default** (Options > Display): when you turn it on, it asks `api.github.com` once a day for the list of releases of this project, and nothing else is sent.
+
 ## Support
 
 Support for Ant Renamer Qt is provided on GitHub: [Issues](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, feature requests) and [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, ideas). Please do not report Ant Renamer Qt problems to the author of the original program.

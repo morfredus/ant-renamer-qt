@@ -2,6 +2,7 @@
 
 #include "appsettings.h"
 #include "icons.h"
+#include "updatecheck.h"
 #include "lngtranslator.h"
 #include "shellmenu.h"
 
@@ -117,6 +118,7 @@ struct OptionsDialog::Ui {
     QComboBox* pageLayout = nullptr;
     QSpinBox *historyMax, *fontSize;
     QComboBox* theme;
+    QCheckBox* checkUpdates;
     QFontComboBox* font;
     QComboBox* iconSet;
     QCheckBox *startSwitch, *startClearLog, *finishSwitch, *finishClearFiles, *finishClearBatch, *saveLog, *saveLogAppend;
@@ -180,6 +182,9 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         th->addWidget(ui_->theme);
         th->addStretch();
         l->addLayout(th);
+
+        header(l, tr("Updates"));
+        ui_->checkUpdates = box(l, tr("Look for a new version at start (once a day, asks GitHub; nothing else is sent)"), o.checkUpdates);
 
         header(l, tr("Fonts"));
         ui_->forceFont = box(l, tr("Force the following font for controls that have to display special characters:"), o.forceFont);
@@ -351,6 +356,7 @@ void OptionsDialog::accept() {
     o.newUi = ui_->newUi->isChecked();
     o.pageLayout = ui_->pageLayout->currentIndex();
     o.theme = ui_->theme->currentIndex();
+    o.checkUpdates = ui_->checkUpdates->isChecked();
     o.realtime = ui_->realtime->isChecked();
     o.resizeCols = ui_->resizeCols->isChecked();
     o.fileIcons = ui_->icons->isChecked();
@@ -447,6 +453,17 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
     v->addWidget(tabs, 1);
 
     auto* bb = new QDialogButtonBox(QDialogButtonBox::Close);
+    auto* upd = bb->addButton(tr("Check for updates"), QDialogButtonBox::ActionRole);
+    connect(upd, &QPushButton::clicked, this, [this, upd] {
+        upd->setEnabled(false);
+        auto* c = new UpdateChecker(this);
+        connect(c, &UpdateChecker::finished, this, [this, upd, c](bool ok, const QString& version, const QString& url, const QString& error) {
+            c->deleteLater();
+            upd->setEnabled(true);
+            reportUpdate(this, ok, version, url, error, true);
+        });
+        c->check();
+    });
     connect(bb, &QDialogButtonBox::rejected, this, &QDialog::reject);
     v->addWidget(bb);
 }

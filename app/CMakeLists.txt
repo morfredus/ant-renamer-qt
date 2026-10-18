@@ -1,7 +1,7 @@
 find_package(Qt6 REQUIRED COMPONENTS Widgets Network)
 set(CMAKE_AUTORCC ON)
 
-set(SRC main.cpp mainwindow.cpp actionpanel.cpp appsettings.cpp dialogs.cpp icons.cpp lngtranslator.cpp helpwindow.cpp shellmenu.cpp theme.cpp resources.qrc)
+set(SRC main.cpp mainwindow.cpp actionpanel.cpp appsettings.cpp dialogs.cpp icons.cpp lngtranslator.cpp helpwindow.cpp shellmenu.cpp theme.cpp updatecheck.cpp resources.qrc)
 if(WIN32)
     enable_language(RC)
     list(APPEND SRC app.rc)   # icone + manifeste (chemins longs, UTF-8, DPI par ecran)

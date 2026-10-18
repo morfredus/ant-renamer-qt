@@ -107,6 +107,8 @@ private:
     void loadSettings();
     void saveSettings();
     void applyOptionsLive();
+    void startUpdateCheck();
+    class UpdateChecker* updater_ = nullptr;
     int theme_ = -1;  // theme in use (see theme.h)
 
     // navigation / status

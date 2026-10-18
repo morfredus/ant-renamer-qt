@@ -26,6 +26,7 @@ static int failures = 0;
     } while (0)
 
 #include "id3_check.h"
+#include "update_check.h"
 
 static void touch(const QString& p) { QFile f(p); if (f.open(QIODevice::WriteOnly)) f.write("x"); }
 
@@ -203,6 +204,7 @@ int main(int argc, char** argv) {
     }
 
     id3Checks();
+    updateChecks();
     robustnessChecks();
 
 

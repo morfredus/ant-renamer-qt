@@ -30,6 +30,7 @@ Version courante : **3.0.0-rc.15**. Ce qui est marqué *(à venir)* est dans le 
 
 | Nouveauté | Depuis |
 |---|---|
+| **Recherche de nouvelle version** (désactivée par défaut) : une fois par jour, ou à la demande depuis la fenêtre À propos, le programme demande à GitHub s'il existe une version plus récente et propose d'ouvrir sa page. Rien d'autre n'est envoyé. | (à venir) |
 | **Thème clair / sombre** : un bouton de la barre d'outils change aussitôt, et *Options > Affichage > Thème* peut suivre le système, forcer le clair ou forcer le sombre (le journal reste lisible dans les deux). | 3.0.0-rc.14 |
 | **Jeu d'icônes « Modern »** (par défaut) : 30 icônes au trait dessinées par le programme, nettes sur tout écran et toute mise à l'échelle, thèmes clair et sombre, grisées quand elles sont désactivées. Options > Affichage > Set d'icônes le propose avec les trois sets classiques (Scrows, Windows XP, Windows XP Large) ; l'aide compare les quatre. | 3.0.0-rc.12 |
 | **Aide réécrite et vérifiée contre le programme** : pages Markdown (UTF-8, une table des matières par langue), chaque option et opération décrite, tableaux des tags et des raccourcis clavier, nouvelles captures du vrai programme en anglais et en français, liens entre pages et sections vérifiés. Le croate et le tamoul affichent le texte anglais pour les pages réécrites. | 3.0.0-rc.12 |
