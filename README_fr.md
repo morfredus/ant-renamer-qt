@@ -86,7 +86,7 @@ choisit ce qu'ajoutent les chemins suivants (f fichiers, F dossiers, r récursif
 
 ## Confidentialité
 
-Le programme n'utilise pas le réseau, sauf pour la recherche de nouvelle version (**absente de la rc.15, prévue pour la prochaine version**), **désactivée par défaut** (Options > Affichage) : si vous l'activez, il interroge `api.github.com` une fois par jour pour obtenir la liste des versions de ce projet, et rien d'autre n'est envoyé.
+Le programme n'utilise pas le réseau, sauf pour la recherche de nouvelle version (**absente de la rc.15, prévue pour la prochaine version**), **désactivée par défaut** (Options > Affichage) : si vous l'activez, il interroge `api.github.com` une fois par jour pour obtenir la liste des versions de ce projet, et rien d'autre n'est envoyé. Si GitHub est inaccessible, il ne se passe rien et le programme fonctionne comme d'habitude.
 
 ## Assistance
 

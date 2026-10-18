@@ -86,7 +86,7 @@ following paths add (f files, F folders, r recursive; wildcards allowed).
 
 ## Privacy
 
-The program does not use the network, except for the new-version check (**not in rc.15, planned for the next version**), which is **off by default** (Options > Display): when you turn it on, it asks `api.github.com` once a day for the list of releases of this project, and nothing else is sent.
+The program does not use the network, except for the new-version check (**not in rc.15, planned for the next version**), which is **off by default** (Options > Display): when you turn it on, it asks `api.github.com` once a day for the list of releases of this project, and nothing else is sent. If GitHub cannot be reached, nothing happens and the program works as usual.
 
 ## Support
 

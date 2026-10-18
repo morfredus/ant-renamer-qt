@@ -12,7 +12,7 @@ Changes committed but not yet published; they get a version number and date when
 
 ### Added
 
-- New-version check: *Options > Display > Look for a new version at start* (off by default) asks GitHub once a day for the list of releases of `morfredus/ant-renamer-qt` and offers to open the download page of a newer one; the "Check for updates" button of the About window does it on demand. Nothing but an ordinary request (program name and version as user agent) is sent. A release candidate is told about newer candidates and about the final version; a final version is not told about candidates. Version order and the choice of the release are in the engine (`ren_update`) and tested; the network part was checked against the real repository.
+- New-version check: *Options > Display > Look for a new version at start* (off by default) asks GitHub once a day for the list of releases of `morfredus/ant-renamer-qt` and offers to open the download page of a newer one; the "Check for updates" button of the About window does it on demand. Nothing but an ordinary request (program name and version as user agent) is sent. A release candidate is told about newer candidates and about the final version; a final version is not told about candidates. Version order and the choice of the release are in the engine (`ren_update`) and tested; the network part was checked against the real repository, and with a GitHub that cannot be reached (refused connection, lost packets): the answer is a silent failure after 10 seconds at most while the interface keeps running, so the program never depends on it.
 
 ## [3.0.0-rc.15] - 2026-10-18
 

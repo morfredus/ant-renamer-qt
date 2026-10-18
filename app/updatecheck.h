@@ -5,6 +5,10 @@
 class QNetworkAccessManager;
 class QWidget;
 
+// The program must never depend on this: the request is asynchronous (the interface keeps running), stops by itself after
+// 10 seconds, and a failure at start-up is silent and tried again at the next start. If GitHub cannot be reached, the
+// program works exactly as without the check.
+//
 // Asks GitHub for the list of published releases and tells whether a newer one exists. Read only: nothing about the
 // user or the files is sent (an ordinary HTTPS request with the program name and version as user agent).
 class UpdateChecker : public QObject {
