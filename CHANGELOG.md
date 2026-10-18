@@ -12,6 +12,20 @@ Changes committed but not yet published; they get a version number and date when
 
 ### Added
 
+- "Changed only" and "Hidden files" are icon buttons (a sheet with a pencil, a dashed sheet with an eye) instead of text, which took too much room in the toolbar; the name stays in the tool tip. Drawn in code, so they are the same in every icon set.
+
+- Drag and drop: the import options window is opened once the drop is over (not inside the drop handler, which kept it behind the file manager) and forces the focus on Windows.
+
+- The "Add folders" window and the drag and drop window have an *Include hidden and system files* checkbox (same setting as in the Options, remembered).
+
+- On Windows too, a name starting with a dot (`.git`, `.config`, `.ScreamingFrogSEOSpider`) counts as hidden, like on Linux, besides the hidden and system attributes; a hidden folder is not entered when adding a folder.
+
+- **Hidden files** button in the files list: shows or hides the hidden and system files of the list (off by default). While hidden they are skipped by every operation (`File::hidden` and `ren::options().skipHidden` in the engine, so an enumeration does not count them either); the choice is remembered. The warning before a renaming only counts them when they are shown.
+
+- Before a rename, a warning (Yes/No, default No) appears when the list contains hidden or system files, with their count.
+
+- *Options > Files & Folders > Include hidden and system files when adding a folder* (off by default): adding a folder no longer lists `desktop.ini`, `.git` and the like unless this is ticked; files picked or dropped one by one are always added.
+
 - New-version check: *Options > Display > Look for a new version at start* (off by default) asks GitHub once a day for the list of releases of `morfredus/ant-renamer-qt` and offers to open the download page of a newer one; the "Check for updates" button of the About window does it on demand. Nothing but an ordinary request (program name and version as user agent) is sent. A release candidate is told about newer candidates and about the final version; a final version is not told about candidates. Version order and the choice of the release are in the engine (`ren_update`) and tested; the network part was checked against the real repository, and with a GitHub that cannot be reached (refused connection, lost packets): the answer is a silent failure after 10 seconds at most while the interface keeps running, so the program never depends on it.
 
 ## [3.0.0-rc.15] - 2026-10-18

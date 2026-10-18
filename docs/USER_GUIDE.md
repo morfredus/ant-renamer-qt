@@ -36,6 +36,7 @@ The program only changes **names** (or copies the files under a new name); it ne
 - **Folders** (F3): shows the drives and folders as a tree; select one or more, then tick what to add: the files they contain, the folders themselves, the subfolders (all levels). The three choices are remembered.
 - **Drag and drop** from the file manager (Explorer, Nautilus, Dolphin, Total Commander...): a window offers the same options. "Do not show this window again" remembers them (changeable in Options > Files & Folders); holding Ctrl or Shift when dropping shows the window once more.
 - **Explorer menu** "Add to Ant Renamer Qt" (Windows; enable it in Options > Files & Folders). Several selected items arrive together in the window that is already open. Windows 11: *Show more options* (or Shift+F10).
+- **Hidden and system files** (`desktop.ini`, `.git`...) of an added folder are skipped, unless *Include hidden and system files when adding a folder* is ticked (Options > Files & Folders). A file picked or dropped on its own is always added. Before a renaming, a warning (Yes/No) is shown if the list holds hidden or system files.
 - **Command line**: see §8.
 
 ### Managing the list
@@ -46,6 +47,7 @@ The program only changes **names** (or copies the files under a new name); it ne
 | Remove dead (F8) | removes files that no longer exist on disk |
 | Refresh preview (F5) | fills the Preview column (not automatic, for performance). It uses the batch, or the action displayed if the batch is empty |
 | Changed only | hides the files whose name does not change in the preview (a display filter only: they are still renamed, and a hidden file is never hit by "Remove selected" or the move buttons); refresh the preview first |
+| Hidden files | shows the hidden and system files of the list; off by default: they are hidden and left alone by every operation (not renamed). A warning appears before a renaming when it is on and the list holds some |
 | Up / Down / Top / Bottom | changes the processing order (drag and drop in the list works too) |
 
 - **Columns**: right-click the header to show Folder, File name, Full path, Ext., Preview, Size, Creation date, Modification date. They can be resized and moved; one column at least stays visible.
@@ -162,7 +164,7 @@ Changes apply when you click OK; a few (language, modern layout) at the next sta
 | Page | Settings |
 |---|---|
 | **Display** | live update, automatic column resizing, icons by extension, modern layout and its page arrangement (Tabs, Single screen in bands, Single screen in columns), forced font and size, history size of the drop-down lists (1 to 200), **theme** (system, light, dark), **look for a new version at start** (*upcoming, not in rc.15*; off by default: once a day it asks GitHub for the list of releases, nothing else is sent; also the "Check for updates" button of the About window), auto-completion, **icon set** (§12) |
-| **Files & Folders** | do not ask on drag and drop and the options to use, natural sort, open the file on double-click, Explorer menu entry (Windows) |
+| **Files & Folders** | do not ask on drag and drop and the options to use, natural sort, open the file on double-click, include hidden and system files of added folders, Explorer menu entry (Windows) |
 | **Processing** | copy instead of rename, generate a log, daylight saving by file date, also rename sidecar files (`.xmp`, DxO `.dop`; they get their old name back on undo), force folders (creates them), detect `x:\` and `\\` (Linux: `/`) as absolute paths, last dot of a folder name = extension |
 | **Events** | at the start of a run: switch to a page, clear the log; at the end: switch to a page, clear the files list, clear the batch, save the log to a file (with "append") |
 | **Language** | interface language (27 `.lng` files; translator and version shown), portable mode |

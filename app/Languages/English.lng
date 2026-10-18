@@ -494,5 +494,9 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="updatesError" Value="Could not check for updates: %1"/>
     <Item Name="updatesUpToDate" Value="This version is up to date."/>
     <Item Name="updatesAvailable" Value="A new version is available: %1 (you have %2). Open the download page?"/>
+    <Item Name="addHiddenFiles" Value="Include hidden and system files when adding a folder"/>
+    <Item Name="renameHiddenWarning" Value="%1 hidden or system file(s) are in the list and will be renamed. Renaming them can break programs or the system. Continue?"/>
+    <Item Name="showHiddenCaption" Value="Hidden files"/>
+    <Item Name="showHiddenHint" Value="Show the hidden and system files of the list; hidden, they are not renamed"/>
   </QtPort>
 </Application>

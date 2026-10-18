@@ -32,6 +32,7 @@ struct AppOptions {
     QString lastUpdateCheck;     // yyyy-MM-dd of the last successful check
     int theme = 0;               // 0 system, 1 light, 2 dark (see theme.h)
     bool naturalSort = true;     // files list sort: natural (2 < 10) instead of alphabetical
+    bool addHidden = false;      // folder contents: include hidden and system files (desktop.ini, .git...)
     bool launchFile = false;     // double click opens the file
     bool addFiles = true, addFolders = false, recursive = true;  // last "add folders" choices
     // Processing

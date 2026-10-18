@@ -68,7 +68,7 @@ void drawVectorIcon(QPainter& p, int index, QIcon::Mode mode) {
         p.setPen(pen);
     };
     auto folder = [&] { closed({{3, 19}, {3, 6}, {9, 6}, {11.5, 8.5}, {21, 8.5}, {21, 19}}); };
-    auto badge = [&](const QColor& c, int kind) {  // 0 plus, 1 cross, 2 minus
+    auto badge = [&](const QColor& c, int kind) {  // 0 plus, 1 cross, 2 minus, 3 pencil
         p.save();
         p.setPen(Qt::NoPen);
         p.setBrush(c);
@@ -76,7 +76,8 @@ void drawVectorIcon(QPainter& p, int index, QIcon::Mode mode) {
         p.setPen(QPen(Qt::white, 1.8, Qt::SolidLine, Qt::RoundCap));
         if (kind == 0) { line(17.5, 14.8, 17.5, 20.2); line(14.8, 17.5, 20.2, 17.5); }
         else if (kind == 1) { line(15.2, 15.2, 19.8, 19.8); line(19.8, 15.2, 15.2, 19.8); }
-        else line(14.8, 17.5, 20.2, 17.5);
+        else if (kind == 2) line(14.8, 17.5, 20.2, 17.5);
+        else { line(15.4, 19.6, 19.6, 15.4); line(15.4, 19.6, 15.2, 20.4); }
         p.restore();
     };
     auto list = [&] { line(3.5, 7, 13.5, 7); line(3.5, 12, 13.5, 12); line(3.5, 17, 9, 17); };
@@ -234,6 +235,22 @@ void drawVectorIcon(QPainter& p, int index, QIcon::Mode mode) {
             p.drawPath(half);
         }
         break;
+    case TbChangedOnly:  // a sheet with a pencil: only the files that change
+        p.save(); p.translate(-2, -1.5); page(); p.restore();
+        badge(off ? fg : QColor(0x3b, 0x82, 0xd6), 3);
+        break;
+    case TbShowHidden: {  // a dashed sheet (the ghost of a hidden file) with an eye
+        page(false, Qt::DashLine);
+        QPainterPath eye;
+        eye.moveTo(8, 14.5);
+        eye.cubicTo(10, 11.2, 15, 11.2, 17, 14.5);
+        eye.cubicTo(15, 17.8, 10, 17.8, 8, 14.5);
+        p.drawPath(eye);
+        p.setPen(Qt::NoPen);
+        p.setBrush(fg);
+        p.drawEllipse(QPointF(12.5, 14.5), 1.3, 1.3);
+        break;
+    }
     case TbExit:
         open({{10, 4}, {5, 4}, {5, 20}, {10, 20}});
         p.setPen(QPen(red, 1.9, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));

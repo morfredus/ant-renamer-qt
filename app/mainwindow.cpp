@@ -14,6 +14,9 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QDirIterator>
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
 #include <QFile>
 #include <QLocale>
 #include <QDragEnterEvent>
@@ -47,6 +50,29 @@ using namespace ren;
 using namespace Qt::StringLiterals;
 
 namespace {
+
+// Windows refuses the focus to a program that is not in the foreground (the file manager, during a drop): a key press of
+// ours first makes the system consider us the active program.
+void bringToFront(QWidget* w) {
+    w->raise();
+    w->activateWindow();
+#ifdef Q_OS_WIN
+    keybd_event(VK_MENU, 0, 0, 0);
+    keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);
+    SetForegroundWindow(reinterpret_cast<HWND>(w->winId()));
+#endif
+}
+
+// Hidden file: a dot name (also on Windows, where .git or .config carry no attribute), or the hidden / system attribute
+// on Windows (desktop.ini, Thumbs.db...).
+bool isHiddenOrSystem(const QFileInfo& fi) {
+    if (fi.isHidden() || fi.fileName().startsWith(u'.')) return true;
+#ifdef Q_OS_WIN
+    return GetFileAttributesW(reinterpret_cast<LPCWSTR>(QDir::toNativeSeparators(fi.absoluteFilePath()).utf16())) & FILE_ATTRIBUTE_SYSTEM;
+#else
+    return false;
+#endif
+}
 
 constexpr int SortRole = Qt::UserRole + 1;
 constexpr int PtrRole = Qt::UserRole;
@@ -232,11 +258,15 @@ void MainWindow::createActions() {
     aRemoveDead_ = makeAction(tr_("Remove dead"), tr_("Remove dead files from the list"), TbRemoveDead, K(Qt::Key_F8));
     aPreview_ = makeAction(tr_("Preview"), tr_("Refresh preview"), TbPreview, K(Qt::Key_F5));
 
-    // view filter only: hidden files stay in the list and are processed as usual
-    aChangedOnly_ = makeAction(tr_("Changed only"), tr_("Show only the files whose name changes in the preview"), TbLogFilter);
-    aChangedOnly_->setIcon(QIcon());
-    aChangedOnly_->setData(QVariant());
+    // view filter only: files hidden by "Changed only" stay in the list and are processed as usual
+    aChangedOnly_ = makeAction(tr_("Changed only"), tr_("Show only the files whose name changes in the preview"), TbChangedOnly);
     aChangedOnly_->setCheckable(true);
+    aShowHidden_ = makeAction(tr_("Hidden files"), tr_("Show the hidden and system files of the list; hidden, they are not renamed"), TbShowHidden);
+    aShowHidden_->setCheckable(true);
+    connect(aShowHidden_, &QAction::toggled, this, [this] {
+        ren::options().skipHidden = !aShowHidden_->isChecked();
+        updateAllItems();
+    });
     connect(aChangedOnly_, &QAction::toggled, this, [this] { updateAllItems(); });
 
     aBatchAdd_ = makeAction(tr_("Add to batch"), tr_("Add to batch"), TbBatchAdd, K(Qt::CTRL | Qt::Key_F2));
@@ -323,6 +353,7 @@ void MainWindow::createActions() {
         appOptions().addFiles = c.files;
         appOptions().addFolders = c.folders;
         appOptions().recursive = c.recursive;
+        appOptions().addHidden = c.hidden;
         appOptions().save();
         if (!dlg.folders().isEmpty()) s.setValue(u"folders/addFolder"_s, dlg.folders().first());
         QStringList n;
@@ -424,7 +455,7 @@ void MainWindow::createToolbars() {
     // --- what each bar contains ---
     const Items tabs = {T(aTab_[0]), T(aTab_[1]), T(aTab_[2])};
     const Items moves = {A(aUp_), A(aDown_), A(aTop_), A(aBottom_)};
-    Items files = {T(aAddFiles_), T(aAddFolders_), sep, A(aRemoveSel_), T(aRemoveAll_), A(aRemoveDead_), sep, A(aPreview_), T(aChangedOnly_)};
+    Items files = {T(aAddFiles_), T(aAddFolders_), sep, A(aRemoveSel_), T(aRemoveAll_), A(aRemoveDead_), sep, A(aPreview_), A(aChangedOnly_), A(aShowHidden_)};
     Items actions = {newUi_ ? T(aBatchAdd_) : A(aBatchAdd_)};
     if (newUi_) actions.push_back(T(aBatchEdit_));
     append(actions, {A(aBatchRemoveSel_), sep, A(aBatchClear_), recent, A(aBatchSave_)});
@@ -672,6 +703,7 @@ void MainWindow::loadSettings() {
     }
     aOnTop_->setChecked(s.value(u"window/onTop"_s, false).toBool());
     aChangedOnly_->setChecked(s.value(u"view/changedOnly"_s, false).toBool());
+    aShowHidden_->setChecked(s.value(u"view/showHidden"_s, false).toBool());
     aLogOk_->setChecked(s.value(u"log/ok"_s, true).toBool());
     aLogError_->setChecked(s.value(u"log/error"_s, true).toBool());
     aLogNot_->setChecked(s.value(u"log/not"_s, true).toBool());
@@ -750,6 +782,7 @@ void MainWindow::saveSettings() {
     }
     s.setValue(u"window/onTop"_s, aOnTop_->isChecked());
     s.setValue(u"view/changedOnly"_s, aChangedOnly_->isChecked());
+    s.setValue(u"view/showHidden"_s, aShowHidden_->isChecked());
     s.setValue(u"log/ok"_s, aLogOk_->isChecked());
     s.setValue(u"log/error"_s, aLogError_->isChecked());
     s.setValue(u"log/not"_s, aLogNot_->isChecked());
@@ -918,7 +951,7 @@ void MainWindow::updateItem(QTreeWidgetItem* item) {
     item->setText(ColFullPath, f->filePath());
     item->setText(ColExt, extractFileExt(f->fileName()));
     item->setText(ColPreview, f->preview);
-    const bool hide = aChangedOnly_->isChecked() && !f->preview.isEmpty() && f->preview == f->fileName();
+    const bool hide = (aChangedOnly_->isChecked() && !f->preview.isEmpty() && f->preview == f->fileName()) || (f->hidden && !aShowHidden_->isChecked());
     item->setHidden(hide);
     if (hide) item->setSelected(false);  // a hidden file must never be hit by "Remove sel." or the move buttons
     auto visible = [this](int c) { return !fileView_->isColumnHidden(c); };
@@ -962,6 +995,7 @@ void MainWindow::updateAllItems() {
 
 void MainWindow::addFile(const QString& path) {
     File& f = files_.add(path);
+    f.hidden = isHiddenOrSystem(QFileInfo(path));
     auto* item = new FileItem;
     item->setData(0, PtrRole, quintptr(&f));
     item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled);
@@ -974,6 +1008,7 @@ void MainWindow::addFolderContents(const QString& dir, const AddChoice& c) {
     QDir d(dir);
     const auto entries = d.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System, QDir::Name | QDir::DirsFirst);
     for (const QFileInfo& fi : entries) {
+        if (!c.hidden && isHiddenOrSystem(fi)) continue;  // a hidden folder is not entered either
         const QString p = native(fi.absoluteFilePath());
         if (fi.isDir()) {
             if (!c.recursive) continue;
@@ -1009,7 +1044,7 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice) {
 // Paths sent by the Explorer context menu: like a drop with the saved options, but without the question.
 void MainWindow::addShellPaths(const QStringList& paths) {
     if (worker_ || paths.isEmpty()) return;
-    const AddChoice c{true, appOptions().addFolders, appOptions().recursive};  // selected files are always added
+    const AddChoice c{true, appOptions().addFolders, appOptions().recursive, appOptions().addHidden};  // selected files are always added
     addFiles(paths, &c);
     showTab(0);
     setWindowState(windowState() & ~Qt::WindowMinimized);
@@ -1018,16 +1053,27 @@ void MainWindow::addShellPaths(const QStringList& paths) {
     activateWindow();
 }
 
+// The question is asked once the drop is over: a modal window opened inside the drop handler stays behind the file
+// manager, which is still waiting for the end of its drag.
 void MainWindow::filesDropped(const QStringList& paths) {
     if (worker_ || paths.isEmpty()) return;
-    AddChoice c{appOptions().addFiles, appOptions().addFolders, appOptions().recursive};
+    QTimer::singleShot(0, this, [this, paths] { importDropped(paths); });
+}
+
+void MainWindow::importDropped(const QStringList& paths) {
+    if (worker_) return;
+    AddChoice c{appOptions().addFiles, appOptions().addFolders, appOptions().recursive, appOptions().addHidden};
     if (!appOptions().dragNoAsk) {
+        bringToFront(this);
         DragDropDialog dlg(this);
+        dlg.show();
+        bringToFront(&dlg);
         if (dlg.exec() != QDialog::Accepted) return;
         c = dlg.choice();
         appOptions().addFiles = c.files;
         appOptions().addFolders = c.folders;
         appOptions().recursive = c.recursive;
+        appOptions().addHidden = c.hidden;
         appOptions().dragNoAsk = dlg.dontAskAgain();
         appOptions().save();
     }
@@ -1337,6 +1383,14 @@ void MainWindow::run(Op op) {
         showTab(1);
         return;
     }
+    if (op == Op::Rename) {  // hidden or system files are rarely meant to be renamed: ask first
+        int hidden = 0;
+        if (aShowHidden_->isChecked())
+            for (size_t i = 0; i < files_.size(); ++i) hidden += files_.at(i).hidden;
+        if (hidden && QMessageBox::warning(this, windowTitle(), tr("%1 hidden or system file(s) are in the list and will be renamed. Renaming them can break programs or the system. Continue?").arg(hidden),
+                                           QMessageBox::Yes | QMessageBox::No, QMessageBox::No) != QMessageBox::Yes)
+            return;
+    }
     const AppOptions& o = appOptions();
     if (op != Op::Preview) {
         if (o.startSwitch >= 0) showTab(o.startSwitch);
@@ -1452,7 +1506,7 @@ void MainWindow::onFinished() {
 // While a run is in progress the lists, the batch and the options belong to the worker thread. The handlers also test
 // worker_; disabling the actions makes it visible (and keeps their shortcuts from firing).
 void MainWindow::setBusy(bool busy) {
-    for (QAction* a : {aUndo_, aOptions_, aAddFiles_, aAddFolders_, aRemoveSel_, aRemoveAll_, aRemoveDead_, aPreview_, aChangedOnly_,
+    for (QAction* a : {aUndo_, aOptions_, aAddFiles_, aAddFolders_, aRemoveSel_, aRemoveAll_, aRemoveDead_, aPreview_, aChangedOnly_, aShowHidden_,
                        aBatchAdd_, aBatchRemoveSel_, aBatchClear_, aBatchOpen_, aBatchSave_, aUp_, aDown_, aTop_, aBottom_, aUnsort_})
         a->setEnabled(!busy);
     aBatchEdit_->setEnabled(!busy && newUi_ && batchView_->selectedItems().size() == 1);

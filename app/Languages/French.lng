@@ -490,5 +490,9 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="updatesError" Value="Impossible de rechercher une mise à jour : %1"/>
     <Item Name="updatesUpToDate" Value="Cette version est à jour."/>
     <Item Name="updatesAvailable" Value="Une nouvelle version est disponible : %1 (vous avez la %2). Ouvrir la page de téléchargement ?"/>
+    <Item Name="addHiddenFiles" Value="Inclure les fichiers cachés et système à l'ajout d'un dossier"/>
+    <Item Name="renameHiddenWarning" Value="%1 fichier(s) caché(s) ou système sont dans la liste et vont être renommés. Les renommer peut casser des programmes ou le système. Continuer ?"/>
+    <Item Name="showHiddenCaption" Value="Fichiers cachés"/>
+    <Item Name="showHiddenHint" Value="Afficher les fichiers cachés et système de la liste ; masqués, ils ne sont pas renommés"/>
   </QtPort>
 </Application>

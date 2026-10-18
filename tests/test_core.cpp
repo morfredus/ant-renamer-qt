@@ -273,6 +273,21 @@ int main(int argc, char** argv) {
     CHECK_EQ(files.at(0).fileName(), u"A.TXT"_s);
     CHECK_EQ(files.at(0).status() == State::Ok ? u"ok"_s : files.at(0).description(), u"ok"_s);
 
+    {   // a file flagged hidden is left alone while skipHidden is on, and renamed when it is off
+        const QString hp = dir + u"h.txt"_s;
+        touch(hp);
+        FileList hf;
+        hf.add(hp).hidden = true;
+        ActionList lo;
+        static_cast<ActionCase&>(lo.add(ActionType::Case)).caseType = 2;
+        lo.perform(hf, Op::Rename);
+        CHECK_EQ(hf.at(0).fileName(), u"h.txt"_s);
+        options().skipHidden = false;
+        lo.perform(hf, Op::Rename);
+        options().skipHidden = true;
+        CHECK_EQ(hf.at(0).fileName() != u"h.txt"_s ? u"renamed"_s : u"kept"_s, u"renamed"_s);
+    }
+
     const QString xml = dir + u"batch.xml"_s;
     ActionList mixed;
     static_cast<ActionStringRepl&>(mixed.add(ActionType::StringRepl)).search = u"\u00e9 & <x>"_s;

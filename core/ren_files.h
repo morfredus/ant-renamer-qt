@@ -23,6 +23,7 @@ struct Options {
     bool detectAbsDir = false;  // a new name with a drive/UNC prefix is an absolute path
     bool folderExt = false;     // treat folder names as having an extension
     bool copy = false;          // copy instead of rename
+    bool skipHidden = true;     // files flagged `hidden` (hidden or system file) are left alone by every operation
     bool dstRelativeToFile = true;  // file times use the DST rule of the date itself (else today's offset)
     bool renameSidecar = true;  // a renamed picture takes its sidecars (IMG.xmp, IMG.CR2.xmp, IMG.dop...) along
 };
@@ -41,6 +42,7 @@ public:
     bool exists() const;
 
     QString preview;
+    bool hidden = false;  // hidden or system file (set by the interface, see Options::skipHidden)
     int position = 0;
     QString description() const { return description_; }
     State status() const { return status_; }

@@ -63,13 +63,16 @@ AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent) 
     files_ = new QCheckBox(tr("Add files of selected folders"));
     folders_ = new QCheckBox(tr("Add selected folders"));
     recursive_ = new QCheckBox(tr("Apply these two options also to subfolders"));
+    hidden_ = new QCheckBox(tr("Include hidden and system files when adding a folder"));
     const AppOptions& o = appOptions();
     files_->setChecked(o.addFiles);
     folders_->setChecked(o.addFolders);
     recursive_->setChecked(o.recursive);
+    hidden_->setChecked(o.addHidden);
     v->addWidget(files_);
     v->addWidget(folders_);
     v->addWidget(recursive_);
+    v->addWidget(hidden_);
     v->addWidget(standardButtons(this));
 
     const QModelIndex start = model_->index(startFolder);
@@ -85,7 +88,7 @@ QStringList AddFoldersDialog::folders() const {
     return l;
 }
 
-AddChoice AddFoldersDialog::choice() const { return {files_->isChecked(), folders_->isChecked(), recursive_->isChecked()}; }
+AddChoice AddFoldersDialog::choice() const { return {files_->isChecked(), folders_->isChecked(), recursive_->isChecked(), hidden_->isChecked()}; }
 
 // --- Drag & drop --------------------------------------------------------------------------------------
 DragDropDialog::DragDropDialog(QWidget* parent) : QDialog(parent) {
@@ -96,23 +99,25 @@ DragDropDialog::DragDropDialog(QWidget* parent) : QDialog(parent) {
     files_ = new QCheckBox(tr("Add files of selected folders"));
     folders_ = new QCheckBox(tr("Add selected folders"));
     recursive_ = new QCheckBox(tr("Apply these two options also to subfolders"));
+    hidden_ = new QCheckBox(tr("Include hidden and system files when adding a folder"));
     const AppOptions& o = appOptions();
     files_->setChecked(o.addFiles);
     folders_->setChecked(o.addFolders);
     recursive_->setChecked(o.recursive);
+    hidden_->setChecked(o.addHidden);
     notAgain_ = new QCheckBox(tr("Do not show this window again (keep selected options for next times)"));
-    for (auto* c : {files_, folders_, recursive_}) v->addWidget(c);
+    for (auto* c : {files_, folders_, recursive_, hidden_}) v->addWidget(c);
     v->addSpacing(8);
     v->addWidget(notAgain_);
     v->addWidget(standardButtons(this));
 }
 
-AddChoice DragDropDialog::choice() const { return {files_->isChecked(), folders_->isChecked(), recursive_->isChecked()}; }
+AddChoice DragDropDialog::choice() const { return {files_->isChecked(), folders_->isChecked(), recursive_->isChecked(), hidden_->isChecked()}; }
 bool DragDropDialog::dontAskAgain() const { return notAgain_->isChecked(); }
 
 // --- Options ---------------------------------------------------------------------------------------------
 struct OptionsDialog::Ui {
-    QCheckBox *realtime, *resizeCols, *icons, *forceFont, *autoComplete, *dragNoAsk, *launch, *naturalSort, *newUi, *forceDir, *detectAbs,
+    QCheckBox *realtime, *resizeCols, *icons, *forceFont, *autoComplete, *dragNoAsk, *launch, *addHidden, *naturalSort, *newUi, *forceDir, *detectAbs,
         *copy, *genLog, *folderExt, *sidecar, *dst, *portable, *shellMenu;
     QCheckBox *dropFiles, *dropFolders, *dropRecursive;
     QComboBox* pageLayout = nullptr;
@@ -230,6 +235,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         ui_->dropRecursive = box(l, tr("Apply these two options also to subfolders"), o.recursive);
         for (auto* c : {ui_->dropFiles, ui_->dropFolders, ui_->dropRecursive}) c->setContentsMargins(20, 0, 0, 0);
         header(l, tr("List behaviour"));
+        ui_->addHidden = box(l, tr("Include hidden and system files when adding a folder"), o.addHidden);
         ui_->launch = box(l, tr("Launch file on double click"), o.launchFile);
         ui_->naturalSort = box(l, tr("Natural sort in files list (2 before 10) instead of alphabetical"), o.naturalSort);
         header(l, tr("Windows Explorer"));
@@ -370,6 +376,7 @@ void OptionsDialog::accept() {
     o.addFiles = ui_->dropFiles->isChecked();
     o.addFolders = ui_->dropFolders->isChecked();
     o.recursive = ui_->dropRecursive->isChecked();
+    o.addHidden = ui_->addHidden->isChecked();
     o.launchFile = ui_->launch->isChecked();
     o.naturalSort = ui_->naturalSort->isChecked();
     o.forceDir = ui_->forceDir->isChecked();

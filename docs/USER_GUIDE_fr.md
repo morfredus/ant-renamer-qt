@@ -36,6 +36,7 @@ Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau 
 - **Dossiers** (F3) : affiche les lecteurs et dossiers sous forme d'arbre ; en choisir un ou plusieurs, puis cocher ce qu'il faut ajouter : les fichiers qu'ils contiennent, les dossiers eux-mêmes, les sous-dossiers (tous niveaux). Les trois choix sont mémorisés.
 - **Glisser-déposer** depuis le gestionnaire de fichiers (Explorateur, Nautilus, Dolphin, Total Commander...) : une fenêtre propose les mêmes options. « Ne plus afficher cette fenêtre » les mémorise (modifiable dans Options > Fichiers & Dossiers) ; maintenir Ctrl ou Maj en déposant réaffiche la fenêtre une fois.
 - **Menu de l'Explorateur** « Ajouter à Ant Renamer Qt » (Windows ; à activer dans Options > Fichiers & Dossiers). Plusieurs éléments sélectionnés arrivent ensemble dans la fenêtre déjà ouverte. Windows 11 : *Afficher plus d'options* (ou Maj+F10).
+- **Fichiers cachés et système** (`desktop.ini`, `.git`...) d'un dossier ajouté : ignorés, sauf si *Inclure les fichiers cachés et système à l'ajout d'un dossier* est coché (Options > Fichiers & Dossiers). Un fichier choisi ou déposé seul est toujours ajouté. Avant un renommage, un avertissement (Oui/Non) s'affiche si la liste contient des fichiers cachés ou système.
 - **Ligne de commande** : voir §8.
 
 ### Gérer la liste
@@ -46,6 +47,7 @@ Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau 
 | Retirer manquants (F8) | retire les fichiers qui n'existent plus sur le disque |
 | Aperçu (F5) | remplit la colonne Aperçu (pas automatique, pour la performance). Il utilise le job, ou l'opération affichée si le job est vide |
 | Seulement modifiés | masque les fichiers dont le nom ne change pas dans l'aperçu (simple filtre d'affichage : ils sont quand même renommés, et un fichier masqué n'est jamais touché par « Retirer sélec. » ni par les boutons de déplacement) ; actualisez l'aperçu d'abord |
+| Fichiers cachés | affiche les fichiers cachés et système de la liste ; désactivé par défaut : ils sont masqués et ignorés par toutes les opérations (pas renommés). Un avertissement s'affiche avant un renommage quand il est activé et que la liste en contient |
 | Haut / Bas / Début / Fin | change l'ordre de traitement (le glisser-déposer dans la liste fonctionne aussi) |
 
 - **Colonnes** : clic droit sur l'en-tête pour afficher Dossier, Nom de fichier, Chemin complet, Ext., Aperçu, Taille, Date de création, Date de modification. Elles se redimensionnent et se déplacent ; une colonne au moins reste visible.
@@ -162,7 +164,7 @@ Les changements s'appliquent en cliquant sur OK ; quelques-uns (langue, disposit
 | Page | Réglages |
 |---|---|
 | **Affichage** | mise à jour en temps réel, redimensionnement automatique des colonnes, icônes selon l'extension, disposition moderne et son arrangement des pages (Onglets, Écran unique en bandes, Écran unique en colonnes), police et taille forcées, taille de l'historique des listes déroulantes (1 à 200), **thème** (système, clair, sombre), **rechercher une nouvelle version au démarrage** (*à venir, absent de la rc.15* ; désactivé par défaut : une fois par jour il interroge GitHub pour la liste des versions, rien d'autre n'est envoyé ; aussi le bouton « Rechercher une mise à jour » de la fenêtre À propos), complétion automatique, **set d'icônes** (§12) |
-| **Fichiers & Dossiers** | ne pas demander lors d'un glisser-déposer et options à utiliser, tri naturel, ouvrir le fichier au double-clic, entrée du menu de l'Explorateur (Windows) |
+| **Fichiers & Dossiers** | ne pas demander lors d'un glisser-déposer et options à utiliser, tri naturel, ouvrir le fichier au double-clic, inclure les fichiers cachés et système des dossiers ajoutés, entrée du menu de l'Explorateur (Windows) |
 | **Traitement** | copier plutôt que renommer, générer un journal, heure d'été selon la date du fichier, renommer aussi les fichiers associés (`.xmp`, `.dop` de DxO ; ils retrouvent leur ancien nom à l'annulation), forcer les dossiers (les crée), détecter `x:\` et `\\` (Linux : `/`) comme chemins absolus, dernier point d'un nom de dossier = extension |
 | **Événements** | au début d'une exécution : basculer vers une page, vider le journal ; à la fin : basculer vers une page, vider la liste de fichiers, vider le job, stocker le journal dans un fichier (avec « ajouter ») |
 | **Langue** | langue de l'interface (27 fichiers `.lng` ; traducteur et version affichés), mode portable |

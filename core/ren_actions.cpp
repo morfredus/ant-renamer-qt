@@ -243,6 +243,7 @@ void Action::perform(FileList& list, Op op, const Progress& progress) {
         if (stopFlag()) break;
         File& f = list.at(i);
         curFile_ = &f;
+        if (options().skipHidden && f.hidden) continue;
         if (op == Op::Rename && isListedSidecar(list, f)) {  // renamed with its picture
             if (progress) progress(f, position, int(i));
             continue;

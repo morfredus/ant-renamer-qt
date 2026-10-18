@@ -7,7 +7,7 @@ class QFileSystemModel;
 class QTreeView;
 
 struct AddChoice {
-    bool files = true, folders = false, recursive = true;
+    bool files = true, folders = false, recursive = true, hidden = false;  // hidden: also hidden and system files
     bool any() const { return files || folders; }
 };
 
@@ -21,7 +21,7 @@ public:
 private:
     QTreeView* view_;
     QFileSystemModel* model_;
-    QCheckBox *files_, *folders_, *recursive_;
+    QCheckBox *files_, *folders_, *recursive_, *hidden_;
 };
 
 // Shown when files are dropped on the list (fDragdropOptions.pas).
@@ -32,7 +32,7 @@ public:
     bool dontAskAgain() const;
 
 private:
-    QCheckBox *files_, *folders_, *recursive_, *notAgain_;
+    QCheckBox *files_, *folders_, *recursive_, *hidden_, *notAgain_;
 };
 
 class OptionsDialog : public QDialog {
