@@ -512,5 +512,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="textFilesTxtAll" Value="Fichiers texte (*.txt);;Tous les fichiers (*.*)"/>
     <Item Name="textFilesLog" Value="Fichiers texte (*.log *.txt)"/>
     <Item Name="versionNumber" Value="Version %1"/>
+    <Item Name="helpBack" Value="Retour"/>
+    <Item Name="helpForward" Value="Suivant"/>
   </QtPort>
 </Application>

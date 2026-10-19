@@ -516,5 +516,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="textFilesTxtAll" Value="Text files (*.txt);;All files (*.*)"/>
     <Item Name="textFilesLog" Value="Text files (*.log *.txt)"/>
     <Item Name="versionNumber" Value="Version %1"/>
+    <Item Name="helpBack" Value="Back"/>
+    <Item Name="helpForward" Value="Forward"/>
   </QtPort>
 </Application>

@@ -13,7 +13,9 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 - Presentation (EN, FR): the "What was added" section now lists the modern layout (with the single screen) and the renaming history; the table of sizes is updated, the layout and help bullets mention the modern layout and the Markdown help, the language note says English and French carry the `<QtPort>` texts.
 - Documentation pass against the code: ARCHITECTURE (EN, FR) lists `ren_update`, `theme`, `updatecheck` and `update_check.h` and says why Qt Network is linked; CONTRIBUTING (EN, FR) no longer says the undo goes back one level only; README (EN, FR) describes the `tests/` folder; WHATS_NEW (EN, FR) gets the new-version check; PRESENTATION gives the right page for the Undo button option.
 - User guide (EN, FR): the 14 actions checked setting by setting against `core/ren_actions.cpp`; the only gap was the String insertion option, which applies to the extension instead of the name (it was described as "count within the extension").
-- `English.lng` and `French.lng`, section `<QtPort>`: five texts that were still English in the French interface are added ("Open", "Save log", the two text-file filters of the file dialogs, "Version %1" of the About window).
+- `English.lng` and `French.lng`, section `<QtPort>`: two more texts, "Back" and "Forward" (tool tips of the help window), found by running the program in French in the three modern page layouts.
+- Quality pass (no code change): build with `-Wall -Wextra -Wpedantic -Wshadow -Wconversion` (only `qsizetype` to `int` narrowing and a few shadowed names, none that can matter for file names), `ctest` and the program (three modern layouts, Options, About and Help windows, French) under AddressSanitizer and UndefinedBehaviorSanitizer on Ubuntu 24.04 (WSL): no error.
+: five texts that were still English in the French interface are added ("Open", "Save log", the two text-file filters of the file dialogs, "Version %1" of the About window).
 
 ## [3.0.0-rc.16] - 2026-10-18
 
