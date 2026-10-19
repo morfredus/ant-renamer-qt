@@ -45,7 +45,7 @@ Prérequis Windows : MSYS2 avec `mingw-w64-x86_64-{gcc,cmake,ninja,qt6-base,qt6-
 |---|---|
 | `core/` | moteur de renommage, QtCore seulement |
 | `app/` | interface Qt Widgets, `Languages/` et `help/` de l'original |
-| `tests/` | vérifications du cœur (`ctest`) |
+| `tests/` | vérifications du moteur et de l'éditeur d'opérations (`ctest`) |
 | `cmake/toolchains/` | toolchain de cross-compilation ARM64 |
 | `scripts/windows/` | déploiement des DLL MinGW, aide VS Code, zip et installeur |
 | `scripts/linux/` | `.deb`, AppImage, fichier `.desktop` |

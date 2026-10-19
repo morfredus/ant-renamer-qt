@@ -8,6 +8,13 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Changed
+
+- Presentation (EN, FR): the "What was added" section now lists the modern layout (with the single screen) and the renaming history; the table of sizes is updated, the layout and help bullets mention the modern layout and the Markdown help, the language note says English and French carry the `<QtPort>` texts.
+- Documentation pass against the code: ARCHITECTURE (EN, FR) lists `ren_update`, `theme`, `updatecheck` and `update_check.h` and says why Qt Network is linked; CONTRIBUTING (EN, FR) no longer says the undo goes back one level only; README (EN, FR) describes the `tests/` folder; WHATS_NEW (EN, FR) gets the new-version check; PRESENTATION gives the right page for the Undo button option.
+- User guide (EN, FR): the 14 actions checked setting by setting against `core/ren_actions.cpp`; the only gap was the String insertion option, which applies to the extension instead of the name (it was described as "count within the extension").
+- `English.lng` and `French.lng`, section `<QtPort>`: five texts that were still English in the French interface are added ("Open", "Save log", the two text-file filters of the file dialogs, "Version %1" of the About window).
+
 ## [3.0.0-rc.16] - 2026-10-18
 
 ### Added

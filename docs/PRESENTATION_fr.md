@@ -28,7 +28,7 @@ jobs de l'autre.
 
 | | Original (Delphi 7) | Portage (C++20 / Qt 6) |
 |---|---|---|
-| Taille | environ 14 700 lignes de Pascal | environ 2 400 lignes (moteur) + 4 400 lignes (interface) + 600 lignes de tests |
+| Taille | environ 14 700 lignes de Pascal | environ 2 650 lignes (moteur) + 4 750 lignes (interface) + 750 lignes de tests |
 | Prérequis | Delphi 7 + 5 paquets de composants tiers | un compilateur C++20 et Qt 6, rien d'autre |
 | Plateformes | Windows | Windows (MinGW, testé), Linux x86_64 et ARM64 (Raspberry Pi ; installé depuis les paquets et utilisé, testé) |
 | Unicode | WideString + contrôles Tnt | `QString` (UTF-16), mêmes positions de caractères |
@@ -48,11 +48,13 @@ jobs de l'autre.
 - **La disposition de l'interface** : les trois pages (Fichiers / Opérations / Journal), les barres d'outils et
   leurs icônes, la liste des actions avec sa page de réglages, l'aperçu en direct du fichier sélectionné, le
   contenu du job repliable, le glisser-déposer avec sa fenêtre d'options, la fenêtre Options et ses onglets, le
-  filtre du journal, la liste des jobs récents, la barre d'état avec progression, les mêmes raccourcis clavier.
+  filtre du journal, la liste des jobs récents, la barre d'état avec progression, les mêmes raccourcis clavier. Cette disposition classique reste celle par défaut ; la
+  disposition moderne est une option (voir « Ce qui a été ajouté »).
 - **Les fichiers de langue d'origine** : les 28 fichiers `.lng` (l'anglais et 27 traductions) sont utilisés tels quels (chacun avec son encodage), et la
   langue se change dans les Options. L'interface française est construite à partir du `French.lng` d'origine, plus quelques textes ajoutés par le portage.
 - **L'aide d'origine** : les pages d'aide (anglais, français, croate, tamoul) et l'historique des versions sont
-  livrés et ouverts depuis F1 et depuis les liens « aide » des notes des actions.
+  livrés et ouverts depuis F1 et depuis les liens « aide » des notes des actions. Les pages ne sont plus en HTML (CHM)
+  mais en 76 fichiers Markdown (UTF-8) avec une table des matières en Markdown ; le texte est le même, révisé pour le portage.
 - **Les graphismes d'origine** : les jeux d'icônes de barres d'outils (Scrows, Windows XP, Windows XP Large), `renamer.ico`,
   `ant.bmp` et le set prédéfini « Remove west-european accents » de `default.xml`.
 - **Le comportement** : renommage dans un fil séparé avec Stop et Annuler, renommage de dossiers avec mise à jour
@@ -130,6 +132,13 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   UTF-8, DPI par écran v2 et contrôles communs v6 ; Qt gère le thème sombre et la haute résolution.
 - **Jeu d'icônes (nouveau jeu vectoriel « Modern », par défaut), police et « redimensionnement automatique des colonnes »** appliqués immédiatement, barres d'outils
   déplaçables et mémorisées, liste des langues avec version, auteurs et commentaires.
+- **Disposition moderne**, en option (Options > Affichage) : une barre principale avec onglets indiquant le nombre de
+  fichiers et d'opérations, un bouton Go bien visible, une barre par page, la colonne du nouveau nom visible par défaut,
+  thème clair ou sombre du système. Les pages peuvent être en onglets ou en **écran unique** (en bandes ou en colonnes,
+  séparateurs déplaçables et mémorisés) ; une opération du job se modifie par double-clic. La disposition classique
+  reste celle par défaut.
+- **Historique des renommages** pour la session : une passe par action, annulation linéaire, fenêtre Historique, et le
+  bouton Annuler peut au choix défaire la dernière passe ou ouvrir l'historique (Options > Fichiers & Dossiers).
 - **Système de build** : presets CMake pour Windows (MinGW), Linux x86_64, Linux ARM64 et compilation croisée
   ARM64 ; les DLL Qt et MinGW sont déployées automatiquement à côté de l'exécutable sous Windows.
 - **Livrables** : `scripts/windows/package-win.ps1` produit un zip portable et, avec Inno Setup 6, un installeur
@@ -159,7 +168,7 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
 - Le menu court de Windows 11 demande un composant COM empaqueté et signé, non réalisé.
 - L'exécutable n'est pas signé, donc SmartScreen peut avertir au premier téléchargement.
 - L'interface est traduite par les fichiers `.lng` d'origine ; les textes ajoutés par le portage (À propos, mode portable, menu
-  de l'Explorateur, thème) sont dans la section `<QtPort>` des fichiers de langue, traduits seulement en français pour l'instant.
+  de l'Explorateur, thème) sont dans la section `<QtPort>` des fichiers de langue, traduits en anglais et en français pour l'instant (les autres langues les affichent en anglais tant qu'un traducteur n'a pas ajouté les lignes).
 
 ## Licence et crédits
 

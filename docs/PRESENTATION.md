@@ -27,7 +27,7 @@ common, on purpose: both programs read each other's batches.
 
 | | Original (Delphi 7) | Port (C++20 / Qt 6) |
 |---|---|---|
-| Size | about 14,700 lines of Pascal | about 2,400 lines (engine) + 4,400 lines (interface) + 600 lines of tests |
+| Size | about 14,700 lines of Pascal | about 2,650 lines (engine) + 4,750 lines (interface) + 750 lines of tests |
 | Needs | Delphi 7 + 5 third-party component packs | a C++20 compiler and Qt 6, nothing else |
 | Platforms | Windows | Windows (MinGW, tested), Linux x86_64 and ARM64 (Raspberry Pi; installed from the packages and run, tested) |
 | Unicode | WideString + Tnt controls | `QString` (UTF-16), same semantics for positions |
@@ -47,11 +47,13 @@ common, on purpose: both programs read each other's batches.
 - **The interface layout**: the three pages (Files / Actions / Log), the toolbars and their icons, the
   action list with its settings page, the live preview of the selected file, the collapsible batch list,
   drag and drop with the options window, the Options dialog with its tabs, the log filter, the MRU list of
-  batches, the status bar with progress, the same keyboard shortcuts.
+  batches, the status bar with progress, the same keyboard shortcuts. This classic layout is still the default; the
+  modern layout is an option (see "What was added").
 - **The original language files**: the 28 `.lng` files (English and 27 translations) are used as they are (each with its own encoding), and the
   language can be changed in Options. The French interface is built from the original `French.lng`, plus a few strings added by the port.
 - **The original help**: the help pages (English, French, Croatian, Tamil) and the version history are shipped
-  and opened from F1 and from the "Help" links of the action notes.
+  and opened from F1 and from the "Help" links of the action notes. The pages are no longer HTML (CHM) but 76
+  Markdown files (UTF-8) with a Markdown table of contents; the text is the same, revised for the port.
 - **The original graphics**: toolbar icon sets (Scrows, Windows XP, Windows XP Large), `renamer.ico`, `ant.bmp`,
   and the predefined "Remove west-european accents" set from `default.xml`.
 - **Behaviour details**: renaming runs in a worker thread with Stop and Undo, folders can be renamed with the
@@ -127,6 +129,12 @@ These are the places where the port does not do exactly what version 2.13 does. 
   page, per-monitor DPI v2 and common controls v6; Qt handles the dark theme and high DPI.
 - **Icon set (a new "Modern" vector set), font and "auto-resize columns"** applied immediately, toolbars that can be moved and
   remembered, languages list with version, authors and comments.
+- **Modern layout**, as an option (Options > Display): one main bar with tabs showing the number of files and actions,
+  a prominent Go button, a bar per page, the new-name column visible by default, the system light or dark theme. The
+  pages can be tabs or a **single screen** (in bands or in columns, movable and remembered splitters); an action of the
+  batch is edited by double-click. The classic layout stays the default.
+- **Renaming history** for the session: one pass per action, linear undo, a History window, and the Undo button either
+  undoes the last pass or opens the history (Options > Files & Folders).
 - **Build system**: CMake presets for Windows (MinGW), Linux x86_64, Linux ARM64 and ARM64 cross
   compilation; Qt and MinGW DLLs are deployed automatically next to the executable on Windows.
 - **Packaging**: `scripts/windows/package-win.ps1` builds a portable zip and, with Inno Setup 6, an
@@ -154,7 +162,7 @@ These are the places where the port does not do exactly what version 2.13 does. 
 - The Windows 11 short context menu needs a packaged COM component and a signed package, not done.
 - The executable is not code-signed, so SmartScreen may warn on the first download.
 - The interface is translated through the original `.lng` files; the strings added by the port (About text,
-  portable mode, Explorer menu, theme) are in the `<QtPort>` section of the language files, translated for French only so far.
+  portable mode, Explorer menu, theme) are in the `<QtPort>` section of the language files, translated in English and French so far (the other languages show them in English until a translator adds the lines).
 
 ## Licence and credits
 

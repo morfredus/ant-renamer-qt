@@ -511,5 +511,10 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="undoOptLabel" Value="The Undo button:"/>
     <Item Name="undoOptLast" Value="undoes the last pass"/>
     <Item Name="undoOptHistory" Value="opens the history of the passes"/>
+    <Item Name="openCaption" Value="Open"/>
+    <Item Name="saveLogCaption" Value="Save log"/>
+    <Item Name="textFilesTxtAll" Value="Text files (*.txt);;All files (*.*)"/>
+    <Item Name="textFilesLog" Value="Text files (*.log *.txt)"/>
+    <Item Name="versionNumber" Value="Version %1"/>
   </QtPort>
 </Application>

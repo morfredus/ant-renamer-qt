@@ -16,7 +16,7 @@ core/             Engine (static library rencore)
 app/              Interface (executable antrenamer-qt)
   Languages/      Language files of the original (.lng, read at run time)
   help/           Markdown help in 4 languages, table of contents, images
-tests/            test_core (engine; includes id3_check.h, robust_check.h), test_panel (actions editor, language loader)
+tests/            test_core (engine; includes id3_check.h, robust_check.h, update_check.h), test_panel (actions editor, language loader)
 cmake/toolchains/ ARM64 cross-compilation toolchain
 scripts/          windows/ (MinGW build helper, zip and installer) and linux/ (.deb, AppImage, .desktop)
 installer/        Inno Setup script of the Windows installer
@@ -56,6 +56,7 @@ LICENSE           GNU General Public License
 | `ren_exif.h/.cpp` | EXIF, IPTC and XMP reader, sidecar file names |
 | `ren_id3.h/.cpp` | ID3 reader (MP3) |
 | `ren_path.h` | Delphi-style path helpers (header only) |
+| `ren_update.h/.cpp` | New-version check without the network part: version comparison and reading of the GitHub releases list |
 
 **Paths.** The helpers of `ren_path.h` follow the rules of the system: on Windows `\`, `/` and `:` are separators (`isDelim`) and `\` is the one the helpers add (`kSep`); on Linux only `/` is, and `\` or `:` are ordinary characters of a name. On Windows paths may therefore mix separators: normalise them (`QDir::fromNativeSeparators`) before comparing two paths.
 
@@ -133,8 +134,10 @@ Settings are attributes (`True` / `False`), long texts (replacement table, list 
 | `helpwindow.h/.cpp` | Built-in help viewer (Markdown) |
 | `icons.h/.cpp` | Toolbar icons cut from the bitmap sets |
 | `shellmenu.h/.cpp` | Windows Explorer context menu entry (registry, Windows only) |
+| `theme.h/.cpp` | Colour theme (system, light, dark) |
+| `updatecheck.h/.cpp` | `UpdateChecker`: asks GitHub for the releases list (Qt Network), optional |
 
-**Startup** (`main.cpp`). Names the application ("Ant Renamer Qt", organisation `AntRenamerQt`: this decides where the INI file is) and sets the version (`AR_APP_VERSION`, from CMake). Single instance: a lock file in the temporary folder; a second instance started with `--shell` sends its paths to the first one through a local socket (this is why Qt Network is linked) and exits. Then the language, `--install-shell` / `--remove-shell` if asked, and the main window.
+**Startup** (`main.cpp`). Names the application ("Ant Renamer Qt", organisation `AntRenamerQt`: this decides where the INI file is) and sets the version (`AR_APP_VERSION`, from CMake). Single instance: a lock file in the temporary folder; a second instance started with `--shell` sends its paths to the first one through a local socket (Qt Network is linked for this and for the optional update check) and exits. Then the language, `--install-shell` / `--remove-shell` if asked, and the main window.
 
 **Translation.** The program does not use Qt `.ts` files but the original `.lng` files (XML, various encodings read from their header). The code contains the English texts (`tr_("Renaming process started")`). `loadLanguage` reads `English.lng` and the chosen language, flattens both into tables (keys such as `MainForm/ActionAddFiles/Caption`) and, for every key present in both, maps the English text to the translation (empty or identical pairs are ignored; a `Hint` of the form "short|long" is registered as two texts). The key of the table is the normalised English text: `%s`, `%d` (Delphi) and `%1`...`%9` (Qt) all become `%@`. So an English text of the code must be **identical** to an entry of `English.lng` to be translated; otherwise it stays in English. `ANTREN_MISSING=1` lists the texts without translation.
 

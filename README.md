@@ -22,7 +22,7 @@ The project is **self-contained**: Qt 6 and a C++20 compiler are the only requir
 cmake --preset mingw   && cmake --build --preset mingw     # Windows (MSYS2 / MinGW-w64)
 cmake --preset linux   && cmake --build --preset linux     # Linux x86_64
 cmake --preset linux-arm64 && cmake --build --preset linux-arm64   # ARM64 machine (e.g. Raspberry Pi)
-ctest --preset linux                                       # core tests
+ctest --preset linux                                       # tests
 ```
 
 Output: `build-mingw/app/antrenamer-qt.exe` (Qt and MinGW DLLs are deployed next to it) or
@@ -45,7 +45,7 @@ Windows prerequisites: MSYS2 with `mingw-w64-x86_64-{gcc,cmake,ninja,qt6-base,qt
 |---|---|
 | `core/` | renaming engine, QtCore only |
 | `app/` | Qt Widgets interface, `Languages/` and `help/` from the original program |
-| `tests/` | core checks (`ctest`) |
+| `tests/` | engine checks and actions editor checks (`ctest`) |
 | `cmake/toolchains/` | ARM64 cross toolchain |
 | `scripts/windows/` | MinGW DLL deployment, VS Code helper, zip and installer |
 | `scripts/linux/` | `.deb`, AppImage, `.desktop` file |

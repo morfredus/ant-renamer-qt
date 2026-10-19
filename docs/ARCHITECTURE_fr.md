@@ -16,7 +16,7 @@ core/             Moteur (bibliothèque statique rencore)
 app/              Interface (exécutable antrenamer-qt)
   Languages/      Fichiers de langue de l'original (.lng, lus à l'exécution)
   help/           Aide Markdown en 4 langues, table des matières, images
-tests/            test_core (moteur ; inclut id3_check.h, robust_check.h), test_panel (éditeur d'actions, chargeur de langues)
+tests/            test_core (moteur ; inclut id3_check.h, robust_check.h, update_check.h), test_panel (éditeur d'actions, chargeur de langues)
 cmake/toolchains/ Toolchain de compilation croisée ARM64
 scripts/          windows/ (compilation MinGW, zip et installeur) et linux/ (.deb, AppImage, .desktop)
 installer/        Script Inno Setup de l'installeur Windows
@@ -56,6 +56,7 @@ LICENSE           Licence publique générale GNU
 | `ren_exif.h/.cpp` | Lecteur EXIF, IPTC et XMP, noms des fichiers associés |
 | `ren_id3.h/.cpp` | Lecteur ID3 (MP3) |
 | `ren_path.h` | Fonctions de chemins à la Delphi (en-tête seul) |
+| `ren_update.h/.cpp` | Recherche de nouvelle version, partie sans réseau : comparaison des versions et lecture de la liste des releases GitHub |
 
 **Chemins.** Les fonctions de `ren_path.h` suivent les règles du système : sous Windows `\`, `/` et `:` sont des séparateurs (`isDelim`) et `\` est celui que les fonctions ajoutent (`kSep`) ; sous Linux seul `/` en est un, `\` et `:` sont des caractères ordinaires d'un nom. Sous Windows les chemins peuvent donc mélanger les séparateurs : il faut les normaliser (`QDir::fromNativeSeparators`) avant de comparer deux chemins.
 
@@ -133,8 +134,10 @@ Les réglages sont des attributs (`True` / `False`), les textes longs (table de 
 | `helpwindow.h/.cpp` | Visionneuse d'aide intégrée (Markdown) |
 | `icons.h/.cpp` | Icônes de la barre d'outils découpées dans les jeux de bitmaps |
 | `shellmenu.h/.cpp` | Entrée du menu contextuel de l'Explorateur Windows (registre, Windows seulement) |
+| `theme.h/.cpp` | Thème de couleurs (système, clair, sombre) |
+| `updatecheck.h/.cpp` | `UpdateChecker` : demande à GitHub la liste des releases (Qt Network), facultatif |
 
-**Démarrage** (`main.cpp`). Nomme l'application (« Ant Renamer Qt », organisation `AntRenamerQt` : c'est ce qui détermine l'emplacement du fichier INI) et donne la version (`AR_APP_VERSION`, fournie par CMake). Instance unique : un fichier verrou dans le dossier temporaire ; une seconde instance lancée avec `--shell` envoie ses chemins à la première par un socket local (c'est pourquoi Qt Network est lié) et quitte. Puis la langue, `--install-shell` / `--remove-shell` si demandé, et la fenêtre principale.
+**Démarrage** (`main.cpp`). Nomme l'application (« Ant Renamer Qt », organisation `AntRenamerQt` : c'est ce qui détermine l'emplacement du fichier INI) et donne la version (`AR_APP_VERSION`, fournie par CMake). Instance unique : un fichier verrou dans le dossier temporaire ; une seconde instance lancée avec `--shell` envoie ses chemins à la première par un socket local (Qt Network est lié pour cela et pour la recherche de mise à jour, facultative) et quitte. Puis la langue, `--install-shell` / `--remove-shell` si demandé, et la fenêtre principale.
 
 **Traduction.** Le programme n'utilise pas les fichiers `.ts` de Qt mais les fichiers `.lng` de l'original (XML, encodages variés lus dans leur en-tête). Le code contient les textes en anglais (`tr_("Renaming process started")`). `loadLanguage` lit `English.lng` et la langue choisie, aplatit les deux en tables (clés comme `MainForm/ActionAddFiles/Caption`) et, pour chaque clé présente dans les deux, associe le texte anglais à sa traduction (les paires vides ou identiques sont ignorées ; un `Hint` de la forme « court|long » est enregistré comme deux textes). La clé de la table est le texte anglais normalisé : `%s`, `%d` (Delphi) et `%1`...`%9` (Qt) deviennent tous `%@`. Donc un texte anglais du code doit être **identique** à une entrée de `English.lng` pour être traduit ; sinon il reste en anglais. `ANTREN_MISSING=1` liste les textes sans traduction.
 

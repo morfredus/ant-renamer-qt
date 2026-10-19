@@ -507,5 +507,10 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="undoOptLabel" Value="Le bouton Annuler :"/>
     <Item Name="undoOptLast" Value="annule la dernière passe"/>
     <Item Name="undoOptHistory" Value="ouvre l'historique des passes"/>
+    <Item Name="openCaption" Value="Ouvrir"/>
+    <Item Name="saveLogCaption" Value="Enregistrer le journal"/>
+    <Item Name="textFilesTxtAll" Value="Fichiers texte (*.txt);;Tous les fichiers (*.*)"/>
+    <Item Name="textFilesLog" Value="Fichiers texte (*.log *.txt)"/>
+    <Item Name="versionNumber" Value="Version %1"/>
   </QtPort>
 </Application>
