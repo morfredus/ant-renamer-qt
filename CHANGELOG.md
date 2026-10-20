@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Added
+
+- `SECURITY.md` and `CODE_OF_CONDUCT.md` (EN, FR) at the repository root, linked from the README (EN, FR). Security problems are reported through the private reporting of GitHub; only the latest version receives fixes. The code of conduct is a short form of the Contributor Covenant 2.1.
+
 ### Changed
 
 - Presentation (EN, FR): the "What was added" section now lists the modern layout (with the single screen) and the renaming history; the table of sizes is updated, the layout and help bullets mention the modern layout and the Markdown help, the language note says English and French carry the `<QtPort>` texts.

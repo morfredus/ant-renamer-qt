@@ -70,7 +70,7 @@ Recettes pas à pas pour les cas courants et complexes (nettoyer des noms, numé
 Compilation, tests et paquets : [docs/BUILDING_fr.md](docs/BUILDING_fr.md) ([en](docs/BUILDING.md)).
 Systèmes sur lesquels le programme a réellement été testé : [docs/TESTED_PLATFORMS_fr.md](docs/TESTED_PLATFORMS_fr.md) ([en](docs/TESTED_PLATFORMS.md)).
 Organisation du code et déroulé d'un renommage : [docs/ARCHITECTURE_fr.md](docs/ARCHITECTURE_fr.md) ([en](docs/ARCHITECTURE.md)).
-Contribuer : [CONTRIBUTING_fr.md](CONTRIBUTING_fr.md) ([en](CONTRIBUTING.md)).
+Contribuer : [CONTRIBUTING_fr.md](CONTRIBUTING_fr.md) ([en](CONTRIBUTING.md)). Code de conduite : [CODE_OF_CONDUCT_fr.md](CODE_OF_CONDUCT_fr.md) ([en](CODE_OF_CONDUCT.md)). Signaler un problème de sécurité : [SECURITY_fr.md](SECURITY_fr.md) ([en](SECURITY.md)).
 Traduire l'interface (les fichiers `.lng`) : [docs/TRANSLATING_fr.md](docs/TRANSLATING_fr.md) ([en](docs/TRANSLATING.md)).
 
 ## Réglages
