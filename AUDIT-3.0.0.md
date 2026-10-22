@@ -102,7 +102,7 @@ Mineurs notables : bouton « Add to batch » (EN) ; format du journal auto-enreg
 
 ## 3. À faire pour passer en 3.0.0 (liste mécanique)
 
-`VERSION` → `3.0.0` ; badge README (EN/FR) → `version-3.0.0-blue` ; `docs/USER_GUIDE*` (ligne de version) ; `docs/WHATS_NEW*` (version courante, colonne « Depuis ») ; section `## [3.0.0]` dans le CHANGELOG ; entrée « 3.0.0 » dans les quatre `history_*.md` ; notes de release sans « release candidate » ni « avis bienvenus avant la 3.0.0 » ; `TESTED_PLATFORMS*` (ligne 3.0.0 par machine) ; `TODO.md` ; commentaires de version (`CMakeLists.txt:9`, `.iss:2`) ; années de copyright si nouvelle année.
+`VERSION` → `3.0.0` ; badge README (EN/FR) → `version-3.0.0-blue` ; `docs/USER_GUIDE*` (ligne de version) ; `docs/WHATS_NEW*` (version courante ; une éventuelle section « À venir » prend le numéro de version) ; section `## [3.0.0]` dans le CHANGELOG ; entrée « 3.0.0 » dans les quatre `history_*.md` ; notes de release sans « release candidate » ni « avis bienvenus avant la 3.0.0 » ; `TESTED_PLATFORMS*` (ligne 3.0.0 par machine) ; `TODO.md` ; commentaires de version (`CMakeLists.txt:9`, `.iss:2`) ; années de copyright si nouvelle année.
 
 ---
 

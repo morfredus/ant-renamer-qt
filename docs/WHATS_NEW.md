@@ -1,15 +1,19 @@
-# Ant Renamer Qt: what is new since the original version
+# Ant Renamer Qt: what is new, version by version
 
-*What Ant Renamer Qt adds or improves compared with Ant Renamer 2.13 (Antoine Potten, Delphi 7).*
-French version: [WHATS_NEW_fr.md](WHATS_NEW_fr.md). This list is kept up to date as development goes on. For the
-technical detail: [CHANGELOG](../CHANGELOG.md). For the port itself (what is kept, the deliberate differences):
-[PRESENTATION.md](PRESENTATION.md).
+*What changes from one version of Ant Renamer Qt to the next.* French version: [WHATS_NEW_fr.md](WHATS_NEW_fr.md).
+For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
+the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.0.0-rc.16**. Items marked *(upcoming)* are in the code but not published yet.
+Current version: **3.0.0-rc.16**.
 
-## Additions
+## 3.0.0
 
-### Renaming
+The first version of the port. Everything below is new compared with Ant Renamer 2.13 (the original). The *Since* column
+gives the release candidate in which each item appeared.
+
+### Additions
+
+#### Renaming
 
 | What is new | Since |
 |---|---|
@@ -20,17 +24,16 @@ Current version: **3.0.0-rc.16**. Items marked *(upcoming)* are in the code but 
 | **`%num%` counter in the EXIF action** (start, digits, increment, restart per folder), same settings as the Enumeration action. | 3.0.0-rc.1 |
 | **ID3v2.2, 2.3 and 2.4 tags** for the MP3 action (the original only read ID3v1). | 3.0.0-rc.1 |
 
-### Working in the list
+#### Working in the list
 
 | What is new | Since |
 |---|---|
 | **History of the renamings**: every action of the batch run by Go is a *pass*; **Undo** (F12) goes back pass after pass (the original had one level), and the **History** button (Shift+F12) lists the passes of the session and goes back to a chosen one, undoing it and all the passes after it. Always linear, the last 50 passes are kept for the session. An option makes the Undo button open the history instead. | 3.0.0-rc.16 |
-| **New-version check** (off by default): *Options > Display > Look for a new version at start*, or the *Check for updates* button of the About window. Once a day it asks GitHub for the list of releases of the project and offers to open the download page; nothing else is sent. | 3.0.0-rc.16 |
 | **Hidden and system files** (`desktop.ini`, `.git`...) of an added folder are skipped by default (*Options > Files & Folders* to include them); a **Hidden files** button shows or hides those in the list, and while they are hidden no operation touches them. A warning is shown before a renaming if they are shown and the list holds some. | 3.0.0-rc.16 |
 | **"Changed only" button**: hides the files whose name does not change in the preview (ideal to check the 2,000 names concerned in a list of 50,000). It is only a view filter: hidden files stay in the list, are renamed as usual, and cannot be hit by "Remove sel." or the move buttons. | 3.0.0-rc.9 |
 | **Natural sort** in the files list (`file 2` before `file 10`), on by default; untick it to get the original alphabetical order. | 3.0.0-rc.7 |
 
-### Interface
+#### Interface
 
 | What is new | Since |
 |---|---|
@@ -45,7 +48,7 @@ Current version: **3.0.0-rc.16**. Items marked *(upcoming)* are in the code but 
 | **Ready for Windows 10/11**: paths over 260 characters, UTF-8, high-resolution screens, dark theme. | 3.0.0-rc.1 |
 | **Explorer context menu** "Add to Ant Renamer Qt" on files and folders, sent to the window that is already open. | 3.0.0-rc.1 |
 
-### Platforms and distribution
+#### Platforms and distribution
 
 | What is new | Since |
 |---|---|
@@ -54,7 +57,7 @@ Current version: **3.0.0-rc.16**. Items marked *(upcoming)* are in the code but 
 | **Windows**: installer and portable zip. | 3.0.0-rc.1 |
 | Official name **Ant Renamer Qt**, living next to the original (separate executable, settings and Explorer entry); `.arb` batches stay readable by both programs. | 3.0.0-rc.2 |
 
-## Improvements
+### Improvements
 
 | Improvement | Since |
 |---|---|
@@ -70,6 +73,7 @@ Current version: **3.0.0-rc.16**. Items marked *(upcoming)* are in the code but 
 
 ## Keeping this file up to date
 
-Every change visible to the user adds a line here, under "Additions" or "Improvements", with *(upcoming)* in the
-"Since" column. When a version is published, replace *(upcoming)* with its number. Keep
-[WHATS_NEW_fr.md](WHATS_NEW_fr.md) in step.
+This file only lists what changes in each version; it does not repeat the presentation of the project.
+
+Every change visible to the user adds a line under a `## Upcoming` section at the top of the list (above the latest version).
+When a version is published, that section takes its number. Keep [WHATS_NEW_fr.md](WHATS_NEW_fr.md) in step.

@@ -27,7 +27,7 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 4. Add or update a test when the engine changes (`tests/test_core.cpp`): a new case that fails without your fix is the best proof that it works.
 5. Run the tests (`ctest`) before you open the pull request; the GitHub workflow builds on Linux and Windows and runs them too.
 6. Add a line under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md) (Added, Changed or Fixed). Version numbers are given by the maintainer when a release is made: do not change `VERSION`.
-7. If the change is visible to users, add a line to `docs/WHATS_NEW.md` and `docs/WHATS_NEW_fr.md` (leave the "Since" column as *(upcoming)* / *(à venir)*) and update the help pages and the guides when they describe the behaviour. If you do not write French, say so in the pull request and the maintainer will take care of the French texts.
+7. If the change is visible to users, add a line to `docs/WHATS_NEW.md` and `docs/WHATS_NEW_fr.md` (under the "Upcoming" / "À venir" section at the top; it takes the version number when released) and update the help pages and the guides when they describe the behaviour. If you do not write French, say so in the pull request and the maintainer will take care of the French texts.
 
 ## How to...
 

@@ -27,7 +27,7 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 4. Ajoutez ou mettez à jour un test quand le moteur change (`tests/test_core.cpp`) : un nouveau cas qui échoue sans votre correctif est la meilleure preuve qu'il fonctionne.
 5. Lancez les tests (`ctest`) avant d'ouvrir la pull request ; le workflow GitHub compile sous Linux et Windows et les lance aussi.
 6. Ajoutez une ligne sous `## [Unreleased]` dans [CHANGELOG.md](CHANGELOG.md) (Added, Changed ou Fixed). Les numéros de version sont donnés par le mainteneur au moment d'une release : ne modifiez pas `VERSION`.
-7. Si le changement est visible par les utilisateurs, ajoutez une ligne à `docs/WHATS_NEW.md` et `docs/WHATS_NEW_fr.md` (laissez la colonne « Depuis » à *(upcoming)* / *(à venir)*) et mettez à jour les pages d'aide et les guides qui décrivent le comportement. Si vous n'écrivez pas en français, dites-le dans la pull request : le mainteneur s'occupera des textes français.
+7. Si le changement est visible par les utilisateurs, ajoutez une ligne à `docs/WHATS_NEW.md` et `docs/WHATS_NEW_fr.md` (sous la section « Upcoming » / « À venir » en tête ; elle prend le numéro de version à la publication) et mettez à jour les pages d'aide et les guides qui décrivent le comportement. Si vous n'écrivez pas en français, dites-le dans la pull request : le mainteneur s'occupera des textes français.
 
 ## Comment faire pour...
 

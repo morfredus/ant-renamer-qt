@@ -145,6 +145,24 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   (`installer/antrenamer-qt.iss`, anglais et français).
 - **Options cachées** pour les scripts : `--install-shell` et `--remove-shell`.
 
+## Demandes des utilisateurs du programme d'origine
+
+Les utilisateurs d'Ant Renamer 2.x ont formulé plusieurs demandes sur le forum du programme d'origine. Ce n'est pas une réponse officielle de l'auteur de l'original : c'est seulement la liste de demandes auxquelles Ant Renamer Qt apporte aujourd'hui une réponse.
+
+- Un tri naturel de la liste des fichiers (`2` avant `10`).
+- Un thème sombre.
+- Le même numéro pour une image JPG et son fichier RAW.
+- Un aperçu des seuls fichiers concernés (bouton « Seulement modifiés »).
+- Les fichiers cachés et système (`desktop.ini`...) laissés hors de la liste.
+- Les tags IPTC et XMP des photos, les tags ID3v2 des fichiers MP3.
+- Un menu contextuel de l'Explorateur pour les fichiers et dossiers, qui les envoie à la fenêtre déjà ouverte.
+- L'annulation sur plusieurs niveaux.
+- Un compteur dans l'action EXIF, pour distinguer des photos prises au même moment.
+- La modification d'une opération du job par double-clic.
+- Voir la liste des fichiers en réglant une opération (l'écran unique).
+- Une version pour Linux.
+- Une vérification de nouvelle version.
+
 ## Qualité et tests
 
 - Le moteur a un programme de test automatique : chemins, formatage des masques et `$if`, formatage des dates,

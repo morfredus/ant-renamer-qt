@@ -141,6 +141,24 @@ These are the places where the port does not do exactly what version 2.13 does. 
   installer (`installer/antrenamer-qt.iss`, English and French).
 - **Hidden helpers** for scripts: `--install-shell` and `--remove-shell`.
 
+## Requests from users of the original program
+
+Users of Ant Renamer 2.x asked for a number of things on the forum of the original program. This is not an official answer from the author of the original: it is only a list of requests that Ant Renamer Qt now answers.
+
+- Natural sort of the files list (`2` before `10`).
+- A dark theme.
+- The same number for a JPG picture and its RAW file.
+- A preview of the affected files only (the "Changed only" button).
+- Hidden and system files (`desktop.ini`...) left out of the list.
+- IPTC and XMP tags for photos, ID3v2 tags for MP3 files.
+- An Explorer context menu for files and folders, sending them to the window that is already open.
+- Undo on several levels.
+- A counter in the EXIF action, to tell apart photos taken at the same time.
+- Editing an action of the batch by double-click.
+- Seeing the files list while setting up an action (the single screen).
+- A version for Linux.
+- A check for a new version.
+
 ## Quality and testing
 
 - The engine has an automated test program: paths, mask formatting and `$if`, date formatting, every
