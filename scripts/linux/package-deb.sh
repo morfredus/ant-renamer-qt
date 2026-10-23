@@ -151,7 +151,7 @@ install -d "$PKGDIR/usr/share/applications"
 sed 's/\r$//' "$SCRIPT_DIR/antrenamer-qt.desktop" > "$PKGDIR/usr/share/applications/$CMD.desktop"
 chmod 644 "$PKGDIR/usr/share/applications/$CMD.desktop"
 
-install -Dm644 "$ICON_SRC" "$PKGDIR/usr/share/icons/hicolor/48x48/apps/$CMD.png"
+install -Dm644 "$ICON_SRC" "$PKGDIR/usr/share/icons/hicolor/256x256/apps/$CMD.png"
 
 install -d "$PKGDIR/usr/share/doc/$CMD"
 cat > "$PKGDIR/usr/share/doc/$CMD/copyright" <<EOF
