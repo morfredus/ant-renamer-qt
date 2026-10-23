@@ -10,10 +10,12 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Added
 
+- `docs/release-notes/3.0.0.md` (EN, FR): draft of the presentation of the 3.0.0 release, to be read and adjusted before publishing.
 - `SECURITY.md` and `CODE_OF_CONDUCT.md` (EN, FR) at the repository root, linked from the README (EN, FR). Security problems are reported through the private reporting of GitHub; only the latest version receives fixes. The code of conduct is a short form of the Contributor Covenant 2.1.
 
 ### Changed
 
+- TODO (EN, FR): 3.1 update check also lists a choice offered by the installer (final versions only, or also beta and rc); 3.1 also lists the modern layout (single screen in bands) as the default of a new installation, with an optional banner at the first start. The modern layout as the default of a new installation, with a one-time offer to switch at the first start of that version, is noted for a later version (not 3.0.0, whose code stays the code of rc.16).
 - WHATS_NEW (EN, FR): now a version-by-version list (the current content is the "3.0.0" section; changes to come go under an "Upcoming" section, so the presentation of the project is not repeated at each release); CONTRIBUTING (EN, FR) follows. PRESENTATION (EN, FR): new section "Requests from users of the original program" (not presented as answers from the original author).
 - TODO (EN, FR): ideas after 3.0.0, not promises, sorted by urgency (from the 120 topics of the original program's forum) and spread over possible versions 3.1 to 3.6, one theme each so that each can be tried before the next: 3.1 pre-releases checkbox for the update check, silent command line, EXIF duplicate suffix, exportable preview; 3.2 file dates, enumeration by letters, copy per action; 3.3 presets, size and checksum tags, encoding fix; 3.4 FLAC/OGG/M4A and MP3 duration; 3.5 video; 3.6 GPS, more EXIF, PDF and Office.
 - Presentation (EN, FR): the "What was added" section now lists the modern layout (with the single screen) and the renaming history; the table of sizes is updated, the layout and help bullets mention the modern layout and the Markdown help, the language note says English and French carry the `<QtPort>` texts.
