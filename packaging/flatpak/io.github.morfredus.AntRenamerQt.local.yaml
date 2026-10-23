@@ -4,7 +4,7 @@
 #   flatpak run io.github.morfredus.AntRenamerQt
 app-id: io.github.morfredus.AntRenamerQt
 runtime: org.kde.Platform
-runtime-version: '6.10'  # check the current KDE runtime at https://docs.flathub.org/docs/for-app-authors/runtimes
+runtime-version: '6.11'
 sdk: org.kde.Sdk
 command: antrenamer-qt
 
