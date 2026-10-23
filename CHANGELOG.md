@@ -14,7 +14,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Changed
 
-- New program icon (`app/antrenamer-qt.svg`, text converted to paths): `renamer.ico` (16 to 256 px, window and executable), `antrenamer-qt.png` (now 256 px; the .deb installs it in `hicolor/256x256`) and the picture of the About box (replaces `ant.bmp`, removed) are made from it; it is also the Flatpak icon. PRESENTATION (EN, FR) no longer lists `renamer.ico` and `ant.bmp` among the graphics reused from the original program; ARCHITECTURE (EN, FR) describes the files.
+- New program icon (`app/antrenamer-qt.svg`, on a light blue rounded square): `renamer.ico` (16 to 256 px, window and executable), `antrenamer-qt.png` (now 256 px; the .deb installs it in `hicolor/256x256`) and the picture of the About box (replaces `ant.bmp`, removed) are made from it; it is also the Flatpak icon. PRESENTATION (EN, FR) no longer lists `renamer.ico` and `ant.bmp` among the graphics reused from the original program; ARCHITECTURE (EN, FR) describes the files.
 - TESTED_PLATFORMS (EN, FR): 3.0.0 tried on the four machines (published packages, AppImage included on Mint; offered by the new-version check); the rc.16 entries are no longer marked as drafts.
 
 ## [3.0.0] - 2026-10-23
