@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.0.0 (23/10/2026)
+  - Première version stable. Même programme que la 3.0.0-rc.16 : seuls le numéro de version et quelques textes des fichiers de langue français et anglais changent (« Ouvrir », « Enregistrer le journal », filtres de fichiers, « Version %1 », info-bulles « Retour » et « Suivant » de l'aide).
 - 3.0.0-rc.16 (18/10/2026)
   - Historique des renommages de la session : Annuler (F12) remonte passe après passe, et un bouton Historique (Maj+F12) liste les passes et annule celle choisie et les suivantes.
   - Fichiers cachés et système : ignorés à l'ajout d'un dossier (option pour les inclure), bouton Fichiers cachés, avertissement avant un renommage.

@@ -1,6 +1,6 @@
 # Ant Renamer Qt : guide des fonctions
 
-*Toutes les fonctions d'Ant Renamer Qt 3.0.0-rc.16, avec le mode d'emploi.*
+*Toutes les fonctions d'Ant Renamer Qt 3.0.0, avec le mode d'emploi.*
 English version : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détails complets, page par page, avec captures d'écran : l'aide intégrée (F1). Différences entre Windows et Linux : §13.
 
 ## 1. Principe général

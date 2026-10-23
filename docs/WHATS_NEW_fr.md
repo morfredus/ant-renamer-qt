@@ -4,7 +4,7 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.0.0-rc.16**.
+Version courante : **3.0.0**.
 
 ## 3.0.0
 

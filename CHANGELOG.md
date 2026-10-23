@@ -8,9 +8,13 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-10-23
+
+First stable version: the code is the code of 3.0.0-rc.16 (five days of use of the candidate, no feedback and no open bug); only the version number, a few texts of the language files and the documentation change.
+
 ### Added
 
-- `docs/release-notes/3.0.0.md` (EN, FR): draft of the presentation of the 3.0.0 release, to be read and adjusted before publishing.
+- `docs/release-notes/3.0.0.md` (EN, FR): presentation of the 3.0.0 release.
 - `SECURITY.md` and `CODE_OF_CONDUCT.md` (EN, FR) at the repository root, linked from the README (EN, FR). Security problems are reported through the private reporting of GitHub; only the latest version receives fixes. The code of conduct is a short form of the Contributor Covenant 2.1.
 
 ### Changed

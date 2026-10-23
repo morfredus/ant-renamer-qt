@@ -4,7 +4,7 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.0.0-rc.16**.
+Current version: **3.0.0**.
 
 ## 3.0.0
 
