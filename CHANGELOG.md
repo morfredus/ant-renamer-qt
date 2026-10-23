@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Changed
+
+- TESTED_PLATFORMS (EN, FR): 3.0.0 tried on the four machines (published packages, AppImage included on Mint; offered by the new-version check); the rc.16 entries are no longer marked as drafts.
+
 ## [3.0.0] - 2026-10-23
 
 First stable version: the code is the code of 3.0.0-rc.16 (five days of use of the candidate, no feedback and no open bug); only the version number, a few texts of the language files and the documentation change.
