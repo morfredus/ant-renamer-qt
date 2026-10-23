@@ -91,7 +91,7 @@ All packages are written to `dist/`.
 | Windows | `powershell -ExecutionPolicy Bypass -File scripts\windows\package-win.ps1` | `AntRenamerQt-<version>-win64-portable.zip` and, when Inno Setup 6 is installed, `AntRenamerQt-<version>-win64-setup.exe` |
 | Debian / Ubuntu | `scripts/linux/package-deb.sh` | `AntRenamerQt-<version>-linux-<arch>.deb` |
 | Linux, any distribution | `scripts/linux/package-appimage.sh` | `AntRenamerQt-<version>-linux-x86_64.AppImage` |
-| Linux, Flatpak (Flathub) | `flatpak-builder --user --install --force-clean build-dir packaging/flatpak/io.github.morfredus.AntRenamerQt.yaml` | the application installed for the user |
+| Linux, Flatpak (Flathub) | `flatpak-builder --user --install --force-clean build-dir packaging/flatpak/fr.morfredus.AntRenamerQt.yaml` | the application installed for the user |
 
 - `package-win.ps1` builds, stages the files that are needed at run time, then runs Inno Setup with `installer/antrenamer-qt.iss` for the installer. The zip contains an empty `antrenamer-qt.ini`, which switches the portable mode on.
 - `package-deb.sh` expects a finished build (`--build <folder>` to choose it). The package depends on the system Qt (the dependencies are detected from the binary, or from the sysroot when cross-compiling) and installs the program in `/usr/bin` and the languages and help in `/usr/share/antrenamer-qt`.
