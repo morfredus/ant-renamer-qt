@@ -91,10 +91,12 @@ Tous les paquets sont écrits dans `dist/`.
 | Windows | `powershell -ExecutionPolicy Bypass -File scripts\windows\package-win.ps1` | `AntRenamerQt-<version>-win64-portable.zip` et, si Inno Setup 6 est installé, `AntRenamerQt-<version>-win64-setup.exe` |
 | Debian / Ubuntu | `scripts/linux/package-deb.sh` | `AntRenamerQt-<version>-linux-<arch>.deb` |
 | Linux, toute distribution | `scripts/linux/package-appimage.sh` | `AntRenamerQt-<version>-linux-x86_64.AppImage` |
+| Linux, Flatpak (Flathub) | `flatpak-builder --user --install --force-clean build-dir packaging/flatpak/io.github.morfredus.AntRenamerQt.yaml` | l'application installée pour l'utilisateur |
 
 - `package-win.ps1` compile, prépare les fichiers utiles à l'exécution, puis lance Inno Setup avec `installer/antrenamer-qt.iss` pour l'installeur. Le zip contient un `antrenamer-qt.ini` vide, qui active le mode portable.
 - `package-deb.sh` attend une compilation terminée (`--build <dossier>` pour la choisir). Le paquet dépend du Qt du système (les dépendances sont détectées depuis le binaire, ou depuis le sysroot en compilation croisée) et installe le programme dans `/usr/bin`, les langues et l'aide dans `/usr/share/antrenamer-qt`.
 - `package-appimage.sh` télécharge `linuxdeploy` et son greffon Qt dans `.cache/` la première fois (une connexion Internet est nécessaire une fois). Les deux sont épinglés à une version et vérifiés par un SHA-256 dans le script (`LD_TAG`/`LD_SHA256`, `QT_TAG`/`QT_SHA256`) : un fichier dont l'empreinte diffère est refusé. Pour les mettre à jour, changer les tags, télécharger les fichiers et recalculer les empreintes avec `sha256sum`.
+- `packaging/flatpak/` contient le manifeste Flatpak (`….local.yaml` est le même compilé depuis la copie de travail, pour l'essayer avant qu'un tag existe ; il demande `flatpak-builder` et le runtime et le SDK KDE de Flathub), le fichier AppStream (`.metainfo.xml` : description, captures, versions) et l'icône est `app/antrenamer-qt.svg`. Flathub compile depuis le tag Git indiqué dans le manifeste (`tag` et `commit`) : avant de soumettre une version, renseigner les deux ainsi que la date de la version dans le `.metainfo.xml`. Sous Flatpak le programme n'a pas d'accès réseau, la recherche de nouvelle version y est donc masquée (`runsInFlatpak()` dans `app/updatecheck.h`).
 - `.github/workflows/build.yml` compile sous Linux et Windows à chaque push et pull request, lance les tests, et garde les paquets Windows comme artefacts du workflow.
 
 ## Options de ligne de commande du programme

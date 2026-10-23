@@ -1,0 +1,38 @@
+# Flatpak manifest for Flathub. Test locally (on Linux):
+#   flatpak-builder --user --install --force-clean build-dir io.github.morfredus.AntRenamerQt.yaml
+#   flatpak run io.github.morfredus.AntRenamerQt
+app-id: io.github.morfredus.AntRenamerQt
+runtime: org.kde.Platform
+runtime-version: '6.10'  # check the current KDE runtime at https://docs.flathub.org/docs/for-app-authors/runtimes
+sdk: org.kde.Sdk
+command: antrenamer-qt
+
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  # A renamer works on the files of the user: it needs them all (no network: the update check is off under Flatpak).
+  - --filesystem=host
+
+modules:
+  - name: antrenamer-qt
+    buildsystem: simple
+    build-commands:
+      - cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+      - cmake --build build --target antrenamer-qt
+      - install -Dm755 build/app/antrenamer-qt /app/bin/antrenamer-qt
+      # Languages and help are read from ../share/antrenamer-qt next to the binary.
+      - install -d /app/share/antrenamer-qt
+      - cp -r app/Languages app/help /app/share/antrenamer-qt/
+      - >-
+        sed -e 's/^Icon=.*/Icon=io.github.morfredus.AntRenamerQt/'
+        scripts/linux/antrenamer-qt.desktop > io.github.morfredus.AntRenamerQt.desktop
+      - install -Dm644 io.github.morfredus.AntRenamerQt.desktop /app/share/applications/io.github.morfredus.AntRenamerQt.desktop
+      - install -Dm644 packaging/flatpak/io.github.morfredus.AntRenamerQt.metainfo.xml /app/share/metainfo/io.github.morfredus.AntRenamerQt.metainfo.xml
+      - install -Dm644 app/antrenamer-qt.svg /app/share/icons/hicolor/scalable/apps/io.github.morfredus.AntRenamerQt.svg
+    sources:
+      - type: git
+        url: https://github.com/morfredus/ant-renamer-qt.git
+        tag: v3.0.1
+        commit: 0000000000000000000000000000000000000000  # git rev-parse v3.0.1, once the tag exists

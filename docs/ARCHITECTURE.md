@@ -20,6 +20,7 @@ tests/            test_core (engine; includes id3_check.h, robust_check.h, updat
 cmake/toolchains/ ARM64 cross-compilation toolchain
 scripts/          windows/ (MinGW build helper, zip and installer) and linux/ (.deb, AppImage, .desktop)
 installer/        Inno Setup script of the Windows installer
+packaging/        flatpak/ (Flathub manifest, AppStream file, icon)
 docs/             Guides, presentation, release notes
 .github/          CI workflow, Dependabot, issue templates
 CMakeLists.txt, CMakePresets.json, VERSION   Build files and the version, the single source
@@ -29,10 +30,10 @@ LICENSE           GNU General Public License
 | In `app/` | Compiled? |
 |---|---|
 | `*.cpp`, `*.h` | Yes |
-| `resources.qrc`: `renamer.ico`, the three toolbar bitmap sets (the fourth, "Modern", is drawn in code), `ant.bmp`, `default.xml` | Embedded in the executable by Qt's `rcc` |
+| `resources.qrc`: `renamer.ico`, the three toolbar bitmap sets (the fourth, "Modern", is drawn in code), `antrenamer-qt.png` (icon of the About box), `default.xml` | Embedded in the executable by Qt's `rcc` |
 | `app.rc`, `app.manifest` (icon, long paths, UTF-8, per-monitor DPI) | Windows only, compiled with `windres` |
 | `Languages/`, `help/` | Not compiled: copied next to the executable (and installed by the packages) |
-| `antrenamer-qt.png` | Not compiled: Linux icon, used by the packaging scripts |
+| `antrenamer-qt.svg`, `antrenamer-qt.png` (256 px) | Not compiled: master of the icon and its Linux PNG, used by the packaging scripts (the PNG and `renamer.ico` are made from the SVG) |
 
 ## Vocabulary
 

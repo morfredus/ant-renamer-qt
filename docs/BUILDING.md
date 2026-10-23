@@ -91,10 +91,12 @@ All packages are written to `dist/`.
 | Windows | `powershell -ExecutionPolicy Bypass -File scripts\windows\package-win.ps1` | `AntRenamerQt-<version>-win64-portable.zip` and, when Inno Setup 6 is installed, `AntRenamerQt-<version>-win64-setup.exe` |
 | Debian / Ubuntu | `scripts/linux/package-deb.sh` | `AntRenamerQt-<version>-linux-<arch>.deb` |
 | Linux, any distribution | `scripts/linux/package-appimage.sh` | `AntRenamerQt-<version>-linux-x86_64.AppImage` |
+| Linux, Flatpak (Flathub) | `flatpak-builder --user --install --force-clean build-dir packaging/flatpak/io.github.morfredus.AntRenamerQt.yaml` | the application installed for the user |
 
 - `package-win.ps1` builds, stages the files that are needed at run time, then runs Inno Setup with `installer/antrenamer-qt.iss` for the installer. The zip contains an empty `antrenamer-qt.ini`, which switches the portable mode on.
 - `package-deb.sh` expects a finished build (`--build <folder>` to choose it). The package depends on the system Qt (the dependencies are detected from the binary, or from the sysroot when cross-compiling) and installs the program in `/usr/bin` and the languages and help in `/usr/share/antrenamer-qt`.
 - `package-appimage.sh` downloads `linuxdeploy` and its Qt plugin into `.cache/` the first time (an Internet connection is needed once). Both are pinned to a release and checked against a SHA-256 in the script (`LD_TAG`/`LD_SHA256`, `QT_TAG`/`QT_SHA256`): a file with another hash is refused. To update them, change the tags, download the files and recompute the hashes with `sha256sum`.
+- `packaging/flatpak/` holds the Flatpak manifest (`….local.yaml` is the same built from the working copy, to try it before a tag exists; it needs `flatpak-builder` and the KDE runtime and SDK from Flathub), the AppStream file (`.metainfo.xml`: description, screenshots, releases) and the icon is `app/antrenamer-qt.svg`. Flathub builds from the Git tag named in the manifest (`tag` and `commit`): before submitting a version, set both and the release date in the `.metainfo.xml`. Under Flatpak the program has no network access, so the new-version check is hidden (`runsInFlatpak()` in `app/updatecheck.h`).
 - `.github/workflows/build.yml` builds on Linux and Windows for every push and pull request, runs the tests, and keeps the Windows packages as workflow artifacts.
 
 ## Command line options of the program

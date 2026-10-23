@@ -189,8 +189,9 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         th->addStretch();
         l->addLayout(th);
 
-        header(l, tr("Updates"));
+        if (!runsInFlatpak()) header(l, tr("Updates"));
         ui_->checkUpdates = box(l, tr("Look for a new version at start (once a day, asks GitHub; nothing else is sent)"), o.checkUpdates);
+        if (runsInFlatpak()) ui_->checkUpdates->hide();
 
         header(l, tr("Fonts"));
         ui_->forceFont = box(l, tr("Force the following font for controls that have to display special characters:"), o.forceFont);
@@ -425,7 +426,7 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
 
     auto* head = new QHBoxLayout;
     auto* img = new QLabel;
-    img->setPixmap(QPixmap(u":/ant.bmp"_s));
+    img->setPixmap(QPixmap(u":/antrenamer-qt.png"_s).scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     auto* title = new QLabel(u"<span style='font-size:18pt;font-weight:bold'>Ant Renamer Qt</span><br>"_s +
                              tr("Version %1").arg(QApplication::applicationVersion()));
     head->addWidget(img);
@@ -472,6 +473,7 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
 
     auto* bb = new QDialogButtonBox(QDialogButtonBox::Close);
     auto* upd = bb->addButton(tr("Check for updates"), QDialogButtonBox::ActionRole);
+    upd->setVisible(!runsInFlatpak());
     connect(upd, &QPushButton::clicked, this, [this, upd] {
         upd->setEnabled(false);
         auto* c = new UpdateChecker(this);

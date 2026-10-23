@@ -731,7 +731,7 @@ void MainWindow::loadSettings() {
 void MainWindow::startUpdateCheck() {
     const AppOptions& o = appOptions();
     const QString today = QDate::currentDate().toString(Qt::ISODate);
-    if (!o.checkUpdates || o.lastUpdateCheck == today || exitAfterRun_ || worker_ || qEnvironmentVariableIsSet("ANTREN_SHOT")) return;
+    if (runsInFlatpak() || !o.checkUpdates || o.lastUpdateCheck == today || exitAfterRun_ || worker_ || qEnvironmentVariableIsSet("ANTREN_SHOT")) return;
     updater_ = new UpdateChecker(this);
     connect(updater_, &UpdateChecker::finished, this, [this, today](bool ok, const QString& version, const QString& url, const QString& error) {
         updater_->deleteLater();
