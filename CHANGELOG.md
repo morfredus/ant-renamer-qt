@@ -24,6 +24,8 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Fixed
 
+- Windows build: the executable kept the old icon after `renamer.ico` changed (CMake did not rebuild `app.rc`, which does not `#include` the icon). `app/CMakeLists.txt` now declares `renamer.ico` and `app.manifest` as dependencies of `app.rc`. A build folder made before this change needs one more build to pick the new icon; the Explorer and the taskbar may also show a cached icon until it is refreshed.
+
 - Command line: a folder given with a trailing slash or backslash (`-afr d:\Data\`) is added like one without it. The name after the last separator was used as the mask and was empty, so nothing was added (0 files instead of 13 on a test folder); the path is now cleaned (`QDir::cleanPath`) before the mask is read. Wildcards (`-af d:\Data\*.jpg`) are unchanged.
 
 ### Changed

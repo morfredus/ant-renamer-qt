@@ -5,6 +5,7 @@ set(SRC main.cpp mainwindow.cpp actionpanel.cpp appsettings.cpp dialogs.cpp icon
 if(WIN32)
     enable_language(RC)
     list(APPEND SRC app.rc)   # icone + manifeste (chemins longs, UTF-8, DPI par ecran)
+    set_source_files_properties(app.rc PROPERTIES OBJECT_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/renamer.ico;${CMAKE_CURRENT_SOURCE_DIR}/app.manifest")  # le .rc ne les cite pas en #include : sans ceci, changer l'icone ne refait pas l'exe
 endif()
 
 add_executable(antrenamer-qt WIN32 ${SRC})
