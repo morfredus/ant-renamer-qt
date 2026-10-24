@@ -520,5 +520,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="exportPreviewCsv" Value="Fichier CSV, noms actuels et nouveaux (*.csv)"/>
     <Item Name="exportPreviewTxt" Value="Fichier texte, nouveaux noms seulement (*.txt)"/>
     <Item Name="typeFolderPath" Value="Ou saisir le chemin d'un dossier"/>
+    <Item Name="webSiteQt" Value="Site web d'Ant Renamer Qt : "/>
+    <Item Name="webSiteOriginal" Value="Site web du programme d'origine (Antoine Potten) : "/>
   </QtPort>
 </Application>

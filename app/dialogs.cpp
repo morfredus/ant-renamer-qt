@@ -453,7 +453,8 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
         u"<b>Copyright &copy; 2000-2026 Antoine Potten - Frédéric Biron</b><br><br>"_s +
         tr("Ant Renamer Qt is a C++/Qt port of Ant Renamer by Antoine Potten, developed in parallel with the original program. Port (Windows and Linux): Frédéric Biron.") + u"<br><br>"_s +
         tr("Ant Renamer Qt support: ") + u"<a href='https://github.com/morfredus/ant-renamer-qt/'>github.com/morfredus/ant-renamer-qt</a> ("_s + tr("issues and discussions") + u")<br><br>"_s +
-        tr("Web site address: ") + u"<a href='https://www.antp.be/software/renamer/'>www.antp.be/software/renamer/</a><br><br>"_s +
+        tr("Ant Renamer Qt web site: ") + u"<a href='https://morfredus.fr/ant-renamer-qt/'>morfredus.fr/ant-renamer-qt</a><br>"_s +
+        tr("Web site of the original program (Antoine Potten): ") + u"<a href='https://www.antp.be/software/renamer/'>www.antp.be/software/renamer/</a><br><br>"_s +
         u"<b>"_s + tr("License:") + u"</b><br>"_s +
         tr("This program is free software; you can redistribute it and/or modify it under the terms of the GNU General "
            "Public License as published by the Free Software Foundation; either version 2 of the License, or (at your "

@@ -524,5 +524,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="exportPreviewCsv" Value="CSV file, current and new names (*.csv)"/>
     <Item Name="exportPreviewTxt" Value="Text file, new names only (*.txt)"/>
     <Item Name="typeFolderPath" Value="Or type the path of a folder"/>
+    <Item Name="webSiteQt" Value="Ant Renamer Qt web site: "/>
+    <Item Name="webSiteOriginal" Value="Web site of the original program (Antoine Potten): "/>
   </QtPort>
 </Application>
