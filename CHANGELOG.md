@@ -10,6 +10,8 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Added
 
+- Screenshots of the program in `docs/screenshots/English` and `docs/screenshots/French` (22 each): classic and modern interface page by page (Files, Actions, Log), the two single-screen arrangements, About, help and Options, in light and dark theme, with sample files. One of them is in the README (EN, FR). Made with the developer aid `ANTREN_SHOT`.
+
 - Export of the preview: *Export preview...* in the context menu of the files list writes the files shown (the "Changed only" and hidden-files filters apply) to a CSV file (`Folder;Name;New name`, semicolon, every field quoted, UTF-8 with BOM so that Excel reads the accents) or to a text file with the new names only, one per line. A file with no preview keeps its current name. `ren::exportPreview` in the engine, tested in `tests/test_core.cpp`; texts in `English.lng` and `French.lng`.
 
 - "Add folders" window: a field to type the path of a folder (added with the folders selected in the tree, if it exists).

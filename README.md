@@ -10,6 +10,10 @@ expressions, names from a list, file date, MP3 tags (ID3v1/v2), EXIF / IPTC / XM
 developed in parallel with the original Ant Renamer and has its own executable, installation folder, settings and
 package names, so both can be installed side by side without confusion.
 
+![Ant Renamer Qt, modern interface, light theme](docs/screenshots/English/modern-ui-light-single-screen-bands.png)
+
+More screenshots (classic and modern interface, light and dark theme, help, About) are in [docs/screenshots/English](docs/screenshots/English).
+
 ## Download
 
 Windows installer and portable zip, Linux `.deb` (x86_64, arm64) and AppImage: [Releases](https://github.com/morfredus/ant-renamer-qt/releases).
