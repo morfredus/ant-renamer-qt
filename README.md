@@ -14,6 +14,15 @@ package names, so both can be installed side by side without confusion.
 
 Windows installer and portable zip, Linux `.deb` (x86_64, arm64) and AppImage: [Releases](https://github.com/morfredus/ant-renamer-qt/releases).
 
+**Checking the Linux files.** The Linux files of the releases after 3.0.0 come with a detached GPG signature (`.asc`), also for `SHA256SUMS-linux.txt`. Public key: [`docs/antrenamer-qt-public.asc`](docs/antrenamer-qt-public.asc), fingerprint `D82C 3ED0 BE99 1611 C2C9 06FA 910B 46ED 3C84 B4A7` (Frederic Biron, Ant Renamer Qt releases). Compare the fingerprint before trusting the key.
+
+```
+gpg --import antrenamer-qt-public.asc
+gpg --verify AntRenamerQt-X.Y.Z-linux-amd64.deb.asc AntRenamerQt-X.Y.Z-linux-amd64.deb
+```
+
+The Windows files are not signed yet (checksums are in `SHA256SUMS.txt`).
+
 The project is **self-contained**: Qt 6 and a C++20 compiler are the only requirements.
 
 ## Build

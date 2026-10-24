@@ -14,6 +14,15 @@ ses propres réglages et ses propres noms de paquets : les deux peuvent être in
 
 Installeur et zip portable Windows, `.deb` Linux (x86_64, arm64) et AppImage : [Releases](https://github.com/morfredus/ant-renamer-qt/releases).
 
+**Vérifier les fichiers Linux.** Les fichiers Linux des versions postérieures à la 3.0.0 sont accompagnés d'une signature GPG détachée (`.asc`), y compris `SHA256SUMS-linux.txt`. Clé publique : [`docs/antrenamer-qt-public.asc`](docs/antrenamer-qt-public.asc), empreinte `D82C 3ED0 BE99 1611 C2C9 06FA 910B 46ED 3C84 B4A7` (Frederic Biron, Ant Renamer Qt releases). Comparez l'empreinte avant de faire confiance à la clé.
+
+```
+gpg --import antrenamer-qt-public.asc
+gpg --verify AntRenamerQt-X.Y.Z-linux-amd64.deb.asc AntRenamerQt-X.Y.Z-linux-amd64.deb
+```
+
+Les fichiers Windows ne sont pas encore signés (les sommes de contrôle sont dans `SHA256SUMS.txt`).
+
 Le projet est **autonome** : Qt 6 et un compilateur C++20 suffisent.
 
 ## Compilation

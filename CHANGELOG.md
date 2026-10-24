@@ -14,6 +14,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 - New-version check: option "Also tell me about beta and release candidates" (Options > Display, off by default; `checkPrereleases` in the settings). Before, only a user of a beta or rc was told about the next one; a user of a final version is now told about candidates only if the box is ticked. `ren::newerRelease(json, current, includePrereleases)`, tests added in `tests/update_check.h`; the check at start and the "Check for updates" button of the About window both follow the option. Text in `English.lng` and `French.lng` (`updatesIncludePre`); hidden under Flatpak with the other update options. The Windows installer offers both choices as unticked tasks ("New-version check": look for a new version at start; also beta and release candidates): `installer/antrenamer-qt.iss` writes `checkUpdates` / `checkPrereleases` in the `[options]` section of `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` only for a ticked task, so a choice already made in the program is kept (compiled with Inno Setup; the INI keys checked by reading such a file in the program, the install itself not run on this machine).
 
+### Added (signatures)
+
+- Linux files of the releases are signed with GPG (detached `.asc`, also for `SHA256SUMS-linux.txt`) by the release script, which lives outside the repository. Public key `docs/antrenamer-qt-public.asc` (fingerprint in the README, EN and FR, with the verification commands). Windows files are not signed.
+
 ### Fixed
 
 - Command line: a folder given with a trailing slash or backslash (`-afr d:\Data\`) is added like one without it. The name after the last separator was used as the mask and was empty, so nothing was added (0 files instead of 13 on a test folder); the path is now cleaned (`QDir::cleanPath`) before the mask is read. Wildcards (`-af d:\Data\*.jpg`) are unchanged.
