@@ -10,7 +10,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Added
 
-- Flatpak (Flathub) packaging files in `packaging/flatpak/`: manifest (KDE runtime, built from the Git tag, access to the user's files, no network), AppStream file, and a `.local.yaml` manifest that builds from the working copy to try it before a tag exists. Under Flatpak the new-version check (start-up option, button of the About box) is hidden, since the store updates the program. BUILDING and ARCHITECTURE (EN, FR) describe it.
+- Flatpak (Flathub) packaging files in `packaging/flatpak/`: manifest (KDE runtime, built from the Git tag, access to the user's files, no network), AppStream file (the icon is installed as SVG and as a 256 px PNG), and a `.local.yaml` manifest that builds from the working copy to try it before a tag exists. Under Flatpak the new-version check (start-up option, button of the About box) is hidden, since the store updates the program. BUILDING and ARCHITECTURE (EN, FR) describe it.
 
 ### Changed
 

@@ -31,6 +31,7 @@ modules:
       - install -Dm644 fr.morfredus.AntRenamerQt.desktop /app/share/applications/fr.morfredus.AntRenamerQt.desktop
       - install -Dm644 packaging/flatpak/fr.morfredus.AntRenamerQt.metainfo.xml /app/share/metainfo/fr.morfredus.AntRenamerQt.metainfo.xml
       - install -Dm644 app/antrenamer-qt.svg /app/share/icons/hicolor/scalable/apps/fr.morfredus.AntRenamerQt.svg
+      - install -Dm644 app/antrenamer-qt.png /app/share/icons/hicolor/256x256/apps/fr.morfredus.AntRenamerQt.png
     sources:
       - type: git
         url: https://github.com/morfredus/ant-renamer-qt.git
