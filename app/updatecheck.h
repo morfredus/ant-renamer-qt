@@ -16,7 +16,7 @@ class UpdateChecker : public QObject {
     Q_OBJECT
 public:
     explicit UpdateChecker(QObject* parent = nullptr);
-    void check();
+    void check(bool includePrereleases = false);  // true: also announce beta and rc
 signals:
     // ok = the answer was read; version empty = nothing newer. error is set when ok is false.
     void finished(bool ok, const QString& version, const QString& url, const QString& error);

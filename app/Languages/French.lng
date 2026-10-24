@@ -485,6 +485,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="thisProgramIsFree" Value="Ce programme est un logiciel libre ; vous pouvez le redistribuer et/ou le modifier selon les termes de la Licence Publique Générale GNU telle que publiée par la Free Software Foundation ; soit la version 2 de la licence, soit (à votre convenance) toute version ultérieure. Ce programme est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE GARANTIE, sans même la garantie implicite de COMMERCIALISATION ou d'ADÉQUATION À UN USAGE PARTICULIER. Consultez la &lt;a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'&gt;Licence Publique Générale GNU&lt;/a&gt; pour plus de détails."/>
     <Item Name="updatesHeader" Value="Mises à jour"/>
     <Item Name="updatesCheckAtStart" Value="Rechercher une nouvelle version au démarrage (une fois par jour, interroge GitHub ; rien d'autre n'est envoyé)"/>
+    <Item Name="updatesIncludePre" Value="Me signaler aussi les versions bêta et release candidates (sinon, versions finales seulement)"/>
     <Item Name="updatesCheckButton" Value="Rechercher une mise à jour"/>
     <Item Name="updatesTitle" Value="Recherche de mise à jour"/>
     <Item Name="updatesError" Value="Impossible de rechercher une mise à jour : %1"/>

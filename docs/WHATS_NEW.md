@@ -6,6 +6,14 @@ the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
 Current version: **3.0.0**.
 
+## Upcoming
+
+| What is new | Since |
+|---|---|
+| **Command line: a folder given with a trailing slash or backslash** (`-afr d:\Data\`) is now added like one without it (it added nothing before). | *(upcoming)* |
+| **New-version check: beta and release candidates are now your choice.** A box in Options > Display ("Also tell me about beta and release candidates"), off by default: only final versions are announced unless it is ticked (a user of a beta or rc is still told about the next one). The Windows installer offers the same choice, with the start-up check itself, among its tasks. | *(upcoming)* |
+| **New program icon**: window, executable, installer, Linux packages and About box. | *(upcoming)* |
+
 ## 3.0.0
 
 The first version of the port. Everything below is new compared with Ant Renamer 2.13 (the original). The *Since* column

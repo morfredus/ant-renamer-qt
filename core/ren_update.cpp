@@ -48,10 +48,10 @@ int compareVersions(const QString& a, const QString& b) {
     return 0;
 }
 
-std::optional<Release> newerRelease(const QByteArray& json, const QString& current) {
+std::optional<Release> newerRelease(const QByteArray& json, const QString& current, bool includePrereleases) {
     const QJsonDocument doc = QJsonDocument::fromJson(json);
     if (!doc.isArray()) return std::nullopt;
-    const bool useCandidates = isPre(current);
+    const bool useCandidates = includePrereleases || isPre(current);
     std::optional<Release> best;
     for (const QJsonValue& v : doc.array()) {
         const QJsonObject o = v.toObject();

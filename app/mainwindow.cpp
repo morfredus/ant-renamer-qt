@@ -742,7 +742,7 @@ void MainWindow::startUpdateCheck() {
         }
         reportUpdate(this, ok, version, url, error, false);
     });
-    updater_->check();
+    updater_->check(o.checkPrereleases);
 }
 
 // Options that can change while the program runs (the others are read when used).
@@ -1634,7 +1634,7 @@ void MainWindow::processCommandLine(const QStringList& args) {
                 addFiles({p}, &legacy);
             }
         } else {
-            const QFileInfo fi(QDir(start).absoluteFilePath(a));
+            const QFileInfo fi(QDir::cleanPath(QDir(start).absoluteFilePath(a)));  // cleanPath drops a trailing slash: "d:\Data\" is "d:\Data"
             const QString mask = fi.fileName() == u"*.*" ? u"*"_s : fi.fileName();  // "*.*" is "everything" for the user; for Qt it needs a dot
             const auto found = QDir(fi.absolutePath()).entryInfoList({mask}, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden);
             for (const QFileInfo& m : found) {

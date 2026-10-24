@@ -6,6 +6,14 @@ conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.
 
 Version courante : **3.0.0**.
 
+## À venir
+
+| Nouveauté | Depuis |
+|---|---|
+| **Ligne de commande : un dossier donné avec une barre oblique ou inverse finale** (`-afr d:\Data\`) est maintenant ajouté comme sans elle (il n'ajoutait rien avant). | *(à venir)* |
+| **Recherche de nouvelle version : les versions bêta et release candidates sont maintenant un choix.** Une case dans Options > Affichage (« Me signaler aussi les versions bêta et release candidates »), décochée par défaut : seules les versions finales sont signalées tant qu'elle n'est pas cochée (un utilisateur d'une bêta ou d'une rc est toujours prévenu de la suivante). L'installeur Windows propose le même choix, avec la recherche au démarrage elle-même, parmi ses tâches. | *(à venir)* |
+| **Nouvelle icône du programme** : fenêtre, exécutable, installeur, paquets Linux et boîte À propos. | *(à venir)* |
+
 ## 3.0.0
 
 La première version du portage. Tout ce qui suit est nouveau par rapport à Ant Renamer 2.13 (l'original). La colonne

@@ -17,8 +17,9 @@ struct Release {
 };
 
 // `json` is the answer of GET /repos/<owner>/<repo>/releases. Returns the newest published release that is newer than
-// `current`. Candidates (rc) are only considered when `current` is one itself: a user of a final version is not told
-// about a candidate. Drafts and addresses outside https://github.com/ are ignored.
-std::optional<Release> newerRelease(const QByteArray& json, const QString& current);
+// `current`. Candidates (beta, rc) are only considered when `current` is one itself or when `includePrereleases` is set
+// (the user asked for them): by default a user of a final version is not told about a candidate. Drafts and addresses
+// outside https://github.com/ are ignored.
+std::optional<Release> newerRelease(const QByteArray& json, const QString& current, bool includePrereleases = false);
 
 }  // namespace ren

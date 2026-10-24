@@ -48,6 +48,8 @@ Name: "{autodesktop}\Ant Renamer Qt"; Filename: "{app}\antrenamer-qt.exe"; Worki
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 Name: "shellmenu"; Description: "{cm:ShellMenuTask}"; GroupDescription: "{cm:ShellMenuGroup}"
+Name: "updatecheck"; Description: "{cm:UpdateCheckTask}"; GroupDescription: "{cm:UpdateCheckGroup}"; Flags: unchecked
+Name: "prereleases"; Description: "{cm:PrereleasesTask}"; GroupDescription: "{cm:UpdateCheckGroup}"; Flags: unchecked
 
 [CustomMessages]
 english.ShellMenuGroup=Windows Explorer
@@ -56,6 +58,12 @@ english.ShellMenu=Add to Ant Renamer Qt
 french.ShellMenuGroup=Explorateur Windows
 french.ShellMenuTask=Ajouter « Ajouter à Ant Renamer Qt » au menu contextuel des fichiers et dossiers
 french.ShellMenu=Ajouter à Ant Renamer Qt
+english.UpdateCheckGroup=New-version check
+english.UpdateCheckTask=Look for a new version at start (once a day, asks GitHub; nothing else is sent)
+english.PrereleasesTask=Also tell me about beta and release candidates (otherwise final versions only)
+french.UpdateCheckGroup=Recherche de nouvelle version
+french.UpdateCheckTask=Rechercher une nouvelle version au démarrage (une fois par jour, interroge GitHub ; rien d'autre n'est envoyé)
+french.PrereleasesTask=Me signaler aussi les versions bêta et release candidates (sinon, versions finales seulement)
 
 [Registry]
 ; Meme entrees que la case des Options du programme (HKCU\Software\Classes\{*,Directory}\shell\AntRenamerQt).
@@ -66,6 +74,15 @@ Root: HKA; Subkey: "Software\Classes\*\shell\AntRenamerQt\command"; ValueType: s
 Root: HKA; Subkey: "Software\Classes\Directory\shell\AntRenamerQt"; ValueType: string; ValueName: ""; ValueData: "{cm:ShellMenu}"; Flags: uninsdeletekey; Tasks: shellmenu
 Root: HKA; Subkey: "Software\Classes\Directory\shell\AntRenamerQt"; ValueType: string; ValueName: "Icon"; ValueData: """{app}\antrenamer-qt.exe"",0"; Tasks: shellmenu
 Root: HKA; Subkey: "Software\Classes\Directory\shell\AntRenamerQt\command"; ValueType: string; ValueName: ""; ValueData: """{app}\antrenamer-qt.exe"" --shell ""%1"""; Tasks: shellmenu
+
+[Dirs]
+; Dossier des reglages (QSettings : %APPDATA%\AntRenamerQt\Ant Renamer Qt), cree pour y ecrire les deux choix ci-dessous.
+Name: "{userappdata}\AntRenamerQt\Ant Renamer Qt"; Flags: uninsneveruninstall; Tasks: updatecheck prereleases
+
+[INI]
+; Memes cles que les cases des Options (section options). Une case decochee n'ecrit rien : un choix deja fait dans le programme est conserve.
+Filename: "{userappdata}\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini"; Section: "options"; Key: "checkUpdates"; String: "true"; Tasks: updatecheck
+Filename: "{userappdata}\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini"; Section: "options"; Key: "checkPrereleases"; String: "true"; Tasks: prereleases
 
 [Run]
 Filename: "{app}\antrenamer-qt.exe"; Description: "{cm:LaunchProgram,Ant Renamer Qt}"; Flags: nowait postinstall skipifsilent

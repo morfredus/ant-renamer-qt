@@ -12,6 +12,12 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 - Flatpak (Flathub) packaging files in `packaging/flatpak/`: manifest (KDE runtime, built from the Git tag, access to the user's files, no network), AppStream file (the icon is installed as SVG and as a 256 px PNG), and a `.local.yaml` manifest that builds from the working copy to try it before a tag exists. Under Flatpak the new-version check (start-up option, button of the About box) is hidden, since the store updates the program. BUILDING and ARCHITECTURE (EN, FR) describe it.
 
+- New-version check: option "Also tell me about beta and release candidates" (Options > Display, off by default; `checkPrereleases` in the settings). Before, only a user of a beta or rc was told about the next one; a user of a final version is now told about candidates only if the box is ticked. `ren::newerRelease(json, current, includePrereleases)`, tests added in `tests/update_check.h`; the check at start and the "Check for updates" button of the About window both follow the option. Text in `English.lng` and `French.lng` (`updatesIncludePre`); hidden under Flatpak with the other update options. The Windows installer offers both choices as unticked tasks ("New-version check": look for a new version at start; also beta and release candidates): `installer/antrenamer-qt.iss` writes `checkUpdates` / `checkPrereleases` in the `[options]` section of `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` only for a ticked task, so a choice already made in the program is kept (compiled with Inno Setup; the INI keys checked by reading such a file in the program, the install itself not run on this machine).
+
+### Fixed
+
+- Command line: a folder given with a trailing slash or backslash (`-afr d:\Data\`) is added like one without it. The name after the last separator was used as the mask and was empty, so nothing was added (0 files instead of 13 on a test folder); the path is now cleaned (`QDir::cleanPath`) before the mask is read. Wildcards (`-af d:\Data\*.jpg`) are unchanged.
+
 ### Changed
 
 - New program icon (`app/antrenamer-qt.svg`, on a light blue rounded square): `renamer.ico` (16 to 256 px, window and executable), `antrenamer-qt.png` (now 256 px; the .deb installs it in `hicolor/256x256`) and the picture of the About box (replaces `ant.bmp`, removed) are made from it; it is also the Flatpak icon. PRESENTATION (EN, FR) no longer lists `renamer.ico` and `ant.bmp` among the graphics reused from the original program; ARCHITECTURE (EN, FR) describes the files.

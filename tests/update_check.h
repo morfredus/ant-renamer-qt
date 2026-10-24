@@ -25,6 +25,8 @@ static void updateChecks() {
     CHECK_EQ(pick(u"3.0.0-rc.16"_s), u"none"_s);          // up to date (the draft rc.99 is ignored)
     CHECK_EQ(pick(u"2.13.0"_s), u"none"_s);               // a final version is not told about candidates
     CHECK_EQ(pick(u"2.12.0"_s), u"2.13.0"_s);
+    CHECK_EQ(ren::newerRelease(list, u"2.13.0"_s, true) ? ren::newerRelease(list, u"2.13.0"_s, true)->version : u"none"_s, u"3.0.0-rc.16"_s);  // asked for candidates
+    CHECK_EQ(ren::newerRelease(list, u"3.0.0-rc.16"_s, true) ? u"found"_s : u"none"_s, u"none"_s);  // still nothing newer than rc.16 (draft ignored)
     CHECK_EQ(ren::newerRelease("not json", u"1.0"_s) ? u"found"_s : u"none"_s, u"none"_s);
     const QByteArray foreign = R"([{"tag_name":"v9.0.0","html_url":"https://evil.example/x","prerelease":false,"draft":false}])";
     CHECK_EQ(ren::newerRelease(foreign, u"1.0"_s) ? u"found"_s : u"none"_s, u"none"_s);  // only github.com addresses
@@ -39,5 +41,6 @@ static void updateChecks() {
     };
     CHECK_EQ(pickReal(u"3.0.0-rc.12"_s), u"3.0.0-rc.15"_s);
     CHECK_EQ(pickReal(u"3.0.0-rc.15"_s), u"none"_s);
-    CHECK_EQ(pickReal(u"2.13.0"_s), u"none"_s);  // a final version is not told about candidates, whatever the flag says
+    CHECK_EQ(pickReal(u"2.13.0"_s), u"none"_s);  // a final version is not told about candidates by default
+    CHECK_EQ(ren::newerRelease(real, u"2.13.0"_s, true)->version, u"3.0.0-rc.15"_s);  // ...unless it asked for them
 }

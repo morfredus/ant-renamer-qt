@@ -28,20 +28,20 @@ void reportUpdate(QWidget* parent, bool ok, const QString& version, const QStrin
 
 UpdateChecker::UpdateChecker(QObject* parent) : QObject(parent), net_(new QNetworkAccessManager(this)) {}
 
-void UpdateChecker::check() {
+void UpdateChecker::check(bool includePrereleases) {
     QNetworkRequest req(QUrl(u"https://api.github.com/repos/%1/releases?per_page=20"_s.arg(QString::fromLatin1(kReleasesRepo))));
     req.setRawHeader("Accept", "application/vnd.github+json");
     req.setHeader(QNetworkRequest::UserAgentHeader, u"AntRenamerQt/%1"_s.arg(QCoreApplication::applicationVersion()));
     req.setTransferTimeout(10000);
     req.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
     QNetworkReply* reply = net_->get(req);
-    connect(reply, &QNetworkReply::finished, this, [this, reply] {
+    connect(reply, &QNetworkReply::finished, this, [this, reply, includePrereleases] {
         reply->deleteLater();
         if (reply->error() != QNetworkReply::NoError) {
             emit finished(false, {}, {}, reply->errorString());
             return;
         }
-        const auto r = ren::newerRelease(reply->readAll(), QCoreApplication::applicationVersion());
+        const auto r = ren::newerRelease(reply->readAll(), QCoreApplication::applicationVersion(), includePrereleases);
         emit finished(true, r ? r->version : QString(), r ? r->url : QString(), {});
     });
 }

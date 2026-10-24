@@ -489,6 +489,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="thisProgramIsFree" Value="This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the &lt;a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'&gt;GNU General Public License&lt;/a&gt; for more details."/>
     <Item Name="updatesHeader" Value="Updates"/>
     <Item Name="updatesCheckAtStart" Value="Look for a new version at start (once a day, asks GitHub; nothing else is sent)"/>
+    <Item Name="updatesIncludePre" Value="Also tell me about beta and release candidates (otherwise final versions only)"/>
     <Item Name="updatesCheckButton" Value="Check for updates"/>
     <Item Name="updatesTitle" Value="Update check"/>
     <Item Name="updatesError" Value="Could not check for updates: %1"/>

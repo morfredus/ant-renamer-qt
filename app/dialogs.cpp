@@ -124,7 +124,7 @@ struct OptionsDialog::Ui {
     QComboBox* undoButton = nullptr;
     QSpinBox *historyMax, *fontSize;
     QComboBox* theme;
-    QCheckBox* checkUpdates;
+    QCheckBox *checkUpdates, *checkPre;
     QFontComboBox* font;
     QComboBox* iconSet;
     QCheckBox *startSwitch, *startClearLog, *finishSwitch, *finishClearFiles, *finishClearBatch, *saveLog, *saveLogAppend;
@@ -191,7 +191,8 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
 
         if (!runsInFlatpak()) header(l, tr("Updates"));
         ui_->checkUpdates = box(l, tr("Look for a new version at start (once a day, asks GitHub; nothing else is sent)"), o.checkUpdates);
-        if (runsInFlatpak()) ui_->checkUpdates->hide();
+        ui_->checkPre = box(l, tr("Also tell me about beta and release candidates (otherwise final versions only)"), o.checkPrereleases);
+        if (runsInFlatpak()) { ui_->checkUpdates->hide(); ui_->checkPre->hide(); }
 
         header(l, tr("Fonts"));
         ui_->forceFont = box(l, tr("Force the following font for controls that have to display special characters:"), o.forceFont);
@@ -374,6 +375,7 @@ void OptionsDialog::accept() {
     o.pageLayout = ui_->pageLayout->currentIndex();
     o.theme = ui_->theme->currentIndex();
     o.checkUpdates = ui_->checkUpdates->isChecked();
+    o.checkPrereleases = ui_->checkPre->isChecked();
     o.realtime = ui_->realtime->isChecked();
     o.resizeCols = ui_->resizeCols->isChecked();
     o.fileIcons = ui_->icons->isChecked();
@@ -482,7 +484,7 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
             upd->setEnabled(true);
             reportUpdate(this, ok, version, url, error, true);
         });
-        c->check();
+        c->check(appOptions().checkPrereleases);
     });
     connect(bb, &QDialogButtonBox::rejected, this, &QDialog::reject);
     v->addWidget(bb);
