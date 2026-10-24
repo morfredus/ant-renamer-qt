@@ -570,6 +570,7 @@ void MainWindow::createPages() {
         m.addAction(aSelInvert_);
         m.addSeparator();
         m.addAction(aPreview_);
+        m.addAction(tr_("Export preview..."), this, [this] { exportPreview(); });
         m.exec(fileView_->viewport()->mapToGlobal(p));
     });
 
@@ -1017,6 +1018,32 @@ void MainWindow::addFile(const QString& path) {
     fileView_->addTopLevelItem(item);
     rows_.insert(quintptr(&f), item);
     updateItem(item);
+}
+
+// The files shown in the list (the "Changed only" and hidden-files filters apply), as a CSV or a list of new names.
+void MainWindow::exportPreview() {
+    std::vector<const File*> shown;
+    for (int i = 0; i < fileView_->topLevelItemCount(); ++i) {
+        QTreeWidgetItem* it = fileView_->topLevelItem(i);
+        if (!it->isHidden())
+            if (const File* f = fileOf(it)) shown.push_back(f);
+    }
+    QSettings s = appSettings();
+    QString filter;
+    const QString csvFilter = tr_("CSV file, current and new names (*.csv)");
+    const QString txtFilter = tr_("Text file, new names only (*.txt)");
+    const QString path = QFileDialog::getSaveFileName(this, tr_("Export preview"), s.value(u"folders/exportPreview"_s).toString(),
+                                                      csvFilter + u";;"_s + txtFilter, &filter);
+    if (path.isEmpty()) return;
+    s.setValue(u"folders/exportPreview"_s, path);
+    const bool csv = path.endsWith(u".csv"_s, Qt::CaseInsensitive) || (filter == csvFilter && !path.endsWith(u".txt"_s, Qt::CaseInsensitive));
+    QFile f(path);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        QMessageBox::warning(this, tr_("Export preview"), tr_("Could not write %1").arg(native(path)));
+        return;
+    }
+    if (csv) f.write("\xEF\xBB\xBF");  // BOM: Excel reads the accents
+    f.write(ren::exportPreview(shown, csv).toUtf8());
 }
 
 void MainWindow::addFolderContents(const QString& dir, const AddChoice& c) {

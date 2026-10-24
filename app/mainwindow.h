@@ -118,6 +118,7 @@ private:
 
     // files
     void addFiles(const QStringList& paths, const AddChoice* choice);
+    void exportPreview();
     void addFolderContents(const QString& dir, const AddChoice& c);
     void addFile(const QString& path);
     void filesDropped(const QStringList& paths);

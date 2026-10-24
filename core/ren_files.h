@@ -142,4 +142,8 @@ private:
     Journal* journal_ = nullptr;
 };
 
+// Text of the exported preview: csv = "Folder";"Name";"New name" (semicolon, every field quoted), otherwise only the new names,
+// one per line. A file with no preview (or an unchanged one) keeps its current name.
+QString exportPreview(const std::vector<const File*>& files, bool csv);
+
 }  // namespace ren

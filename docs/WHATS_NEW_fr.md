@@ -10,6 +10,8 @@ Version courante : **3.0.0**.
 
 | Nouveauté | Depuis |
 |---|---|
+| **Export de l'aperçu** : *Exporter l'aperçu...* dans le menu contextuel de la liste des fichiers écrit les noms actuels et nouveaux dans un fichier CSV, ou seulement les nouveaux noms dans un fichier texte. | *(à venir)* |
+| **Ajouter des dossiers** : un champ pour saisir le chemin d'un dossier. | *(à venir)* |
 | **Ligne de commande : un dossier donné avec une barre oblique ou inverse finale** (`-afr d:\Data\`) est maintenant ajouté comme sans elle (il n'ajoutait rien avant). | *(à venir)* |
 | **Recherche de nouvelle version : les versions bêta et release candidates sont maintenant un choix.** Une case dans Options > Affichage (« Me signaler aussi les versions bêta et release candidates »), décochée par défaut : seules les versions finales sont signalées tant qu'elle n'est pas cochée (un utilisateur d'une bêta ou d'une rc est toujours prévenu de la suivante). L'installeur Windows propose le même choix, avec la recherche au démarrage elle-même, parmi ses tâches. | *(à venir)* |
 | **Nouvelle icône du programme** : fenêtre, exécutable, installeur, paquets Linux et boîte À propos. | *(à venir)* |

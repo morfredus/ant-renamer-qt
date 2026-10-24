@@ -12,6 +12,7 @@
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QFileSystemModel>
 #include <QFontComboBox>
 #include <QFormLayout>
@@ -60,6 +61,10 @@ AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent) 
     view_->setSelectionMode(QAbstractItemView::ExtendedSelection);
     v->addWidget(view_, 1);
 
+    path_ = new QLineEdit;
+    path_->setPlaceholderText(tr("Or type the path of a folder"));
+    v->addWidget(path_);
+
     files_ = new QCheckBox(tr("Add files of selected folders"));
     folders_ = new QCheckBox(tr("Add selected folders"));
     recursive_ = new QCheckBox(tr("Apply these two options also to subfolders"));
@@ -85,6 +90,8 @@ AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent) 
 QStringList AddFoldersDialog::folders() const {
     QStringList l;
     for (const QModelIndex& i : view_->selectionModel()->selectedRows(0)) l << model_->filePath(i);
+    const QString typed = QDir::cleanPath(path_->text().trimmed());
+    if (!path_->text().trimmed().isEmpty() && QFileInfo(typed).isDir() && !l.contains(typed)) l << typed;
     return l;
 }
 

@@ -205,6 +205,15 @@ int main(int argc, char** argv) {
 
     id3Checks();
     updateChecks();
+    {   // exported preview: quotes doubled, unchanged file keeps its name
+        FileList el;
+        File& a = el.add(u"/tmp/a\"b.txt"_s);
+        a.preview = u"c.txt"_s;
+        File& b = el.add(u"/tmp/d.txt"_s);
+        const std::vector<const File*> v = {&a, &b};
+        CHECK_EQ(exportPreview(v, true), u"\"Folder\";\"Name\";\"New name\"\n\"/tmp/\";\"a\"\"b.txt\";\"c.txt\"\n\"/tmp/\";\"d.txt\";\"d.txt\"\n"_s);
+        CHECK_EQ(exportPreview(v, false), u"c.txt\nd.txt\n"_s);
+    }
     robustnessChecks();
 
 

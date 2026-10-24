@@ -515,5 +515,10 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="versionNumber" Value="Version %1"/>
     <Item Name="helpBack" Value="Retour"/>
     <Item Name="helpForward" Value="Suivant"/>
+    <Item Name="exportPreviewMenu" Value="Exporter l'aperçu..."/>
+    <Item Name="exportPreview" Value="Exporter l'aperçu"/>
+    <Item Name="exportPreviewCsv" Value="Fichier CSV, noms actuels et nouveaux (*.csv)"/>
+    <Item Name="exportPreviewTxt" Value="Fichier texte, nouveaux noms seulement (*.txt)"/>
+    <Item Name="typeFolderPath" Value="Ou saisir le chemin d'un dossier"/>
   </QtPort>
 </Application>

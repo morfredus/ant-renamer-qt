@@ -519,5 +519,10 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="versionNumber" Value="Version %1"/>
     <Item Name="helpBack" Value="Back"/>
     <Item Name="helpForward" Value="Forward"/>
+    <Item Name="exportPreviewMenu" Value="Export preview..."/>
+    <Item Name="exportPreview" Value="Export preview"/>
+    <Item Name="exportPreviewCsv" Value="CSV file, current and new names (*.csv)"/>
+    <Item Name="exportPreviewTxt" Value="Text file, new names only (*.txt)"/>
+    <Item Name="typeFolderPath" Value="Or type the path of a folder"/>
   </QtPort>
 </Application>

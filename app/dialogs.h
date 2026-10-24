@@ -4,6 +4,7 @@
 
 class QCheckBox;
 class QFileSystemModel;
+class QLineEdit;
 class QTreeView;
 
 struct AddChoice {
@@ -21,6 +22,7 @@ public:
 private:
     QTreeView* view_;
     QFileSystemModel* model_;
+    QLineEdit* path_;
     QCheckBox *files_, *folders_, *recursive_, *hidden_;
 };
 

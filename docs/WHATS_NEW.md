@@ -10,6 +10,8 @@ Current version: **3.0.0**.
 
 | What is new | Since |
 |---|---|
+| **Export of the preview**: *Export preview...* in the context menu of the files list writes the current and new names to a CSV file, or the new names only to a text file. | *(upcoming)* |
+| **Add folders**: a field to type the path of a folder. | *(upcoming)* |
 | **Command line: a folder given with a trailing slash or backslash** (`-afr d:\Data\`) is now added like one without it (it added nothing before). | *(upcoming)* |
 | **New-version check: beta and release candidates are now your choice.** A box in Options > Display ("Also tell me about beta and release candidates"), off by default: only final versions are announced unless it is ticked (a user of a beta or rc is still told about the next one). The Windows installer offers the same choice, with the start-up check itself, among its tasks. | *(upcoming)* |
 | **New program icon**: window, executable, installer, Linux packages and About box. | *(upcoming)* |

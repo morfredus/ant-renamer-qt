@@ -275,4 +275,15 @@ void FileList::sort() {
     std::stable_sort(items_.begin(), items_.end(), [](auto& a, auto& b) { return a->position < b->position; });
 }
 
+QString exportPreview(const std::vector<const File*>& files, bool csv) {
+    auto q = [](QString v) { return u'"' + v.replace(u'"', u"\"\""_s) + u'"'; };
+    QString out;
+    if (csv) out += u"\"Folder\";\"Name\";\"New name\"\n"_s;
+    for (const File* f : files) {
+        const QString& to = f->preview.isEmpty() ? f->fileName() : f->preview;
+        out += csv ? q(f->fileFolder()) + u';' + q(f->fileName()) + u';' + q(to) + u'\n' : to + u'\n';
+    }
+    return out;
+}
+
 }  // namespace ren
