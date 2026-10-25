@@ -105,6 +105,10 @@ Le programme n'utilise pas le réseau, sauf pour la recherche de nouvelle versio
 
 L'assistance pour Ant Renamer Qt se fait sur GitHub : [Issues](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, demandes de fonctions) et [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, idées). Merci de ne pas signaler les problèmes d'Ant Renamer Qt à l'auteur du programme d'origine.
 
+## Soutenir le portage
+
+Ant Renamer Qt est un logiciel libre et le reste : rien n'est réservé à ceux qui donnent. Si vous souhaitez soutenir le travail sur le portage Qt (et non le programme d'origine, qui est d'Antoine Potten), utilisez le bouton « Sponsor » du dépôt ([GitHub Sponsors](https://github.com/sponsors/morfredus) ou [PayPal](https://www.paypal.com/donate/?hosted_button_id=X4FPQCL7BL2FG)). Pour soutenir le programme d'origine, son auteur a sa propre [page de dons](https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=7LPTSBU87XB34).
+
 ## Crédits
 
 - Programme d'origine : Antoine Potten, [Ant Renamer](https://www.antp.be/software/renamer/) (Delphi 7, GPL v2 ou ultérieure).

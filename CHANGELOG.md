@@ -10,6 +10,8 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Added
 
+- Funding: `.github/FUNDING.yml` (GitHub Sponsors and a PayPal donation link, for the work on the Qt port) and a "Support the port" section in the README (EN, FR), with the link to the donation page of the original program's author.
+
 - Screenshots of the program in `docs/screenshots/English` and `docs/screenshots/French` (22 each): classic and modern interface page by page (Files, Actions, Log), the two single-screen arrangements, About, help and Options, in light and dark theme, with sample files. One of them is in the README (EN, FR). Made with the developer aid `ANTREN_SHOT`.
 
 - Flatpak (Flathub) packaging files in `packaging/flatpak/`: manifest (KDE runtime, built from the Git tag, access to the user's files, no network), AppStream file (the icon is installed as SVG and as a 256 px PNG), and a `.local.yaml` manifest that builds from the working copy to try it before a tag exists. Under Flatpak the new-version check (start-up option, button of the About box) is hidden, since the store updates the program. BUILDING and ARCHITECTURE (EN, FR) describe it.
