@@ -10,6 +10,10 @@ la casse, expressions régulières, noms depuis une liste, date du fichier, tags
 développé en parallèle de l'Ant Renamer d'origine et a son propre exécutable, son propre dossier d'installation,
 ses propres réglages et ses propres noms de paquets : les deux peuvent être installés côte à côte sans confusion.
 
+![Ant Renamer Qt, interface moderne, thème clair](docs/screenshots/French/modern-ui-light-single-screen-bands.png)
+
+D'autres captures (interface classique et moderne, thème clair et sombre, aide, À propos) sont dans [docs/screenshots/French](docs/screenshots/French).
+
 ## Téléchargement
 
 Installeur et zip portable Windows, `.deb` Linux (x86_64, arm64) et AppImage : [Releases](https://github.com/morfredus/ant-renamer-qt/releases).
