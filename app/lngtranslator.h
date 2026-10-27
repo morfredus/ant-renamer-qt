@@ -15,10 +15,12 @@ struct LangInfo {
 
 QList<LangInfo> availableLanguages(const QString& dir);
 QString dataPath(const QString& name);  // "Languages" / "help": next to the program, or in ../share/antrenamer-qt
-QString languageDir();                 // <exe>/Languages
+QString languageDir();                  // <exe>/Languages
 QString defaultLanguage();
-QString helpLanguageCode();            // "en", "fr", "hr" or "ta": the languages the help pages exist in
-void openHelp(const QString& topic);   // topic = page name without language: "index", "format", "regexp", ...             // from the system locale, "English" if unknown
+QString helpLanguageCode();  // "en", "fr", "hr" or "ta": the languages the help pages exist in
+void openHelp(
+    const QString&
+        topic);  // topic = page name without language: "index", "format", "regexp", ...             // from the system locale, "English" if unknown
 
 class LngTranslator : public QTranslator {
 public:
@@ -31,7 +33,7 @@ public:
     QString control(const QString& name, const QString& fallback) const;
 
 private:
-    QHash<QString, QString> map_;       // normalized English -> translated
+    QHash<QString, QString> map_;  // normalized English -> translated
     QString language_;
     QHash<QString, QString> controls_;  // control name -> translated Caption
 };

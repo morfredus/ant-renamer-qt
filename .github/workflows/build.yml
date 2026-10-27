@@ -1,6 +1,6 @@
-# Compilation automatique sur GitHub : controle a chaque push/PR/tag (Linux + Windows). Les livrables Windows sont des artefacts
-# du run (verification, et base d'une future signature) ; les releases sont publiees a part, par le mainteneur, pour que
-# SHA256SUMS corresponde aux fichiers publies. Meme code que les scripts locaux : package-win.ps1 et les presets CMake.
+# Automatic build on GitHub: checked at every push, pull request and tag (Linux + Windows). The Windows files are artifacts
+# of the run (a check, and the basis of a future signature); releases are published separately by the maintainer, so that
+# SHA256SUMS matches the published files. Same code as the local scripts: package-win.ps1 and the CMake presets.
 name: Build
 
 on:
@@ -20,17 +20,17 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
-      - name: Dependances
+      - name: Dependencies
         run: sudo apt-get update && sudo apt-get install -y cmake ninja-build g++ qt6-base-dev libgl1-mesa-dev
-      - name: Compilation
+      - name: Build
         run: cmake --preset linux && cmake --build --preset linux
       - name: Tests
         run: ctest --test-dir build --output-on-failure
         env:
           QT_QPA_PLATFORM: offscreen
-      - name: Paquet .deb
+      - name: .deb package
         run: scripts/linux/package-deb.sh
-      - name: Installation du .deb (dependances resolues par apt)
+      - name: Install the .deb (dependencies resolved by apt)
         run: |
           sudo apt-get install -y ./dist/*.deb
           test -x /usr/bin/antrenamer-qt
@@ -42,7 +42,7 @@ jobs:
           path: dist/*.deb
 
   windows:
-    name: Windows (build + livrables)
+    name: Windows (build + packages)
     runs-on: windows-2022
     timeout-minutes: 30
     steps:
@@ -65,14 +65,14 @@ jobs:
           if (-not (Get-Command ISCC.exe -ErrorAction SilentlyContinue) -and -not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
             choco install innosetup --no-progress -y
           }
-      - name: Compilation et livrables
+      - name: Build and packages
         shell: pwsh
         env:
           MSYS2_ROOT: ${{ steps.msys2.outputs.msys2-location }}
         run: powershell -ExecutionPolicy Bypass -File scripts\windows\package-win.ps1
-      # Moteur seulement : le test de l'interface (panel) ouvre des fenetres Qt et se bloque sur le runner Windows (pas de
-      # plugin "offscreen" deploye a cote du programme, Qt attend alors une boite de dialogue). Il tourne sur Linux.
-      - name: Tests (moteur)
+      # Engine only: the interface test (panel) opens Qt windows and hangs on the Windows runner (no "offscreen" plugin
+      # deployed next to the program, so Qt waits for a dialog box). It runs on Linux.
+      - name: Tests (engine)
         shell: msys2 {0}
         timeout-minutes: 5
         run: ctest --test-dir build-mingw -R core --output-on-failure

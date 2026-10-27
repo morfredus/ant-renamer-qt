@@ -2,9 +2,9 @@
 
 #include "appsettings.h"
 #include "icons.h"
-#include "updatecheck.h"
 #include "lngtranslator.h"
 #include "shellmenu.h"
+#include "updatecheck.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -56,7 +56,9 @@ AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent) 
     view_ = new QTreeView;
     view_->setModel(model_);
     view_->setRootIndex(model_->index(QString()));
-    for (int c = 1; c < model_->columnCount(); ++c) view_->hideColumn(c);
+    for (int c = 1; c < model_->columnCount(); ++c) {
+        view_->hideColumn(c);
+    }
     view_->setHeaderHidden(true);
     view_->setSelectionMode(QAbstractItemView::ExtendedSelection);
     v->addWidget(view_, 1);
@@ -89,13 +91,19 @@ AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent) 
 
 QStringList AddFoldersDialog::folders() const {
     QStringList l;
-    for (const QModelIndex& i : view_->selectionModel()->selectedRows(0)) l << model_->filePath(i);
+    for (const QModelIndex& i : view_->selectionModel()->selectedRows(0)) {
+        l << model_->filePath(i);
+    }
     const QString typed = QDir::cleanPath(path_->text().trimmed());
-    if (!path_->text().trimmed().isEmpty() && QFileInfo(typed).isDir() && !l.contains(typed)) l << typed;
+    if (!path_->text().trimmed().isEmpty() && QFileInfo(typed).isDir() && !l.contains(typed)) {
+        l << typed;
+    }
     return l;
 }
 
-AddChoice AddFoldersDialog::choice() const { return {files_->isChecked(), folders_->isChecked(), recursive_->isChecked(), hidden_->isChecked()}; }
+AddChoice AddFoldersDialog::choice() const {
+    return {files_->isChecked(), folders_->isChecked(), recursive_->isChecked(), hidden_->isChecked()};
+}
 
 // --- Drag & drop --------------------------------------------------------------------------------------
 DragDropDialog::DragDropDialog(QWidget* parent) : QDialog(parent) {
@@ -113,19 +121,25 @@ DragDropDialog::DragDropDialog(QWidget* parent) : QDialog(parent) {
     recursive_->setChecked(o.recursive);
     hidden_->setChecked(o.addHidden);
     notAgain_ = new QCheckBox(tr("Do not show this window again (keep selected options for next times)"));
-    for (auto* c : {files_, folders_, recursive_, hidden_}) v->addWidget(c);
+    for (auto* c : {files_, folders_, recursive_, hidden_}) {
+        v->addWidget(c);
+    }
     v->addSpacing(8);
     v->addWidget(notAgain_);
     v->addWidget(standardButtons(this));
 }
 
-AddChoice DragDropDialog::choice() const { return {files_->isChecked(), folders_->isChecked(), recursive_->isChecked(), hidden_->isChecked()}; }
-bool DragDropDialog::dontAskAgain() const { return notAgain_->isChecked(); }
+AddChoice DragDropDialog::choice() const {
+    return {files_->isChecked(), folders_->isChecked(), recursive_->isChecked(), hidden_->isChecked()};
+}
+bool DragDropDialog::dontAskAgain() const {
+    return notAgain_->isChecked();
+}
 
 // --- Options ---------------------------------------------------------------------------------------------
 struct OptionsDialog::Ui {
-    QCheckBox *realtime, *resizeCols, *icons, *forceFont, *autoComplete, *dragNoAsk, *launch, *addHidden, *naturalSort, *newUi, *forceDir, *detectAbs,
-        *copy, *genLog, *folderExt, *sidecar, *dst, *portable, *shellMenu;
+    QCheckBox *realtime, *resizeCols, *icons, *forceFont, *autoComplete, *dragNoAsk, *launch, *addHidden, *naturalSort, *newUi,
+        *forceDir, *detectAbs, *copy, *genLog, *folderExt, *sidecar, *dst, *portable, *shellMenu;
     QCheckBox *dropFiles, *dropFolders, *dropRecursive;
     QComboBox* pageLayout = nullptr;
     QComboBox* undoButton = nullptr;
@@ -141,7 +155,7 @@ struct OptionsDialog::Ui {
     QLabel *langVersion, *langAuthors, *langComments;
 };
 
-OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
+OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(std::make_unique<Ui>()) {
     setWindowTitle(tr("Options"));
     setWindowIcon(tbIcon(TbOptions));
     resize(520, 440);
@@ -168,7 +182,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         return c;
     };
 
-    {   // Display
+    {  // Display
         auto* l = page(tr("Display"));
         header(l, tr("Lists"));
         ui_->realtime = box(l, tr("Real-time update when renaming files"), o.realtime);
@@ -196,13 +210,21 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         th->addStretch();
         l->addLayout(th);
 
-        if (!runsInFlatpak()) header(l, tr("Updates"));
-        ui_->checkUpdates = box(l, tr("Look for a new version at start (once a day, asks GitHub; nothing else is sent)"), o.checkUpdates);
-        ui_->checkPre = box(l, tr("Also tell me about beta and release candidates (otherwise final versions only)"), o.checkPrereleases);
-        if (runsInFlatpak()) { ui_->checkUpdates->hide(); ui_->checkPre->hide(); }
+        if (!runsInFlatpak()) {
+            header(l, tr("Updates"));
+        }
+        ui_->checkUpdates =
+            box(l, tr("Look for a new version at start (once a day, asks GitHub; nothing else is sent)"), o.checkUpdates);
+        ui_->checkPre =
+            box(l, tr("Also tell me about beta and release candidates (otherwise final versions only)"), o.checkPrereleases);
+        if (runsInFlatpak()) {
+            ui_->checkUpdates->hide();
+            ui_->checkPre->hide();
+        }
 
         header(l, tr("Fonts"));
-        ui_->forceFont = box(l, tr("Force the following font for controls that have to display special characters:"), o.forceFont);
+        ui_->forceFont =
+            box(l, tr("Force the following font for controls that have to display special characters:"), o.forceFont);
         auto* fr = new QHBoxLayout;
         ui_->font = new QFontComboBox;
         ui_->font->setCurrentFont(QFont(o.fontName.isEmpty() ? QApplication::font().family() : o.fontName));
@@ -236,14 +258,16 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         l->addLayout(ir);
         l->addStretch();
     }
-    {   // Files & folders
+    {  // Files & folders
         auto* l = page(tr("Files && Folders"));
         header(l, tr("Drag & Drop"));
         ui_->dragNoAsk = box(l, tr("Do not ask what to do, always use the following options:"), o.dragNoAsk);
         ui_->dropFiles = box(l, tr("Add files of selected folders"), o.addFiles);
         ui_->dropFolders = box(l, tr("Add selected folders"), o.addFolders);
         ui_->dropRecursive = box(l, tr("Apply these two options also to subfolders"), o.recursive);
-        for (auto* c : {ui_->dropFiles, ui_->dropFolders, ui_->dropRecursive}) c->setContentsMargins(20, 0, 0, 0);
+        for (auto* c : {ui_->dropFiles, ui_->dropFolders, ui_->dropRecursive}) {
+            c->setContentsMargins(20, 0, 0, 0);
+        }
         header(l, tr("List behaviour"));
         ui_->addHidden = box(l, tr("Include hidden and system files when adding a folder"), o.addHidden);
         ui_->launch = box(l, tr("Launch file on double click"), o.launchFile);
@@ -258,7 +282,8 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         ru->addStretch();
         l->addLayout(ru);
         header(l, tr("Windows Explorer"));
-        ui_->shellMenu = box(l, tr("Add \"Add to Ant Renamer Qt\" to the context menu of files and folders"), shellMenuInstalled());
+        ui_->shellMenu =
+            box(l, tr("Add \"Add to Ant Renamer Qt\" to the context menu of files and folders"), shellMenuInstalled());
 #ifdef Q_OS_WIN
         l->addWidget(new QLabel(tr("On Windows 11 the entry is in \"Show more options\" (or Shift+F10).")));
 #else
@@ -266,7 +291,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
 #endif
         l->addStretch();
     }
-    {   // Processing
+    {  // Processing
         auto* l = page(tr("Processing"));
         header(l, tr("File renaming"));
         ui_->copy = box(l, tr("Copy instead of Rename"), o.copy);
@@ -275,11 +300,13 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         ui_->sidecar = box(l, tr("Also rename the sidecar files (.xmp, .dop) of a renamed picture"), o.renameSidecar);
         header(l, tr("Folder rules"));
         ui_->forceDir = box(l, tr("Force directories (allows to create folders if \"\\\" are found in names)"), o.forceDir);
-        ui_->detectAbs = box(l, tr("Detect a \":\\\" or \"\\\\\" as an absolute path (allows to move files to anywhere)"), o.detectAbsDir);
-        ui_->folderExt = box(l, tr("Consider the last \".\" in a folder name as extension delimiter, like for files"), o.folderExt);
+        ui_->detectAbs =
+            box(l, tr("Detect a \":\\\" or \"\\\\\" as an absolute path (allows to move files to anywhere)"), o.detectAbsDir);
+        ui_->folderExt =
+            box(l, tr("Consider the last \".\" in a folder name as extension delimiter, like for files"), o.folderExt);
         l->addStretch();
     }
-    {   // Events
+    {  // Events
         auto* l = page(tr("Events"));
         const QStringList tabNames = {tr("Files list"), tr("Actions"), tr("Log")};
         header(l, tr("When renaming starts"));
@@ -315,8 +342,11 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         browse->setToolTip(tr("Browse..."));
         browse->setMaximumWidth(30);
         connect(browse, &QPushButton::clicked, this, [this] {
-            const QString f = QFileDialog::getSaveFileName(this, tr("Save log"), ui_->logFile->text(), tr("Text files (*.log *.txt)"));
-            if (!f.isEmpty()) ui_->logFile->setText(QDir::toNativeSeparators(f));
+            const QString f =
+                QFileDialog::getSaveFileName(this, tr("Save log"), ui_->logFile->text(), tr("Text files (*.log *.txt)"));
+            if (!f.isEmpty()) {
+                ui_->logFile->setText(QDir::toNativeSeparators(f));
+            }
         });
         r3->addWidget(ui_->saveLog);
         r3->addWidget(ui_->logFile, 1);
@@ -325,7 +355,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
         ui_->saveLogAppend = box(l, tr("Append to current file"), o.saveLogAppend);
         l->addStretch();
     }
-    {   // Language: the original program's .lng files, then where the settings live
+    {  // Language: the original program's .lng files, then where the settings live
         auto* l = page(tr("Language"));
         header(l, tr("Language"));
         ui_->languages = new QTreeWidget;
@@ -338,7 +368,9 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
             item->setData(0, Qt::UserRole, li.file);
             item->setData(1, Qt::UserRole, QStringList{li.version, li.authors, li.comments});
             ui_->languages->addTopLevelItem(item);
-            if (li.file == cur) ui_->languages->setCurrentItem(item);
+            if (li.file == cur) {
+                ui_->languages->setCurrentItem(item);
+            }
         }
         l->addWidget(ui_->languages, 1);
         auto* form = new QFormLayout;
@@ -367,17 +399,23 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(new Ui) {
     v->addWidget(standardButtons(this));
 }
 
+OptionsDialog::~OptionsDialog() = default;
+
 void OptionsDialog::accept() {
     // storage first, so everything below is written where it will be read from next time
-    if (ui_->portable->isChecked() != isPortable() && !setPortable(ui_->portable->isChecked()))
+    if (ui_->portable->isChecked() != isPortable() && !setPortable(ui_->portable->isChecked())) {
         QMessageBox::warning(this, windowTitle(), tr("Could not write the settings in the program folder."));
+    }
 
-    if (ui_->shellMenu->isChecked() != shellMenuInstalled() && !setShellMenu(ui_->shellMenu->isChecked(), tr("Add to Ant Renamer Qt")))
+    if (ui_->shellMenu->isChecked() != shellMenuInstalled() &&
+        !setShellMenu(ui_->shellMenu->isChecked(), tr("Add to Ant Renamer Qt"))) {
         QMessageBox::warning(this, windowTitle(), tr("Could not change the Explorer context menu."));
+    }
 
     AppOptions& o = appOptions();
-    if (o.newUi != ui_->newUi->isChecked() || (ui_->newUi->isChecked() && o.pageLayout != ui_->pageLayout->currentIndex()))
+    if (o.newUi != ui_->newUi->isChecked() || (ui_->newUi->isChecked() && o.pageLayout != ui_->pageLayout->currentIndex())) {
         QMessageBox::information(this, windowTitle(), tr("The new interface is used the next time the program starts."));
+    }
     o.newUi = ui_->newUi->isChecked();
     o.pageLayout = ui_->pageLayout->currentIndex();
     o.theme = ui_->theme->currentIndex();
@@ -421,8 +459,7 @@ void OptionsDialog::accept() {
     }
     o.applyToCore();
     o.save();
-    delete ui_;
-    ui_ = nullptr;
+    ui_.reset();
     QDialog::accept();
 }
 
@@ -449,28 +486,35 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
         b->setHtml(html);
         return b;
     };
-    tabs->addTab(browser(
-        u"<b>Copyright &copy; 2000-2026 Antoine Potten - Frédéric Biron</b><br><br>"_s +
-        tr("Ant Renamer Qt is a C++/Qt port of Ant Renamer by Antoine Potten, developed in parallel with the original program. Port (Windows and Linux): Frédéric Biron.") + u"<br><br>"_s +
-        tr("Ant Renamer Qt support: ") + u"<a href='https://github.com/morfredus/ant-renamer-qt/'>github.com/morfredus/ant-renamer-qt</a> ("_s + tr("issues and discussions") + u")<br><br>"_s +
-        tr("Ant Renamer Qt web site: ") + u"<a href='https://morfredus.fr/ant-renamer-qt/'>morfredus.fr/ant-renamer-qt</a><br>"_s +
-        tr("Web site of the original program (Antoine Potten): ") + u"<a href='https://www.antp.be/software/renamer/'>www.antp.be/software/renamer/</a><br><br>"_s +
-        u"<b>"_s + tr("License:") + u"</b><br>"_s +
-        tr("This program is free software; you can redistribute it and/or modify it under the terms of the GNU General "
-           "Public License as published by the Free Software Foundation; either version 2 of the License, or (at your "
-           "option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY "
-           "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the "
-           "<a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'>GNU General Public License</a> for more details.")),
+    tabs->addTab(
+        browser(u"<b>Copyright &copy; 2000-2026 Antoine Potten - Frédéric Biron</b><br><br>"_s +
+                tr("Ant Renamer Qt is a C++/Qt port of Ant Renamer by Antoine Potten, developed in parallel with the original "
+                   "program. Port (Windows and Linux): Frédéric Biron.") +
+                u"<br><br>"_s + tr("Ant Renamer Qt support: ") +
+                u"<a href='https://github.com/morfredus/ant-renamer-qt/'>github.com/morfredus/ant-renamer-qt</a> ("_s +
+                tr("issues and discussions") + u")<br><br>"_s + tr("Ant Renamer Qt web site: ") +
+                u"<a href='https://morfredus.fr/ant-renamer-qt/'>morfredus.fr/ant-renamer-qt</a><br>"_s +
+                tr("Web site of the original program (Antoine Potten): ") +
+                u"<a href='https://www.antp.be/software/renamer/'>www.antp.be/software/renamer/</a><br><br>"_s + u"<b>"_s +
+                tr("License:") + u"</b><br>"_s +
+                tr("This program is free software; you can redistribute it and/or modify it under the terms of the GNU General "
+                   "Public License as published by the Free Software Foundation; either version 2 of the License, or (at your "
+                   "option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY "
+                   "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the "
+                   "<a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'>GNU General Public License</a> for more "
+                   "details.")),
         tr("General"));
-    tabs->addTab(browser(
-        u"<b>"_s + tr("Port:") + u"</b><br>"_s + tr("C++/Qt 6 port and Linux port: ") + u"Frédéric Biron<br><br>"_s +
-        u"<b>"_s + tr("Thanks to:") + u"</b><br>Sebastien Buysse, Grégory Zicot, Michel Potten, "_s +
-        tr("...and all the people that sent me suggestions and comments") + u"<br><br><b>"_s + tr("Translations:") + u"</b><br>"_s +
-        u"Arek Czak, Asabukuro, Carlos A Medina R, Damir13, Denny, dzmitry[li], elega, GVG, Hiro5, Ivo Blaauw, Jim Liu, "
-        u"Kari Eveli, Karin Andersson, Lin Fan (林繁), N.Nedelev, Nazar Tychkivskyi, Roberto Paiva, Salvatore Meschini, "
-        u"Sepp Winkler, Seunghoe Yang, Ulisses F Braga, Vico//Koby, Volker Schmidt, Wasilis Mandratzis, Zoltán Danhauser, "
-        u"大眼仔~旭, 无名用户, தமிழ்நேரக்குழு<br><br><b>"_s +
-        tr("Components:") + u"</b><br>Qt (<a href='https://www.qt.io'>www.qt.io</a>)"_s),
+    tabs->addTab(
+        browser(
+            u"<b>"_s + tr("Port:") + u"</b><br>"_s + tr("C++/Qt 6 port and Linux port: ") + u"Frédéric Biron<br><br>"_s +
+            u"<b>"_s + tr("Thanks to:") + u"</b><br>Sebastien Buysse, Grégory Zicot, Michel Potten, "_s +
+            tr("...and all the people that sent me suggestions and comments") + u"<br><br><b>"_s + tr("Translations:") +
+            u"</b><br>"_s +
+            u"Arek Czak, Asabukuro, Carlos A Medina R, Damir13, Denny, dzmitry[li], elega, GVG, Hiro5, Ivo Blaauw, Jim Liu, "
+            u"Kari Eveli, Karin Andersson, Lin Fan (林繁), N.Nedelev, Nazar Tychkivskyi, Roberto Paiva, Salvatore Meschini, "
+            u"Sepp Winkler, Seunghoe Yang, Ulisses F Braga, Vico//Koby, Volker Schmidt, Wasilis Mandratzis, Zoltán Danhauser, "
+            u"大眼仔~旭, 无名用户, தமிழ்நேரக்குழு<br><br><b>"_s +
+            tr("Components:") + u"</b><br>Qt (<a href='https://www.qt.io'>www.qt.io</a>)"_s),
         tr("Credits"));
 
     // version history of the original program, in the language of the interface when available
@@ -487,11 +531,12 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
     connect(upd, &QPushButton::clicked, this, [this, upd] {
         upd->setEnabled(false);
         auto* c = new UpdateChecker(this);
-        connect(c, &UpdateChecker::finished, this, [this, upd, c](bool ok, const QString& version, const QString& url, const QString& error) {
-            c->deleteLater();
-            upd->setEnabled(true);
-            reportUpdate(this, ok, version, url, error, true);
-        });
+        connect(c, &UpdateChecker::finished, this,
+                [this, upd, c](bool ok, const QString& version, const QString& url, const QString& error) {
+                    c->deleteLater();
+                    upd->setEnabled(true);
+                    reportUpdate(this, ok, version, url, error, true);
+                });
         c->check(appOptions().checkPrereleases);
     });
     connect(bb, &QDialogButtonBox::rejected, this, &QDialog::reject);

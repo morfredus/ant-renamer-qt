@@ -2,6 +2,7 @@
 // New-version check, the part that needs no network: comparing versions and reading the list of GitHub releases.
 #include <QByteArray>
 #include <QString>
+
 #include <optional>
 
 namespace ren {

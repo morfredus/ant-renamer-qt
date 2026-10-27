@@ -30,7 +30,9 @@ private:
 void reportUpdate(QWidget* parent, bool ok, const QString& version, const QString& url, const QString& error, bool manual);
 
 // Under Flatpak the store updates the program: the check is neither run nor offered (its message would mislead).
-inline bool runsInFlatpak() { return QFile::exists(QStringLiteral("/.flatpak-info")); }
+inline bool runsInFlatpak() {
+    return QFile::exists(QStringLiteral("/.flatpak-info"));
+}
 
 // Address of the project page for the releases (also the repository the check reads).
 inline const char* kReleasesRepo = "morfredus/ant-renamer-qt";

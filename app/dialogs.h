@@ -2,6 +2,8 @@
 #include <QDialog>
 #include <QStringList>
 
+#include <memory>
+
 class QCheckBox;
 class QFileSystemModel;
 class QLineEdit;
@@ -40,11 +42,12 @@ private:
 class OptionsDialog : public QDialog {
 public:
     explicit OptionsDialog(QWidget* parent);
+    ~OptionsDialog() override;
     void accept() override;
 
 private:
     struct Ui;
-    Ui* ui_;
+    std::unique_ptr<Ui> ui_;
 };
 
 class AboutDialog : public QDialog {

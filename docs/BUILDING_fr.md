@@ -19,6 +19,7 @@ Rien d'autre : aucune bibliothèque tierce.
 
 - Le **moteur** (`core/`) est une bibliothèque statique, `rencore`, qui ne dépend que de QtCore.
 - L'**application** (`app/`) est l'exécutable `antrenamer-qt` (Qt Widgets et Network). Il utilise `rencore`.
+- Les avertissements du compilateur (`-Wall -Wextra -Wshadow`) sont activés pour GCC et Clang ; le code compile sans aucun.
 - Deux programmes de test : `test_core` (moteur seul) et `test_panel` (l'éditeur d'actions, sans fenêtre).
 - La version vient du fichier `VERSION` à la racine, source unique : CMake la lit et la passe au programme.
 - `CMakePresets.json` contient les réglages par plateforme : une compilation, c'est toujours `cmake --preset <nom>` puis `cmake --build --preset <nom>`.

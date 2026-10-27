@@ -11,8 +11,12 @@ inline void id3Checks() {
         return f + data;
     };
     const QByteArray latin1Title("\0Song", 5);
-    const QByteArray utf16Artist("\x01\xFF\xFE" "A\0r\0t\0\xEF\0", 11);  // "Art" + i-diaeresis, little endian with BOM
-    const QByteArray track("\0" "3/12", 5);
+    const QByteArray utf16Artist("\x01\xFF\xFE"
+                                 "A\0r\0t\0\xEF\0",
+                                 11);  // "Art" + i-diaeresis, little endian with BOM
+    const QByteArray track("\0"
+                           "3/12",
+                           5);
     const QByteArray genre("\0(17)", 5);
     const QByteArray body = frame("TIT2", latin1Title) + frame("TPE1", utf16Artist) + frame("TRCK", track) + frame("TCON", genre);
     const int n = int(body.size());
@@ -25,7 +29,10 @@ inline void id3Checks() {
 
     QTemporaryDir td;
     QFile f(td.filePath(QStringLiteral("s.mp3")));
-    if (!f.open(QIODevice::WriteOnly)) { CHECK_EQ(QStringLiteral("open failed"), QStringLiteral("ok")); return; }
+    if (!f.open(QIODevice::WriteOnly)) {
+        CHECK_EQ(QStringLiteral("open failed"), QStringLiteral("ok"));
+        return;
+    }
     f.write(tag + QByteArray(100, 'x') + v1);
     f.close();
     Id3Info info;

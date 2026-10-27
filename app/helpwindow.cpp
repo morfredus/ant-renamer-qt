@@ -9,8 +9,8 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QHash>
 #include <QHBoxLayout>
+#include <QHash>
 #include <QMessageBox>
 #include <QPointer>
 #include <QPushButton>
@@ -38,7 +38,9 @@ public:
 protected:
     QVariant loadResource(int type, const QUrl& name) override {
         QVariant v = QTextBrowser::loadResource(type, name);
-        if (type != QTextDocument::MarkdownResource) return v;
+        if (type != QTextDocument::MarkdownResource) {
+            return v;
+        }
         QString text = v.userType() == QMetaType::QByteArray ? QString::fromUtf8(v.toByteArray()) : v.toString();
         static const QRegularExpression tag(u"^(#+ .*?) *{#([\\w-]+)}$"_s, QRegularExpression::MultilineOption);
         titles_.clear();
@@ -52,13 +54,16 @@ protected:
     void doSetSource(const QUrl& url, QTextDocument::ResourceType type) override {
         QTextBrowser::doSetSource(url, type);
         const QString title = titles_.value(url.fragment());
-        if (title.isEmpty()) return;
+        if (title.isEmpty()) {
+            return;
+        }
         QTimer::singleShot(0, this, [this, title] {  // after the layout
-            for (QTextBlock b = document()->begin(); b.isValid(); b = b.next())
+            for (QTextBlock b = document()->begin(); b.isValid(); b = b.next()) {
                 if (b.blockFormat().headingLevel() && b.text() == title) {
                     verticalScrollBar()->setValue(int(document()->documentLayout()->blockBoundingRect(b).top()));
                     return;
                 }
+            }
         });
     }
 
@@ -114,16 +119,23 @@ public:
         loadToc(lang);
         connect(toc_, &QTreeWidget::itemClicked, this, [this](QTreeWidgetItem* it) {
             const QString page = it->data(0, Qt::UserRole).toString();
-            if (!page.isEmpty()) open(page);
+            if (!page.isEmpty()) {
+                open(page);
+            }
         });
-        connect(browser_, &QTextBrowser::sourceChanged, this, [this](const QUrl& u) { selectInToc(QFileInfo(u.toLocalFile()).fileName()); });
+        connect(browser_, &QTextBrowser::sourceChanged, this,
+                [this](const QUrl& u) { selectInToc(QFileInfo(u.toLocalFile()).fileName()); });
         QSettings s = appSettings();
-        if (s.contains(u"help/geometry"_s)) restoreGeometry(s.value(u"help/geometry"_s).toByteArray());
+        if (s.contains(u"help/geometry"_s)) {
+            restoreGeometry(s.value(u"help/geometry"_s).toByteArray());
+        }
     }
 
     bool open(const QString& page) {
         const QString path = QDir(dir_).filePath(page);
-        if (!QFileInfo::exists(path)) return false;
+        if (!QFileInfo::exists(path)) {
+            return false;
+        }
         browser_->setSource(QUrl::fromLocalFile(path));
         return true;
     }
@@ -139,12 +151,16 @@ private:
     // The table of contents (toc_<lang>.md): a nested list of "- [Title](page.md)", two spaces of indentation per level.
     void loadToc(const QString& lang) {
         QFile f(QDir(dir_).filePath(u"toc_%1.md"_s.arg(lang)));
-        if (!f.open(QIODevice::ReadOnly) && !(f.setFileName(QDir(dir_).filePath(u"toc_en.md"_s)), f.open(QIODevice::ReadOnly))) return;
+        if (!f.open(QIODevice::ReadOnly) && !(f.setFileName(QDir(dir_).filePath(u"toc_en.md"_s)), f.open(QIODevice::ReadOnly))) {
+            return;
+        }
         static const QRegularExpression entry(u"^( *)- \\[(.*)\\]\\((.*)\\)\\s*$"_s);
         QList<QTreeWidgetItem*> parents;  // parents[d] = the last item of depth d
         for (const QString& line : QString::fromUtf8(f.readAll()).split(u'\n')) {
             const auto m = entry.match(line);
-            if (!m.hasMatch()) continue;
+            if (!m.hasMatch()) {
+                continue;
+            }
             const qsizetype depth = qMin<qsizetype>(m.capturedLength(1) / 2, parents.size());
             auto* it = new QTreeWidgetItem(depth ? parents[depth - 1] : toc_->invisibleRootItem(), {m.captured(2)});
             it->setData(0, Qt::UserRole, m.captured(3));
@@ -183,12 +199,17 @@ void showHelp(const QString& topic, QWidget* parent) {
         // Say exactly where the program looked: installation problems are then obvious.
         const QMessageBox::StandardButton b = QMessageBox::warning(
             parent, QApplication::applicationName(),
-            QApplication::translate("Ren", "The help files were not found in:\n%1\n\nOpen the program's web site instead?").arg(QDir::toNativeSeparators(dir)),
+            QApplication::translate("Ren", "The help files were not found in:\n%1\n\nOpen the program's web site instead?")
+                .arg(QDir::toNativeSeparators(dir)),
             QMessageBox::Yes | QMessageBox::No);
-        if (b == QMessageBox::Yes) QDesktopServices::openUrl(QUrl(u"https://www.antp.be/software/renamer/"_s));
+        if (b == QMessageBox::Yes) {
+            QDesktopServices::openUrl(QUrl(u"https://www.antp.be/software/renamer/"_s));
+        }
         return;
     }
-    if (!g_window) g_window = new HelpWindow(dir, lang, parent);
+    if (!g_window) {
+        g_window = new HelpWindow(dir, lang, parent);
+    }
     g_window->open(page);
     g_window->show();
     g_window->raise();

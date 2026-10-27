@@ -3,10 +3,12 @@
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
+
 #include <atomic>
 #include <deque>
 #include <functional>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 namespace ren {
@@ -20,14 +22,18 @@ struct Error {
 
 // Replaces the Delphi GlobalSettings / GlobalStop globals.
 struct Options {
-    bool forceDir = false;      // create missing target folders
-    bool detectAbsDir = false;  // a new name with a drive/UNC prefix is an absolute path
-    bool folderExt = false;     // treat folder names as having an extension
-    bool copy = false;          // copy instead of rename
-    bool skipHidden = true;     // files flagged `hidden` (hidden or system file) are left alone by every operation
+    bool forceDir = false;          // create missing target folders
+    bool detectAbsDir = false;      // a new name with a drive/UNC prefix is an absolute path
+    bool folderExt = false;         // treat folder names as having an extension
+    bool copy = false;              // copy instead of rename
+    bool skipHidden = true;         // files flagged `hidden` (hidden or system file) are left alone by every operation
     bool dstRelativeToFile = true;  // file times use the DST rule of the date itself (else today's offset)
-    bool renameSidecar = true;  // a renamed picture takes its sidecars (IMG.xmp, IMG.CR2.xmp, IMG.dop...) along
+    bool renameSidecar = true;      // a renamed picture takes its sidecars (IMG.xmp, IMG.CR2.xmp, IMG.dop...) along
 };
+// Identifier that is never reused during a run: what a view stores to find a File or an Action again. Unlike a pointer,
+// an id whose object was removed finds nothing (FileList::byId, ActionList::byId return nullptr).
+quint64 nextId();
+
 Options& options();
 QDateTime adjustFileTime(const QDateTime& t);  // applies options().dstRelativeToFile
 std::atomic<bool>& stopFlag();
@@ -52,15 +58,25 @@ public:
     void beginPass(const QString& summary);
     void endPass();  // an empty pass (nothing moved) is not kept
     void record(Move m);
-    void clear() { passes_.clear(); open_ = false; }
-    void setMaxPasses(int n) { max_ = n < 1 ? 1 : n; trim(); }
+    void clear() {
+        passes_.clear();
+        open_ = false;
+    }
+    void setMaxPasses(int n) {
+        max_ = n < 1 ? 1 : n;
+        trim();
+    }
     bool recording() const { return open_; }
     size_t size() const { return passes_.size(); }
     const std::deque<Pass>& passes() const { return passes_; }  // oldest first
 
 private:
     friend class FileList;
-    void trim() { while (int(passes_.size()) > max_) passes_.pop_front(); }
+    void trim() {
+        while (int(passes_.size()) > max_) {
+            passes_.pop_front();
+        }
+    }
     std::deque<Pass> passes_;
     Pass cur_;
     bool open_ = false;
@@ -78,12 +94,17 @@ public:
     bool isFolder() const { return isFolder_; }
     bool exists() const;
 
+    quint64 id() const { return id_; }
+
     QString preview;
     bool hidden = false;  // hidden or system file (set by the interface, see Options::skipHidden)
     int position = 0;
     QString description() const { return description_; }
     State status() const { return status_; }
-    void setError(const QString& d, State s) { description_ = d; status_ = s; }
+    void setError(const QString& d, State s) {
+        description_ = d;
+        status_ = s;
+    }
 
     qint64 size() const;
     QDateTime createdDate() const;
@@ -93,7 +114,10 @@ public:
     bool revert();
     // Puts the file back to `from` after a move recorded in the journal (`sidecars` as it recorded them).
     bool undoMove(const QString& from, const std::vector<std::pair<QString, QString>>& sidecars);
-    void initBeforeJob() { preview.clear(); copyDone_ = false; }
+    void initBeforeJob() {
+        preview.clear();
+        copyDone_ = false;
+    }
 
     // After a folder rename, entries below it must follow the move.
     void fixPathAfterFolderRename(const QString& from, const QString& to);
@@ -108,6 +132,7 @@ public:
 
 private:
     void moveSidecars(const QString& from, const QString& to, bool revert);
+    quint64 id_ = nextId();
     QString folder_, name_, oldName_, description_;
     std::vector<std::pair<QString, QString>> sidecarsMoved_;  // (from, to) of the last rename, to put them back on revert
     State status_ = State::NotRenamed;
@@ -120,11 +145,25 @@ public:
     File& add(const QString& path);
     size_t size() const { return items_.size(); }
     File& at(size_t i) { return *items_[i]; }
-    void clear() { items_.clear(); }
-    void remove(size_t i) { items_.erase(items_.begin() + i); }
+    File* byId(quint64 id) const {
+        const auto it = byId_.find(id);
+        return it == byId_.end() ? nullptr : it->second;
+    }
+    void clear() {
+        items_.clear();
+        byId_.clear();
+    }
+    void remove(size_t i) {
+        byId_.erase(items_[i]->id());
+        items_.erase(items_.begin() + i);
+    }
     void remove(const File* f) {
-        for (size_t i = 0; i < items_.size(); ++i)
-            if (items_[i].get() == f) { items_.erase(items_.begin() + i); return; }
+        for (size_t i = 0; i < items_.size(); ++i) {
+            if (items_[i].get() == f) {
+                remove(i);
+                return;
+            }
+        }
     }
     void sort();  // by position
 
@@ -139,6 +178,7 @@ private:
     void wire(File& f);
     File* findByPath(const QString& path);
     std::vector<std::unique_ptr<File>> items_;
+    std::unordered_map<quint64, File*> byId_;
     Journal* journal_ = nullptr;
 };
 

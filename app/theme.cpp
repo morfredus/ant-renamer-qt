@@ -4,7 +4,9 @@
 #include <QStyle>
 #include <QToolTip>
 
-bool isDarkPalette(const QPalette& p) { return p.color(QPalette::Base).lightness() < p.color(QPalette::Text).lightness(); }
+bool isDarkPalette(const QPalette& p) {
+    return p.color(QPalette::Base).lightness() < p.color(QPalette::Text).lightness();
+}
 
 static QPalette darkPalette() {
     QPalette p;
@@ -30,7 +32,9 @@ static QPalette darkPalette() {
     p.setColor(QPalette::Shadow, Qt::black);
     p.setColor(QPalette::PlaceholderText, QColor(0x8a, 0x8a, 0x8a));
     const QColor dim(0x80, 0x80, 0x80);
-    for (auto r : {QPalette::WindowText, QPalette::Text, QPalette::ButtonText}) p.setColor(QPalette::Disabled, r, dim);
+    for (auto r : {QPalette::WindowText, QPalette::Text, QPalette::ButtonText}) {
+        p.setColor(QPalette::Disabled, r, dim);
+    }
     p.setColor(QPalette::Disabled, QPalette::Highlight, QColor(0x50, 0x50, 0x50));
     return p;
 }
@@ -60,7 +64,9 @@ static QPalette lightPalette() {
     p.setColor(QPalette::Shadow, QColor(0x76, 0x76, 0x76));
     p.setColor(QPalette::PlaceholderText, QColor(0x76, 0x76, 0x76));
     const QColor dim(0xbe, 0xbe, 0xbe);
-    for (auto r : {QPalette::WindowText, QPalette::Text, QPalette::ButtonText}) p.setColor(QPalette::Disabled, r, dim);
+    for (auto r : {QPalette::WindowText, QPalette::Text, QPalette::ButtonText}) {
+        p.setColor(QPalette::Disabled, r, dim);
+    }
     p.setColor(QPalette::Disabled, QPalette::Highlight, QColor(0x91, 0x91, 0x91));
     return p;
 }

@@ -5,16 +5,24 @@
 #include <QDateTime>
 #include <QTemporaryDir>
 
-inline QString okBad(bool ok) { return ok ? QStringLiteral("ok") : QStringLiteral("bad"); }
+inline QString okBad(bool ok) {
+    return ok ? QStringLiteral("ok") : QStringLiteral("bad");
+}
 
 inline void writeFile(const QString& path, const QByteArray& data) {
     QFile f(path);
-    if (f.open(QIODevice::WriteOnly)) f.write(data);
+    if (f.open(QIODevice::WriteOnly)) {
+        f.write(data);
+    }
 }
 
 // Little-endian helpers to build tiny TIFF/EXIF files.
-inline QByteArray le16(int v) { return QByteArray().append(char(v)).append(char(v >> 8)); }
-inline QByteArray le32(quint32 v) { return le16(int(v & 0xFFFF)) + le16(int(v >> 16)); }
+inline QByteArray le16(int v) {
+    return QByteArray().append(char(v)).append(char(v >> 8));
+}
+inline QByteArray le32(quint32 v) {
+    return le16(int(v & 0xFFFF)) + le16(int(v >> 16));
+}
 inline QByteArray ifdEntry(int tag, int type, quint32 count, quint32 value) {
     return le16(tag) + le16(type) + le32(count) + le32(value);
 }
@@ -69,7 +77,8 @@ inline void robustnessChecks() {
         // IFD offset near INT_MAX
         writeFile(dir + u"t1.tif"_s, head + le32(0x7FFFFFFE) + QByteArray(32, '\0'));
         // one entry (ExposureTime, RATIONAL) whose data offset is near INT_MAX
-        writeFile(dir + u"t2.tif"_s, head + le32(8) + le16(1) + ifdEntry(0x829A, 5, 1, 0x7FFFFFF0) + le32(0) + QByteArray(16, '\0'));
+        writeFile(dir + u"t2.tif"_s,
+                  head + le32(8) + le16(1) + ifdEntry(0x829A, 5, 1, 0x7FFFFFF0) + le32(0) + QByteArray(16, '\0'));
         // entry count larger than the data, and an Exif sub-IFD pointer to itself
         writeFile(dir + u"t3.tif"_s, head + le32(8) + le16(500) + ifdEntry(0x8769, 4, 1, 8) + QByteArray(8, '\0'));
         // big-endian header with a truncated IFD
@@ -99,8 +108,8 @@ inline void robustnessChecks() {
             a.offset = offset;
             return a.makeNewName(path, false);
         };
-        CHECK_EQ(exifNameWithOffset("2024:03:31 01:30:00", 3600), u"2024-03-31 02-30-00"_s);   // Europe/Paris spring forward
-        CHECK_EQ(exifNameWithOffset("2024:10:27 02:30:00", 3600), u"2024-10-27 03-30-00"_s);   // Europe/Paris fall back
+        CHECK_EQ(exifNameWithOffset("2024:03:31 01:30:00", 3600), u"2024-03-31 02-30-00"_s);  // Europe/Paris spring forward
+        CHECK_EQ(exifNameWithOffset("2024:10:27 02:30:00", 3600), u"2024-10-27 03-30-00"_s);  // Europe/Paris fall back
         CHECK_EQ(exifNameWithOffset("2024:12:31 23:30:00", 3600), u"2025-01-01 00-30-00"_s);
         CHECK_EQ(exifNameWithOffset("2024:01:01 00:10:00", -3600), u"2023-12-31 23-10-00"_s);
     }
@@ -120,7 +129,12 @@ inline void robustnessChecks() {
         CHECK_EQ(files.at(0).status() == State::Ok ? u"ok"_s : u"not renamed"_s, u"not renamed"_s);
     }
     // --- an empty expression changes nothing (it used to put the replacement between every character)
-    CHECK_EQ(prev<ActionRegexp>(u"abc.txt"_s, [](auto& a) { a.expr.clear(); a.repl = u"X"_s; }), u"abc.txt"_s);
+    CHECK_EQ(prev<ActionRegexp>(u"abc.txt"_s,
+                                [](auto& a) {
+                                    a.expr.clear();
+                                    a.repl = u"X"_s;
+                                }),
+             u"abc.txt"_s);
 
     // --- a new name that contains a NUL is refused, never truncated by the system
     {
@@ -133,10 +147,33 @@ inline void robustnessChecks() {
     }
 
     // --- "apply to extension" never leaves a dot at the end
-    CHECK_EQ(prev<ActionStringRepl>(u"Makefile"_s, [](auto& a) { a.search = u"x"_s; a.replace = u"y"_s; a.onlyExt = true; }), u"Makefile"_s);
-    CHECK_EQ(prev<ActionStringRepl>(u"a.txt"_s, [](auto& a) { a.search = u"txt"_s; a.replace.clear(); a.onlyExt = true; }), u"a"_s);
-    CHECK_EQ(prev<ActionStringIns>(u"file"_s, [](auto& a) { a.newString.clear(); a.ext = true; }), u"file"_s);
-    CHECK_EQ(prev<ActionCharDel>(u"file.t"_s, [](auto& a) { a.nbChar = 1; a.pos = 0; a.ext = true; }), u"file"_s);
+    CHECK_EQ(prev<ActionStringRepl>(u"Makefile"_s,
+                                    [](auto& a) {
+                                        a.search = u"x"_s;
+                                        a.replace = u"y"_s;
+                                        a.onlyExt = true;
+                                    }),
+             u"Makefile"_s);
+    CHECK_EQ(prev<ActionStringRepl>(u"a.txt"_s,
+                                    [](auto& a) {
+                                        a.search = u"txt"_s;
+                                        a.replace.clear();
+                                        a.onlyExt = true;
+                                    }),
+             u"a"_s);
+    CHECK_EQ(prev<ActionStringIns>(u"file"_s,
+                                   [](auto& a) {
+                                       a.newString.clear();
+                                       a.ext = true;
+                                   }),
+             u"file"_s);
+    CHECK_EQ(prev<ActionCharDel>(u"file.t"_s,
+                                 [](auto& a) {
+                                     a.nbChar = 1;
+                                     a.pos = 0;
+                                     a.ext = true;
+                                 }),
+             u"file"_s);
 
     // --- date mask: repeated 'a' keeps its letters
     CHECK_EQ(formatDateTime(u"aab"_s, QDateTime(QDate(2024, 3, 9), QTime(10, 0))), u"aab"_s);
@@ -148,9 +185,8 @@ inline void robustnessChecks() {
         writeFile(dir + u"foreign.xml"_s, "<foo><bar/></foo>");
         CHECK_EQ(okBad(!keep.load(dir + u"foreign.xml"_s)), u"ok"_s);
         CHECK_EQ(QString::number(keep.size()), u"1"_s);
-        writeFile(dir + u"huge.arb"_s,
-                  "<AntRenamer><Batch><Enum Mask=\"%num%\" Digits=\"2000000000\" Start=\"5\" Incr=\"1\"/>"
-                  "<StrIns Str=\"x\" Pos=\"2000000000\"/></Batch></AntRenamer>");
+        writeFile(dir + u"huge.arb"_s, "<AntRenamer><Batch><Enum Mask=\"%num%\" Digits=\"2000000000\" Start=\"5\" Incr=\"1\"/>"
+                                       "<StrIns Str=\"x\" Pos=\"2000000000\"/></Batch></AntRenamer>");
         ActionList huge;
         CHECK_EQ(okBad(huge.load(dir + u"huge.arb"_s)), u"ok"_s);
         CHECK_EQ(QString::number(static_cast<ActionEnum&>(huge.at(0)).digits), u"20"_s);

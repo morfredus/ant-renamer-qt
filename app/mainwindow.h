@@ -8,6 +8,7 @@
 #include <QPersistentModelIndex>
 #include <QThread>
 #include <QTreeWidget>
+
 #include <vector>
 
 class QAction;
@@ -22,7 +23,7 @@ class QToolBar;
 
 // What the worker tells the GUI after each file (copied, so the GUI never reads a File being modified).
 struct Snapshot {
-    quintptr file = 0;
+    quint64 file = 0;  // ren::File::id(), 0 for a line of the log
     QString description;
     int state = 0;
     int batchPos = 0, index = 0;
@@ -52,7 +53,8 @@ private:
 class RenWorker : public QThread {
     Q_OBJECT
 public:
-    RenWorker(ren::ActionList* a, ren::FileList* f, ren::Op op, int undoCount = 1) : actions_(a), files_(f), op_(op), undoCount_(undoCount) {}
+    RenWorker(ren::ActionList* a, ren::FileList* f, ren::Op op, int undoCount = 1)
+        : actions_(a), files_(f), op_(op), undoCount_(undoCount) {}
     ren::Op op() const { return op_; }
 signals:
     void progress(const Snapshot& s);
@@ -90,12 +92,12 @@ private:
     void createToolbars();
     // Modern layout, "single screen": the three pages (bar + content) side by side in splitters instead of tabs.
     void buildSingleScreen();
-    void arrangeSingle(int mode);   // 1 bands, 2 columns
+    void arrangeSingle(int mode);  // 1 bands, 2 columns
     void saveSingleState();
     void setPaneVisible(int page, bool on);
-    int pageLayout_ = 0;            // option: 0 tabs, 1 bands, 2 columns
+    int pageLayout_ = 0;  // option: 0 tabs, 1 bands, 2 columns
     bool singleScreen_ = false;
-    int singleMode_ = 1;            // arrangement shown now (columns give way to bands in a narrow window)
+    int singleMode_ = 1;  // arrangement shown now (columns give way to bands in a narrow window)
     QWidget* panes_[3] = {};
     bool paneVisible_[3] = {true, true, true};
     QWidget* singleHost_ = nullptr;
@@ -126,6 +128,9 @@ private:
     void updateItem(QTreeWidgetItem* item);
     void updateAllItems();
     ren::File* fileOf(QTreeWidgetItem* item) const;
+    ren::Action* actionOf(QTreeWidgetItem* item);
+    bool confirmHiddenFiles();
+    void showPreviewHint();
     void renumberFiles();
     void removeSelectedFiles();
     void removeAllFiles();
@@ -143,11 +148,11 @@ private:
     void editBatchItem(QTreeWidgetItem* item);  // load an action of the plan into the editor
     void updateBatchItem();                     // replace the selected action with the editor settings
     void applyEditorTo(QTreeWidgetItem* item);
-    void validateEdit();                        // "Validate the modification" of the editor zone
+    void validateEdit();  // "Validate the modification" of the editor zone
     void endEdit();
-    QFrame* editBar_ = nullptr;                 // modern layout: shown under the editor while an action is edited
+    QFrame* editBar_ = nullptr;  // modern layout: shown under the editor while an action is edited
     QLabel* editLabel_ = nullptr;
-    QPersistentModelIndex editIndex_;           // the plan row being edited (invalid once it is removed)
+    QPersistentModelIndex editIndex_;  // the plan row being edited (invalid once it is removed)
     void clearBatch();
     void renumberActions();
     void renumberBatchView();
@@ -181,9 +186,12 @@ private:
     RenWorker* worker_ = nullptr;
     bool clearBatchAfter_ = false;
     bool exitAfterRun_ = false;
-    QHash<quintptr, QTreeWidgetItem*> rows_;
+    QHash<quint64, QTreeWidgetItem*> rows_;
 
-    struct LogEntry { QString text; ren::State state; };
+    struct LogEntry {
+        QString text;
+        ren::State state;
+    };
     std::vector<LogEntry> logEntries_;
     size_t runLogStart_ = 0;  // first log entry of the current run (the auto-saved log holds this run only)
     bool logShowOk_ = true, logShowError_ = true, logShowNot_ = true;
@@ -204,7 +212,7 @@ private:
     int currentTab_ = 0;
 
     QAction *aGo_, *aStop_, *aUndo_, *aHistory_, *aOnTop_, *aTheme_, *aOptions_, *aHelp_, *aAbout_, *aExit_;
-    QAction *aTab_[3];
+    QAction* aTab_[3];
     QAction *aAddFiles_, *aAddFolders_, *aRemoveSel_, *aRemoveAll_, *aRemoveDead_, *aPreview_, *aChangedOnly_, *aShowHidden_;
     QAction *aBatchAdd_, *aBatchEdit_, *aBatchRemoveSel_, *aBatchClear_, *aBatchOpen_, *aBatchSave_;
     QAction *aLogFilter_, *aLogOk_, *aLogError_, *aLogNot_, *aLogClear_, *aLogSave_, *aLogCopy_;

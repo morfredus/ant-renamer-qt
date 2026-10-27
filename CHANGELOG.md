@@ -26,11 +26,23 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Fixed
 
+- Options window: the object holding its controls was freed only when the window was accepted, so it leaked on Cancel; it is now owned by a `std::unique_ptr`.
+
+- Portable mode: switching it on or off reported success even when the old settings file could not be removed, so the mode did not change; it now reports the failure.
+
 - Windows build: the executable kept the old icon after `renamer.ico` changed (CMake did not rebuild `app.rc`, which does not `#include` the icon). `app/CMakeLists.txt` now declares `renamer.ico` and `app.manifest` as dependencies of `app.rc`. A build folder made before this change needs one more build to pick the new icon; the Explorer and the taskbar may also show a cached icon until it is refreshed.
 
 - Command line: a folder given with a trailing slash or backslash (`-afr d:\Data\`) is added like one without it. The name after the last separator was used as the mask and was empty, so nothing was added (0 files instead of 13 on a test folder); the path is now cleaned (`QDir::cleanPath`) before the mask is read. Wildcards (`-af d:\Data\*.jpg`) are unchanged.
 
 ### Changed
+
+- Code review pass: the developer aids (`ANTREN_*` variables: screenshots, untranslated texts) moved out of `main()` into `app/devaids.cpp`; `MainWindow::run` split (`confirmHiddenFiles`, `showPreviewHint`); the shift of the EXIF date by an offset now uses `QDateTime` in UTC instead of hand-written Julian day arithmetic (same result in every time zone, covered by the existing test).
+
+- Code style made uniform: `.clang-format` and `.editorconfig` added, all the C++ files formatted with `clang-format` (braces on every `if`/`else`/loop, 4 spaces, 130 columns; formatting only, no change in behaviour; the commit is listed in `.git-blame-ignore-revs`). The comments of the CMake files, of the toolchain, of the GitHub workflow, of the Windows and Linux scripts and of the Inno Setup script, and the messages of those scripts, are now in English like those of the C++ code. CONTRIBUTING (EN, FR) describes the rules; BUILDING and ARCHITECTURE (EN, FR) updated.
+
+- Main window code: the rows of the files list and of the batch now store the `id()` of their `File` or `Action` instead of a raw pointer (`FileList::byId`, `ActionList::byId`; an id whose object was removed finds `nullptr`, where a pointer was undefined behaviour), and the worker's `Snapshot` carries the id too. `mainwindow.cpp` (1,700 lines) is split by topic into `mainwindow.cpp`, `mainwindow_files.cpp`, `mainwindow_batch.cpp`, `mainwindow_run.cpp` and `mainwindow_internal.h` (same class, same behaviour). Test added in `tests/test_core.cpp`; ARCHITECTURE (EN, FR) updated.
+
+- Compiler warnings: the project now builds with `-Wall -Wextra -Wshadow` (GCC and Clang) and compiles with no warning. Fixed the three that showed up: names shadowing a member or a parameter in `ren_actions.cpp` and `ren_files.cpp`, and a missing initializer in `mainwindow.cpp`. No change in behaviour.
 
 - About window (General tab): the web site of the port, `https://morfredus.fr/ant-renamer-qt/`, is shown next to the address of the original program (`www.antp.be/software/renamer/`), which stays and is now labelled as the original program's site (Antoine Potten). Texts in `English.lng` and `French.lng`.
 - New program icon (`app/antrenamer-qt.svg`, on a light blue rounded square): `renamer.ico` (16 to 256 px, window and executable), `antrenamer-qt.png` (now 256 px; the .deb installs it in `hicolor/256x256`) and the picture of the About box (replaces `ant.bmp`, removed) are made from it; it is also the Flatpak icon. PRESENTATION (EN, FR) no longer lists `renamer.ico` and `ant.bmp` among the graphics reused from the original program; ARCHITECTURE (EN, FR) describes the files.

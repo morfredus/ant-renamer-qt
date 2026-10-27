@@ -5,6 +5,7 @@
 
 #include <QComboBox>
 #include <QWidget>
+
 #include <functional>
 #include <memory>
 #include <vector>
@@ -45,7 +46,7 @@ protected:
     bool eventFilter(QObject* o, QEvent* e) override;
 
 signals:
-    void changed();         // any control changed: the sample preview must be refreshed
+    void changed();                            // any control changed: the sample preview must be refreshed
     void helpRequested(const QString& topic);  // help page to open ("format", "regexp")
 
 private:
@@ -62,13 +63,12 @@ private:
 
     Page newPage(const QString& name);
     HistoryCombo* combo(Page& p, const QString& key, const QString& label, const QString& def, bool place = true);
-    QSpinBox* spin(Page& p, const QString& key, const QString& label, int def, int min, int max,
-                   const QString& suffix = {});
+    QSpinBox* spin(Page& p, const QString& key, const QString& label, int def, int min, int max, const QString& suffix = {});
     QCheckBox* check(Page& p, const QString& key, const QString& label, bool def);
     void notes(Page& p, const QString& control, const QString& english);
     // Radio group; the result is the index of the checked one.
-    std::vector<QRadioButton*> radios(Page& p, const QString& key, const QStringList& labels, int def,
-                                      bool vertical = false, QWidget* firstExtra = nullptr);
+    std::vector<QRadioButton*> radios(Page& p, const QString& key, const QStringList& labels, int def, bool vertical = false,
+                                      QWidget* firstExtra = nullptr);
 
     void buildPages();
     void buildMultstr(Page& p);

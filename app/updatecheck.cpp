@@ -16,9 +16,13 @@ void reportUpdate(QWidget* parent, bool ok, const QString& version, const QStrin
     auto tr = [](const char* s) { return QCoreApplication::translate("UpdateCheck", s); };
     const QString title = tr("Update check");
     if (!ok) {
-        if (manual) QMessageBox::warning(parent, title, tr("Could not check for updates: %1").arg(error));
+        if (manual) {
+            QMessageBox::warning(parent, title, tr("Could not check for updates: %1").arg(error));
+        }
     } else if (version.isEmpty()) {
-        if (manual) QMessageBox::information(parent, title, tr("This version is up to date."));
+        if (manual) {
+            QMessageBox::information(parent, title, tr("This version is up to date."));
+        }
     } else if (QMessageBox::question(parent, title,
                                      tr("A new version is available: %1 (you have %2). Open the download page?")
                                          .arg(version, QCoreApplication::applicationVersion())) == QMessageBox::Yes) {
