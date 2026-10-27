@@ -109,7 +109,7 @@ An operation can report a problem without failing (`setInfo`): the file keeps it
 **Job file (`.arb`).** XML written with `QXmlStreamWriter`:
 
 ```xml
-<AntRenamer Version="3.0.0" Date="2026-10-23">
+<AntRenamer Version="3.1.0-beta.1" Date="2026-10-27">
  <Batch>
   <StrRepl Search="old" Repl="new" AllOccurences="True" CaseSensitive="True" .../>
   <Enum Mask="File %num%%ext%" Start="1" Digits="3" Incr="1" Restart="False" SharePairs="False"/>

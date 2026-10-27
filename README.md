@@ -1,6 +1,6 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.0.0-blue)
+![version](https://img.shields.io/badge/version-3.1.0--beta.1-blue)
 
 C++/Qt 6 port of [Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (originally Delphi 7,
 GPL v2 or later). Batch file renaming: replace, insert, move, delete, enumerate, change case, regular
@@ -89,7 +89,7 @@ Translating the interface (the `.lng` files): [docs/TRANSLATING.md](docs/TRANSLA
 ## Settings
 
 Portable mode: create an empty `antrenamer-qt.ini` next to the program (or tick the box in
-Options > Language). Otherwise settings live in `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) or `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
+Options > Display). Otherwise settings live in `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) or `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
 
 Explorer context menu (Windows): Options > Files & Folders adds "Add to Ant Renamer Qt" to files and folders (Windows 11:
 "Show more options"). Everything selected is sent to the window that is already open.
@@ -104,6 +104,10 @@ The program does not use the network, except for the new-version check, which is
 ## Support
 
 Support for Ant Renamer Qt is provided on GitHub: [Issues](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, feature requests) and [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, ideas). Please do not report Ant Renamer Qt problems to the author of the original program.
+
+## Support the port
+
+Ant Renamer Qt is free software and stays so: nothing is reserved to those who give. If you want to support the work on the Qt port (not the original program, which is by Antoine Potten), use the "Sponsor" button of the repository ([GitHub Sponsors](https://github.com/sponsors/morfredus) or [PayPal](https://www.paypal.com/donate/?hosted_button_id=X4FPQCL7BL2FG)). To support the original program, its author has his own [donation page](https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=7LPTSBU87XB34).
 
 ## Credits
 

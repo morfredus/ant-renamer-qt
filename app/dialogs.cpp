@@ -256,6 +256,8 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(std::make_u
         ir->addWidget(ui_->iconSet);
         ir->addStretch();
         l->addLayout(ir);
+        header(l, tr("Settings storage"));
+        ui_->portable = box(l, tr("Portable mode: keep the settings in the program folder"), isPortable());
         l->addStretch();
     }
     {  // Files & folders
@@ -355,7 +357,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(std::make_u
         ui_->saveLogAppend = box(l, tr("Append to current file"), o.saveLogAppend);
         l->addStretch();
     }
-    {  // Language: the original program's .lng files, then where the settings live
+    {  // Language: the .lng files of the original program
         auto* l = page(tr("Language"));
         header(l, tr("Language"));
         ui_->languages = new QTreeWidget;
@@ -392,9 +394,6 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(std::make_u
         connect(ui_->languages, &QTreeWidget::currentItemChanged, this, [showInfo](QTreeWidgetItem* it) { showInfo(it); });
         showInfo(ui_->languages->currentItem());
         l->addWidget(new QLabel(tr("The new language is used the next time the program starts.")));
-
-        header(l, tr("Settings storage"));
-        ui_->portable = box(l, tr("Portable mode: keep the settings in the program folder"), isPortable());
     }
     v->addWidget(standardButtons(this));
 }

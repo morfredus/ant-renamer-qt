@@ -4,18 +4,19 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.0.0**.
+Version courante : **3.1.0-beta.1**.
 
-## À venir
+## 3.1.0-beta.1
 
 | Nouveauté | Depuis |
 |---|---|
-| **Export de l'aperçu** : *Exporter l'aperçu...* dans le menu contextuel de la liste des fichiers écrit les noms actuels et nouveaux dans un fichier CSV, ou seulement les nouveaux noms dans un fichier texte. | *(à venir)* |
-| **Ajouter des dossiers** : un champ pour saisir le chemin d'un dossier. | *(à venir)* |
-| **Fenêtre À propos** : le site web du portage (morfredus.fr/ant-renamer-qt) est affiché à côté de celui du programme d'origine, qui est conservé et présenté comme tel. | *(à venir)* |
-| **Ligne de commande : un dossier donné avec une barre oblique ou inverse finale** (`-afr d:\Data\`) est maintenant ajouté comme sans elle (il n'ajoutait rien avant). | *(à venir)* |
-| **Recherche de nouvelle version : les versions bêta et release candidates sont maintenant un choix.** Une case dans Options > Affichage (« Me signaler aussi les versions bêta et release candidates »), décochée par défaut : seules les versions finales sont signalées tant qu'elle n'est pas cochée (un utilisateur d'une bêta ou d'une rc est toujours prévenu de la suivante). L'installeur Windows propose le même choix, avec la recherche au démarrage elle-même, parmi ses tâches. | *(à venir)* |
-| **Nouvelle icône du programme** : fenêtre, exécutable, installeur, paquets Linux et boîte À propos. | *(à venir)* |
+| **Export de l'aperçu** : *Exporter l'aperçu...* dans le menu contextuel de la liste des fichiers écrit les noms actuels et nouveaux dans un fichier CSV, ou seulement les nouveaux noms dans un fichier texte. | 3.1.0-beta.1 |
+| **Ajouter des dossiers** : un champ pour saisir le chemin d'un dossier. | 3.1.0-beta.1 |
+| **Mode portable** : sa case passe de l'onglet Langue à l'onglet Affichage des options, dans une section « Settings storage ». | 3.1.0-beta.1 |
+| **Fenêtre À propos** : le site web du portage (morfredus.fr/ant-renamer-qt) est affiché à côté de celui du programme d'origine, qui est conservé et présenté comme tel. | 3.1.0-beta.1 |
+| **Ligne de commande : un dossier donné avec une barre oblique ou inverse finale** (`-afr d:\Data\`) est maintenant ajouté comme sans elle (il n'ajoutait rien avant). | 3.1.0-beta.1 |
+| **Recherche de nouvelle version : les versions bêta et release candidates sont maintenant un choix.** Une case dans Options > Affichage (« Me signaler aussi les versions bêta et release candidates »), décochée par défaut : seules les versions finales sont signalées tant qu'elle n'est pas cochée (un utilisateur d'une bêta ou d'une rc est toujours prévenu de la suivante). L'installeur Windows propose le même choix, avec la recherche au démarrage elle-même, parmi ses tâches. | 3.1.0-beta.1 |
+| **Nouvelle icône du programme** : fenêtre, exécutable, installeur, paquets Linux et boîte À propos. | 3.1.0-beta.1 |
 
 ## 3.0.0
 

@@ -2,6 +2,12 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.1.0-beta.1 (27/10/2026)
+  - Export of the preview (CSV or text file) from the context menu of the files list; a field to type a path in "Add folders".
+  - New-version check: an option to also hear about beta and release candidates (the Windows installer offers it); the About window shows the web site of the port.
+  - Command line: a folder given with a trailing slash or backslash is added like one without it.
+  - Portable mode box moved to the Display tab of the options; new program icon; Flatpak packaging files; Linux files signed with GPG.
+  - Code: the build is free of compiler warnings and the code is formatted and commented in one style.
 - 3.0.0 (23/10/2026)
   - First stable version. Same program as 3.0.0-rc.16: only the version number and a few texts of the French and English language files differ ("Open", "Save log", file filters, "Version %1", the "Back" and "Forward" tips of the help window).
 - 3.0.0-rc.16 (18/10/2026)

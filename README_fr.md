@@ -1,6 +1,6 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.0.0-blue)
+![version](https://img.shields.io/badge/version-3.1.0--beta.1-blue)
 
 Portage C++/Qt 6 d'[Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (Delphi 7 à l'origine,
 GPL v2 ou ultérieure). Renommage de fichiers par lots : remplacer, insérer, déplacer, supprimer, énumérer, changer
@@ -89,7 +89,7 @@ Traduire l'interface (les fichiers `.lng`) : [docs/TRANSLATING_fr.md](docs/TRANS
 ## Réglages
 
 Mode portable : créer un fichier `antrenamer-qt.ini` vide à côté du programme (ou cocher la case dans
-Options > Langue). Sinon les réglages sont dans `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) ou `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
+Options > Affichage). Sinon les réglages sont dans `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) ou `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
 
 Menu contextuel de l'Explorateur (Windows) : Options > Fichiers & Dossiers ajoute « Ajouter à Ant Renamer Qt » aux fichiers et
 dossiers (Windows 11 : « Afficher plus d'options »). Tout ce qui est sélectionné arrive dans la fenêtre déjà ouverte.
@@ -104,6 +104,10 @@ Le programme n'utilise pas le réseau, sauf pour la recherche de nouvelle versio
 ## Assistance
 
 L'assistance pour Ant Renamer Qt se fait sur GitHub : [Issues](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, demandes de fonctions) et [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, idées). Merci de ne pas signaler les problèmes d'Ant Renamer Qt à l'auteur du programme d'origine.
+
+## Soutenir le portage
+
+Ant Renamer Qt est un logiciel libre et le reste : rien n'est réservé à ceux qui donnent. Si vous souhaitez soutenir le travail sur le portage Qt (et non le programme d'origine, qui est d'Antoine Potten), utilisez le bouton « Sponsor » du dépôt ([GitHub Sponsors](https://github.com/sponsors/morfredus) ou [PayPal](https://www.paypal.com/donate/?hosted_button_id=X4FPQCL7BL2FG)). Pour soutenir le programme d'origine, son auteur a sa propre [page de dons](https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=7LPTSBU87XB34).
 
 ## Crédits
 

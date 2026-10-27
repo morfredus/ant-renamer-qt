@@ -8,7 +8,11 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.0-beta.1] - 2026-10-27
+
 ### Added
+
+- Funding: `.github/FUNDING.yml` (GitHub Sponsors and a PayPal donation link, for the work on the Qt port) and a "Support the port" section in the README (EN, FR), with the link to the donation page of the original program's author.
 
 - Screenshots of the program in `docs/screenshots/English` and `docs/screenshots/French` (22 each): classic and modern interface page by page (Files, Actions, Log), the two single-screen arrangements, About, help and Options, in light and dark theme, with sample files. One of them is in the README (EN, FR). Made with the developer aid `ANTREN_SHOT`.
 
@@ -35,6 +39,8 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 - Command line: a folder given with a trailing slash or backslash (`-afr d:\Data\`) is added like one without it. The name after the last separator was used as the mask and was empty, so nothing was added (0 files instead of 13 on a test folder); the path is now cleaned (`QDir::cleanPath`) before the mask is read. Wildcards (`-af d:\Data\*.jpg`) are unchanged.
 
 ### Changed
+
+- Options: the "Portable mode" box moves from the Language tab to the end of the Display tab, in its own "Settings storage" section (it has nothing to do with the language). Help pages (`options_*.md`, `qt_*.md`, EN, FR, HR, TA), USER_GUIDE and README (EN, FR) updated; the help pictures of the Display and Language tabs (EN, FR) are made again (they also show the Updates and Theme options added since the old pictures).
 
 - Code review pass: the developer aids (`ANTREN_*` variables: screenshots, untranslated texts) moved out of `main()` into `app/devaids.cpp`; `MainWindow::run` split (`confirmHiddenFiles`, `showPreviewHint`); the shift of the EXIF date by an offset now uses `QDateTime` in UTC instead of hand-written Julian day arithmetic (same result in every time zone, covered by the existing test).
 

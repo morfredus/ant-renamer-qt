@@ -1,6 +1,6 @@
 # Ant Renamer Qt: function guide
 
-*Every function of Ant Renamer Qt 3.0.0 with instructions.*
+*Every function of Ant Renamer Qt 3.1.0-beta.1 with instructions.*
 French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use cases): [USER_RECIPES.md](USER_RECIPES.md). Full details, page by page, with screenshots: the built-in help (F1). Differences between Windows and Linux: §13.
 
 ## 1. General principle
@@ -165,13 +165,13 @@ Changes apply when you click OK; a few (language, modern layout) at the next sta
 
 | Page | Settings |
 |---|---|
-| **Display** | live update, automatic column resizing, icons by extension, modern layout and its page arrangement (Tabs, Single screen in bands, Single screen in columns), forced font and size, history size of the drop-down lists (1 to 200), **theme** (system, light, dark), **look for a new version at start** (off by default: once a day it asks GitHub for the list of releases, nothing else is sent; also the "Check for updates" button of the About window), **also tell me about beta and release candidates** (off by default: only final versions are announced), auto-completion, **icon set** (§12) |
+| **Display** | live update, automatic column resizing, icons by extension, modern layout and its page arrangement (Tabs, Single screen in bands, Single screen in columns), forced font and size, history size of the drop-down lists (1 to 200), **theme** (system, light, dark), **look for a new version at start** (off by default: once a day it asks GitHub for the list of releases, nothing else is sent; also the "Check for updates" button of the About window), **also tell me about beta and release candidates** (off by default: only final versions are announced), auto-completion, **icon set** (§12), **portable mode** (settings kept in the program folder) |
 | **Files & Folders** | do not ask on drag and drop and the options to use, natural sort, open the file on double-click, include hidden and system files of added folders, Explorer menu entry (Windows) |
 | **Processing** | copy instead of rename, generate a log, daylight saving by file date, also rename sidecar files (`.xmp`, DxO `.dop`; they get their old name back on undo), force folders (creates them), detect `x:\` and `\\` (Linux: `/`) as absolute paths, last dot of a folder name = extension |
 | **Events** | at the start of a run: switch to a page, clear the log; at the end: switch to a page, clear the files list, clear the batch, save the log to a file (with "append") |
-| **Language** | interface language (27 `.lng` files; translator and version shown), portable mode |
+| **Language** | interface language (27 `.lng` files; translator and version shown) |
 
-Settings are stored in your profile (`%APPDATA%\AntRenamerQt` on Windows, `~/.local/share/AntRenamerQt` on Linux). Portable mode: an `antrenamer-qt.ini` file next to the program keeps all settings in that folder (the checkbox in Options > Language creates or removes it; an empty file is enough).
+Settings are stored in your profile (`%APPDATA%\AntRenamerQt` on Windows, `~/.local/share/AntRenamerQt` on Linux). Portable mode: an `antrenamer-qt.ini` file next to the program keeps all settings in that folder (the checkbox in Options > Display creates or removes it; an empty file is enough).
 
 ## 11. Modern layout (optional)
 
