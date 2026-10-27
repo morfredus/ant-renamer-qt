@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 #
-# Ant Renamer Qt - construction d'un paquet Debian (.deb).
+# Ant Renamer Qt - builds a Debian package (.deb).
 #
-# Produit dist/AntRenamerQt-<version>-linux-<arch>.deb, installable avec
+# Produces dist/AntRenamerQt-<version>-linux-<arch>.deb, installable with
 #   sudo apt install ./AntRenamerQt-<version>-linux-<arch>.deb
-# Le binaire est lie dynamiquement au Qt du systeme : le paquet DECLARE ses dependances (Qt6...) pour
-# qu'apt les installe. Les langues et l'aide de l'original vont dans /usr/share/antrenamer-qt.
+# The binary is linked dynamically to the system Qt: the package DECLARES its dependencies (Qt6...) so
+# that apt installs them. The language files and the help of the original go to /usr/share/antrenamer-qt.
 #
-# Binaire attendu apres une compilation (voir CMakePresets.json) :
-#   cmake --preset linux             (x86_64, natif)        -> build/app/antrenamer-qt
-#   cmake --preset linux-arm64       (ARM64, natif, ex. Pi) -> build-arm64/app/antrenamer-qt
-#   cmake --preset linux-arm64-cross (ARM64 depuis x86_64)  -> build-arm64-cross/app/antrenamer-qt
+# Binary expected after a build (see CMakePresets.json):
+#   cmake --preset linux             (x86_64, native)         -> build/app/antrenamer-qt
+#   cmake --preset linux-arm64       (ARM64, native, e.g. Pi) -> build-arm64/app/antrenamer-qt
+#   cmake --preset linux-arm64-cross (ARM64 from x86_64)      -> build-arm64-cross/app/antrenamer-qt
 #
-# Compilation croisee arm64 : l'architecture du paquet se lit dans l'ELF (pas dans l'hote) et les
-# dependances sont resolues dans le sysroot (variable ARM64_SYSROOT, il doit contenir la base dpkg).
+# arm64 cross build: the architecture of the package is read from the ELF (not from the host) and the
+# dependencies are resolved in the sysroot (variable ARM64_SYSROOT, which must contain the dpkg database).
 #
-# Usage : scripts/linux/package-deb.sh [--build <dossier>] [--maintainer "Nom <email>"] [--depends "pkg, ..."]
+# Usage: scripts/linux/package-deb.sh [--build <folder>] [--maintainer "Name <email>"] [--depends "pkg, ..."]
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -27,9 +27,9 @@ MAINTAINER="${DEB_MAINTAINER:-Frederic Biron <morfredus@users.noreply.github.com
 DEPENDS_OVERRIDE=""
 BUILD_CANDIDATES=("$ROOT/build" "$ROOT/build-arm64" "$ROOT/build-arm64-cross")
 
-die() { printf 'Erreur : %s\n' "$1" >&2; exit 1; }
+die() { printf 'Error: %s\n' "$1" >&2; exit 1; }
 
-# Architecture reelle d'un ELF (e_machine, offset 18, little-endian) : 0xb7 = aarch64, 0x3e = x86-64.
+# Real architecture of an ELF (e_machine, offset 18, little-endian) : 0xb7 = aarch64, 0x3e = x86-64.
 _elf_arch() {
     case "$(od -An -tx1 -j18 -N2 "$1" 2>/dev/null | tr -d ' ')" in
         b700) echo arm64 ;;
@@ -46,35 +46,35 @@ while [ $# -gt 0 ]; do
         -h|--help)
             sed -n '2,19p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
             exit 0 ;;
-        *) die "option inconnue : $1 (voir --help)" ;;
+        *) die "unknown option: $1 (see --help)" ;;
     esac
     shift
 done
 
-[ "$(uname -s)" = "Linux" ] || die "ce script doit etre execute sous Linux."
-command -v dpkg-deb >/dev/null 2>&1 || die "dpkg-deb introuvable (paquet 'dpkg')."
+[ "$(uname -s)" = "Linux" ] || die "this script must be run on Linux."
+command -v dpkg-deb >/dev/null 2>&1 || die "dpkg-deb not found (package 'dpkg')."
 
-# --build <dossier> : le dossier de build ou son sous-dossier app/ (les deux sont acceptes).
+# --build <folder>: the build folder or its app/ subfolder (both are accepted).
 find_binary() {
     local d="$1"
     for c in "$d/app/antrenamer-qt" "$d/antrenamer-qt"; do [ -x "$c" ] && { echo "$c"; return 0; }; done
     return 1
 }
 if [ -n "$BUILD_DIR" ]; then
-    BINARY="$(find_binary "$BUILD_DIR")" || die "binaire introuvable dans $BUILD_DIR (compile d'abord)."
+    BINARY="$(find_binary "$BUILD_DIR")" || die "binary not found in $BUILD_DIR (build first)."
 else
     for dir in "${BUILD_CANDIDATES[@]}"; do
         if BINARY="$(find_binary "$dir")"; then BUILD_DIR="$dir"; break; fi
     done
-    [ -n "${BINARY:-}" ] || die "binaire introuvable dans : ${BUILD_CANDIDATES[*]}
-  Compile d'abord :  cmake --preset linux && cmake --build --preset linux"
+    [ -n "${BINARY:-}" ] || die "binary not found in: ${BUILD_CANDIDATES[*]}
+  Build first:  cmake --preset linux && cmake --build --preset linux"
 fi
 APP_DIR="$(dirname "$BINARY")"
-echo "Binaire : $BINARY"
+echo "Binary: $BINARY"
 
 VERSION="$(head -n1 "$ROOT/VERSION" | tr -d '[:space:]')"
-[ -n "$VERSION" ] || die "fichier VERSION vide ou absent."
-# Debian : le suffixe de pre-version se note avec ~ (3.0.0~rc.1 < 3.0.0) ; le '-' est la revision du paquet.
+[ -n "$VERSION" ] || die "VERSION file empty or missing."
+# Debian: a pre-release suffix is written with ~ (3.0.0~rc.1 < 3.0.0); the '-' is the package revision.
 DEB_VERSION="${VERSION/-/\~}"
 
 CROSS_ARM64=0
@@ -88,12 +88,12 @@ else
 fi
 
 ICON_SRC="$ROOT/app/antrenamer-qt.png"
-[ -f "$ICON_SRC" ] || die "icone introuvable : $ICON_SRC"
-for d in Languages help; do [ -d "$APP_DIR/$d" ] || die "dossier $d absent de $APP_DIR (le build le copie apres l'edition de liens)."; done
+[ -f "$ICON_SRC" ] || die "icon not found: $ICON_SRC"
+for d in Languages help; do [ -d "$APP_DIR/$d" ] || die "folder $d missing from $APP_DIR (the build copies it after linking)."; done
 
-# Dependances d'un binaire natif : uniquement les bibliotheques DIRECTEMENT demandees (NEEDED), resolues avec
-# ldconfig puis converties en paquets avec dpkg -S (readlink -f : sur un systeme "usr-merged", dpkg -S ne
-# connait que le chemin reel /usr/lib/...). Les dependances transitives viennent des paquets eux-memes.
+# Dependencies of a native binary: only the libraries it asks for DIRECTLY (NEEDED), resolved with
+# ldconfig then converted to packages with dpkg -S (readlink -f: on a "usr-merged" system, dpkg -S only
+# knows the real path /usr/lib/...). Transitive dependencies come from the packages themselves.
 detect_depends() {
     local soname path
     objdump -p "$BINARY" 2>/dev/null | awk '$1=="NEEDED"{print $2}' | sort -u | while read -r soname; do
@@ -103,12 +103,12 @@ detect_depends() {
     done | sort -u | sed 's/:[a-z0-9]*$//' | paste -sd, - | sed 's/,/, /g'
 }
 
-# Dependances d'un binaire croise : sonames NEEDED (objdump de la cible) resolus dans le sysroot, puis
-# convertis en paquets avec la base dpkg DU SYSROOT (dpkg --admindir).
+# Dependencies of a cross-built binary: NEEDED sonames (objdump of the target) resolved in the sysroot, then
+# converted to packages with the dpkg database OF THE SYSROOT (dpkg --admindir).
 cross_depends() {
     local sysroot="$1" soname path
-    command -v aarch64-linux-gnu-objdump >/dev/null 2>&1 || die "objdump cible manquant : installe binutils-aarch64-linux-gnu."
-    [ -d "$sysroot/var/lib/dpkg" ] || die "pas de base dpkg dans le sysroot : $sysroot"
+    command -v aarch64-linux-gnu-objdump >/dev/null 2>&1 || die "target objdump missing: install binutils-aarch64-linux-gnu."
+    [ -d "$sysroot/var/lib/dpkg" ] || die "no dpkg database in the sysroot: $sysroot"
     aarch64-linux-gnu-objdump -p "$BINARY" | awk '$1=="NEEDED"{print $2}' | sort -u | while read -r soname; do
         path="$(find "$sysroot/lib" "$sysroot/usr/lib" -name "$soname" -print -quit 2>/dev/null || true)"
         [ -n "$path" ] || continue
@@ -119,30 +119,30 @@ cross_depends() {
 if [ -n "$DEPENDS_OVERRIDE" ]; then
     DEPENDS="$DEPENDS_OVERRIDE"
 elif [ "$CROSS_ARM64" = "1" ]; then
-    [ -n "${ARM64_SYSROOT:-}" ] && [ -d "$ARM64_SYSROOT" ] || die "ARM64_SYSROOT absent : sysroot arm64 requis pour les dependances."
+    [ -n "${ARM64_SYSROOT:-}" ] && [ -d "$ARM64_SYSROOT" ] || die "ARM64_SYSROOT not set: an arm64 sysroot is needed for the dependencies."
     DEPENDS="$(cross_depends "$ARM64_SYSROOT")"
-    [ -n "$DEPENDS" ] || die "dependances croisees vides (sysroot sans base dpkg ?)."
+    [ -n "$DEPENDS" ] || die "cross dependencies empty (sysroot without a dpkg database?)."
 else
     DEPENDS="$(detect_depends || true)"
     [ -n "$DEPENDS" ] || DEPENDS="libc6, libqt6core6, libqt6gui6, libqt6widgets6, libqt6network6"
 fi
-# Ubuntu 24.04 nomme libqt6gui6t64 ce que Debian 13 nomme libqt6gui6 (et inversement selon les paquets) :
-# chaque dependance en "xxxt64" devient "xxxt64 | xxx" pour s'installer sur les deux.
+# Ubuntu 24.04 calls libqt6gui6t64 what Debian 13 calls libqt6gui6 (and the other way round for some packages):
+# every "xxxt64" dependency becomes "xxxt64 | xxx" so that it installs on both.
 DEPENDS="$(printf '%s' "$DEPENDS" | sed -E 's/([A-Za-z0-9.+-]+)t64\b/\1t64 | \1/g')"
-# Le plugin xcb (charge par dlopen) exige libxcb-cursor0 depuis Qt 6.5.
+# The xcb plugin (loaded with dlopen) needs libxcb-cursor0 since Qt 6.5.
 case ", $DEPENDS," in
     *", libxcb-cursor0,"*) : ;;
     *) DEPENDS="$DEPENDS, libxcb-cursor0" ;;
 esac
 
-# Arborescence preparee dans le systeme de fichiers NATIF (jamais sur /mnt/c : DrvFs force le mode 777 et
-# dpkg-deb refuse un DEBIAN/ en 777).
+# Tree prepared on the NATIVE file system (never on /mnt/c: DrvFs forces mode 777 and
+# dpkg-deb refuses a DEBIAN/ in 777).
 STAGE_ROOT="$(mktemp -d)"
 trap 'rm -rf "$STAGE_ROOT"' EXIT
 PKGDIR="$STAGE_ROOT/${CMD}_${DEB_VERSION}_${ARCH}"
 install -Dm755 "$BINARY" "$PKGDIR/usr/bin/$CMD"
 
-# Langues et aide de l'original : le programme les cherche dans ../share/antrenamer-qt a cote du binaire.
+# Language files and help of the original: the program looks for them in ../share/antrenamer-qt next to the binary.
 install -d "$PKGDIR/usr/share/antrenamer-qt"
 cp -r "$APP_DIR/Languages" "$APP_DIR/help" "$PKGDIR/usr/share/antrenamer-qt/"
 find "$PKGDIR/usr/share/antrenamer-qt" -type d -exec chmod 755 {} + -o -type f -exec chmod 644 {} +
@@ -205,5 +205,5 @@ else
 fi
 
 echo "OK - $OUT ($(du -h "$OUT" | cut -f1), $ARCH)"
-echo "Dependances : $DEPENDS"
-echo "Installation :  sudo apt install \"$OUT\""
+echo "Dependencies: $DEPENDS"
+echo "Install:  sudo apt install \"$OUT\""
