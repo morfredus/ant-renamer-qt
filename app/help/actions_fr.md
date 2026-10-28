@@ -242,4 +242,4 @@ Le tag `%num%` est un compteur, comme dans l'opération [Énumération](#enum) (
 
 Un fichier qui ne contient aucune information EXIF, IPTC ou XMP n'est pas renommé : le journal indique « Pas d'info EXIF trouvée ».
 
-Le fichier XMP associé d'une image (`IMG.xmp` ou `IMG.CR2.xmp`) est lu avec l'image et l'emporte sur le XMP intégré, ce qui rend disponibles les mots-clés et la note d'un fichier RAW. Quand l'image est renommée, ses fichiers associés (`.xmp`, et `.dop` de DxO) sont renommés avec elle : voir l'option dans les [Options](options_fr.md), page *Traitement*.
+Le fichier XMP associé d'une image (`IMG.xmp` ou `IMG.CR2.xmp`) est lu avec l'image et l'emporte sur le XMP intégré, ce qui rend disponibles les mots-clés et la note d'un fichier RAW. Quand l'image est renommée, ses fichiers associés (`.xmp`, `.dop`, `.pp3`... et, pour un JPEG, son fichier RAW) sont renommés avec elle : voir l'option dans les [Options](options_fr.md), page *Traitement*.

@@ -334,18 +334,31 @@ bool isKnownExifTag(const QString& name) {
 }
 
 const QStringList& sidecarExtensions() {
-    static const QStringList e = {QStringLiteral("xmp"), QStringLiteral("dop")};
+    static const QStringList e = [] {
+        QStringList l = {QStringLiteral("xmp"), QStringLiteral("dop"), QStringLiteral("pp3"), QStringLiteral("cos"),
+                         QStringLiteral("acr"), QStringLiteral("on1"), QStringLiteral("thm"), QStringLiteral("aae")};
+        return l + rawExtensions();
+    }();
+    return e;
+}
+
+const QStringList& rawExtensions() {
+    static const QStringList e = QStringLiteral("3fr arw cr2 cr3 crw dcr dng erf fff gpr iiq kdc mef mos mrw nef nrw orf pef raf raw rw2 rwl sr2 srf srw x3f").split(u' ');
     return e;
 }
 
 QStringList sidecarCandidates(const QString& path, const QStringList& exts) {
     const QFileInfo fi(path);
-    if (sidecarExtensions().contains(fi.suffix(), Qt::CaseInsensitive)) {
+    const bool isRaw = rawExtensions().contains(fi.suffix(), Qt::CaseInsensitive);
+    if (!isRaw && sidecarExtensions().contains(fi.suffix(), Qt::CaseInsensitive)) {
         return {};
     }
     const QString stem = fi.absolutePath() + u'/' + fi.completeBaseName();
     QStringList r;
     for (const QString& e : exts) {
+        if (isRaw && rawExtensions().contains(e)) {
+            continue;  // a RAW does not take another RAW (nor itself) along: the picture (JPEG) takes the RAW
+        }
         r << stem + u'.' + e << stem + u'.' + e.toUpper() << path + u'.' + e << path + u'.' + e.toUpper();
     }
     return r;

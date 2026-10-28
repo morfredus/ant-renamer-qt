@@ -175,7 +175,7 @@ Users of Ant Renamer 2.x asked for a number of things on the forum of the origin
 ## Known limits
 
 - 36 EXIF tags (IFD0 and Exif IFD only, no MakerNote decoding); IPTC is read from JPEG only; XMP
-  sidecar files are read and renamed with their picture (IMG.xmp, IMG.CR2.xmp and DxO `.dop`; other sidecar types are not).
+  sidecar files are read and renamed with their picture (IMG.xmp, IMG.CR2.xmp, DxO `.dop`, RawTherapee `.pp3`, Capture One `.cos`... and the RAW files of a renamed JPEG).
 - Only ID3 tags; no other audio tag formats.
 - The Windows 11 short context menu needs a packaged COM component and a signed package, not done.
 - The executable is not code-signed, so SmartScreen may warn on the first download.

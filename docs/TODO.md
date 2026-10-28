@@ -20,7 +20,6 @@ These are ideas, not promises: some of them may never be done. If they are, one 
 
 ### Smaller ideas, no version yet
 
-- More sidecar types (for example RawTherapee `.pp3`).
 - Read `.dop` data? Not planned: it is a DxO-only format.
 - XMP properties not mapped yet: the `exif:` attributes of a sidecar (date, GPS), `crs:` (Camera Raw) settings.
 - Filter the files to process with a mask or a regular expression, before or after adding them (only the hidden and system files are filtered today).

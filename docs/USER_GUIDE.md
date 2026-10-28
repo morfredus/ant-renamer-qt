@@ -59,7 +59,8 @@ The program only changes **names** (or copies the files under a new name); it ne
 
 ### Sidecar files of a photo
 When a photo is renamed, its sidecar files are renamed with it, with nothing more to do:
-- **Recognised**: `.xmp` (Lightroom, Capture One: `IMG.xmp`; digiKam, darktable: `IMG.CR2.xmp`) and DxO PhotoLab `.dop` (`IMG.dop`, `IMG.CR2.dop`), upper-case extensions included.
+- **Recognised**: `.xmp` (Lightroom, Capture One: `IMG.xmp`; digiKam, darktable: `IMG.CR2.xmp`) DxO PhotoLab `.dop` (`IMG.dop`, `IMG.CR2.dop`), RawTherapee `.pp3`, Capture One `.cos`, Camera Raw `.acr`, ON1 `.on1`, camera `.thm` and Apple `.aae`, upper-case extensions included.
+- **RAW files**: renaming a JPEG also renames the RAW file with the same name (`IMG.jpg` and `IMG.ORF`, `.CR2`, `.CR3`, `.NEF`, `.ARW`, `.RAF`, `.DNG`, `.RW2`, `.PEF`, `.SRW`... 27 formats), with its own sidecars. Renaming a RAW takes its sidecars along but not the JPEG: put the JPEG in the list to rename the pair.
 - **Method**: in Options > Processing, tick "Also rename the sidecar files (.xmp, .dop) of a renamed picture" (on by default). Then rename the photo as usual (for example `IMG_0001.CR2` → `Paris 001.CR2`): `IMG_0001.xmp` or `IMG_0001.CR2.xmp` becomes `Paris 001.xmp` or `Paris 001.CR2.xmp`.
 - **Undo** (F12): the sidecars get their old name back with the photo.
 - **Log**: the photo's line mentions the renamed sidecar.
@@ -167,7 +168,7 @@ Changes apply when you click OK; the language and the modern layout too, without
 |---|---|
 | **Display** | live update, automatic column resizing, icons by extension, modern layout and its page arrangement (Tabs, Single screen in bands, Single screen in columns), forced font and size, history size of the drop-down lists (1 to 200), **theme** (system, light, dark), **look for a new version at start** (off by default: once a day it asks GitHub for the list of releases, nothing else is sent; also the "Check for updates" button of the About window), **also tell me about beta and release candidates** (off by default: only final versions are announced), auto-completion, **icon set** (§12), **portable mode** (settings kept in the program folder) |
 | **Files & Folders** | do not ask on drag and drop and the options to use, natural sort, open the file on double-click, include hidden and system files of added folders, Explorer menu entry (Windows) |
-| **Processing** | copy instead of rename, generate a log, daylight saving by file date, also rename sidecar files (`.xmp`, DxO `.dop`; they get their old name back on undo), force folders (creates them), detect `x:\` and `\\` (Linux: `/`) as absolute paths, last dot of a folder name = extension |
+| **Processing** | copy instead of rename, generate a log, daylight saving by file date, also rename sidecar files (`.xmp`, `.dop`, `.pp3`..., and the RAW files of a renamed JPEG; they get their old name back on undo), force folders (creates them), detect `x:\` and `\\` (Linux: `/`) as absolute paths, last dot of a folder name = extension |
 | **Events** | at the start of a run: switch to a page, clear the log; at the end: switch to a page, clear the files list, clear the batch, save the log to a file (with "append") |
 | **Language** | interface language (27 `.lng` files; translator and version shown) |
 

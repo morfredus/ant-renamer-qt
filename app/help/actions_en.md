@@ -242,4 +242,4 @@ The `%num%` tag is a counter, like in the [Enumeration](#enum) action (same opti
 
 A file that contains no EXIF, IPTC or XMP information is not renamed: the log says "No EXIF info found" ("Pas d'info EXIF trouvée" in French).
 
-The XMP sidecar file of a picture (`IMG.xmp` or `IMG.CR2.xmp`) is read with the picture and wins over the XMP embedded in it, which is how the keywords and the rating of a RAW file become available. When the picture is renamed, its sidecar files (`.xmp`, and DxO `.dop`) are renamed with it: see the option in [Options](options_en.md), *Processing*.
+The XMP sidecar file of a picture (`IMG.xmp` or `IMG.CR2.xmp`) is read with the picture and wins over the XMP embedded in it, which is how the keywords and the rating of a RAW file become available. When the picture is renamed, its sidecar files (`.xmp`, `.dop`, `.pp3`... and, for a JPEG, its RAW file) are renamed with it: see the option in [Options](options_en.md), *Processing*.

@@ -112,7 +112,7 @@ Triez par nom pour que `IMG_1234.JPG` et `IMG_1234.CR2` se suivent, puis cochez 
 Les valeurs multiples sont jointes par « , ». Pour un RAW, les mots-clés et le titre donnés dans le logiciel photo sont dans le `.xmp` voisin, lu automatiquement.
 
 ### 3.6 Renommer les photos avec leurs fichiers associés
-Rien à faire si la case « Renommer aussi les fichiers associés (.xmp, .dop) d'une image renommée » (Options > Traitement) est cochée, ce qui est le cas par défaut. `IMG_0001.CR2` et `IMG_0001.CR2.xmp` partent ensemble, l'annulation (F12) remet les deux. Le journal le signale. Voir aussi §2.4.
+Rien à faire si la case « Renommer aussi les fichiers associés (.xmp, .dop) d'une image renommée » (Options > Traitement) est cochée, ce qui est le cas par défaut. `IMG_0001.CR2` et `IMG_0001.CR2.xmp` partent ensemble (et `IMG_0001.JPG` emporte son RAW `IMG_0001.CR2`), l'annulation (F12) remet les deux. Le journal le signale. Voir aussi §2.4.
 
 ### 3.7 Ranger les photos dans des dossiers année / mois
 *Date et heure* (ou EXIF si la date de prise de vue compte) : masque `yyyy'/'mm'/'fe` → `2026/10/nom.jpg`. Le `/` fait un sous-dossier, créé à côté du fichier. Cochez **Forcer les dossiers** (Options > Traitement) pour qu'ils soient créés automatiquement ; sans cela le dossier doit exister.

@@ -180,8 +180,7 @@ Les utilisateurs d'Ant Renamer 2.x ont formulé plusieurs demandes sur le forum 
 ## Limites connues
 
 - 36 balises EXIF (IFD0 et IFD Exif seulement, MakerNote non décodé) ; l'IPTC n'est lu que dans les
-  JPEG ; les fichiers XMP associés sont lus et renommés avec leur image (IMG.xmp, IMG.CR2.xmp et `.dop` de DxO ; pas les
-  autres types de fichiers associés).
+  JPEG ; les fichiers XMP associés sont lus et renommés avec leur image (IMG.xmp, IMG.CR2.xmp, `.dop` de DxO, `.pp3` de RawTherapee, `.cos` de Capture One... et les fichiers RAW d'un JPEG renommé).
 - Seulement les tags ID3 ; pas d'autres formats de tags audio.
 - Le menu court de Windows 11 demande un composant COM empaqueté et signé, non réalisé.
 - L'exécutable n'est pas signé, donc SmartScreen peut avertir au premier téléchargement.

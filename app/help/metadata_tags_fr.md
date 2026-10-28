@@ -15,7 +15,7 @@ Les noms de tags ne tiennent pas compte des majuscules. Un tag absent du fichier
 - **Dates.** Les dates EXIF, IPTC et XMP sont toutes données sous la forme `aaaa:MM:jj HH:mm:ss`. Les caractères interdits dans un nom de fichier (comme « : ») sont remplacés par « - » : `2024:05:17 14:30:05` donne `2024-05-17 14-30-05`. Le réglage « Décalage » de l'action décale tous les tags date ayant cette forme.
 - **Codes.** Des tags comme `Flash`, `Orientation` ou `MeteringMode` donnent le nombre stocké dans le fichier (voir la spécification EXIF pour la signification de chaque valeur).
 - **Caractères interdits.** Les valeurs sont nettoyées comme tout nom de fichier : `/ \ : * ? " < > |` sont remplacés.
-- **Fichiers XMP associés.** Le fichier `.xmp` à côté d'une image (`IMG.xmp` ou `IMG.CR2.xmp`) est lu avec l'image et l'emporte sur le XMP intégré : les mots-clés, le titre et la note donnés à un fichier RAW dans votre logiciel photo sont utilisables. Le fichier associé (et un fichier `.dop` de DxO) est aussi renommé avec l'image (Options, Traitement).
+- **Fichiers XMP associés.** Le fichier `.xmp` à côté d'une image (`IMG.xmp` ou `IMG.CR2.xmp`) est lu avec l'image et l'emporte sur le XMP intégré : les mots-clés, le titre et la note donnés à un fichier RAW dans votre logiciel photo sont utilisables. Le fichier associé (et les fichiers `.dop`, `.pp3`..., et le fichier RAW d'un JPEG) est aussi renommé avec l'image (Options, Traitement).
 - **Limites.** Seuls les 512 premiers Ko de chaque fichier sont examinés. L'IPTC n'est lu que dans les JPEG.
 
 ## Tags EXIF {#exif}

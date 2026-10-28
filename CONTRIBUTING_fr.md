@@ -45,7 +45,7 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 
 **Ajouter un tag EXIF, IPTC ou XMP.** Une ligne dans la table correspondante (`tagNames`, `iptcNames`, `xmpProps` dans `core/ren_exif.cpp`), la page d'aide des tags, et un test avec un fichier synthétique dans `test_core.cpp`.
 
-**Ajouter un type de fichier associé.** Ajouter l'extension à `sidecarExtensions()` dans `core/ren_exif.cpp` : la recherche des candidats, le déplacement, l'annulation et le saut des sidecar présents dans la liste en découlent.
+**Ajouter un type de fichier associé.** Ajouter l'extension à `sidecarExtensions()` (ou à `rawExtensions()` pour un format RAW) dans `core/ren_exif.cpp` : la recherche des candidats, le déplacement, l'annulation et le saut des sidecar présents dans la liste en découlent.
 
 **Ajouter un fichier source.** Ajouter le `.cpp` à `add_library(rencore ...)` (moteur) ou à `set(SRC ...)` dans `app/CMakeLists.txt` : les listes de sources sont écrites à la main, rien n'est détecté automatiquement. Un fichier oublié se voit par une erreur « undefined reference » à l'édition de liens. Si `test_panel` en a aussi besoin, l'ajouter à sa liste.
 

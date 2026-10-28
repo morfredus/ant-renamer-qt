@@ -14,7 +14,7 @@ Il lit les informations stockées à l'intérieur de certains fichiers pour cons
 - les données EXIF, IPTC et XMP des images (JPEG, et fichiers basés sur TIFF comme la plupart des fichiers RAW ; XMP aussi depuis les PNG, WebP... et depuis les fichiers `.xmp`) ;
 - la date et l'heure des fichiers.
 
-Quand une image est renommée, ses fichiers associés (`.xmp`, `.dop` de DxO) peuvent être renommés avec elle, voir les [options](options_fr.md#processing).
+Quand une image est renommée, ses fichiers associés (`.xmp`, `.dop`, `.pp3`... et le fichier RAW d'un JPEG) peuvent être renommés avec elle, voir les [options](options_fr.md#processing).
 
 Ant Renamer Qt fonctionne sous Windows et sous Linux.
 

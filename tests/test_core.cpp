@@ -322,6 +322,23 @@ int main(int argc, char** argv) {
             CHECK_EQ(nl.at(1).fileName(), u"q.dng.xmp"_s);
         }
 
+        {  // a JPEG takes its RAW along; a RAW takes its sidecar, not the JPEG
+            QTemporaryDir rd;
+            const QString r = rd.path() + u'/';
+            for (const char* f : {"c.jpg", "c.ORF", "c.xmp"}) {
+                QFile w(r + QString::fromLatin1(f));
+                if (w.open(QIODevice::WriteOnly)) {
+                    w.write("x");
+                }
+            }
+            FileList rl;
+            rl.add(r + u"c.ORF"_s);
+            rl.add(r + u"c.jpg"_s);
+            rl.at(1).rename(u"d.jpg"_s);
+            CHECK_EQ(QFile::exists(r + u"d.ORF"_s) ? u"y"_s : u"n"_s, u"y"_s);
+            CHECK_EQ(QFile::exists(r + u"d.xmp"_s) ? u"y"_s : u"n"_s, u"y"_s);
+        }
+
         options().renameSidecar = false;
         fl.at(0).rename(u"z.jpg"_s);
         CHECK_EQ(has("a.jpg.xmp") + has("z.jpg.xmp"), u"yn"_s);

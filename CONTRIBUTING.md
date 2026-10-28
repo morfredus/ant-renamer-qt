@@ -45,7 +45,7 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 
 **Add an EXIF, IPTC or XMP tag.** A line in the matching table (`tagNames`, `iptcNames`, `xmpProps` in `core/ren_exif.cpp`), the help page of the tags, and a test with a synthetic file in `test_core.cpp`.
 
-**Add a sidecar type.** Add the extension to `sidecarExtensions()` in `core/ren_exif.cpp`: finding the candidates, moving, reverting and skipping the sidecars that are in the list all follow from it.
+**Add a sidecar type.** Add the extension to `sidecarExtensions()` (or `rawExtensions()` for a RAW format) in `core/ren_exif.cpp`: finding the candidates, moving, reverting and skipping the sidecars that are in the list all follow from it.
 
 **Add a source file.** Add the `.cpp` to `add_library(rencore ...)` (engine) or to `set(SRC ...)` in `app/CMakeLists.txt`: the lists of sources are written by hand, nothing is detected automatically. A forgotten file shows up as an "undefined reference" at link time. If `test_panel` also needs it, add it to its list too.
 

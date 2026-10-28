@@ -47,7 +47,7 @@ LICENSE           GNU General Public License
 | Job (batch) | `ren::ActionList` | The ordered operations, saved as an `.arb` XML file |
 | Mask | a string like `%IptcDateCreated%_%num%%ext%` | Name template whose `%tags%` are replaced by their values |
 | Preview | `Op::Preview`, `File::preview` | The computed name, without touching the disk |
-| Sidecar | `.xmp`, `.dop` | A file that follows its picture |
+| Sidecar | `.xmp`, `.dop`, `.pp3`, `.cos`, `.acr`, `.on1`, `.thm`, `.aae` and the RAW files (`rawExtensions()`) | A file that follows its picture; a RAW does not take another RAW along |
 
 ## The engine (`core/`)
 
@@ -63,7 +63,7 @@ LICENSE           GNU General Public License
 
 **Paths.** The helpers of `ren_path.h` follow the rules of the system: on Windows `\`, `/` and `:` are separators (`isDelim`) and `\` is the one the helpers add (`kSep`); on Linux only `/` is, and `\` or `:` are ordinary characters of a name. On Windows paths may therefore mix separators: normalise them (`QDir::fromNativeSeparators`) before comparing two paths.
 
-**`File`.** `rename(newName)` computes the target path, refuses an identical name, creates missing folders when asked, then moves the file. On Windows it uses `MoveFileW` and not `QFile::rename`, because the latter refuses case-only renames (`a.txt` to `A.txt`) on case-insensitive disks and the Case operation needs them. `revert()` puts the old name back. After a successful rename, `moveSidecars` moves the sidecar files of the old name (`sidecarCandidates()`: `IMG.xmp`, `IMG.XMP`, `IMG.CR2.xmp`..., same with `.dop`) to match the new name. A problem with a sidecar never fails the picture: it is only added to the log text. `FileList::add` plugs two callbacks on each file: when a **folder** is renamed the files below follow it, and when a sidecar that is also in the list is moved by its picture, its list entry follows (`followPath`).
+**`File`.** `rename(newName)` computes the target path, refuses an identical name, creates missing folders when asked, then moves the file. On Windows it uses `MoveFileW` and not `QFile::rename`, because the latter refuses case-only renames (`a.txt` to `A.txt`) on case-insensitive disks and the Case operation needs them. `revert()` puts the old name back. After a successful rename, `moveSidecars` moves the sidecar files of the old name (`sidecarCandidates()`: `IMG.xmp`, `IMG.XMP`, `IMG.CR2.xmp`..., same with the other extensions of `sidecarExtensions()`; a RAW file gets the non-RAW ones only, so a JPEG takes its RAW but a RAW never takes the JPEG) to match the new name. A problem with a sidecar never fails the picture: it is only added to the log text. `FileList::add` plugs two callbacks on each file: when a **folder** is renamed the files below follow it, and when a sidecar that is also in the list is moved by its picture, its list entry follows (`followPath`).
 
 **The mask language** (`advancedFormat`). `%tag%` calls a *getter*, a function supplied by the caller that returns the value of the tag; a tag the getter refuses stays as text. `%%` gives `%`. With `AllowQuotes`, `"..."` protects a text; with `AllowIf`, `$if(cond,then,else)` takes `then` when `cond` expands to a non-empty text, and `$$` gives `$`. `formatDateTime` reimplements Delphi's `FormatDateTime` (`d`, `m`, `yy`, `h`, `n` for minutes, `s`, `z`, `am/pm`, `a/p`, `ampm`...); `m` is a minute after an hour or before seconds, otherwise a month, as in Delphi.
 
@@ -175,7 +175,7 @@ Job: an *Enumeration* operation with the mask `Photo %num%%ext%`; files `a.jpg` 
 2. `init()` sets the counter to the start value.
 3. For `a.jpg`: it is not a listed sidecar. `makeNewName` calls `advancedFormat("Photo %num%%ext%", ...)`; the getter returns `num` = `001` and `ext` = `.jpg`, giving `Photo 001.jpg`.
 4. `File::rename("Photo 001.jpg")` moves the file. The log text becomes "... renamed to Photo 001.jpg".
-5. With the sidecar option on, `moveSidecars` computes the candidates of `a.jpg` (`a.xmp`, `a.XMP`, `a.jpg.xmp`, `a.jpg.XMP`, same for `.dop`) and of `Photo 001.jpg`, moves those that exist, and appends "(sidecar file ... renamed to ...)" to the log text. The `a.xmp` row of the list follows (`followPath`).
+5. With the sidecar option on, `moveSidecars` computes the candidates of `a.jpg` (`a.xmp`, `a.XMP`, `a.jpg.xmp`, `a.jpg.XMP`, same for the other extensions) and of `Photo 001.jpg`, moves those that exist, and appends "(sidecar file ... renamed to ...)" to the log text. The `a.xmp` row of the list follows (`followPath`).
 6. For `a.xmp` in the list: its picture `a.jpg` is in the list, so it is skipped.
 7. The counter advances, the worker emits `progress`, the interface updates the row and the log.
 8. `onFinished` applies the end-of-process options.
