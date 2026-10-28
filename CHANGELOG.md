@@ -8,6 +8,8 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.0-beta.2] - 2026-10-29
+
 ### Added
 
 - The log is saved as a CSV by default (Save button of the Log page, and the file of the *Save log to file* option when its name ends with `.csv`): semicolon-separated, quoted, UTF-8 with a BOM so Excel and LibreOffice read the accents, one line per file with the columns Folder, Original name, New name and Reason (why it was not renamed). Lines end with CRLF (RFC 4180), also in the preview export; the file is no longer opened in text mode, which doubled the CR and showed a blank line between rows. `.log` and `.txt` stay plain text. The file dialogs add `.csv` or `.log` (according to the chosen file type) when the typed name has no `.csv`, `.log` or `.txt` extension (`withLogExtension()` in `app/appsettings.h`). New text `saveLogCsv` in `English.lng` and `French.lng`.

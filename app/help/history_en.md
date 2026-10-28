@@ -2,6 +2,9 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.1.0-beta.2 (29/10/2026)
+  - A picture takes its RAW file (ORF, CR2, CR3, NEF, ARW, RAF, DNG... 27 formats) along when it is renamed, and its sidecar files: .pp3, .cos, .acr, .on1, .thm and .aae in addition to .xmp and .dop. A RAW or a sidecar that is in the files list shows the new name of its picture in the preview.
+  - The log is saved as a CSV by default (Folder, Original name, New name, Reason; semicolon, UTF-8 with BOM, CRLF) that Excel and LibreOffice open with the accents right; .log and .txt stay plain text, and the extension is added when you type none.
 - 3.1.0-beta.1 (28/10/2026)
   - Language and interface (classic or modern, pages layout) applied as soon as the options are closed with OK, without restarting.
   - Export of the preview (CSV or text file) from the context menu of the files list; a field to type a path in "Add folders".
