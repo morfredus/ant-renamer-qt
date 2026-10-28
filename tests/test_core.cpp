@@ -361,7 +361,7 @@ int main(int argc, char** argv) {
         File& b = el.add(u"/tmp/d.txt"_s);
         const std::vector<const File*> v = {&a, &b};
         CHECK_EQ(exportPreview(v, true),
-                 u"\"Folder\";\"Name\";\"New name\"\n\"/tmp/\";\"a\"\"b.txt\";\"c.txt\"\n\"/tmp/\";\"d.txt\";\"d.txt\"\n"_s);
+                 u"\"Folder\";\"Name\";\"New name\"\r\n\"/tmp/\";\"a\"\"b.txt\";\"c.txt\"\r\n\"/tmp/\";\"d.txt\";\"d.txt\"\r\n"_s);
         CHECK_EQ(exportPreview(v, false), u"c.txt\nd.txt\n"_s);
     }
     robustnessChecks();

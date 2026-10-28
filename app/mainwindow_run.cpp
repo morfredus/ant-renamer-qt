@@ -339,7 +339,7 @@ void MainWindow::logAction(int which) {
         p = withLogExtension(p, filter == csvFilter);
         const bool csv = p.endsWith(u".csv"_s, Qt::CaseInsensitive);
         QFile f(p);
-        if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        if (f.open(QIODevice::WriteOnly)) {  // not Text: the lines already end with CRLF, Text would make it CR CR LF
             if (csv) {  // the entries shown, with their status
                 QByteArray out = "\xEF\xBB\xBF" + logCsvHeader;
                 for (const LogEntry& e : logEntries_) {

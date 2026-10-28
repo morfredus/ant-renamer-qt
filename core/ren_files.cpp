@@ -384,11 +384,11 @@ QString exportPreview(const std::vector<const File*>& files, bool csv) {
     auto q = [](QString v) { return u'"' + v.replace(u'"', u"\"\""_s) + u'"'; };
     QString out;
     if (csv) {
-        out += u"\"Folder\";\"Name\";\"New name\"\n"_s;
+        out += u"\"Folder\";\"Name\";\"New name\"\r\n"_s;  // CRLF like any CSV (RFC 4180)
     }
     for (const File* f : files) {
         const QString& to = f->preview.isEmpty() ? f->fileName() : f->preview;
-        out += csv ? q(f->fileFolder()) + u';' + q(f->fileName()) + u';' + q(to) + u'\n' : to + u'\n';
+        out += csv ? q(f->fileFolder()) + u';' + q(f->fileName()) + u';' + q(to) + u"\r\n"_s : to + u'\n';
     }
     return out;
 }
