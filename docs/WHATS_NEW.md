@@ -11,7 +11,7 @@ Current version: **3.1.0-beta.1**.
 | What is new | Since |
 |---|---|
 | **More sidecar files, and RAW files, follow their picture**: renaming `IMG.jpg` also renames `IMG.ORF` (or CR2, NEF, ARW, RAF, DNG... 27 RAW formats) and its sidecars (`.xmp`, `.dop`, and now `.pp3`, `.cos`, `.acr`, `.on1`, `.thm`, `.aae`). A RAW or a sidecar that is in the list shows the new name of its picture in the preview and keeps the case of its extension. | *(upcoming)* |
-| **The log is saved as a CSV by default**: the Save button of the Log page and the *Save log to file* option write a `.csv` that Excel and LibreOffice open with the accents right, with a Status column to filter on. `.log` and `.txt` stay available. | *(upcoming)* |
+| **The log is saved as a CSV by default**: the Save button of the Log page and the *Save log to file* option write a `.csv` that Excel and LibreOffice open with the accents right, one line per file (Folder, Original name, New name, Reason) to filter on. `.log` and `.txt` stay available. | *(upcoming)* |
 
 ## 3.1.0-beta.1
 

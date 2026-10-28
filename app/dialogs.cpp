@@ -344,11 +344,12 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(std::make_u
         browse->setToolTip(tr("Browse..."));
         browse->setMaximumWidth(30);
         connect(browse, &QPushButton::clicked, this, [this] {
+            const QString csvFilter = tr("CSV file (*.csv)");
+            QString filter;
             const QString f = QFileDialog::getSaveFileName(this, tr("Save log"), ui_->logFile->text(),
-                                                           tr("CSV file, to open in Excel or LibreOffice (*.csv)") + u";;"_s +
-                                                               tr("Text files (*.log *.txt)"));
+                                                           csvFilter + u";;"_s + tr("Text files (*.log *.txt)"), &filter);
             if (!f.isEmpty()) {
-                ui_->logFile->setText(QDir::toNativeSeparators(f));
+                ui_->logFile->setText(QDir::toNativeSeparators(withLogExtension(f, filter == csvFilter)));
             }
         });
         r3->addWidget(ui_->saveLog);

@@ -101,6 +101,7 @@ public:
     int position = 0;
     QString description() const { return description_; }
     State status() const { return status_; }
+    QString oldName() const { return oldName_; }  // full path before the last move (empty after a revert)
     void setError(const QString& d, State s) {
         description_ = d;
         status_ = s;

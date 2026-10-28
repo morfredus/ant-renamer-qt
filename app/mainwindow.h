@@ -27,6 +27,7 @@ struct Snapshot {
     QString description;
     int state = 0;
     int batchPos = 0, index = 0;
+    QString from;  // full path before a successful renaming (empty otherwise)
     QString folder, name, preview;  // the row as the worker left it: the GUI never reads a File that is being modified
 };
 Q_DECLARE_METATYPE(Snapshot)
@@ -178,7 +179,7 @@ private:
     void setBusy(bool busy);  // disables what would modify the lists, the batch or the options while a run is in progress
 
     // log
-    void addLog(const QString& text, ren::State st);
+    void addLog(const QString& text, ren::State st, const QStringList& row = {});
     void rebuildLog();
     void logAction(int which);
 
@@ -193,6 +194,7 @@ private:
     struct LogEntry {
         QString text;
         ren::State state;
+        QStringList row;  // CSV row (folder, original name, new name, reason) of a file line; empty for other lines
     };
     std::vector<LogEntry> logEntries_;
     size_t runLogStart_ = 0;  // first log entry of the current run (the auto-saved log holds this run only)
