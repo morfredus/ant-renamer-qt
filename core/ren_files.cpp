@@ -227,9 +227,18 @@ void File::moveSidecars(const QString& from, const QString& to, bool revert) {
             pairs.emplace_back(a[i], b[i]);
         }
     }
-    for (const auto& [src, dst] : pairs) {
+    for (auto [src, dst] : pairs) {
         if (src == dst || !QFileInfo::exists(src)) {
             continue;  // checked now: on Windows .xmp and .XMP are one file
+        }
+        if (!revert) {  // on Windows IMG.orf finds IMG.ORF: the sidecar keeps the extension it really has
+            const QFileInfo si(src);
+            const QStringList real = si.dir().entryList({si.fileName()}, QDir::Files);
+            const QString ext = real.isEmpty() ? QString() : QFileInfo(real.first()).suffix();
+            if (!ext.isEmpty() && ext != si.suffix()) {
+                src = si.absolutePath() + u'/' + real.first();
+                dst = dst.left(dst.size() - ext.size()) + ext;
+            }
         }
         QString err;
         const bool onlyCase = src.compare(dst, Qt::CaseInsensitive) == 0;

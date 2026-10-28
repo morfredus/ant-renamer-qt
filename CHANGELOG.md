@@ -14,6 +14,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 - Documentation and help pages (EN, FR) updated for the new sidecar types and the RAW files that follow their JPEG: User guide, recipes, presentation, architecture, contributing, TODO, Options, Actions, Metadata tags, What, Qt pages. The Croatian and Tamil help pages are not translated yet.
 - Support by e-mail for people without a GitHub account: [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr) in the About box (new text `supportByEmail` in `English.lng` and `French.lng`, other languages show the English text), in the About help pages (en, fr, hr, ta), and in README, SECURITY, CONTRIBUTING and PRESENTATION (EN, FR).
 
+### Fixed
+
+- A RAW or a sidecar that is in the files list (JPEG + ORF...) had no new name in the preview (its metadata cannot be read) and the preview numbering differed from the real renaming; it now shows the new name of its picture, with the case of its own extension (`listedPicture()` in `core/ren_actions.cpp`). On Windows, `IMG.ORF` is no longer renamed with a lower-case `.orf` (`moveSidecars`).
+
 ## [3.1.0-beta.1] - 2026-10-28
 
 ### Added

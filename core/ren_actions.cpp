@@ -279,11 +279,12 @@ void Action::setInfo(const QString& what) {
     lastError_.status = State::Info;
 }
 
-// A sidecar (.xmp, .dop) whose picture is in the list too: the picture renames it, so it must not be renamed on its own
-// (whatever their order in the list, and whether it already followed or not).
-static bool isListedSidecar(FileList& list, const File& f) {
+// The picture that renames the sidecar `f` (.xmp, .dop, RAW...) when that picture is in the list too, and the index of `f`
+// among its candidates; null if there is none. The picture renames it, so it must not be renamed on its own (whatever
+// their order in the list, and whether it already followed or not).
+static const File* listedPicture(FileList& list, const File& f, int& k) {
     if (f.isFolder() || !options().renameSidecar || options().copy) {
-        return false;
+        return nullptr;
     }
     const QString me = QDir::fromNativeSeparators(f.filePath());
     for (size_t i = 0; i < list.size(); ++i) {
@@ -291,13 +292,19 @@ static bool isListedSidecar(FileList& list, const File& f) {
         if (&g == &f || g.isFolder()) {
             continue;
         }
-        for (const QString& c : sidecarCandidates(g.filePath(), sidecarExtensions())) {
-            if (QDir::fromNativeSeparators(c).compare(me, Qt::CaseInsensitive) == 0) {
-                return true;
+        const QStringList c = sidecarCandidates(g.filePath(), sidecarExtensions());
+        for (k = 0; k < c.size(); ++k) {
+            if (QDir::fromNativeSeparators(c[k]).compare(me, Qt::CaseInsensitive) == 0) {
+                return &g;
             }
         }
     }
-    return false;
+    return nullptr;
+}
+
+static bool isListedSidecar(FileList& list, const File& f) {
+    int k;
+    return listedPicture(list, f, k) != nullptr;
 }
 
 void Action::perform(FileList& list, Op op, const Progress& progress) {
@@ -314,7 +321,7 @@ void Action::perform(FileList& list, Op op, const Progress& progress) {
         if (options().skipHidden && f.hidden) {
             continue;
         }
-        if (op == Op::Rename && isListedSidecar(list, f)) {  // renamed with its picture
+        if (op != Op::Revert && isListedSidecar(list, f)) {  // renamed with its picture (shown after the loop in a preview)
             if (progress) {
                 progress(f, position, int(i));
             }
@@ -346,6 +353,23 @@ void Action::perform(FileList& list, Op op, const Progress& progress) {
         }
         if (progress) {
             progress(f, position, int(i));
+        }
+    }
+    if (op == Op::Preview) {  // a sidecar shows the new name of its picture (its own metadata would not do for a RAW)
+        for (size_t i = 0; i < list.size(); ++i) {
+            File& f = list.at(i);
+            int k;
+            if (const File* g = listedPicture(list, f, k)) {
+                const QString pn = g->preview.isEmpty() ? g->fileName() : g->preview;
+                // IMG.CR2.xmp keeps the whole name of its picture, IMG.xmp only its base name; the extension keeps its case
+                // ponytail: a folder change of the picture is not shown
+                const QString base = k % 4 >= 2 ? pn : QFileInfo(pn).completeBaseName();
+                f.setError(QString(), State::NotRenamed);
+                f.preview = base + u'.' + QFileInfo(f.fileName()).suffix();
+                if (progress) {  // the files list was told about this file before its preview was known
+                    progress(f, position, int(i));
+                }
+            }
         }
     }
     curFile_ = nullptr;

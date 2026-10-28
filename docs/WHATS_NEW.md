@@ -6,6 +6,12 @@ the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
 Current version: **3.1.0-beta.1**.
 
+## Upcoming
+
+| What is new | Since |
+|---|---|
+| **More sidecar files, and RAW files, follow their picture**: renaming `IMG.jpg` also renames `IMG.ORF` (or CR2, NEF, ARW, RAF, DNG... 27 RAW formats) and its sidecars (`.xmp`, `.dop`, and now `.pp3`, `.cos`, `.acr`, `.on1`, `.thm`, `.aae`). A RAW or a sidecar that is in the list shows the new name of its picture in the preview and keeps the case of its extension. | *(upcoming)* |
+
 ## 3.1.0-beta.1
 
 | What is new | Since |

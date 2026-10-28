@@ -334,6 +334,13 @@ int main(int argc, char** argv) {
             FileList rl;
             rl.add(r + u"c.ORF"_s);
             rl.add(r + u"c.jpg"_s);
+            ActionList rb;
+            static_cast<ActionEnum&>(rb.add(ActionType::Enum)).mask = u"n%num%%ext%"_s;
+            rb.perform(rl, Op::Preview);  // the RAW shows the new name of its JPEG
+            CHECK_EQ(rl.at(0).preview + u" "_s + rl.at(1).preview, u"n001.ORF n001.jpg"_s);
+            rb.perform(rl, Op::Rename);
+            CHECK_EQ(rl.at(0).fileName() + u" "_s + rl.at(1).fileName(), u"n001.ORF n001.jpg"_s);
+            CHECK_EQ(QFile::exists(r + u"n001.xmp"_s) ? u"y"_s : u"n"_s, u"y"_s);
             rl.at(1).rename(u"d.jpg"_s);
             CHECK_EQ(QFile::exists(r + u"d.ORF"_s) ? u"y"_s : u"n"_s, u"y"_s);
             CHECK_EQ(QFile::exists(r + u"d.xmp"_s) ? u"y"_s : u"n"_s, u"y"_s);
