@@ -10,6 +10,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Added
 
+- The log is saved as a CSV by default (Save button of the Log page, and the file of the *Save log to file* option when its name ends with `.csv`): semicolon-separated, quoted, UTF-8 with a BOM so Excel and LibreOffice read the accents, a header and two columns Status (OK, Error, Not renamed, Info) and Message. `.log` and `.txt` stay plain text. New text `saveLogCsv` in `English.lng` and `French.lng`.
 - More sidecar files follow a renamed picture: `.pp3` (RawTherapee), `.cos` (Capture One), `.acr` (Camera Raw), `.on1` (ON1), `.thm` (camera), `.aae` (Apple), in addition to `.xmp` and `.dop`, and the RAW files (CR2, CR3, NEF, ARW, ORF, RAF, DNG, RW2, PEF, SRW... see `rawExtensions()` in `core/ren_exif.cpp`): renaming `IMG.jpg` renames `IMG.ORF` and `IMG.xmp` with it. A RAW takes its sidecars along, not the JPEG.
 - Documentation and help pages (EN, FR) updated for the new sidecar types and the RAW files that follow their JPEG: User guide, recipes, presentation, architecture, contributing, TODO, Options, Actions, Metadata tags, What, Qt pages. The Croatian and Tamil help pages are not translated yet.
 - Support by e-mail for people without a GitHub account: [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr) in the About box (new text `supportByEmail` in `English.lng` and `French.lng`, other languages show the English text), in the About help pages (en, fr, hr, ta), and in README, SECURITY, CONTRIBUTING and PRESENTATION (EN, FR).

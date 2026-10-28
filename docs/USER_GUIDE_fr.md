@@ -158,7 +158,7 @@ Sans `-a`, comportement de la 2.07 : un nom finissant par `.arb` est un job, un 
 
 Chaque fichier traité donne une ligne : **verte** (renommé, ancien → nouveau nom ; le chemin complet quand le dossier change ; fichiers associés mentionnés), **bleue** (non renommé : nom identique, tag absent, ligne vide ou fin de liste, fichier manquant), **rouge** (erreur : nom déjà pris, caractère invalide, fichier verrouillé).
 Boutons : **Filtrer** (Succès / Erreurs / Non renommés), **Vider**, **Sauver** (fichier texte), **Copier** (presse-papiers).
-L'option *Stocker le journal* (Options > Événements) l'enregistre automatiquement après chaque exécution en UTF-8, deux colonnes séparées par une tabulation (`v` succès, `x` erreur), avec une option pour ajouter à un fichier existant.
+L'option *Stocker le journal* (Options > Événements) l'enregistre automatiquement après chaque exécution en UTF-8, avec une option pour ajouter à un fichier existant. Avec un nom de fichier `.csv` (le choix par défaut de la fenêtre de fichier), c'est un CSV pour Excel ou LibreOffice, accents compris : deux colonnes, Status (OK, Error, Not renamed) et Message, prêtes à filtrer ; avec `.log` ou `.txt`, ce sont deux colonnes séparées par une tabulation (`v` succès, `x` erreur). Le bouton *Sauver* de la page Journal propose les mêmes deux formats.
 
 ## 10. Options (F10)
 

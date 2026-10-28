@@ -158,7 +158,7 @@ Without `-a`, 2.07 behaviour: a name ending in `.arb` is a batch, a folder is ad
 
 Each processed file gives one line: **green** (renamed, old → new name; the full path when the folder changes; sidecar files mentioned), **blue** (not renamed: identical name, missing tag, empty line or end of the list, file missing), **red** (error: name already used, invalid character, file locked).
 Buttons: **Filter** (Successes / Errors / Not renamed), **Clear**, **Save** (text file), **Copy** (clipboard).
-The *Save log to file* option (Options > Events) saves it automatically after each run in UTF-8, two tab-separated columns (`v` success, `x` error), with an option to append to an existing file.
+The *Save log to file* option (Options > Events) saves it automatically after each run in UTF-8, with an option to append to an existing file. With a `.csv` file name (the default choice in the file dialog) it is a CSV for Excel or LibreOffice, accents included: two columns, Status (OK, Error, Not renamed) and Message, ready to filter; with `.log` or `.txt` it is two tab-separated columns (`v` success, `x` error). The *Save* button of the Log page offers the same two formats.
 
 ## 10. Options (F10)
 

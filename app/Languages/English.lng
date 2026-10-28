@@ -523,6 +523,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="exportPreviewMenu" Value="Export preview..."/>
     <Item Name="exportPreview" Value="Export preview"/>
     <Item Name="exportPreviewCsv" Value="CSV file, current and new names (*.csv)"/>
+    <Item Name="saveLogCsv" Value="CSV file, to open in Excel or LibreOffice (*.csv)"/>
     <Item Name="exportPreviewTxt" Value="Text file, new names only (*.txt)"/>
     <Item Name="typeFolderPath" Value="Or type the path of a folder"/>
     <Item Name="webSiteQt" Value="Ant Renamer Qt web site: "/>

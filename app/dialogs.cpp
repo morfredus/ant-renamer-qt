@@ -344,8 +344,9 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(std::make_u
         browse->setToolTip(tr("Browse..."));
         browse->setMaximumWidth(30);
         connect(browse, &QPushButton::clicked, this, [this] {
-            const QString f =
-                QFileDialog::getSaveFileName(this, tr("Save log"), ui_->logFile->text(), tr("Text files (*.log *.txt)"));
+            const QString f = QFileDialog::getSaveFileName(this, tr("Save log"), ui_->logFile->text(),
+                                                           tr("CSV file, to open in Excel or LibreOffice (*.csv)") + u";;"_s +
+                                                               tr("Text files (*.log *.txt)"));
             if (!f.isEmpty()) {
                 ui_->logFile->setText(QDir::toNativeSeparators(f));
             }

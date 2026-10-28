@@ -12,7 +12,7 @@ Voici ses commandes :
 
 - ![Filtrer](img/filter.png) Le bouton "Filtrer" fera apparaître un menu permettant de spécifier quels types d'éléments vous voulez voir dans le journal : "Succès", "Erreurs" et "Non renommés" (voir paragraphe suivant). Le filtre ne fait que masquer des lignes, rien n'est perdu : cochez à nouveau l'entrée pour les revoir.
 - ![Vider](img/logclear.png) Le bouton "Vider" videra le journal.
-- ![Sauver](img/save.png) Le bouton "Sauver..." ouvrira une fenêtre standard de sélection de fichier, vous permettant de choisir où sauver le contenu du journal.
+- ![Sauver](img/save.png) Le bouton "Sauver..." ouvrira une fenêtre standard de sélection de fichier, vous permettant de choisir où sauver le contenu du journal, par défaut en fichier CSV (`.csv`, séparateur point-virgule, UTF-8) qu'Excel ou LibreOffice ouvrent avec les accents corrects et qu'il est facile de filtrer sur la colonne Status ; un fichier `.log` ou `.txt` est du texte simple.
 - ![Copier](img/copy.png) Le bouton "Copier" copiera le contenu du journal dans le presse-papiers.
 
 Lorsqu'un fichier est renommé avec succès, une ligne est ajoutée au journal, spécifiant l'ancien et le nouveau nom du fichier. Elle est écrite en vert. Si le fichier a changé de dossier, le nouveau chemin complet est affiché. Quand une image emmène ses fichiers associés avec elle, la ligne les mentionne.
