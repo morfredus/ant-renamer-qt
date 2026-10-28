@@ -15,10 +15,10 @@ bool setPortable(bool on);
 
 struct AppOptions {
     // Display
-    bool realtime = true;        // update the list while renaming
-    bool resizeCols = false;     // files list columns share the width
+    bool realtime = true;     // update the list while renaming
+    bool resizeCols = false;  // files list columns share the width
     bool fileIcons = true;
-    bool forceFont = false;      // use `fontName`/`fontSize` for the whole program
+    bool forceFont = false;  // use `fontName`/`fontSize` for the whole program
     QString fontName;
     int fontSize = 9;
     int iconSet = kDefaultIconSet;  // 0 Scrows, 1 Windows XP, 2 Windows XP Large, 3 Modern (default)
@@ -26,19 +26,20 @@ struct AppOptions {
     bool autoComplete = false;
     // Files & folders
     bool dragNoAsk = false;
-    int pageLayout = 0;          // modern layout: 0 tabs, 1 single screen in bands, 2 single screen in columns
-    bool newUi = false;          // modern layout (taken into account at the next start)
-    bool checkUpdates = false;   // look for a new release on GitHub at start (once a day)
-    QString lastUpdateCheck;     // yyyy-MM-dd of the last successful check
-    int theme = 0;               // 0 system, 1 light, 2 dark (see theme.h)
-    int undoButton = 0;          // Undo button: 0 undoes the last pass, 1 opens the history
-    bool naturalSort = true;     // files list sort: natural (2 < 10) instead of alphabetical
-    bool addHidden = false;      // folder contents: include hidden and system files (desktop.ini, .git...)
-    bool launchFile = false;     // double click opens the file
+    int pageLayout = 0;             // modern layout: 0 tabs, 1 single screen in bands, 2 single screen in columns
+    bool newUi = false;             // modern layout (taken into account at the next start)
+    bool checkUpdates = false;      // look for a new release on GitHub at start (once a day)
+    bool checkPrereleases = false;  // the new-version check also announces beta and rc (otherwise final versions only)
+    QString lastUpdateCheck;        // yyyy-MM-dd of the last successful check
+    int theme = 0;                  // 0 system, 1 light, 2 dark (see theme.h)
+    int undoButton = 0;             // Undo button: 0 undoes the last pass, 1 opens the history
+    bool naturalSort = true;        // files list sort: natural (2 < 10) instead of alphabetical
+    bool addHidden = false;         // folder contents: include hidden and system files (desktop.ini, .git...)
+    bool launchFile = false;        // double click opens the file
     bool addFiles = true, addFolders = false, recursive = true;  // last "add folders" choices
     // Processing
     bool forceDir = true, detectAbsDir = true, folderExt = false, copy = false, genLog = true;
-    bool renameSidecar = true;   // a renamed picture takes its sidecars (.xmp, .dop) along
+    bool renameSidecar = true;  // a renamed picture takes its sidecars (.xmp, .dop) along
     bool dstRelativeToFile = true;
     // Events: tab index (0 files, 1 actions, 2 log) or -1 for "do nothing"
     int startSwitch = -1, finishSwitch = -1;

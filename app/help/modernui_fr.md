@@ -6,10 +6,10 @@ Ce chapitre est propre à Ant Renamer Qt. En plus de la disposition classique d�
 
 Ouvrez la [fenêtre des options](options_fr.md#display), page *Affichage* :
 
-- **Disposition moderne de l'interface (prise en compte au prochain démarrage)** : affiche la disposition moderne à la place de la classique.
+- **Disposition moderne de l'interface** : affiche la disposition moderne à la place de la classique.
 - **Disposition des pages (interface moderne)** : la façon dont les trois pages (Fichiers, Opérations, Journal) sont arrangées : *Onglets*, *Écran unique, en bandes* ou *Écran unique, en colonnes*, voir [ci-dessous](#layouts). Ce choix n'est disponible que si la disposition moderne est activée.
 
-Les changements sont pris en compte au prochain démarrage du programme. La disposition moderne garde sa propre taille de fenêtre, ses largeurs de colonnes et la position de ses séparateurs : la disposition classique n'est pas affectée, vous pouvez y revenir à tout moment.
+Les changements sont pris en compte dès que vous cliquez sur "OK" dans les options : la fenêtre est reconstruite, et vos fichiers, votre batch et votre journal sont conservés. La disposition moderne garde sa propre taille de fenêtre, ses largeurs de colonnes et la position de ses séparateurs : la disposition classique n'est pas affectée, vous pouvez y revenir à tout moment.
 
 ## Barre principale et barres des pages {#bar}
 

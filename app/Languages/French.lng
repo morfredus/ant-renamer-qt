@@ -3,10 +3,10 @@
 Icon=Qk32AAAAAAAAAHYAAAAoAAAAEAAAABAAAAABAAQAAAAAAIAAAAATCwAAEwsAABAAAAAQAAAAAAAAAGYAAACqAAAA/2VlAAAAqgAAAP0AZWX/AKqqqgDMzMwA7u7uAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAKqqqqqqqqqqAAAAAAAAAAABERF3d0REUAEiIoiIVVVgASIiiIhVVWABIiKIiFVVYAEiIoiIVVVgASIiiIhVVWABIiKIiFVVYAEiIoiIVVVgASIiiIhVVWABIiKIiFVVYAIzM5mZZmZgAAAAAAAAAACqqqqqqqqqqqqqqqqqqqqq
 Name=French
 LocalName=Français
-Version=2.13
+Version=3.1
 VersionFormat=2.13
-Comments=
-Authors=Antoine Potten|antrenamer-contact@antp.be
+Comments=Textes d'origine d'Antoine Potten, complétés par Frédéric Biron pour Ant Renamer Qt.
+Authors=Antoine Potten|antrenamer-contact@antp.be|Frédéric Biron (Ant Renamer Qt)
 -->
 <Application>
   <MainForm>
@@ -440,7 +440,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="theNewLanguageIs" Value="La nouvelle langue sera utilisée au prochain démarrage du programme."/>
     <Item Name="history" Value="Historique"/>
     <Item Name="naturalSortInFiles" Value="Tri naturel dans la liste des fichiers (2 avant 10) au lieu du tri alphabétique"/>
-    <Item Name="modernInterfaceLayoutUsed" Value="Disposition moderne de l'interface (prise en compte au prochain démarrage)"/>
+    <Item Name="modernInterfaceLayoutUsed" Value="Disposition moderne de l'interface"/>
     <Item Name="theNewInterfaceIs" Value="La nouvelle interface sera utilisée au prochain démarrage du programme."/>
     <Item Name="modify" Value="Modifier"/>
     <Item Name="pagesLayoutModernInterface" Value="Disposition des pages (interface moderne) :"/>
@@ -485,6 +485,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="thisProgramIsFree" Value="Ce programme est un logiciel libre ; vous pouvez le redistribuer et/ou le modifier selon les termes de la Licence Publique Générale GNU telle que publiée par la Free Software Foundation ; soit la version 2 de la licence, soit (à votre convenance) toute version ultérieure. Ce programme est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE GARANTIE, sans même la garantie implicite de COMMERCIALISATION ou d'ADÉQUATION À UN USAGE PARTICULIER. Consultez la &lt;a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'&gt;Licence Publique Générale GNU&lt;/a&gt; pour plus de détails."/>
     <Item Name="updatesHeader" Value="Mises à jour"/>
     <Item Name="updatesCheckAtStart" Value="Rechercher une nouvelle version au démarrage (une fois par jour, interroge GitHub ; rien d'autre n'est envoyé)"/>
+    <Item Name="updatesIncludePre" Value="Me signaler aussi les versions bêta et release candidates (sinon, versions finales seulement)"/>
     <Item Name="updatesCheckButton" Value="Rechercher une mise à jour"/>
     <Item Name="updatesTitle" Value="Recherche de mise à jour"/>
     <Item Name="updatesError" Value="Impossible de rechercher une mise à jour : %1"/>
@@ -514,5 +515,12 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="versionNumber" Value="Version %1"/>
     <Item Name="helpBack" Value="Retour"/>
     <Item Name="helpForward" Value="Suivant"/>
+    <Item Name="exportPreviewMenu" Value="Exporter l'aperçu..."/>
+    <Item Name="exportPreview" Value="Exporter l'aperçu"/>
+    <Item Name="exportPreviewCsv" Value="Fichier CSV, noms actuels et nouveaux (*.csv)"/>
+    <Item Name="exportPreviewTxt" Value="Fichier texte, nouveaux noms seulement (*.txt)"/>
+    <Item Name="typeFolderPath" Value="Ou saisir le chemin d'un dossier"/>
+    <Item Name="webSiteQt" Value="Site web d'Ant Renamer Qt : "/>
+    <Item Name="webSiteOriginal" Value="Site web du programme d'origine (Antoine Potten) : "/>
   </QtPort>
 </Application>

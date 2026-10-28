@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Génère un dossier de test pour Ant Renamer Qt.
+"""Generates a test folder for Ant Renamer Qt.
 
-Usage : make_test_folder.py [DESTINATION]   (défaut : ../ant-renamer-test-data)
+Usage: make_test_folder.py [DESTINATION]   (default: ../ant-renamer-test-data)
 
-Contenu : images avec EXIF (JPEG/TIFF/PNG/WebP), audio avec tags ID3, documents,
-fichiers sans extension, noms accentués/espaces, fichiers et dossiers cachés,
-sous-dossiers imbriqués, et un dossier de 250 fichiers.
-Nécessite Pillow et exiftool.
+Content: pictures with EXIF (JPEG/TIFF/PNG/WebP), audio with ID3 tags, documents,
+files without extension, accented names and spaces, hidden files and folders,
+nested subfolders, and a folder of 250 files.
+Names and texts of the test files are in French on purpose (accents).
+Requires Pillow and exiftool.
 """
 import math
 import random
@@ -84,18 +85,18 @@ def photo(rel, n, fmt="JPEG"):
 # ---------- 01 Photos (EXIF) ----------
 for i in range(1, 9):
     photo(f"01_photos_exif/IMG_{1000 + i}.jpg", i)
-photo("01_photos_exif/DSC_0042.JPG", 3)                  # extension en majuscules
-photo("01_photos_exif/Vacances été 2024 (1).jpeg", 4)    # accents, espaces, parenthèses
+photo("01_photos_exif/DSC_0042.JPG", 3)                  # uppercase extension
+photo("01_photos_exif/Vacances été 2024 (1).jpeg", 4)    # accents, spaces, parentheses
 for i, ext in enumerate(["tif", "png", "webp"], 20):
     fmt = {"tif": "TIFF", "png": "PNG", "webp": "WEBP"}[ext]
     p = image(f"01_photos_exif/photo_{ext}.{ext}", (320, 240), (30 * i % 255, 120, 200), fmt)
     exif(p, Make="Canon", Model="Canon EOS 5D", DateTimeOriginal="2023:07:14 09:05:00")
-# JPEG sans EXIF
+# JPEG without EXIF
 image("01_photos_exif/sans_exif.jpg", (320, 240), (60, 60, 60), "JPEG")
 Image.new("RGB", (64, 64), "red").save(dest / "01_photos_exif/icone.gif")
 Image.new("RGB", (64, 64), "blue").save(dest / "01_photos_exif/fond.bmp")
 
-# ---------- 02 Audio (ID3 / métadonnées) ----------
+# ---------- 02 Audio (ID3 / metadata) ----------
 def wav(rel, secs=1, freq=440):
     p = dest / rel
     p.parent.mkdir(parents=True, exist_ok=True)
@@ -120,7 +121,7 @@ def mp3(rel, title, artist, album, track, year):
     frames = (frame("TIT2", title) + frame("TPE1", artist) + frame("TALB", album)
               + frame("TRCK", str(track)) + frame("TYER", str(year)) + frame("TCON", "Rock"))
     tag = b"ID3\x04\x00\x00" + synsyncsafe(len(frames)) + frames
-    # trame MPEG1 L3 128 kbps 44,1 kHz (417 octets) répétée
+    # MPEG1 L3 frame, 128 kbps 44.1 kHz (417 bytes), repeated
     mpeg = (b"\xff\xfb\x90\x00" + b"\x00" * 413) * 10
     put(rel, tag + mpeg)
 
@@ -151,13 +152,13 @@ exif(pdf, Title="Rapport de test", Author="Frédéric Test", Subject="Essai")
 with zipfile.ZipFile(dest / "03_documents/archive.zip", "w") as z:
     z.writestr("a.txt", "a")
     z.writestr("dossier/b.txt", "b")
-# faux docx / odt (zip avec métadonnées)
+# fake docx / odt (zip with metadata)
 for name, mime in [("lettre.docx", "docx"), ("tableau.xlsx", "xlsx"), ("texte.odt", "odt")]:
     with zipfile.ZipFile(dest / "03_documents" / name, "w") as z:
         z.writestr("[Content_Types].xml", "<Types/>")
         z.writestr("docProps/core.xml", "<cp:coreProperties/>")
 
-# ---------- 04 Cas limites de noms ----------
+# ---------- 04 Edge cases in names ----------
 put("04_noms_speciaux/sans_extension", "pas d'extension\n")
 put("04_noms_speciaux/Makefile", "all:\n\t@echo ok\n")
 put("04_noms_speciaux/fichier avec  deux  espaces.txt", "x")
@@ -171,16 +172,16 @@ put("04_noms_speciaux/emoji_😀.txt", "emoji")
 put("04_noms_speciaux/a&b #1 [test] {x} ~tilde $dollar %pct.txt", "symboles")
 put("04_noms_speciaux/" + "n" * 200 + ".txt", "nom long")
 put("04_noms_speciaux/doublon.txt", "x")
-put("04_noms_speciaux/Doublon.txt", "x")                  # collision de casse (Linux)
+put("04_noms_speciaux/Doublon.txt", "x")                  # case collision (Linux)
 put("04_noms_speciaux/fichier vide.txt", b"")
 put("04_noms_speciaux/001.txt", "x")
 put("04_noms_speciaux/002.txt", "x")
 put("04_noms_speciaux/010.txt", "x")
 put("04_noms_speciaux/2.txt", "x")
 put("04_noms_speciaux/10.txt", "x")
-put("04_noms_speciaux/1.txt", "x")                         # tri naturel vs alphabétique
+put("04_noms_speciaux/1.txt", "x")                         # natural vs alphabetical sort
 
-# ---------- 05 Cachés ----------
+# ---------- 05 Hidden ----------
 put("05_caches/.fichier_cache.txt", "caché\n")
 put("05_caches/.gitignore", "*.tmp\n")
 put("05_caches/.hidden_photo.jpg", b"")
@@ -200,7 +201,7 @@ put(".dossier_racine_cache/fichier.txt", "x\n")
 put("Thumbs.db", b"\x00" * 16)
 put(".DS_Store", b"\x00" * 16)
 
-# ---------- 06 Arborescence imbriquée ----------
+# ---------- 06 Nested tree ----------
 for path in ["a/b/c/d", "a/b/autre", "a/x", "vide_mais_present"]:
     (dest / "06_arborescence" / path).mkdir(parents=True, exist_ok=True)
 put("06_arborescence/racine.txt", "x")
@@ -214,7 +215,7 @@ put("06_arborescence/Dossier Avec Espaces/fichier un.txt", "x")
 put("06_arborescence/Dossier Avec Espaces/fichier deux.txt", "x")
 put("06_arborescence/Été 2024/photo.txt", "x")
 
-# ---------- 07 Beaucoup de fichiers (250) ----------
+# ---------- 07 Many files (250) ----------
 exts = ["txt", "log", "dat", "jpg", "png", "mp3", "csv", "md"]
 (dest / "07_beaucoup").mkdir(parents=True)
 for i in range(1, 251):
@@ -226,15 +227,15 @@ for i in range(1, 251):
     else:
         put(f"07_beaucoup/fichier_{i:03d}.{ext}", f"contenu {i}\n")
 for i in range(1, 11):
-    put(f"07_beaucoup/.cache_{i:02d}.tmp", "caché\n")      # 10 fichiers cachés en plus
+    put(f"07_beaucoup/.cache_{i:02d}.tmp", "caché\n")      # 10 more hidden files
 for i in range(1, 6):
     put(f"07_beaucoup/sous_dossier_{i}/element_{i:02d}.txt", "x")
 
-# ---------- Fichiers à la racine ----------
+# ---------- Files at the root ----------
 put("readme_racine.txt", "Dossier de test pour Ant Renamer Qt.\n")
 photo("photo_racine.jpg", 2)
 
-# ---------- Dates de modification variées ----------
+# ---------- Varied modification dates ----------
 import os
 import time
 base = time.mktime((2020, 1, 1, 12, 0, 0, 0, 0, -1))

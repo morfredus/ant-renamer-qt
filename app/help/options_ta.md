@@ -1,6 +1,6 @@
 # Options window
 
-This window is accessible through the ![Options](img/options.png) "Options" icon (F10) of the main window. It is divided in five pages. The changes are applied when you click "OK" (and are lost if you click "Cancel"); a few of them are only used the next time the program starts, as noted below.
+This window is accessible through the ![Options](img/options.png) "Options" icon (F10) of the main window. It is divided in five pages. The changes are applied when you click "OK" (and are lost if you click "Cancel"); the language and the interface layout are applied at once: the window is rebuilt and your files, batch and log are kept.
 
 ## Display {#display}
 
@@ -9,14 +9,15 @@ This window is accessible through the ![Options](img/options.png) "Options" icon
 - **Real-time update when renaming files** : The lists contents are updated each time a file is renamed. It is quite slower if you rename thousands of files or on a slow machine.
 - **Auto-resize columns of Files list** : When enabled, the program will always try to fit the columns of Files list (main window) in the width of the window.
 - **Show icons in files list, based on file extension** : Displays icons on the left of the items of the Files list. It may slow down a little the scrolling of the list, and since each ".exe" file has its own icon it may be quite slow for files coming from a network drive for example.
-- **Modern interface layout (used at the next start)** : (Ant Renamer Qt) Shows the modern layout of the main window instead of the classic one. See [modern interface layout](modernui_ta.md).
-- **Pages layout (modern interface)** : (Ant Renamer Qt) Only available with the modern layout: *Tabs*, *Single screen, in bands* or *Single screen, in columns*. Used the next time the program starts. See [pages layout](modernui_ta.md#layouts).
+- **Modern interface layout** : (Ant Renamer Qt) Shows the modern layout of the main window instead of the classic one. See [modern interface layout](modernui_ta.md).
+- **Pages layout (modern interface)** : (Ant Renamer Qt) Only available with the modern layout: *Tabs*, *Single screen, in bands* or *Single screen, in columns*. See [pages layout](modernui_ta.md#layouts).
 - **Force the following font for controls that have to display special characters** : Replaces the font of the program by the font and the size chosen below it. Useful if some characters (Asian languages, symbols) are displayed as squares: [click here for more information](fonts_ta.md). By default the font of your system is used.
 - **Number of values to keep in history** : The drop-down lists of the actions remember the last text strings that you used. You can specify here how much strings have to be kept (1 to 200).
 - **Autocomplete with history values while typing** : When you type the text, if it has the same beginning than an existing item of the history this item will be copied in the field (the part you did not type is selected, so you can continue to type to overwrite it).
 - **Theme** : (Ant Renamer Qt) "Follow the system" (default), "Light" or "Dark". Light and dark use the same look on every system; this is useful where the system theme is not detected (an AppImage, for instance). The "Light / dark" button of the toolbar changes it too.
 - **Look for a new version at start** : (Ant Renamer Qt) Off by default. When it is on, the program asks GitHub once a day, a few seconds after it starts, for the list of published releases, and offers to open the download page if a newer one exists (a final version is not told about release candidates). Nothing else is sent: no file name, no setting, only an ordinary web request that shows the program name and version. The "Check for updates" button of the [About window](about_ta.md) does the same on demand. If GitHub cannot be reached (no network, firewall, GitHub down), nothing happens: no message at start, no delay, and the program works as usual; the check is simply tried again at the next start.
 - **Icon set** : Icon set to use for toolbars. Four sets are included: "Scrows", "Windows XP", "Windows XP Large" (the same as the second one, with larger icons) and "Modern" (Ant Renamer Qt, the default): line icons drawn by the program, sharp on high-resolution screens, which follow the light or dark theme of your system. The set is applied immediately.
+- **Portable mode: keep the settings in the program folder** : By default the settings are stored in your user profile (`%APPDATA%` on Windows, `~/.local/share/AntRenamerQt` on Linux). With this option they are stored in a file `antrenamer-qt.ini` next to the program, which makes it possible to carry the program and its settings on a USB drive. Unchecking the option moves them back to your profile. The file can also be created by hand (an empty file is enough).
 
 ### The toolbar icons {#icons}
 
@@ -57,6 +58,5 @@ The "Icon set" list offers four sets: "Scrows", "Windows XP", "Windows XP Large"
 
 ![Language page of the options](img/options_language_en.png)
 
-- In this page you can select the language to use in the user interface. The list shows the language files (the folder "Languages" of the program); the name of the translator and the version of the file are displayed under the list. The new language is used the next time the program starts.
+- In this page you can select the language to use in the user interface. The list shows the language files (the folder "Languages" of the program); the name of the translator and the version of the file are displayed under the list. The new language is used as soon as you click "OK", without restarting.
 - The help exists in English, French, Croatian and Tamil. For the other languages of the interface, the help is shown in English.
-- **Portable mode: keep the settings in the program folder** : By default the settings are stored in your user profile (`%APPDATA%` on Windows, `~/.local/share/AntRenamerQt` on Linux). With this option they are stored in a file `antrenamer-qt.ini` next to the program, which makes it possible to carry the program and its settings on a USB drive. Unchecking the option moves them back to your profile. The file can also be created by hand (an empty file is enough).

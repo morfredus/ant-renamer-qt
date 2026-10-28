@@ -20,19 +20,22 @@ tests/            test_core (moteur ; inclut id3_check.h, robust_check.h, update
 cmake/toolchains/ Toolchain de compilation croisée ARM64
 scripts/          windows/ (compilation MinGW, zip et installeur) et linux/ (.deb, AppImage, .desktop)
 installer/        Script Inno Setup de l'installeur Windows
+packaging/        flatpak/ (manifeste Flathub, fichier AppStream, icône)
 docs/             Guides, présentation, notes de version
 .github/          Workflow d'intégration continue, Dependabot, modèles de tickets
 CMakeLists.txt, CMakePresets.json, VERSION   Fichiers de compilation et version, source unique
+.clang-format, .editorconfig   Style du code (voir CONTRIBUTING_fr.md)
 LICENSE           Licence publique générale GNU
 ```
 
 | Dans `app/` | Compilé ? |
 |---|---|
 | `*.cpp`, `*.h` | Oui |
-| `resources.qrc` : `renamer.ico`, les trois jeux de bitmaps de la barre d'outils (le quatrième, « Modern », est dessiné dans le code), `ant.bmp`, `default.xml` | Embarqués dans l'exécutable par `rcc` de Qt |
+| `resources.qrc` : `renamer.ico`, les trois jeux de bitmaps de la barre d'outils (le quatrième, « Modern », est dessiné dans le code), `antrenamer-qt.png` (icône de la boîte À propos), `default.xml` | Embarqués dans l'exécutable par `rcc` de Qt |
 | `app.rc`, `app.manifest` (icône, chemins longs, UTF-8, DPI par écran) | Windows seulement, compilés avec `windres` |
 | `Languages/`, `help/` | Non compilés : copiés à côté de l'exécutable (et installés par les paquets) |
-| `antrenamer-qt.png` | Non compilé : icône Linux, utilisée par les scripts de packaging |
+| `antrenamer-qt.svg`, `antrenamer-qt.png` (256 px) | Non compilés : original de l'icône et son PNG (le PNG et `renamer.ico` sont tirés du SVG) |
+| `icons/hicolor/` | Non compilé : le SVG et les PNG de 16, 24, 32, 48, 64, 128 et 256 px dans l'arborescence du thème d'icônes freedesktop, installés par le paquet `.deb` dans `/usr/share/icons/hicolor` (tirés du SVG avec `rsvg-convert -w <taille> -h <taille>`) |
 
 ## Vocabulaire
 
@@ -107,7 +110,7 @@ Une opération peut signaler un problème sans échouer (`setInfo`) : le fichier
 **Fichier de job (`.arb`).** XML écrit avec `QXmlStreamWriter` :
 
 ```xml
-<AntRenamer Version="3.0.0" Date="2026-10-23">
+<AntRenamer Version="3.1.0-beta.1" Date="2026-10-27">
  <Batch>
   <StrRepl Search="old" Repl="new" AllOccurences="True" CaseSensitive="True" .../>
   <Enum Mask="File %num%%ext%" Start="1" Digits="3" Incr="1" Restart="False" SharePairs="False"/>
@@ -126,13 +129,14 @@ Les réglages sont des attributs (`True` / `False`), les textes longs (table de 
 | Fichier | Rôle |
 |---|---|
 | `main.cpp` | Point d'entrée : instance unique, langue, `--install-shell`, fenêtre principale |
-| `mainwindow.h/.cpp` | Fenêtre principale : liste des fichiers, job, aperçu, démarrage, journal |
+| `mainwindow.h`, `mainwindow.cpp`, `mainwindow_files.cpp`, `mainwindow_batch.cpp`, `mainwindow_run.cpp`, `mainwindow_internal.h` | Fenêtre principale, une seule classe découpée par sujet : construction et réglages / liste des fichiers / lot / lancement, journal et ligne de commande ; le `.h` partagé par les quatre `.cpp` contient leurs fonctions d'aide |
 | `actionpanel.h/.cpp` | La page « Opérations » : les 14 types et leurs réglages |
 | `dialogs.h/.cpp` | Ajouter des dossiers, glisser-déposer, Options, À propos |
 | `appsettings.h/.cpp` | Options du programme dans un fichier INI |
 | `lngtranslator.h/.cpp` | Traduction avec les fichiers `.lng` de l'original |
 | `helpwindow.h/.cpp` | Visionneuse d'aide intégrée (Markdown) |
 | `icons.h/.cpp` | Icônes de la barre d'outils découpées dans les jeux de bitmaps |
+| `devaids.h/.cpp` | Aides de développement pilotées par les variables d'environnement `ANTREN_*` (captures d'écran, textes non traduits) ; appelées depuis `main` |
 | `shellmenu.h/.cpp` | Entrée du menu contextuel de l'Explorateur Windows (registre, Windows seulement) |
 | `theme.h/.cpp` | Thème de couleurs (système, clair, sombre) |
 | `updatecheck.h/.cpp` | `UpdateChecker` : demande à GitHub la liste des releases (Qt Network), facultatif |
@@ -143,7 +147,7 @@ Les réglages sont des attributs (`True` / `False`), les textes longs (table de 
 
 **Réglages.** `appSettings()` est un `QSettings` au format INI : à côté de l'exécutable si `antrenamer-qt.ini` existe (portable), sinon dans le profil utilisateur. `AppOptions` contient toutes les options de la boîte Options avec les valeurs par défaut de l'original ; une macro `KEYS(...)` liste chaque champ une seule fois pour générer `load()` et `save()` (clés `options/nom`), et `applyToCore()` copie les options de traitement vers `ren::options()`. Autres clés : `window/*` (géométrie, colonnes, séparateurs, par disposition), `last/*` (dernières valeurs des réglages d'opérations), `history/*`, `mru/batch`, `view/changedOnly`, `log/*`.
 
-**Fenêtre principale.** Trois pages : Fichiers, Opérations, Journal. Selon une option : onglets (classique) ou disposition moderne en un seul écran (bandes ou colonnes). `files_` (`FileList`) et `batch_` (`ActionList`) sont les vraies données ; les vues (`fileView_`, `batchView_`, des `QTreeWidget` qui acceptent le glisser-déposer) n'en sont qu'un miroir : chaque ligne porte un pointeur vers son `File` ou son `Action`, et `updateItem` recopie l'état d'un fichier dans les colonnes (et masque la ligne quand « Seulement modifiés » est actif et que l'aperçu égale le nom).
+**Fenêtre principale.** Trois pages : Fichiers, Opérations, Journal. Selon une option : onglets (classique) ou disposition moderne en un seul écran (bandes ou colonnes). `files_` (`FileList`) et `batch_` (`ActionList`) sont les vraies données ; les vues (`fileView_`, `batchView_`, des `QTreeWidget` qui acceptent le glisser-déposer) n'en sont qu'un miroir : chaque ligne porte l'`id()` de son `File` ou de son `Action` (jamais un pointeur : `FileList::byId` et `ActionList::byId` renvoient `nullptr` pour un objet retiré), et `updateItem` recopie l'état d'un fichier dans les colonnes (et masque la ligne quand « Seulement modifiés » est actif et que l'aperçu égale le nom).
 
 **Le panneau d'opérations** (`ActionPanel`) possède **une** action en cours de configuration. La liste de gauche contient les 14 types (l'index de la ligne **est** la valeur de `ActionType`), avec une page de contrôles par type. Chaque contrôle est créé par une aide (`combo`, `spin`, `check`, `radios`) qui l'enregistre avec une clé, un lecteur et un écrivain, ce qui sert à sauvegarder et restaurer les dernières valeurs. Deux fonctions sont inverses l'une de l'autre : `makeAction()` lit les contrôles et construit l'`Action` ; `setFromAction()` charge une action existante dans les contrôles (pour modifier une action du job). `test_panel` vérifie qu'elles sont réciproques pour chaque champ et chaque type : **ajouter un champ à une action sans mettre à jour `setFromAction` le fait échouer**.
 
@@ -153,7 +157,7 @@ Les réglages sont des attributs (`True` / `False`), les textes longs (table de 
 1. Vérifie que rien ne tourne déjà (`worker_`), qu'il y a des fichiers et une action.
 2. Journalise, numérote fichiers et actions. Avec un job vide, l'action configurée à l'écran est exécutée puis oubliée.
 3. Crée un **`RenWorker`** (un `QThread`) et le démarre : le travail se fait **hors du fil de l'interface**, la fenêtre reste réactive et Arrêter fonctionne.
-4. Le worker appelle `ActionList::perform` et, après chaque fichier, émet `progress(Snapshot)`. Un `Snapshot` est une **copie** (pointeur, description, état, positions) : l'interface ne lit jamais un `File` que l'autre fil est en train de modifier. Il est transmis par une connexion en file d'attente.
+4. Le worker appelle `ActionList::perform` et, après chaque fichier, émet `progress(Snapshot)`. Un `Snapshot` est une **copie** (id du `File`, description, état, positions) : l'interface ne lit jamais un `File` que l'autre fil est en train de modifier. Il est transmis par une connexion en file d'attente.
 5. `onProgress` met à jour la ligne (option « temps réel »), le journal, la barre de progression.
 6. `onFinished` vide les signaux en attente, journalise, applique les options de fin de traitement (changer de page, vider la liste ou le job, enregistrer le journal dans un fichier avec BOM UTF-8), réactive les boutons et quitte si `-x` a été donné.
 

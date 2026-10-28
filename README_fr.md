@@ -1,6 +1,6 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.0.0-blue)
+![version](https://img.shields.io/badge/version-3.1.0--beta.1-blue)
 
 Portage C++/Qt 6 d'[Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (Delphi 7 à l'origine,
 GPL v2 ou ultérieure). Renommage de fichiers par lots : remplacer, insérer, déplacer, supprimer, énumérer, changer
@@ -10,9 +10,22 @@ la casse, expressions régulières, noms depuis une liste, date du fichier, tags
 développé en parallèle de l'Ant Renamer d'origine et a son propre exécutable, son propre dossier d'installation,
 ses propres réglages et ses propres noms de paquets : les deux peuvent être installés côte à côte sans confusion.
 
+![Ant Renamer Qt, interface moderne, thème clair](docs/screenshots/French/modern-ui-light-single-screen-bands.png)
+
+D'autres captures (interface classique et moderne, thème clair et sombre, aide, À propos) sont dans [docs/screenshots/French](docs/screenshots/French).
+
 ## Téléchargement
 
 Installeur et zip portable Windows, `.deb` Linux (x86_64, arm64) et AppImage : [Releases](https://github.com/morfredus/ant-renamer-qt/releases).
+
+**Vérifier les fichiers Linux.** Les fichiers Linux des versions postérieures à la 3.0.0 sont accompagnés d'une signature GPG détachée (`.asc`), y compris `SHA256SUMS-linux.txt`. Clé publique : [`docs/antrenamer-qt-public.asc`](docs/antrenamer-qt-public.asc), empreinte `D82C 3ED0 BE99 1611 C2C9 06FA 910B 46ED 3C84 B4A7` (Frederic Biron, Ant Renamer Qt releases). Comparez l'empreinte avant de faire confiance à la clé.
+
+```
+gpg --import antrenamer-qt-public.asc
+gpg --verify AntRenamerQt-X.Y.Z-linux-amd64.deb.asc AntRenamerQt-X.Y.Z-linux-amd64.deb
+```
+
+Les fichiers Windows ne sont pas encore signés (les sommes de contrôle sont dans `SHA256SUMS.txt`).
 
 Le projet est **autonome** : Qt 6 et un compilateur C++20 suffisent.
 
@@ -76,7 +89,7 @@ Traduire l'interface (les fichiers `.lng`) : [docs/TRANSLATING_fr.md](docs/TRANS
 ## Réglages
 
 Mode portable : créer un fichier `antrenamer-qt.ini` vide à côté du programme (ou cocher la case dans
-Options > Langue). Sinon les réglages sont dans `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) ou `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
+Options > Affichage). Sinon les réglages sont dans `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) ou `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
 
 Menu contextuel de l'Explorateur (Windows) : Options > Fichiers & Dossiers ajoute « Ajouter à Ant Renamer Qt » aux fichiers et
 dossiers (Windows 11 : « Afficher plus d'options »). Tout ce qui est sélectionné arrive dans la fenêtre déjà ouverte.
@@ -91,6 +104,10 @@ Le programme n'utilise pas le réseau, sauf pour la recherche de nouvelle versio
 ## Assistance
 
 L'assistance pour Ant Renamer Qt se fait sur GitHub : [Issues](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, demandes de fonctions) et [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, idées). Merci de ne pas signaler les problèmes d'Ant Renamer Qt à l'auteur du programme d'origine.
+
+## Soutenir le portage
+
+Ant Renamer Qt est un logiciel libre et le reste : rien n'est réservé à ceux qui donnent. Si vous souhaitez soutenir le travail sur le portage Qt (et non le programme d'origine, qui est d'Antoine Potten), utilisez le bouton « Sponsor » du dépôt ([GitHub Sponsors](https://github.com/sponsors/morfredus) ou [PayPal](https://www.paypal.com/donate/?hosted_button_id=X4FPQCL7BL2FG)). Pour soutenir le programme d'origine, son auteur a sa propre [page de dons](https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=7LPTSBU87XB34).
 
 ## Crédits
 

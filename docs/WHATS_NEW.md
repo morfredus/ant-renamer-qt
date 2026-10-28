@@ -4,7 +4,20 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.0.0**.
+Current version: **3.1.0-beta.1**.
+
+## 3.1.0-beta.1
+
+| What is new | Since |
+|---|---|
+| **Language and interface applied at once**: changing the language, or switching between the classic and the modern interface (or its pages layout), no longer needs a restart. The window is rebuilt when you click OK in the options; your files, batch and log stay. | 3.1.0-beta.1 |
+| **Export of the preview**: *Export preview...* in the context menu of the files list writes the current and new names to a CSV file, or the new names only to a text file. | 3.1.0-beta.1 |
+| **Add folders**: a field to type the path of a folder. | 3.1.0-beta.1 |
+| **Portable mode**: its box moves from the Language tab to the Display tab of the options, in a "Settings storage" section. | 3.1.0-beta.1 |
+| **About window**: the web site of the port (morfredus.fr/ant-renamer-qt) is shown next to the one of the original program, which is kept and labelled as such. | 3.1.0-beta.1 |
+| **Command line: a folder given with a trailing slash or backslash** (`-afr d:\Data\`) is now added like one without it (it added nothing before). | 3.1.0-beta.1 |
+| **New-version check: beta and release candidates are now your choice.** A box in Options > Display ("Also tell me about beta and release candidates"), off by default: only final versions are announced unless it is ticked (a user of a beta or rc is still told about the next one). The Windows installer offers the same choice, with the start-up check itself, among its tasks. | 3.1.0-beta.1 |
+| **New program icon**: window, executable, installer, Linux packages and About box. | 3.1.0-beta.1 |
 
 ## 3.0.0
 

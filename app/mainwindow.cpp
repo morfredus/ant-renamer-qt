@@ -1,108 +1,4 @@
-#include "mainwindow.h"
-
-#include "appsettings.h"
-#include "icons.h"
-#include "lngtranslator.h"
-#include "theme.h"
-#include "updatecheck.h"
-#include "ren_path.h"
-
-#include <QApplication>
-#include <QCheckBox>
-#include <QClipboard>
-#include <QCloseEvent>
-#include <QDesktopServices>
-#include <QDialog>
-#include <QDialogButtonBox>
-#include <QDir>
-#include <QDirIterator>
-#ifdef Q_OS_WIN
-#include <windows.h>
-#endif
-#include <QFile>
-#include <QLocale>
-#include <QDragEnterEvent>
-#include <QFileDialog>
-#include <QFileIconProvider>
-#include <QGroupBox>
-#include <QHBoxLayout>
-#include <QHeaderView>
-#include <QLabel>
-#include <QPushButton>
-#include <QListWidget>
-#include <QMenu>
-#include <QMessageBox>
-#include <QMimeData>
-#include <QProgressBar>
-#include <QCollator>
-#include <QScreen>
-#include <QSettings>
-#include <QSplitter>
-#include <QStackedWidget>
-#include <QStatusBar>
-#include <QDate>
-#include <QTimer>
-#include <QToolBar>
-#include <QToolButton>
-#include <QUrl>
-#include <QVBoxLayout>
-#include <algorithm>
-
-using namespace ren;
-using namespace Qt::StringLiterals;
-
-namespace {
-
-// Windows refuses the focus to a program that is not in the foreground (the file manager, during a drop): a key press of
-// ours first makes the system consider us the active program.
-void bringToFront(QWidget* w) {
-    w->raise();
-    w->activateWindow();
-#ifdef Q_OS_WIN
-    keybd_event(VK_MENU, 0, 0, 0);
-    keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);
-    SetForegroundWindow(reinterpret_cast<HWND>(w->winId()));
-#endif
-}
-
-// Hidden file: a dot name (also on Windows, where .git or .config carry no attribute), or the hidden / system attribute
-// on Windows (desktop.ini, Thumbs.db...).
-bool isHiddenOrSystem(const QFileInfo& fi) {
-    if (fi.isHidden() || fi.fileName().startsWith(u'.')) return true;
-#ifdef Q_OS_WIN
-    return GetFileAttributesW(reinterpret_cast<LPCWSTR>(QDir::toNativeSeparators(fi.absoluteFilePath()).utf16())) & FILE_ATTRIBUTE_SYSTEM;
-#else
-    return false;
-#endif
-}
-
-constexpr int SortRole = Qt::UserRole + 1;
-constexpr int PtrRole = Qt::UserRole;
-
-QString native(const QString& p) { return QDir::toNativeSeparators(p); }
-
-QString tr_(const char* s) { return QCoreApplication::translate("Ren", s); }
-
-// Sorts like the original: text case-insensitively, size and dates numerically.
-class FileItem : public QTreeWidgetItem {
-public:
-    using QTreeWidgetItem::QTreeWidgetItem;
-    bool operator<(const QTreeWidgetItem& o) const override {
-        const int c = treeWidget()->sortColumn();
-        const QVariant a = data(c, SortRole), b = o.data(c, SortRole);
-        if (a.isValid() && b.isValid()) return a.toLongLong() < b.toLongLong();
-        static QCollator natural = [] { QCollator q; q.setNumericMode(true); q.setCaseSensitivity(Qt::CaseInsensitive); return q; }();
-        if (appOptions().naturalSort) return natural.compare(text(c), o.text(c)) < 0;
-        return text(c).compare(o.text(c), Qt::CaseInsensitive) < 0;
-    }
-};
-
-QColor folderColor(const QPalette& p) {  // window colour darkened by 8 per channel, like the original
-    const QColor base = p.color(QPalette::Base);
-    return QColor(qMax(0, base.red() - 8), qMax(0, base.green() - 8), qMax(0, base.blue() - 8));
-}
-
-}  // namespace
+#include "mainwindow_internal.h"
 
 // --- ItemTree ------------------------------------------------------------------------------------
 ItemTree::ItemTree(bool acceptUrls) : acceptUrls_(acceptUrls) {
@@ -116,19 +12,30 @@ ItemTree::ItemTree(bool acceptUrls) : acceptUrls_(acceptUrls) {
 }
 
 void ItemTree::dragEnterEvent(QDragEnterEvent* e) {
-    if (acceptUrls_ && e->mimeData()->hasUrls()) e->acceptProposedAction();
-    else QTreeWidget::dragEnterEvent(e);
+    if (acceptUrls_ && e->mimeData()->hasUrls()) {
+        e->acceptProposedAction();
+    } else {
+        QTreeWidget::dragEnterEvent(e);
+    }
 }
 void ItemTree::dragMoveEvent(QDragMoveEvent* e) {
-    if (acceptUrls_ && e->mimeData()->hasUrls()) e->acceptProposedAction();
-    else QTreeWidget::dragMoveEvent(e);
+    if (acceptUrls_ && e->mimeData()->hasUrls()) {
+        e->acceptProposedAction();
+    } else {
+        QTreeWidget::dragMoveEvent(e);
+    }
 }
 void ItemTree::dropEvent(QDropEvent* e) {
     if (e->mimeData()->hasUrls()) {
-        if (!acceptUrls_) return;
+        if (!acceptUrls_) {
+            return;
+        }
         QStringList paths;
-        for (const QUrl& u : e->mimeData()->urls())
-            if (u.isLocalFile()) paths << native(u.toLocalFile());
+        for (const QUrl& u : e->mimeData()->urls()) {
+            if (u.isLocalFile()) {
+                paths << native(u.toLocalFile());
+            }
+        }
         e->acceptProposedAction();
         emit urlsDropped(paths);
         return;
@@ -142,15 +49,16 @@ void RenWorker::run() {
     try {
         if (op_ == Op::Undo) {
             files_->undoPasses(undoCount_, [this](File& f) {
-                emit progress({quintptr(&f), f.description(), int(f.status()), 0, 0, f.fileFolder(), f.fileName(), f.preview});
+                emit progress({f.id(), f.description(), int(f.status()), 0, 0, f.fileFolder(), f.fileName(), f.preview});
             });
             return;
         }
         actions_->perform(*files_, op_, [this](File& f, int batchPos, int idx) {
-            emit progress({quintptr(&f), f.description(), int(f.status()), batchPos, idx, f.fileFolder(), f.fileName(), f.preview});
+            emit progress({f.id(), f.description(), int(f.status()), batchPos, idx, f.fileFolder(), f.fileName(), f.preview});
         });
     } catch (const std::exception& e) {
-        emit progress({0, QStringLiteral("Thread error caught: ") + QString::fromLocal8Bit(e.what()), int(State::Error), 0, 0});
+        emit progress(
+            {0, QStringLiteral("Thread error caught: ") + QString::fromLocal8Bit(e.what()), int(State::Error), 0, 0, {}, {}, {}});
     }
 }
 
@@ -159,7 +67,9 @@ QAction* MainWindow::makeAction(const QString& text, const QString& hint, int ic
     auto* a = new QAction(tbIcon(icon), text, this);
     a->setToolTip(hint);
     a->setData(icon);  // remembered so applyIcons() can switch icon set at run time
-    if (!key.isEmpty()) a->setShortcut(key);
+    if (!key.isEmpty()) {
+        a->setShortcut(key);
+    }
     a->setShortcutContext(Qt::WindowShortcut);
     addAction(a);  // keeps shortcuts alive when the toolbar button is hidden
     return a;
@@ -168,12 +78,29 @@ QAction* MainWindow::makeAction(const QString& text, const QString& hint, int ic
 MainWindow::MainWindow() {
     qRegisterMetaType<Snapshot>("Snapshot");
     files_.setJournal(&journal_);
-    setWindowTitle(tr_("Ant Renamer Qt %1").arg(QApplication::applicationVersion()));
     setAcceptDrops(true);
     setMinimumSize(300, 300);
+    appOptions().load();
+    // keep the Move buttons on the list that has the focus (single screen: there is no current tab any more)
+    connect(qApp, &QApplication::focusChanged, this, [this](QWidget*, QWidget* now) {
+        for (int i = 0; i < 2 && now && singleScreen_; ++i) {
+            if (panes_[i]->isAncestorOf(now)) {
+                currentTab_ = i;
+            }
+        }
+    });
+    buildUi();
+    aStop_->setEnabled(false);
+    aUndo_->setEnabled(false);  // nothing to undo before the first pass
+    aHistory_->setEnabled(false);
+}
+
+// Everything the user sees, from the options as they are now. The files, the batch, the journal and the log belong to the
+// window and are not touched, so this can run again (see rebuildUi()).
+void MainWindow::buildUi() {
+    setWindowTitle(tr_("Ant Renamer Qt %1").arg(QApplication::applicationVersion()));
     resize(730, 500);
 
-    appOptions().load();
     newUi_ = appOptions().newUi;
     theme_ = appOptions().theme;
     applyTheme(theme_, newUi_);  // the modern layout uses Fusion, which follows the system palette, light or dark
@@ -191,16 +118,12 @@ MainWindow::MainWindow() {
     createToolbars();
     if (singleScreen_) {
         buildSingleScreen();
-        // keep the Move buttons on the list that has the focus (there is no current tab any more)
-        connect(qApp, &QApplication::focusChanged, this, [this](QWidget*, QWidget* now) {
-            for (int i = 0; i < 2 && now; ++i)
-                if (panes_[i]->isAncestorOf(now)) currentTab_ = i;
-        });
     }
     createStatusBar();
     // Flat toolbar buttons with hover / pressed / checked feedback, like the original TBX toolbars.
     // rgba() so it works on light and dark themes.
-    if (newUi_) setStyleSheet(uR"(
+    if (newUi_) {
+        setStyleSheet(uR"(
         QToolBar { spacing: 2px; padding: 4px 6px; border: 0; border-bottom: 1px solid palette(mid); }
         QToolButton { border: 1px solid transparent; border-radius: 4px; padding: 4px 8px; background: transparent; }
         QToolButton:hover { background: palette(midlight); border-color: palette(mid); }
@@ -220,7 +143,8 @@ MainWindow::MainWindow() {
         QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; left: 10px; padding: 0 4px; }
         QGroupBox QLabel, QGroupBox QTreeWidget { font-weight: normal; }
     )"_s);
-    else setStyleSheet(uR"(
+    } else {
+        setStyleSheet(uR"(
         QToolBar { spacing: 1px; padding: 1px; border: 0; }
         QToolButton { border: 1px solid transparent; border-radius: 2px; padding: 2px 3px; background: transparent; }
         QToolButton:hover { background: rgba(0,120,215,40); border-color: rgba(0,120,215,110); }
@@ -230,12 +154,63 @@ MainWindow::MainWindow() {
         QToolButton:disabled { background: transparent; border-color: transparent; }
         QToolButton::menu-button { border: 0; width: 12px; }
     )"_s);
+    }
     loadSettings();
     setStatus();
     showTab(0);
-    aStop_->setEnabled(false);
-    aUndo_->setEnabled(false);  // nothing to undo before the first pass
-    aHistory_->setEnabled(false);
+}
+
+// The language or the interface changed in the Options: save what the window remembers, throw the interface away and build
+// it again (the texts are looked up when the widgets are made). The work in progress is kept.
+void MainWindow::rebuildUi() {
+    if (worker_) {
+        return;
+    }
+    saveSettings();
+    endEdit();
+    const bool stayOnTop = aOnTop_->isChecked();
+    setUpdatesEnabled(false);
+    // the widgets first (their signals reach the actions), then the actions and the menus, which are children of the window
+    if (QWidget* c = takeCentralWidget()) {
+        delete c;
+    }
+    qDeleteAll(findChildren<QToolBar*>(Qt::FindDirectChildrenOnly));
+    qDeleteAll(findChildren<QMenu*>(Qt::FindDirectChildrenOnly));
+    qDeleteAll(findChildren<QAction*>(Qt::FindDirectChildrenOnly));
+    for (QWidget* w : {static_cast<QWidget*>(progress_), static_cast<QWidget*>(countLabel_), static_cast<QWidget*>(statusLabel_)}) {
+        statusBar()->removeWidget(w);
+        delete w;
+    }
+    rows_.clear();
+    sortColumn_ = -1;
+    stack_ = nullptr;
+    singleHost_ = nullptr;
+    outer_ = inner_ = nullptr;
+    editBar_ = nullptr;
+    editLabel_ = nullptr;
+    setStyleSheet(QString());
+
+    buildUi();
+    aOnTop_->setChecked(stayOnTop);
+
+    // put the work back in the new views
+    for (size_t i = 0; i < files_.size(); ++i) {
+        File& f = files_.at(i);
+        auto* item = new FileItem;
+        item->setData(0, IdRole, f.id());
+        item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled);
+        fileView_->addTopLevelItem(item);
+        rows_.insert(f.id(), item);
+    }
+    for (size_t i = 0; i < batch_.size(); ++i) {
+        addBatchItem(&batch_.at(i));
+    }
+    rebuildLog();
+    updateAllItems();
+    updateUndoState();
+    updateSamplePreview();
+    setUpdatesEnabled(true);
+    show();
 }
 
 void MainWindow::createActions() {
@@ -243,7 +218,8 @@ void MainWindow::createActions() {
     aGo_ = makeAction(tr_("Go"), tr_("Start the renaming process"), TbGo, K(Qt::Key_F9));
     aStop_ = makeAction(tr_("Stop"), tr_("Stop the renaming process"), TbStop, K(Qt::Key_Escape));
     aUndo_ = makeAction(tr_("Undo"), tr_("Undo last renaming"), TbUndo, K(Qt::Key_F12));
-    aHistory_ = makeAction(tr_("History"), tr_("Renaming passes of this session: go back to a given pass"), TbHistory, K(Qt::SHIFT | Qt::Key_F12));
+    aHistory_ = makeAction(tr_("History"), tr_("Renaming passes of this session: go back to a given pass"), TbHistory,
+                           K(Qt::SHIFT | Qt::Key_F12));
     aOnTop_ = makeAction(tr_("On top"), tr_("Keep window always on top"), TbAlwaysOnTop, K(Qt::Key_F11));
     aOnTop_->setCheckable(true);
     aTheme_ = makeAction(tr_("Light / dark"), tr_("Switch between the light and the dark theme"), TbTheme);
@@ -258,13 +234,17 @@ void MainWindow::createActions() {
         aTab_[i] = makeAction(tr_(tabNames[i]), tr_(tabHints[i]), TbTabFiles + i, K(Qt::CTRL | (Qt::Key_1 + i)));
         aTab_[i]->setCheckable(true);
         connect(aTab_[i], &QAction::triggered, this, [this, i](bool on) {
-            if (singleScreen_) setPaneVisible(i, on);  // the page buttons show / hide a pane
-            else showTab(i);
+            if (singleScreen_) {
+                setPaneVisible(i, on);  // the page buttons show / hide a pane
+            } else {
+                showTab(i);
+            }
         });
     }
 
     aAddFiles_ = makeAction(tr_("Add files..."), tr_("Add files to the list"), TbAddFiles, K(Qt::Key_F2));
-    aAddFolders_ = makeAction(tr_("Add folders..."), tr_("Add folders or folder contents to the list"), TbAddFolder, K(Qt::Key_F3));
+    aAddFolders_ =
+        makeAction(tr_("Add folders..."), tr_("Add folders or folder contents to the list"), TbAddFolder, K(Qt::Key_F3));
     aRemoveSel_ = makeAction(tr_("Remove sel."), tr_("Remove selected files from the list"), TbRemoveSelected, K(Qt::Key_F6));
     aRemoveAll_ = makeAction(tr_("Remove all"), tr_("Remove all files from the list"), TbRemoveAll, K(Qt::Key_F7));
     aRemoveDead_ = makeAction(tr_("Remove dead"), tr_("Remove dead files from the list"), TbRemoveDead, K(Qt::Key_F8));
@@ -273,7 +253,8 @@ void MainWindow::createActions() {
     // view filter only: files hidden by "Changed only" stay in the list and are processed as usual
     aChangedOnly_ = makeAction(tr_("Changed only"), tr_("Show only the files whose name changes in the preview"), TbChangedOnly);
     aChangedOnly_->setCheckable(true);
-    aShowHidden_ = makeAction(tr_("Hidden files"), tr_("Show the hidden and system files of the list; hidden, they are not renamed"), TbShowHidden);
+    aShowHidden_ = makeAction(tr_("Hidden files"),
+                              tr_("Show the hidden and system files of the list; hidden, they are not renamed"), TbShowHidden);
     aShowHidden_->setCheckable(true);
     connect(aShowHidden_, &QAction::toggled, this, [this] {
         ren::options().skipHidden = !aShowHidden_->isChecked();
@@ -282,14 +263,18 @@ void MainWindow::createActions() {
     connect(aChangedOnly_, &QAction::toggled, this, [this] { updateAllItems(); });
 
     aBatchAdd_ = makeAction(tr_("Add to batch"), tr_("Add to batch"), TbBatchAdd, K(Qt::CTRL | Qt::Key_F2));
-    aBatchEdit_ = makeAction(tr_("Modify"), tr_("Replace the selected action with the current settings (double-click an action to load its settings)"), TbBatchAdd);
+    aBatchEdit_ = makeAction(
+        tr_("Modify"), tr_("Replace the selected action with the current settings (double-click an action to load its settings)"),
+        TbBatchAdd);
     aBatchEdit_->setEnabled(false);
     connect(aBatchEdit_, &QAction::triggered, this, [this] { updateBatchItem(); });
     if (newUi_) {
-        connect(batchView_, &QTreeWidget::itemSelectionChanged, this, [this] { aBatchEdit_->setEnabled(!worker_ && batchView_->selectedItems().size() == 1); });
+        connect(batchView_, &QTreeWidget::itemSelectionChanged, this,
+                [this] { aBatchEdit_->setEnabled(!worker_ && batchView_->selectedItems().size() == 1); });
         connect(batchView_, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* it, int) { editBatchItem(it); });
     }
-    aBatchRemoveSel_ = makeAction(tr_("Remove sel."), tr_("Remove selected actions from the batch"), TbBatchRemoveSel, K(Qt::SHIFT | Qt::Key_F6));
+    aBatchRemoveSel_ = makeAction(tr_("Remove sel."), tr_("Remove selected actions from the batch"), TbBatchRemoveSel,
+                                  K(Qt::SHIFT | Qt::Key_F6));
     aBatchClear_ = makeAction(tr_("Clear"), tr_("Remove all actions from the batch"), TbBatchClear, K(Qt::SHIFT | Qt::Key_F7));
     aBatchOpen_ = makeAction(tr_("Open..."), tr_("Open a batch file"), TbBatchOpen, K(Qt::CTRL | Qt::Key_O));
     aBatchSave_ = makeAction(tr_("Save..."), tr_("Save this batch to a file"), TbBatchSave, K(Qt::CTRL | Qt::Key_S));
@@ -316,8 +301,10 @@ void MainWindow::createActions() {
 
     aUp_ = makeAction(tr_("Up"), tr_("Move up selected items"), TbMoveUp, K(Qt::CTRL | Qt::Key_Up));
     aDown_ = makeAction(tr_("Down"), tr_("Move down selected items"), TbMoveDown, K(Qt::CTRL | Qt::Key_Down));
-    aTop_ = makeAction(tr_("Top"), tr_("Move selected items to top of the list"), TbMoveTop, K(Qt::CTRL | Qt::SHIFT | Qt::Key_Up));
-    aBottom_ = makeAction(tr_("Bottom"), tr_("Move selected items to bottom of the list"), TbMoveBottom, K(Qt::CTRL | Qt::SHIFT | Qt::Key_Down));
+    aTop_ =
+        makeAction(tr_("Top"), tr_("Move selected items to top of the list"), TbMoveTop, K(Qt::CTRL | Qt::SHIFT | Qt::Key_Up));
+    aBottom_ = makeAction(tr_("Bottom"), tr_("Move selected items to bottom of the list"), TbMoveBottom,
+                          K(Qt::CTRL | Qt::SHIFT | Qt::Key_Down));
 
     aSelAll_ = new QAction(tr_("Select all"), this);
     aSelNone_ = new QAction(tr_("Select none"), this);
@@ -328,14 +315,20 @@ void MainWindow::createActions() {
     connect(aGo_, &QAction::triggered, this, [this] { run(Op::Rename); });
     connect(aStop_, &QAction::triggered, this, [] { stopFlag() = true; });
     connect(aUndo_, &QAction::triggered, this, [this] {
-        if (appOptions().undoButton == 1) showHistory(); else run(Op::Undo, 1);  // F12 follows the choice made in the options
+        if (appOptions().undoButton == 1) {
+            showHistory();
+        } else {
+            run(Op::Undo, 1);  // F12 follows the choice made in the options
+        }
     });
     connect(aHistory_, &QAction::triggered, this, &MainWindow::showHistory);
     connect(aPreview_, &QAction::triggered, this, [this] { run(Op::Preview); });
     connect(aOnTop_, &QAction::toggled, this, [this](bool on) {
         const bool vis = isVisible();
         setWindowFlag(Qt::WindowStaysOnTopHint, on);
-        if (vis) show();
+        if (vis) {
+            show();
+        }
     });
     connect(aTheme_, &QAction::triggered, this, [this] {
         appOptions().theme = isDarkPalette(QGuiApplication::palette()) ? 1 : 2;
@@ -344,7 +337,20 @@ void MainWindow::createActions() {
     });
     connect(aOptions_, &QAction::triggered, this, [this] {
         OptionsDialog dlg(this);
-        if (dlg.exec() == QDialog::Accepted) applyOptionsLive();
+        const QString language = defaultLanguage();
+        if (dlg.exec() != QDialog::Accepted) {
+            return;
+        }
+        const AppOptions& o = appOptions();
+        const bool newLanguage = defaultLanguage() != language;
+        if (newLanguage) {
+            switchLanguage(defaultLanguage());
+        }
+        if (newLanguage || o.newUi != newUi_ || (o.newUi ? qBound(0, o.pageLayout, 2) : 0) != pageLayout_) {
+            QTimer::singleShot(0, this, [this] { rebuildUi(); });  // not from inside the action that is being deleted
+        } else {
+            applyOptionsLive();
+        }
     });
     connect(aHelp_, &QAction::triggered, this, [] { openHelp(u"index"_s); });
     connect(panel_, &ActionPanel::helpRequested, this, [](const QString& topic) { openHelp(topic); });
@@ -354,25 +360,35 @@ void MainWindow::createActions() {
     connect(aAddFiles_, &QAction::triggered, this, [this] {
         QSettings s = appSettings();
         const QStringList f = QFileDialog::getOpenFileNames(this, tr_("Select files"), s.value(u"folders/addFiles"_s).toString());
-        if (f.isEmpty()) return;
+        if (f.isEmpty()) {
+            return;
+        }
         s.setValue(u"folders/addFiles"_s, QFileInfo(f.first()).absolutePath());
         QStringList n;
-        for (const QString& p : f) n << native(p);
+        for (const QString& p : f) {
+            n << native(p);
+        }
         addFiles(n, nullptr);
     });
     connect(aAddFolders_, &QAction::triggered, this, [this] {
         QSettings s = appSettings();
         AddFoldersDialog dlg(s.value(u"folders/addFolder"_s).toString(), this);
-        if (dlg.exec() != QDialog::Accepted) return;
+        if (dlg.exec() != QDialog::Accepted) {
+            return;
+        }
         const AddChoice c = dlg.choice();
         appOptions().addFiles = c.files;
         appOptions().addFolders = c.folders;
         appOptions().recursive = c.recursive;
         appOptions().addHidden = c.hidden;
         appOptions().save();
-        if (!dlg.folders().isEmpty()) s.setValue(u"folders/addFolder"_s, dlg.folders().first());
+        if (!dlg.folders().isEmpty()) {
+            s.setValue(u"folders/addFolder"_s, dlg.folders().first());
+        }
         QStringList n;
-        for (const QString& p : dlg.folders()) n << native(p);
+        for (const QString& p : dlg.folders()) {
+            n << native(p);
+        }
         addFiles(n, &c);
     });
     connect(aRemoveSel_, &QAction::triggered, this, [this] { removeSelectedFiles(); });
@@ -394,12 +410,24 @@ void MainWindow::createActions() {
     connect(aTop_, &QAction::triggered, this, [this] { moveItems(2); });
     connect(aBottom_, &QAction::triggered, this, [this] { moveItems(3); });
 
-    connect(aSelAll_, &QAction::triggered, this, [this] { if (auto* t = currentList()) t->selectAll(); });
-    connect(aSelNone_, &QAction::triggered, this, [this] { if (auto* t = currentList()) t->clearSelection(); });
+    connect(aSelAll_, &QAction::triggered, this, [this] {
+        if (auto* t = currentList()) {
+            t->selectAll();
+        }
+    });
+    connect(aSelNone_, &QAction::triggered, this, [this] {
+        if (auto* t = currentList()) {
+            t->clearSelection();
+        }
+    });
     connect(aSelInvert_, &QAction::triggered, this, [this] {
-        if (auto* t = currentList())
-            for (int i = 0; i < t->topLevelItemCount(); ++i)
-                if (!t->topLevelItem(i)->isHidden()) t->topLevelItem(i)->setSelected(!t->topLevelItem(i)->isSelected());
+        if (auto* t = currentList()) {
+            for (int i = 0; i < t->topLevelItemCount(); ++i) {
+                if (!t->topLevelItem(i)->isHidden()) {
+                    t->topLevelItem(i)->setSelected(!t->topLevelItem(i)->isSelected());
+                }
+            }
+        }
     });
     connect(aUnsort_, &QAction::triggered, this, [this] { unsortFiles(); });
 }
@@ -427,41 +455,42 @@ void MainWindow::createToolbars() {
         t->setFloatable(false);
         for (const Item& i : items) {
             switch (i.kind) {
-            case Act:
-            case ActText:
-                t->addAction(i.a);
-                if (auto* b = qobject_cast<QToolButton*>(t->widgetForAction(i.a)))
-                    b->setToolButtonStyle(i.kind == ActText ? Qt::ToolButtonTextBesideIcon : Qt::ToolButtonIconOnly);
-                break;
-            case Sep:
-                t->addSeparator();
-                break;
-            case Spacer: {
-                auto* s = new QWidget;
-                s->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-                t->addWidget(s);
-                break;
-            }
-            case RecentMenu: {  // "Open..." with the list of recent batch files
-                recentMenu_ = new QMenu(this);
-                auto* openBtn = new QToolButton;
-                openBtn->setDefaultAction(aBatchOpen_);
-                openBtn->setMenu(recentMenu_);
-                openBtn->setPopupMode(QToolButton::MenuButtonPopup);
-                t->addWidget(openBtn);
-                connect(recentMenu_, &QMenu::aboutToShow, this, [this] { updateRecentMenu(); });
-                break;
-            }
-            case FilterMenu: {  // log filter
-                auto* filterMenu = new QMenu(this);
-                filterMenu->addActions({aLogOk_, aLogError_, aLogNot_});
-                auto* filterBtn = new QToolButton;
-                filterBtn->setDefaultAction(aLogFilter_);
-                filterBtn->setMenu(filterMenu);
-                filterBtn->setPopupMode(QToolButton::InstantPopup);
-                t->addWidget(filterBtn);
-                break;
-            }
+                case Act:
+                case ActText:
+                    t->addAction(i.a);
+                    if (auto* b = qobject_cast<QToolButton*>(t->widgetForAction(i.a))) {
+                        b->setToolButtonStyle(i.kind == ActText ? Qt::ToolButtonTextBesideIcon : Qt::ToolButtonIconOnly);
+                    }
+                    break;
+                case Sep:
+                    t->addSeparator();
+                    break;
+                case Spacer: {
+                    auto* s = new QWidget;
+                    s->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+                    t->addWidget(s);
+                    break;
+                }
+                case RecentMenu: {  // "Open..." with the list of recent batch files
+                    recentMenu_ = new QMenu(this);
+                    auto* openBtn = new QToolButton;
+                    openBtn->setDefaultAction(aBatchOpen_);
+                    openBtn->setMenu(recentMenu_);
+                    openBtn->setPopupMode(QToolButton::MenuButtonPopup);
+                    t->addWidget(openBtn);
+                    connect(recentMenu_, &QMenu::aboutToShow, this, [this] { updateRecentMenu(); });
+                    break;
+                }
+                case FilterMenu: {  // log filter
+                    auto* filterMenu = new QMenu(this);
+                    filterMenu->addActions({aLogOk_, aLogError_, aLogNot_});
+                    auto* filterBtn = new QToolButton;
+                    filterBtn->setDefaultAction(aLogFilter_);
+                    filterBtn->setMenu(filterMenu);
+                    filterBtn->setPopupMode(QToolButton::InstantPopup);
+                    t->addWidget(filterBtn);
+                    break;
+                }
             }
         }
         return t;
@@ -470,16 +499,20 @@ void MainWindow::createToolbars() {
     // --- what each bar contains ---
     const Items tabs = {T(aTab_[0]), T(aTab_[1]), T(aTab_[2])};
     const Items moves = {A(aUp_), A(aDown_), A(aTop_), A(aBottom_)};
-    Items files = {T(aAddFiles_), T(aAddFolders_), sep, A(aRemoveSel_), T(aRemoveAll_), A(aRemoveDead_), sep, A(aPreview_), A(aChangedOnly_), A(aShowHidden_)};
+    Items files = {T(aAddFiles_),    T(aAddFolders_), sep, A(aRemoveSel_), T(aRemoveAll_), A(aRemoveDead_), sep, A(aPreview_),
+                   A(aChangedOnly_), A(aShowHidden_)};
     Items actions = {newUi_ ? T(aBatchAdd_) : A(aBatchAdd_)};
-    if (newUi_) actions.push_back(T(aBatchEdit_));
+    if (newUi_) {
+        actions.push_back(T(aBatchEdit_));
+    }
     append(actions, {A(aBatchRemoveSel_), sep, A(aBatchClear_), recent, A(aBatchSave_)});
     const Items log = {filter, sep, A(aLogClear_), A(aLogSave_), A(aLogCopy_)};
 
     if (!newUi_) {  // classic: bars on the window, movable; the move buttons have their own bar
         tbTabs_ = bar(u"Pages"_s, tabs);
         addToolBar(Qt::TopToolBarArea, tbTabs_);
-        tbProgram_ = bar(u"Program"_s, {T(aGo_), T(aStop_), A(aUndo_), A(aHistory_), sep, A(aOnTop_), A(aTheme_), A(aOptions_), sep, A(aHelp_), A(aAbout_), sep, A(aExit_)});
+        tbProgram_ = bar(u"Program"_s, {T(aGo_), T(aStop_), A(aUndo_), A(aHistory_), sep, A(aOnTop_), A(aTheme_), A(aOptions_),
+                                        sep, A(aHelp_), A(aAbout_), sep, A(aExit_)});
         addToolBar(Qt::TopToolBarArea, tbProgram_);
         addToolBarBreak();
         tbFiles_ = bar(u"Files"_s, files);
@@ -495,9 +528,12 @@ void MainWindow::createToolbars() {
 
     // modern: tabs + program buttons in one main bar, a slim bar (with the move buttons) in each page
     Items mainBar = tabs;
-    append(mainBar, {spacer, T(aGo_), T(aStop_), A(aUndo_), A(aHistory_), A(aOptions_), A(aHelp_), sep, A(aOnTop_), A(aTheme_), A(aAbout_), A(aExit_)});
+    append(mainBar, {spacer, T(aGo_), T(aStop_), A(aUndo_), A(aHistory_), A(aOptions_), A(aHelp_), sep, A(aOnTop_), A(aTheme_),
+                     A(aAbout_), A(aExit_)});
     tbProgram_ = bar(u"Main"_s, mainBar);
-    if (auto* b = tbProgram_->widgetForAction(aGo_)) b->setObjectName(u"goButton"_s);  // the one coloured button
+    if (auto* b = tbProgram_->widgetForAction(aGo_)) {
+        b->setObjectName(u"goButton"_s);  // the one coloured button
+    }
     addToolBar(Qt::TopToolBarArea, tbProgram_);
     for (Items* page : {&files, &actions}) {
         page->push_back(spacer);
@@ -509,11 +545,14 @@ void MainWindow::createToolbars() {
 
     // each page gets its own bar on top
     int i = 0;
-    for (auto sig : {&QAbstractItemModel::rowsInserted, &QAbstractItemModel::rowsRemoved})
+    for (auto sig : {&QAbstractItemModel::rowsInserted, &QAbstractItemModel::rowsRemoved}) {
         connect(batchView_->model(), sig, this, [this] {
             updateTabCounts();
-            if (editBar_ && editBar_->isVisible() && !editIndex_.isValid()) endEdit();
+            if (editBar_ && editBar_->isVisible() && !editIndex_.isValid()) {
+                endEdit();
+            }
         });
+    }
     for (QToolBar* t : {tbFiles_, tbActions_, tbLog_}) {
         QWidget* content = stack_->widget(i);
         stack_->removeWidget(content);
@@ -544,9 +583,14 @@ void MainWindow::createPages() {
     fileView_->header()->setSectionsMovable(true);
     fileView_->header()->setStretchLastSection(true);  // the header bar fills the whole width, like the original
     const int widths[ColCount] = {200, 400, 400, 60, 200, 70, 130, 130};
-    for (int c = 0; c < ColCount; ++c) fileView_->setColumnWidth(c, widths[c]);
-    for (int c : {ColFullPath, ColExt, ColPreview, ColSize, ColCreated, ColModified})
-        if (!(newUi_ && c == ColPreview)) fileView_->setColumnHidden(c, true);  // modern layout: new name visible
+    for (int c = 0; c < ColCount; ++c) {
+        fileView_->setColumnWidth(c, widths[c]);
+    }
+    for (int c : {ColFullPath, ColExt, ColPreview, ColSize, ColCreated, ColModified}) {
+        if (!(newUi_ && c == ColPreview)) {
+            fileView_->setColumnHidden(c, true);  // modern layout: new name visible
+        }
+    }
     if (newUi_) {  // current name, new name, folder
         auto* h = fileView_->header();
         h->moveSection(h->visualIndex(ColFolder), h->visualIndex(ColPreview));
@@ -558,8 +602,11 @@ void MainWindow::createPages() {
     connect(fileView_->header(), &QHeaderView::sectionClicked, this, &MainWindow::sortFilesBy);
     connect(fileView_->header(), &QHeaderView::customContextMenuRequested, this, &MainWindow::fileHeaderMenu);
     connect(fileView_, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* it, int) {
-        if (appOptions().launchFile)
-            if (File* f = fileOf(it)) QDesktopServices::openUrl(QUrl::fromLocalFile(f->filePath()));
+        if (appOptions().launchFile) {
+            if (File* f = fileOf(it)) {
+                QDesktopServices::openUrl(QUrl::fromLocalFile(f->filePath()));
+            }
+        }
     });
     connect(fileView_, &QWidget::customContextMenuRequested, this, [this](const QPoint& p) {
         QMenu m;
@@ -570,6 +617,7 @@ void MainWindow::createPages() {
         m.addAction(aSelInvert_);
         m.addSeparator();
         m.addAction(aPreview_);
+        m.addAction(tr_("Export preview..."), this, [this] { exportPreview(); });
         m.exec(fileView_->viewport()->mapToGlobal(p));
     });
 
@@ -582,7 +630,9 @@ void MainWindow::createPages() {
     pl->addWidget(actionsSplit_);
 
     panel_ = new ActionPanel;
-    if (!newUi_) actionsSplit_->addWidget(panel_);
+    if (!newUi_) {
+        actionsSplit_->addWidget(panel_);
+    }
     connect(panel_, &ActionPanel::changed, this, [this] { updateSamplePreview(); });
 
     previewGroup_ = new QGroupBox(tr_("Preview of selected file"));
@@ -606,21 +656,33 @@ void MainWindow::createPages() {
         previewGroup_->setObjectName(u"preview"_s);
         previewGroup_->setMaximumHeight(90);
         pl->addWidget(previewGroup_);
-        connect(previewGroup_, &QGroupBox::toggled, this, [this](bool on) { if (!on) previewGroup_->setChecked(true); });  // always on
+        connect(previewGroup_, &QGroupBox::toggled, this, [this](bool on) {
+            if (!on) {
+                previewGroup_->setChecked(true);
+            }
+        });  // always on
     } else {
         actionsSplit_->addWidget(previewGroup_);
     }
     connect(previewGroup_, &QGroupBox::toggled, this, [this](bool on) {
         previewOld_->setVisible(on);
         previewNew_->setVisible(on);
-        for (auto* l : previewGroup_->findChildren<QLabel*>()) l->setVisible(on);
-        if (on) updateSamplePreview();
+        for (auto* l : previewGroup_->findChildren<QLabel*>()) {
+            l->setVisible(on);
+        }
+        if (on) {
+            updateSamplePreview();
+        }
     });
 
     batchGroup_ = new QGroupBox(tr_("Batch contents (planned actions)"));
     batchGroup_->setCheckable(!newUi_);  // modern layout: the plan is always visible
-    if (newUi_) batchGroup_->setMinimumWidth(170);  // the long title must not decide the width of the plan
-    if (!newUi_) batchGroup_->setChecked(false);
+    if (newUi_) {
+        batchGroup_->setMinimumWidth(170);  // the long title must not decide the width of the plan
+    }
+    if (!newUi_) {
+        batchGroup_->setChecked(false);
+    }
     auto* bg = new QVBoxLayout(batchGroup_);
     batchView_ = new ItemTree(false);
     batchView_->setColumnCount(2);
@@ -658,7 +720,9 @@ void MainWindow::createPages() {
     connect(batchView_, &ItemTree::reordered, this, [this] { renumberBatchView(); });
     connect(batchView_, &QWidget::customContextMenuRequested, this, [this](const QPoint& p) {
         QMenu m;
-        if (newUi_) m.addAction(aBatchEdit_);
+        if (newUi_) {
+            m.addAction(aBatchEdit_);
+        }
         m.addAction(aBatchRemoveSel_);
         m.addAction(aBatchClear_);
         m.exec(batchView_->viewport()->mapToGlobal(p));
@@ -704,13 +768,23 @@ void MainWindow::loadSettings() {
         stColsOuter_ = s.value(u"window/singleColsOuter"_s).toByteArray();
         stColsInner_ = s.value(u"window/singleColsInner"_s).toByteArray();
         const int mask = s.value(u"window/panes"_s, 7).toInt();
-        for (int i = 0; i < 3; ++i) paneVisible_[i] = mask & (1 << i);
+        for (int i = 0; i < 3; ++i) {
+            paneVisible_[i] = mask & (1 << i);
+        }
         arrangeSingle(singleMode_);  // applies the remembered sizes
-        for (int i = 0; i < 3; ++i) aTab_[i]->setChecked(paneVisible_[i]);
+        for (int i = 0; i < 3; ++i) {
+            aTab_[i]->setChecked(paneVisible_[i]);
+        }
     }
-    if (s.contains(u"window/geometry"_s + sfx)) restoreGeometry(s.value(u"window/geometry"_s + sfx).toByteArray());
-    if (s.contains(u"window/filesHeader"_s + sfx)) fileView_->header()->restoreState(s.value(u"window/filesHeader"_s + sfx).toByteArray());
-    if (s.contains(u"window/actionsSplit"_s + sfx)) actionsSplit_->restoreState(s.value(u"window/actionsSplit"_s + sfx).toByteArray());
+    if (s.contains(u"window/geometry"_s + sfx)) {
+        restoreGeometry(s.value(u"window/geometry"_s + sfx).toByteArray());
+    }
+    if (s.contains(u"window/filesHeader"_s + sfx)) {
+        fileView_->header()->restoreState(s.value(u"window/filesHeader"_s + sfx).toByteArray());
+    }
+    if (s.contains(u"window/actionsSplit"_s + sfx)) {
+        actionsSplit_->restoreState(s.value(u"window/actionsSplit"_s + sfx).toByteArray());
+    }
     if (!newUi_) {
         previewGroup_->setChecked(s.value(u"window/enableSample"_s, true).toBool());
         batchGroup_->setChecked(s.value(u"window/enableBatch"_s, false).toBool());
@@ -722,7 +796,9 @@ void MainWindow::loadSettings() {
     aLogOk_->setChecked(s.value(u"log/ok"_s, true).toBool());
     aLogError_->setChecked(s.value(u"log/error"_s, true).toBool());
     aLogNot_->setChecked(s.value(u"log/not"_s, true).toBool());
-    if (!newUi_ && s.contains(u"window/toolbars"_s)) restoreState(s.value(u"window/toolbars"_s).toByteArray());
+    if (!newUi_ && s.contains(u"window/toolbars"_s)) {
+        restoreState(s.value(u"window/toolbars"_s).toByteArray());
+    }
     applyOptionsLive();
     QTimer::singleShot(2500, this, &MainWindow::startUpdateCheck);  // only if the user asked for it (Options > Display)
 }
@@ -731,18 +807,22 @@ void MainWindow::loadSettings() {
 void MainWindow::startUpdateCheck() {
     const AppOptions& o = appOptions();
     const QString today = QDate::currentDate().toString(Qt::ISODate);
-    if (!o.checkUpdates || o.lastUpdateCheck == today || exitAfterRun_ || worker_ || qEnvironmentVariableIsSet("ANTREN_SHOT")) return;
+    if (runsInFlatpak() || !o.checkUpdates || o.lastUpdateCheck == today || exitAfterRun_ || worker_ ||
+        qEnvironmentVariableIsSet("ANTREN_SHOT")) {
+        return;
+    }
     updater_ = new UpdateChecker(this);
-    connect(updater_, &UpdateChecker::finished, this, [this, today](bool ok, const QString& version, const QString& url, const QString& error) {
-        updater_->deleteLater();
-        updater_ = nullptr;
-        if (ok) {
-            appOptions().lastUpdateCheck = today;  // a failure is tried again at the next start
-            appOptions().save();
-        }
-        reportUpdate(this, ok, version, url, error, false);
-    });
-    updater_->check();
+    connect(updater_, &UpdateChecker::finished, this,
+            [this, today](bool ok, const QString& version, const QString& url, const QString& error) {
+                updater_->deleteLater();
+                updater_ = nullptr;
+                if (ok) {
+                    appOptions().lastUpdateCheck = today;  // a failure is tried again at the next start
+                    appOptions().save();
+                }
+                reportUpdate(this, ok, version, url, error, false);
+            });
+    updater_->check(o.checkPrereleases);
 }
 
 // Options that can change while the program runs (the others are read when used).
@@ -756,20 +836,25 @@ void MainWindow::applyOptionsLive() {
         setStyleSheet(QString());
         setStyleSheet(sheet);
         // A label with links keeps the link colour it was laid out with (dark blue on a dark background): lay it out again.
-        for (QLabel* l : findChildren<QLabel*>())
+        for (QLabel* l : findChildren<QLabel*>()) {
             if (const QString html = l->text(); html.contains(u"<a "_s)) {  // (setText ignores the same text)
                 l->clear();
                 l->setText(html);
             }
+        }
         rebuildLog();  // the colours of the lines depend on the theme
     }
     setIconSet(o.iconSet);
     for (QAction* a : findChildren<QAction*>()) {
         bool ok = false;
         const int idx = a->data().toInt(&ok);
-        if (ok && a->data().isValid()) a->setIcon(tbIcon(idx));
+        if (ok && a->data().isValid()) {
+            a->setIcon(tbIcon(idx));
+        }
     }
-    for (QToolBar* t : findChildren<QToolBar*>()) t->setIconSize(QSize(iconCell(), iconCell()));
+    for (QToolBar* t : findChildren<QToolBar*>()) {
+        t->setIconSize(QSize(iconCell(), iconCell()));
+    }
     o.applyFont();
     fileView_->header()->setSectionResizeMode(o.resizeCols ? QHeaderView::Stretch : QHeaderView::Interactive);
     panel_->applyOptions();
@@ -823,8 +908,12 @@ void MainWindow::showTab(int tab) {
         return;
     }
     stack_->setCurrentIndex(tab);
-    for (int i = 0; i < 3; ++i) aTab_[i]->setChecked(i == tab);
-    if (newUi_) return;  // modern layout: each page carries its own bar
+    for (int i = 0; i < 3; ++i) {
+        aTab_[i]->setChecked(i == tab);
+    }
+    if (newUi_) {
+        return;  // modern layout: each page carries its own bar
+    }
     tbActions_->setVisible(tab == 1);
     tbLog_->setVisible(tab == 2);
     tbFiles_->setVisible(true);  // the original keeps the files toolbar on every page
@@ -846,14 +935,16 @@ void MainWindow::buildSingleScreen() {
     singleHost_ = new QWidget;
     auto* l = new QVBoxLayout(singleHost_);
     l->setContentsMargins(0, 0, 0, 0);
-    arrangeSingle(singleMode_);  // moves the panes out of the stack first
+    arrangeSingle(singleMode_);     // moves the panes out of the stack first
     setCentralWidget(singleHost_);  // deletes the (now empty) stack
     stack_ = nullptr;
 }
 
 void MainWindow::arrangeSingle(int mode) {
-    for (QWidget* p : panes_) p->setParent(singleHost_);  // out of the old splitters, which are deleted below
-    delete outer_;                                        // also deletes inner_
+    for (QWidget* p : panes_) {
+        p->setParent(singleHost_);  // out of the old splitters, which are deleted below
+    }
+    delete outer_;  // also deletes inner_
     outer_ = inner_ = nullptr;
     singleMode_ = mode;
     auto splitter = [](Qt::Orientation o) {
@@ -870,27 +961,45 @@ void MainWindow::arrangeSingle(int mode) {
         inner_->addWidget(panes_[2]);
     } else {
         outer_ = splitter(Qt::Vertical);
-        for (QWidget* p : panes_) outer_->addWidget(p);
+        for (QWidget* p : panes_) {
+            outer_->addWidget(p);
+        }
     }
     singleHost_->layout()->addWidget(outer_);
-    for (int i = 0; i < 3; ++i) panes_[i]->setVisible(paneVisible_[i]);
+    for (int i = 0; i < 3; ++i) {
+        panes_[i]->setVisible(paneVisible_[i]);
+    }
     if (mode == 2) {
         outer_->setStretchFactor(0, 1);
         outer_->setStretchFactor(1, 1);
         inner_->setStretchFactor(0, 3);
         inner_->setStretchFactor(1, 1);
-        if (!stColsOuter_.isEmpty()) outer_->restoreState(stColsOuter_); else outer_->setSizes({420, 880});
-        if (!stColsInner_.isEmpty()) inner_->restoreState(stColsInner_); else inner_->setSizes({480, 180});
+        if (!stColsOuter_.isEmpty()) {
+            outer_->restoreState(stColsOuter_);
+        } else {
+            outer_->setSizes({420, 880});
+        }
+        if (!stColsInner_.isEmpty()) {
+            inner_->restoreState(stColsInner_);
+        } else {
+            inner_->setSizes({480, 180});
+        }
     } else {
         outer_->setStretchFactor(0, 2);
         outer_->setStretchFactor(1, 3);
         outer_->setStretchFactor(2, 1);
-        if (!stBands_.isEmpty()) outer_->restoreState(stBands_); else outer_->setSizes({260, 320, 140});
+        if (!stBands_.isEmpty()) {
+            outer_->restoreState(stBands_);
+        } else {
+            outer_->setSizes({260, 320, 140});
+        }
     }
 }
 
 void MainWindow::saveSingleState() {
-    if (!outer_) return;
+    if (!outer_) {
+        return;
+    }
     if (singleMode_ == 2) {
         stColsOuter_ = outer_->saveState();
         stColsInner_ = inner_->saveState();
@@ -908,7 +1017,9 @@ void MainWindow::setPaneVisible(int page, bool on) {
 // Columns need room: below about 900 px they give way to bands, and come back above 960 px (no flapping).
 void MainWindow::resizeEvent(QResizeEvent* e) {
     QMainWindow::resizeEvent(e);
-    if (!singleScreen_ || pageLayout_ != 2 || !outer_) return;
+    if (!singleScreen_ || pageLayout_ != 2 || !outer_) {
+        return;
+    }
     const int want = singleMode_ == 2 ? (width() < 900 ? 1 : 2) : (width() >= 960 ? 2 : 1);
     if (want != singleMode_) {
         saveSingleState();
@@ -917,7 +1028,9 @@ void MainWindow::resizeEvent(QResizeEvent* e) {
 }
 
 void MainWindow::setBatchVisible(bool on) {
-    if (newUi_) return;  // the plan is always visible
+    if (newUi_) {
+        return;  // the plan is always visible
+    }
     batchView_->setVisible(on);
     batchGroup_->setMaximumHeight(on ? QWIDGETSIZE_MAX : 24);  // collapsed: just the title, like the original
     tbMove_->setVisible((currentTab_ == 1 && on) || currentTab_ == 0);
@@ -925,10 +1038,14 @@ void MainWindow::setBatchVisible(bool on) {
 
 // Modern layout: the tabs show how many files / planned actions there are.
 void MainWindow::updateTabCounts() {
-    if (!newUi_) return;
+    if (!newUi_) {
+        return;
+    }
     const int n[] = {int(files_.size()), batchView_->topLevelItemCount()};
     const char* names[] = {"Files", "Actions"};
-    for (int i = 0; i < 2; ++i) aTab_[i]->setText(n[i] > 0 ? tr_(names[i]) + u" (%1)"_s.arg(n[i]) : tr_(names[i]));
+    for (int i = 0; i < 2; ++i) {
+        aTab_[i]->setText(n[i] > 0 ? tr_(names[i]) + u" (%1)"_s.arg(n[i]) : tr_(names[i]));
+    }
 }
 
 void MainWindow::setStatus() {
@@ -944,715 +1061,13 @@ void MainWindow::setStatus(int percent, const QString& text) {
         progress_->setValue(percent);
         progress_->setTextVisible(percent > 0);
     }
-    if (!text.isEmpty()) statusLabel_->setText(text);
+    if (!text.isEmpty()) {
+        statusLabel_->setText(text);
+    }
 }
 
 QTreeWidget* MainWindow::currentList() const {
-    return currentTab_ == 0 ? static_cast<QTreeWidget*>(fileView_) : currentTab_ == 1 ? static_cast<QTreeWidget*>(batchView_) : nullptr;
-}
-
-// --- files ------------------------------------------------------------------------------------------------------
-File* MainWindow::fileOf(QTreeWidgetItem* item) const {
-    return item ? reinterpret_cast<File*>(item->data(0, PtrRole).value<quintptr>()) : nullptr;
-}
-
-void MainWindow::updateItem(QTreeWidgetItem* item) {
-    File* f = fileOf(item);
-    if (!f) return;
-    static QFileIconProvider provider;
-    static QHash<QString, QIcon> iconCache;
-    item->setText(ColFolder, f->fileFolder());
-    item->setText(ColFileName, f->fileName());
-    item->setText(ColFullPath, f->filePath());
-    item->setText(ColExt, extractFileExt(f->fileName()));
-    item->setText(ColPreview, f->preview);
-    const bool hide = (aChangedOnly_->isChecked() && !f->preview.isEmpty() && f->preview == f->fileName()) || (f->hidden && !aShowHidden_->isChecked());
-    item->setHidden(hide);
-    if (hide) item->setSelected(false);  // a hidden file must never be hit by "Remove sel." or the move buttons
-    auto visible = [this](int c) { return !fileView_->isColumnHidden(c); };
-    if (visible(ColSize)) {
-        const qint64 sz = f->isFolder() ? -1 : f->size();
-        item->setText(ColSize, sz < 0 ? QString() : QLocale().toString(sz));
-        item->setData(ColSize, SortRole, sz);
-        item->setTextAlignment(ColSize, Qt::AlignRight | Qt::AlignVCenter);
-    }
-    auto date = [&](int c, const QDateTime& d) {
-        item->setText(c, d.isValid() ? QLocale().toString(d, QLocale::ShortFormat) : QString());
-        item->setData(c, SortRole, d.isValid() ? d.toMSecsSinceEpoch() : 0);
-    };
-    if (visible(ColCreated)) date(ColCreated, f->createdDate());
-    if (visible(ColModified)) date(ColModified, f->modifiedDate());
-    if (appOptions().fileIcons) {
-        QIcon ic;
-        if (f->isFolder()) {
-            ic = provider.icon(QFileIconProvider::Folder);
-        } else {
-            QString ext = extractFileExt(f->fileName()).toLower();
-            const QString key = (ext == u".exe" || ext == u".ico" || ext == u".lnk" || ext == u".pif") ? f->filePath().toLower() : ext;
-            if (!iconCache.contains(key)) iconCache.insert(key, provider.icon(QFileInfo(f->filePath())));
-            ic = iconCache.value(key);
-        }
-        item->setIcon(ColFolder, ic);
-    } else {
-        item->setIcon(ColFolder, QIcon());
-    }
-    if (f->isFolder()) {
-        const QBrush b(folderColor(palette()));
-        for (int c = 0; c < ColCount; ++c) item->setBackground(c, b);
-    }
-}
-
-void MainWindow::updateAllItems() {
-    fileView_->setUpdatesEnabled(false);
-    for (int i = 0; i < fileView_->topLevelItemCount(); ++i) updateItem(fileView_->topLevelItem(i));
-    fileView_->setUpdatesEnabled(true);
-}
-
-void MainWindow::addFile(const QString& path) {
-    File& f = files_.add(path);
-    f.hidden = isHiddenOrSystem(QFileInfo(path));
-    auto* item = new FileItem;
-    item->setData(0, PtrRole, quintptr(&f));
-    item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled);
-    fileView_->addTopLevelItem(item);
-    rows_.insert(quintptr(&f), item);
-    updateItem(item);
-}
-
-void MainWindow::addFolderContents(const QString& dir, const AddChoice& c) {
-    QDir d(dir);
-    const auto entries = d.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System, QDir::Name | QDir::DirsFirst);
-    for (const QFileInfo& fi : entries) {
-        if (!c.hidden && isHiddenOrSystem(fi)) continue;  // a hidden folder is not entered either
-        const QString p = native(fi.absoluteFilePath());
-        if (fi.isDir()) {
-            if (!c.recursive) continue;
-            if (c.folders) addFile(p);
-            addFolderContents(p, c);
-        } else if (c.files) {
-            addFile(p);
-        }
-    }
-}
-
-// Port of TMainForm.AddFiles: with no choice, every path is added as is; otherwise folders are expanded.
-void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice) {
-    if (worker_) return;  // the list belongs to the worker thread during a run
-    setStatus(0, tr_("Adding files"));
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    fileView_->setUpdatesEnabled(false);
-    for (const QString& p : paths) {
-        const QFileInfo fi(p);
-        if (choice && fi.isDir()) {
-            if (choice->folders) addFile(native(p));
-            addFolderContents(p, *choice);
-        } else if (!choice || (choice->files && fi.isFile())) {
-            addFile(native(p));
-        }
-    }
-    fileView_->setUpdatesEnabled(true);
-    QApplication::restoreOverrideCursor();
-    setStatus();
-    updateSamplePreview();
-}
-
-// Paths sent by the Explorer context menu: like a drop with the saved options, but without the question.
-void MainWindow::addShellPaths(const QStringList& paths) {
-    if (worker_ || paths.isEmpty()) return;
-    const AddChoice c{true, appOptions().addFolders, appOptions().recursive, appOptions().addHidden};  // selected files are always added
-    addFiles(paths, &c);
-    showTab(0);
-    setWindowState(windowState() & ~Qt::WindowMinimized);
-    show();
-    raise();
-    activateWindow();
-}
-
-// The question is asked once the drop is over: a modal window opened inside the drop handler stays behind the file
-// manager, which is still waiting for the end of its drag.
-void MainWindow::filesDropped(const QStringList& paths) {
-    if (worker_ || paths.isEmpty()) return;
-    QTimer::singleShot(0, this, [this, paths] { importDropped(paths); });
-}
-
-void MainWindow::importDropped(const QStringList& paths) {
-    if (worker_) return;
-    AddChoice c{appOptions().addFiles, appOptions().addFolders, appOptions().recursive, appOptions().addHidden};
-    if (!appOptions().dragNoAsk) {
-        bringToFront(this);
-        DragDropDialog dlg(this);
-        dlg.show();
-        bringToFront(&dlg);
-        if (dlg.exec() != QDialog::Accepted) return;
-        c = dlg.choice();
-        appOptions().addFiles = c.files;
-        appOptions().addFolders = c.folders;
-        appOptions().recursive = c.recursive;
-        appOptions().addHidden = c.hidden;
-        appOptions().dragNoAsk = dlg.dontAskAgain();
-        appOptions().save();
-    }
-    addFiles(paths, &c);
-}
-
-void MainWindow::dragEnterEvent(QDragEnterEvent* e) {
-    if (e->mimeData()->hasUrls()) e->acceptProposedAction();
-}
-void MainWindow::dropEvent(QDropEvent* e) {
-    QStringList paths;
-    for (const QUrl& u : e->mimeData()->urls())
-        if (u.isLocalFile()) paths << native(u.toLocalFile());
-    filesDropped(paths);
-}
-
-void MainWindow::renumberFiles() {
-    for (int i = 0; i < fileView_->topLevelItemCount(); ++i)
-        if (File* f = fileOf(fileView_->topLevelItem(i))) f->position = i;
-    files_.sort();
-}
-
-void MainWindow::removeSelectedFiles() {
-    if (worker_) return;
-    const auto sel = fileView_->selectedItems();
-    for (QTreeWidgetItem* it : sel) {
-        File* f = fileOf(it);
-        rows_.remove(quintptr(f));
-        files_.remove(f);
-        delete it;
-    }
-    setStatus();
-    updateSamplePreview();
-}
-
-void MainWindow::removeAllFiles() {
-    if (worker_) return;
-    fileView_->clear();
-    rows_.clear();
-    files_.clear();
-    setStatus();
-    updateSamplePreview();
-}
-
-void MainWindow::removeDeadFiles() {
-    if (worker_) return;
-    for (int i = fileView_->topLevelItemCount() - 1; i >= 0; --i) {
-        QTreeWidgetItem* it = fileView_->topLevelItem(i);
-        File* f = fileOf(it);
-        if (f && !f->exists()) {
-            rows_.remove(quintptr(f));
-            files_.remove(f);
-            delete it;
-        }
-    }
-    setStatus();
-    updateSamplePreview();
-}
-
-void MainWindow::fileHeaderMenu(const QPoint& pos) {
-    if (worker_) return;
-    QMenu m;
-    for (int c = 0; c < ColCount; ++c) {
-        QAction* a = m.addAction(fileView_->headerItem()->text(c));
-        a->setCheckable(true);
-        a->setChecked(!fileView_->isColumnHidden(c));
-        connect(a, &QAction::toggled, this, [this, c](bool on) {
-            if (!on) {
-                int shown = 0;
-                for (int k = 0; k < ColCount; ++k) shown += !fileView_->isColumnHidden(k);
-                if (shown <= 1) return;  // keep at least one column
-            }
-            fileView_->setColumnHidden(c, !on);
-            if (on) updateAllItems();
-        });
-    }
-    if (fileView_->header()->isSortIndicatorShown()) {
-        m.addSeparator();
-        m.addAction(aUnsort_);
-    }
-    m.exec(fileView_->header()->mapToGlobal(pos));
-}
-
-void MainWindow::sortFilesBy(int column) {
-    if (worker_) return;
-    // Own state: Qt's header may already have toggled its indicator by the time sectionClicked fires.
-    auto* h = fileView_->header();
-    sortOrder_ = (sortColumn_ == column && sortOrder_ == Qt::AscendingOrder) ? Qt::DescendingOrder : Qt::AscendingOrder;
-    sortColumn_ = column;
-    h->setSortIndicatorShown(true);
-    h->setSortIndicator(column, sortOrder_);
-    fileView_->sortItems(column, sortOrder_);
-}
-
-void MainWindow::unsortFiles() {
-    if (worker_) return;
-    sortColumn_ = -1;
-    fileView_->header()->setSortIndicatorShown(false);
-}
-
-// --- batch -------------------------------------------------------------------------------------------------------
-void MainWindow::addBatchItem(Action* a) {
-    auto* item = new QTreeWidgetItem;
-    item->setData(0, PtrRole, quintptr(a));
-    item->setText(0, QString::number(batchView_->topLevelItemCount() + 1));
-    item->setText(1, a->description());
-    item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled);
-    batchView_->addTopLevelItem(item);
-}
-
-void MainWindow::addToBatch() {
-    if (worker_) return;
-    auto a = panel_->makeAction(true);
-    if (!a) return;
-    Action* raw = a.get();
-    batch_.add(std::move(a));
-    addBatchItem(raw);
-    if (!batchGroup_->isChecked()) batchGroup_->setChecked(true);
-}
-
-void MainWindow::renumberBatchView() {
-    for (int i = 0; i < batchView_->topLevelItemCount(); ++i) batchView_->topLevelItem(i)->setText(0, QString::number(i + 1));
-}
-
-void MainWindow::renumberActions() {
-    for (int i = 0; i < batchView_->topLevelItemCount(); ++i)
-        reinterpret_cast<Action*>(batchView_->topLevelItem(i)->data(0, PtrRole).value<quintptr>())->position = i;
-    batch_.sort();
-}
-
-void MainWindow::editBatchItem(QTreeWidgetItem* item) {
-    if (worker_ || !item) return;
-    if (const Action* a = reinterpret_cast<const Action*>(item->data(0, PtrRole).value<quintptr>())) {
-        panel_->setFromAction(*a);
-        batchView_->setCurrentItem(item);
-        editIndex_ = QPersistentModelIndex(batchView_->indexFromItem(item));
-        editLabel_->setText(tr_("Modification of action %1").arg(item->text(0)));
-        editBar_->show();
-        setStatus(-1, tr_("Settings loaded: change them, then validate the modification"));
-    }
-}
-
-void MainWindow::applyEditorTo(QTreeWidgetItem* item) {
-    auto a = panel_->makeAction(true);
-    if (!a || !item) return;
-    renumberActions();  // view order == list order from here on
-    Action* raw = a.get();
-    batch_.replace(size_t(batchView_->indexOfTopLevelItem(item)), std::move(a));
-    item->setData(0, PtrRole, quintptr(raw));
-    item->setText(1, raw->description());
-    updateSamplePreview();
-}
-
-void MainWindow::updateBatchItem() {  // toolbar "Modify": the selected action
-    if (worker_) return;
-    const auto sel = batchView_->selectedItems();
-    if (sel.size() != 1) return;
-    applyEditorTo(sel.first());
-    endEdit();
-}
-
-void MainWindow::validateEdit() {  // editor zone "Validate the modification": the action being edited
-    if (worker_) return;
-    if (editIndex_.isValid()) applyEditorTo(batchView_->topLevelItem(editIndex_.row()));
-    endEdit();
-}
-
-void MainWindow::endEdit() {
-    editIndex_ = QPersistentModelIndex();
-    if (editBar_) editBar_->hide();
-}
-
-void MainWindow::removeSelectedActions() {
-    if (worker_) return;
-    renumberActions();  // view order == list order from here on
-    QList<int> rows;
-    for (auto* it : batchView_->selectedItems()) rows << batchView_->indexOfTopLevelItem(it);
-    std::sort(rows.begin(), rows.end(), std::greater<int>());
-    for (int r : rows) {
-        batch_.remove(size_t(r));
-        delete batchView_->takeTopLevelItem(r);
-    }
-    renumberBatchView();
-}
-
-void MainWindow::clearBatch() {
-    if (worker_) return;
-    batchView_->clear();
-    batch_.clear();
-}
-
-void MainWindow::openBatch() {
-    QSettings s = appSettings();
-    const QString p = QFileDialog::getOpenFileName(this, tr_("Open"), s.value(u"folders/batch"_s).toString(),
-                                                   tr_("Ant Renamer batch files (*.arb *.xml)"));
-    if (p.isEmpty()) return;
-    s.setValue(u"folders/batch"_s, QFileInfo(p).absolutePath());
-    openBatchFile(p);
-}
-
-void MainWindow::openBatchFile(const QString& path) {
-    if (worker_) return;
-    QSettings s = appSettings();
-    if (!batch_.load(path)) {
-        QMessageBox::critical(this, windowTitle(), tr_("Could not read %1").arg(native(path)));
-        return;
-    }
-    QStringList mru = s.value(u"mru/batch"_s).toStringList();
-    mru.removeAll(path);
-    mru.prepend(path);
-    while (mru.size() > 9) mru.removeLast();
-    s.setValue(u"mru/batch"_s, mru);
-    batchView_->clear();
-    for (size_t i = 0; i < batch_.size(); ++i) addBatchItem(&batch_.at(i));
-    if (batch_.size() > 0 && !batchGroup_->isChecked()) batchGroup_->setChecked(true);
-}
-
-void MainWindow::saveBatch() {
-    if (worker_) return;  // saving renumbers (re-sorts) the batch the worker is walking
-    QSettings s = appSettings();
-    QString p = QFileDialog::getSaveFileName(this, tr_("Save"), s.value(u"folders/batch"_s).toString(),
-                                             tr_("Ant Renamer batch files (*.arb)"));
-    if (p.isEmpty()) return;
-    if (QFileInfo(p).suffix().isEmpty()) p += u".arb"_s;
-    s.setValue(u"folders/batch"_s, QFileInfo(p).absolutePath());
-    renumberActions();
-    if (!batch_.save(p)) QMessageBox::critical(this, windowTitle(), tr_("Could not write %1").arg(native(p)));
-}
-
-void MainWindow::updateRecentMenu() {
-    recentMenu_->clear();
-    const QStringList mru = appSettings().value(u"mru/batch"_s).toStringList();
-    if (mru.isEmpty()) {
-        recentMenu_->addAction(tr_("(no recent file)"))->setEnabled(false);
-        return;
-    }
-    for (const QString& f : mru) recentMenu_->addAction(native(f), this, [this, f] { openBatchFile(f); });
-}
-
-// --- list helpers -----------------------------------------------------------------------------------------------
-// mode: 0 up, 1 down, 2 top, 3 bottom. Works on the files list and on the batch list.
-void MainWindow::moveItems(int mode) {
-    QTreeWidget* t = currentList();
-    if (!t || worker_) return;
-    QList<QTreeWidgetItem*> sel = t->selectedItems();
-    if (sel.isEmpty()) return;
-    std::sort(sel.begin(), sel.end(), [t](auto* a, auto* b) { return t->indexOfTopLevelItem(a) < t->indexOfTopLevelItem(b); });
-    const int n = t->topLevelItemCount();
-    QSignalBlocker block(t);
-    switch (mode) {
-    case 0: {
-        int limit = 0;
-        for (auto* it : sel) {
-            const int r = t->indexOfTopLevelItem(it);
-            if (r == limit) { ++limit; continue; }
-            t->insertTopLevelItem(r - 1, t->takeTopLevelItem(r));
-        }
-        break;
-    }
-    case 1: {
-        int limit = n - 1;
-        for (int i = int(sel.size()) - 1; i >= 0; --i) {
-            const int r = t->indexOfTopLevelItem(sel[i]);
-            if (r == limit) { --limit; continue; }
-            t->insertTopLevelItem(r + 1, t->takeTopLevelItem(r));
-        }
-        break;
-    }
-    case 2:
-        for (int i = 0; i < sel.size(); ++i) t->insertTopLevelItem(i, t->takeTopLevelItem(t->indexOfTopLevelItem(sel[i])));
-        break;
-    case 3:
-        for (auto* it : sel) t->addTopLevelItem(t->takeTopLevelItem(t->indexOfTopLevelItem(it)));
-        break;
-    }
-    for (auto* it : sel) it->setSelected(true);
-    if (t == batchView_) renumberBatchView();
-    else unsortFiles();
-    if (!sel.isEmpty()) t->scrollToItem(sel.first());
-}
-
-// --- sample preview (one file, current action) ---------------------------------------------------------------------
-void MainWindow::updateSamplePreview() {
-    if (!isVisible() || worker_ || !previewGroup_->isChecked()) return;
-    previewOld_->clear();
-    previewNew_->clear();
-    QTreeWidgetItem* item = fileView_->selectedItems().isEmpty() ? fileView_->topLevelItem(0) : fileView_->selectedItems().first();
-    File* f = fileOf(item);
-    auto action = panel_->makeAction(false);
-    if (!f || !action) return;
-    stopFlag() = false;
-    FileList one;
-    File& copy = one.add(f->filePath());
-    action->perform(one, Op::Preview);
-    previewOld_->setText(copy.fileName());
-    previewNew_->setText(copy.preview);
-}
-
-// --- running ---------------------------------------------------------------------------------------------------------
-void MainWindow::run(Op op, int undoCount) {
-    if (worker_) {
-        QMessageBox::information(this, windowTitle(), tr_("Application is busy: Renaming operation in progress."));
-        return;
-    }
-    if (op == Op::Undo ? journal_.size() == 0 : (files_.size() == 0 || (batch_.size() == 0 && panel_->currentIndex() < 0 && op != Op::Revert))) {
-        QMessageBox::warning(this, windowTitle(), op == Op::Undo ? tr_("Nothing to undo: no renaming pass was made in this session.")
-                                                                  : tr_("Nothing to do: please select at least one file and an action to perform."));
-        if (op != Op::Undo) showTab(1);
-        return;
-    }
-    if (op == Op::Rename) {  // hidden or system files are rarely meant to be renamed: ask first
-        int hidden = 0;
-        if (aShowHidden_->isChecked())
-            for (size_t i = 0; i < files_.size(); ++i) hidden += files_.at(i).hidden;
-        if (hidden && QMessageBox::warning(this, windowTitle(), tr("%1 hidden or system file(s) are in the list and will be renamed. Renaming them can break programs or the system. Continue?").arg(hidden),
-                                           QMessageBox::Yes | QMessageBox::No, QMessageBox::No) != QMessageBox::Yes)
-            return;
-    }
-    const AppOptions& o = appOptions();
-    if (op != Op::Preview) {
-        if (o.startSwitch >= 0) showTab(o.startSwitch);
-        if (o.startClearLog) logAction(0);
-    } else {
-        showTab(0);
-        if (fileView_->isColumnHidden(ColPreview)) {
-            fileView_->setColumnHidden(ColPreview, false);
-            QSettings s = appSettings();
-            if (s.value(u"hints/showPreview"_s, true).toBool()) {
-                QMessageBox box(QMessageBox::Information, windowTitle(),
-                                tr_("Preview column is now visible. If you want to hide it, click with the right mouse button on the column headers of the files list."),
-                                QMessageBox::Ok, this);
-                auto* again = new QCheckBox(tr_("Do not show this hint again"));
-                box.setCheckBox(again);
-                box.exec();
-                if (again->isChecked()) s.setValue(u"hints/showPreview"_s, false);
-            }
-        }
-    }
-    runLogStart_ = logEntries_.size();
-    addLog(op == Op::Rename ? tr_("Renaming process started") : op == Op::Preview ? tr_("Refreshing preview") : op == Op::Undo ? tr_("Undoing the last renaming passes") : tr_("Revert to previous names"), State::Info);
-
-    renumberFiles();
-    renumberActions();
-    aStop_->setEnabled(true);
-    aGo_->setEnabled(false);
-    setStatus(0, tr_("Renaming files"));
-
-    if (op != Op::Revert && op != Op::Undo && batch_.size() == 0) {  // empty batch: run the action configured on screen, then forget it
-        auto a = panel_->makeAction(true);
-        if (a) {
-            Action* raw = a.get();
-            batch_.add(std::move(a));
-            addBatchItem(raw);
-        }
-        clearBatchAfter_ = true;
-    } else {
-        clearBatchAfter_ = op == Op::Rename && o.finishClearBatch;
-    }
-    if (op == Op::Rename)
-        for (size_t i = 0; i < batch_.size(); ++i) addLog(u"%1. %2"_s.arg(i + 1).arg(batch_.at(i).description()), State::Info);
-
-    stopFlag() = false;
-    worker_ = new RenWorker(&batch_, &files_, op, undoCount);
-    connect(worker_, &RenWorker::progress, this, &MainWindow::onProgress, Qt::QueuedConnection);
-    connect(worker_, &QThread::finished, this, &MainWindow::onFinished);
-    setBusy(true);
-    worker_->start();
-}
-
-void MainWindow::onProgress(const Snapshot& s) {
-    const AppOptions& o = appOptions();
-    if (!s.file) {
-        addLog(s.description, State(s.state));
-        return;
-    }
-    if (o.realtime) {
-        if (QTreeWidgetItem* it = rows_.value(s.file)) {  // texts from the snapshot: the worker may already be editing this File again
-            it->setText(ColFolder, s.folder);
-            it->setText(ColFileName, s.name);
-            it->setText(ColFullPath, s.folder + s.name);
-            it->setText(ColExt, extractFileExt(s.name));
-            it->setText(ColPreview, s.preview);
-            const bool hide = aChangedOnly_->isChecked() && !s.preview.isEmpty() && s.preview == s.name;
-            it->setHidden(hide);
-            if (hide) it->setSelected(false);
-        }
-    }
-    if (o.genLog) addLog(s.description, State(s.state));
-    if (o.realtime) {
-        const bool undo = worker_ && worker_->op() == Op::Revert;  // an undo makes one pass, whatever the batch holds
-        const int div = int(files_.size() * (undo ? 1 : batch_.size()));
-        if (div > 0 && !(worker_ && worker_->op() == Op::Undo)) setStatus(int(((qint64(s.batchPos) * int(files_.size())) + s.index + 1) * 100 / div), {});
-    }
-}
-
-void MainWindow::onFinished() {
-    // the queued progress signals were posted before finished(); drain them first
-    QCoreApplication::sendPostedEvents(this, QEvent::MetaCall);
-    const Op op = worker_->op();
-    worker_->deleteLater();
-    worker_ = nullptr;
-    setBusy(false);
-    const AppOptions& o = appOptions();
-
-    if (stopFlag()) addLog(tr_("Operation stopped by user"), State::Info);
-    addLog(op == Op::Rename ? tr_("Renaming process finished") : op == Op::Preview ? tr_("Preview process finished") : tr_("Revert process finished"), State::Info);
-    if (op != Op::Preview && o.finishSwitch >= 0) showTab(o.finishSwitch);
-    if (clearBatchAfter_) clearBatch();
-    if (o.finishClearFiles && op != Op::Preview) removeAllFiles();
-    if (o.saveLog && op != Op::Preview && !o.saveLogFile.isEmpty()) {
-        QFile f(o.saveLogFile);
-        if (f.open(QIODevice::WriteOnly | (o.saveLogAppend ? QIODevice::Append : QIODevice::Truncate))) {
-            if (f.size() == 0) f.write("\xEF\xBB\xBF");
-            for (size_t i = qMin(runLogStart_, logEntries_.size()); i < logEntries_.size(); ++i) {  // this run only
-                const LogEntry& e = logEntries_[i];
-                const char* mark = e.state == State::NotRenamed ? " " : e.state == State::Ok ? "v" : e.state == State::Error ? "x" : nullptr;
-                if (mark) f.write(QByteArray(mark) + '\t' + e.text.toUtf8() + "\r\n");
-            }
-        } else {
-            addLog(tr_("Could not write %1").arg(native(o.saveLogFile)), State::Error);  // a log line, not a dialog: -g -x runs unattended
-        }
-    }
-    aGo_->setEnabled(true);
-    aStop_->setEnabled(false);
-    updateUndoState();
-    setStatus();
-    updateAllItems();
-    updateSamplePreview();
-    if (exitAfterRun_) close();
-}
-
-// While a run is in progress the lists, the batch and the options belong to the worker thread. The handlers also test
-// worker_; disabling the actions makes it visible (and keeps their shortcuts from firing).
-void MainWindow::setBusy(bool busy) {
-    for (QAction* a : {aOptions_, aAddFiles_, aAddFolders_, aRemoveSel_, aRemoveAll_, aRemoveDead_, aPreview_, aChangedOnly_, aShowHidden_,
-                       aBatchAdd_, aBatchRemoveSel_, aBatchClear_, aBatchOpen_, aBatchSave_, aUp_, aDown_, aTop_, aBottom_, aUnsort_})
-        a->setEnabled(!busy);
-    aBatchEdit_->setEnabled(!busy && newUi_ && batchView_->selectedItems().size() == 1);
-    aUndo_->setEnabled(!busy && journal_.size() > 0);
-    aHistory_->setEnabled(!busy && journal_.size() > 0);
-}
-
-void MainWindow::updateUndoState() { setBusy(worker_ != nullptr); }
-
-// The passes of the session, newest first. Undo goes back linearly: choosing a pass undoes it and every pass after it.
-void MainWindow::showHistory() {
-    if (worker_ || journal_.size() == 0) return;
-    QDialog dlg(this);
-    dlg.setWindowTitle(tr_("Renaming history"));
-    auto* lay = new QVBoxLayout(&dlg);
-    lay->addWidget(new QLabel(tr_("Passes of this session, newest first. Passes are undone one after the other from the last one: "
-                                  "choosing a pass undoes it and all the passes made after it.")));
-    dynamic_cast<QLabel*>(lay->itemAt(0)->widget())->setWordWrap(true);
-    auto* list = new QListWidget;
-    const auto& passes = journal_.passes();
-    for (auto it = passes.rbegin(); it != passes.rend(); ++it)
-        list->addItem(tr_("#%1  %2  -  %3 move(s)  -  %4").arg(it->number).arg(it->when.toString(u"hh:mm:ss"_s)).arg(it->moves.size()).arg(it->summary));
-    list->setCurrentRow(0);
-    lay->addWidget(list, 1);
-    auto* box = new QDialogButtonBox(QDialogButtonBox::Close);
-    auto* undoBtn = box->addButton(tr_("Undo up to this pass"), QDialogButtonBox::AcceptRole);
-    connect(box, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
-    connect(box, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
-    connect(list, &QListWidget::itemDoubleClicked, undoBtn, &QPushButton::click);
-    lay->addWidget(box);
-    dlg.resize(620, 360);
-    if (dlg.exec() != QDialog::Accepted || list->currentRow() < 0) return;
-    const int count = list->currentRow() + 1;
-    if (count > 1 && QMessageBox::question(this, windowTitle(), tr_("Undo %1 passes?").arg(count)) != QMessageBox::Yes) return;
-    run(Op::Undo, count);
-}
-
-// --- log ------------------------------------------------------------------------------------------------------------------
-void MainWindow::addLog(const QString& text, State st) {
-    if (text.isEmpty()) return;
-    logEntries_.push_back({text, st});
-    const bool shown = (st == State::Ok && logShowOk_) || (st == State::Error && logShowError_) ||
-                       (st == State::NotRenamed && logShowNot_) || st == State::Info;
-    if (!shown) return;
-    auto* item = new QListWidgetItem(text, logView_);
-    // dark red or navy on a dark background cannot be read: lighter shades there
-    static const QColor light[] = {QColor(0, 0, 128), QColor(0, 128, 0), QColor(128, 0, 0), QColor(128, 128, 128)};
-    static const QColor dark[] = {QColor(0x7a, 0xb4, 0xff), QColor(0x6f, 0xd0, 0x6f), QColor(0xff, 0x7b, 0x7b), QColor(0xaa, 0xaa, 0xaa)};
-    const QColor* colors = isDarkPalette(logView_->palette()) ? dark : light;
-    item->setForeground(colors[int(st)]);
-    if (currentTab_ == 2 || singleScreen_) logView_->scrollToItem(item);
-}
-
-void MainWindow::rebuildLog() {
-    const auto all = logEntries_;
-    logEntries_.clear();
-    logView_->clear();
-    for (const LogEntry& e : all) addLog(e.text, e.state);
-}
-
-void MainWindow::logAction(int which) {
-    if (which == 0) {
-        logEntries_.clear();
-        logView_->clear();
-        return;
-    }
-    QStringList lines;
-    for (int i = 0; i < logView_->count(); ++i) lines << logView_->item(i)->text();
-    if (which == 2) {
-        QApplication::clipboard()->setText(lines.join(u'\n'));
-    } else {
-        const QString p = QFileDialog::getSaveFileName(this, tr_("Save log"), {}, tr_("Text files (*.log *.txt)"));
-        QFile f(p);
-        if (p.isEmpty()) return;
-        if (f.open(QIODevice::WriteOnly | QIODevice::Text)) f.write(lines.join(u"\r\n"_s).toUtf8());
-        else QMessageBox::critical(this, windowTitle(), tr_("Could not write %1").arg(native(p)));
-    }
-}
-
-// --- command line (same switches as the original) ---------------------------------------------------------------------------
-// -b file.arb  load a batch      -g  start renaming      -x  exit when finished
-// -a[fFr]      what the following paths add: f = files, F = folders, r = recursive; wildcards allowed
-void MainWindow::processCommandLine(const QStringList& args) {
-    bool go = false, exit = false;
-    AddChoice add{false, false, false};
-    bool haveAdd = false;
-    const QString start = QDir::currentPath();
-    for (int i = 0; i < args.size(); ++i) {
-        const QString& a = args[i];
-        if (a == u"--shell") {  // Explorer context menu: everything after it is a path
-            addShellPaths(args.mid(i + 1));
-            break;
-        }
-        if (a == u"-b" && i + 1 < args.size()) {
-            openBatchFile(QDir(start).absoluteFilePath(args[++i]));
-        } else if (a == u"-g") {
-            go = true;
-        } else if (a == u"-x") {
-            exit = true;
-        } else if (a.startsWith(u"-a")) {
-            haveAdd = true;
-            add = {a.contains(u'f'), a.contains(u'F'), a.contains(u'r')};
-        } else if (!haveAdd || !add.any()) {
-            const QString p = QDir(start).absoluteFilePath(a);
-            if (a.endsWith(u".arb", Qt::CaseInsensitive)) openBatchFile(p);
-            else if (QFileInfo(p).isDir()) {  // v2.07 compatibility
-                const AddChoice legacy{true, false, true};
-                addFiles({p}, &legacy);
-            }
-        } else {
-            const QFileInfo fi(QDir(start).absoluteFilePath(a));
-            const QString mask = fi.fileName() == u"*.*" ? u"*"_s : fi.fileName();  // "*.*" is "everything" for the user; for Qt it needs a dot
-            const auto found = QDir(fi.absolutePath()).entryInfoList({mask}, QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden);
-            for (const QFileInfo& m : found) {
-                if (m.isDir()) {
-                    if (add.folders) addFile(native(m.absoluteFilePath()));
-                    if (add.recursive) addFolderContents(m.absoluteFilePath(), add);
-                } else if (add.files) {
-                    addFile(native(m.absoluteFilePath()));
-                }
-            }
-        }
-    }
-    setStatus();
-    updateSamplePreview();
-    if (go && files_.size() > 0) {
-        exitAfterRun_ = exit;
-        run(Op::Rename);
-    } else if (exit) {
-        QTimer::singleShot(0, this, [this] { close(); });  // from the event loop, so quitting always works
-    }
+    return currentTab_ == 0   ? static_cast<QTreeWidget*>(fileView_)
+           : currentTab_ == 1 ? static_cast<QTreeWidget*>(batchView_)
+                              : nullptr;
 }

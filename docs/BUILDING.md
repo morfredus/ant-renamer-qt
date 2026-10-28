@@ -6,7 +6,7 @@ How the project is built, tested and packaged. For the structure of the code see
 
 - A C++20 compiler (g++ is what the project uses; MSVC is accepted by the CMake files).
 - CMake 3.21 or newer and Ninja.
-- Qt 6: modules Core, Widgets and Network (plus the Qt tools, `windeployqt`, on Windows).
+- Qt 6.4 or newer (6.4.2 is the Qt of Ubuntu 24.04 and Linux Mint 22, the oldest the project is built with; do not use an API added after 6.4): modules Core, Widgets and Network (plus the Qt tools, `windeployqt`, on Windows).
 
 Nothing else: no third-party library.
 
@@ -19,6 +19,7 @@ Nothing else: no third-party library.
 
 - The **engine** (`core/`) is a static library, `rencore`, that depends on QtCore only.
 - The **application** (`app/`) is the executable `antrenamer-qt` (Qt Widgets and Network). It links `rencore`.
+- Compiler warnings (`-Wall -Wextra -Wshadow`) are on for GCC and Clang; the code builds without any.
 - Two test programs: `test_core` (engine only) and `test_panel` (the actions editor, without a window).
 - The version comes from the `VERSION` file at the root, the single source: CMake reads it and passes it to the program.
 - `CMakePresets.json` holds the settings per platform, so a build is always `cmake --preset <name>` then `cmake --build --preset <name>`.
@@ -91,10 +92,12 @@ All packages are written to `dist/`.
 | Windows | `powershell -ExecutionPolicy Bypass -File scripts\windows\package-win.ps1` | `AntRenamerQt-<version>-win64-portable.zip` and, when Inno Setup 6 is installed, `AntRenamerQt-<version>-win64-setup.exe` |
 | Debian / Ubuntu | `scripts/linux/package-deb.sh` | `AntRenamerQt-<version>-linux-<arch>.deb` |
 | Linux, any distribution | `scripts/linux/package-appimage.sh` | `AntRenamerQt-<version>-linux-x86_64.AppImage` |
+| Linux, Flatpak (Flathub) | `flatpak-builder --user --install --force-clean build-dir packaging/flatpak/fr.morfredus.AntRenamerQt.yaml` | the application installed for the user |
 
-- `package-win.ps1` builds, stages the files that are needed at run time, then runs Inno Setup with `installer/antrenamer-qt.iss` for the installer. The zip contains an empty `antrenamer-qt.ini`, which switches the portable mode on.
+- `package-win.ps1` builds, stages the files that are needed at run time, then runs Inno Setup with `installer/antrenamer-qt.iss` for the installer (its tasks include the two new-version check choices, written as `checkUpdates` and `checkPrereleases` in the user's settings file, so the keys must keep the names used by `app/appsettings.cpp`). The zip contains an empty `antrenamer-qt.ini`, which switches the portable mode on.
 - `package-deb.sh` expects a finished build (`--build <folder>` to choose it). The package depends on the system Qt (the dependencies are detected from the binary, or from the sysroot when cross-compiling) and installs the program in `/usr/bin` and the languages and help in `/usr/share/antrenamer-qt`.
 - `package-appimage.sh` downloads `linuxdeploy` and its Qt plugin into `.cache/` the first time (an Internet connection is needed once). Both are pinned to a release and checked against a SHA-256 in the script (`LD_TAG`/`LD_SHA256`, `QT_TAG`/`QT_SHA256`): a file with another hash is refused. To update them, change the tags, download the files and recompute the hashes with `sha256sum`.
+- `packaging/flatpak/` holds the Flatpak manifest (`….local.yaml` is the same built from the working copy, to try it before a tag exists; it needs `flatpak-builder` and the KDE runtime and SDK from Flathub), the AppStream file (`.metainfo.xml`: description, screenshots, releases) and the icon is `app/antrenamer-qt.svg`. Flathub builds from the Git tag named in the manifest (`tag` and `commit`): before submitting a version, set both and the release date in the `.metainfo.xml`. Under Flatpak the program has no network access, so the new-version check is hidden (`runsInFlatpak()` in `app/updatecheck.h`).
 - `.github/workflows/build.yml` builds on Linux and Windows for every push and pull request, runs the tests, and keeps the Windows packages as workflow artifacts.
 
 ## Command line options of the program

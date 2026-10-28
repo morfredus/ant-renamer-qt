@@ -6,7 +6,7 @@ Comment le projet est compilé, testé et empaqueté. Pour la structure du code 
 
 - Un compilateur C++20 (g++ est celui qu'utilise le projet ; MSVC est prévu dans les fichiers CMake).
 - CMake 3.21 ou plus récent, et Ninja.
-- Qt 6 : modules Core, Widgets et Network (plus les outils Qt, `windeployqt`, sous Windows).
+- Qt 6.4 ou plus récent (6.4.2 est le Qt d'Ubuntu 24.04 et de Linux Mint 22, le plus ancien avec lequel le projet est compilé ; n'utilisez pas une API ajoutée après la 6.4) : modules Core, Widgets et Network (plus les outils Qt, `windeployqt`, sous Windows).
 
 Rien d'autre : aucune bibliothèque tierce.
 
@@ -19,6 +19,7 @@ Rien d'autre : aucune bibliothèque tierce.
 
 - Le **moteur** (`core/`) est une bibliothèque statique, `rencore`, qui ne dépend que de QtCore.
 - L'**application** (`app/`) est l'exécutable `antrenamer-qt` (Qt Widgets et Network). Il utilise `rencore`.
+- Les avertissements du compilateur (`-Wall -Wextra -Wshadow`) sont activés pour GCC et Clang ; le code compile sans aucun.
 - Deux programmes de test : `test_core` (moteur seul) et `test_panel` (l'éditeur d'actions, sans fenêtre).
 - La version vient du fichier `VERSION` à la racine, source unique : CMake la lit et la passe au programme.
 - `CMakePresets.json` contient les réglages par plateforme : une compilation, c'est toujours `cmake --preset <nom>` puis `cmake --build --preset <nom>`.
@@ -91,10 +92,12 @@ Tous les paquets sont écrits dans `dist/`.
 | Windows | `powershell -ExecutionPolicy Bypass -File scripts\windows\package-win.ps1` | `AntRenamerQt-<version>-win64-portable.zip` et, si Inno Setup 6 est installé, `AntRenamerQt-<version>-win64-setup.exe` |
 | Debian / Ubuntu | `scripts/linux/package-deb.sh` | `AntRenamerQt-<version>-linux-<arch>.deb` |
 | Linux, toute distribution | `scripts/linux/package-appimage.sh` | `AntRenamerQt-<version>-linux-x86_64.AppImage` |
+| Linux, Flatpak (Flathub) | `flatpak-builder --user --install --force-clean build-dir packaging/flatpak/fr.morfredus.AntRenamerQt.yaml` | l'application installée pour l'utilisateur |
 
-- `package-win.ps1` compile, prépare les fichiers utiles à l'exécution, puis lance Inno Setup avec `installer/antrenamer-qt.iss` pour l'installeur. Le zip contient un `antrenamer-qt.ini` vide, qui active le mode portable.
+- `package-win.ps1` compile, prépare les fichiers utiles à l'exécution, puis lance Inno Setup avec `installer/antrenamer-qt.iss` pour l'installeur (ses tâches comprennent les deux choix de la recherche de nouvelle version, écrits sous les noms `checkUpdates` et `checkPrereleases` dans le fichier de réglages de l'utilisateur : ces clés doivent garder les noms de `app/appsettings.cpp`). Le zip contient un `antrenamer-qt.ini` vide, qui active le mode portable.
 - `package-deb.sh` attend une compilation terminée (`--build <dossier>` pour la choisir). Le paquet dépend du Qt du système (les dépendances sont détectées depuis le binaire, ou depuis le sysroot en compilation croisée) et installe le programme dans `/usr/bin`, les langues et l'aide dans `/usr/share/antrenamer-qt`.
 - `package-appimage.sh` télécharge `linuxdeploy` et son greffon Qt dans `.cache/` la première fois (une connexion Internet est nécessaire une fois). Les deux sont épinglés à une version et vérifiés par un SHA-256 dans le script (`LD_TAG`/`LD_SHA256`, `QT_TAG`/`QT_SHA256`) : un fichier dont l'empreinte diffère est refusé. Pour les mettre à jour, changer les tags, télécharger les fichiers et recalculer les empreintes avec `sha256sum`.
+- `packaging/flatpak/` contient le manifeste Flatpak (`….local.yaml` est le même compilé depuis la copie de travail, pour l'essayer avant qu'un tag existe ; il demande `flatpak-builder` et le runtime et le SDK KDE de Flathub), le fichier AppStream (`.metainfo.xml` : description, captures, versions) et l'icône est `app/antrenamer-qt.svg`. Flathub compile depuis le tag Git indiqué dans le manifeste (`tag` et `commit`) : avant de soumettre une version, renseigner les deux ainsi que la date de la version dans le `.metainfo.xml`. Sous Flatpak le programme n'a pas d'accès réseau, la recherche de nouvelle version y est donc masquée (`runsInFlatpak()` dans `app/updatecheck.h`).
 - `.github/workflows/build.yml` compile sous Linux et Windows à chaque push et pull request, lance les tests, et garde les paquets Windows comme artefacts du workflow.
 
 ## Options de ligne de commande du programme

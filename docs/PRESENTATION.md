@@ -54,7 +54,7 @@ common, on purpose: both programs read each other's batches.
 - **The original help**: the help pages (English, French, Croatian, Tamil) and the version history are shipped
   and opened from F1 and from the "Help" links of the action notes. The pages are no longer HTML (CHM) but 76
   Markdown files (UTF-8) with a Markdown table of contents; the text is the same, revised for the port.
-- **The original graphics**: toolbar icon sets (Scrows, Windows XP, Windows XP Large), `renamer.ico`, `ant.bmp`,
+- **The original graphics**: toolbar icon sets (Scrows, Windows XP, Windows XP Large),
   and the predefined "Remove west-european accents" set from `default.xml`.
 - **Behaviour details**: renaming runs in a worker thread with Stop and Undo, folders can be renamed with the
   list following the move, "force directories", absolute path detection, "copy instead of rename", folder
@@ -190,7 +190,7 @@ Users of Ant Renamer 2.x asked for a number of things on the forum of the origin
 - Third-party code used by the port: Qt 6 (LGPL v3 / GPL), nothing else. The Delphi components of the
   original are not needed.
 - Reused from the original, unchanged: `Languages/*.lng`, `help/` (images; the pages were converted from HTML to Markdown and revised for the port), toolbar bitmaps,
-  `renamer.ico`, `ant.bmp`, `default.xml`, texts of the action notes. Translators are credited in the
+  `default.xml`, texts of the action notes. Translators are credited in the
   Credits tab as in the original About box.
 
 ## Feedback and support

@@ -1,21 +1,21 @@
-# Toolchain CMake : cross-compilation Linux ARM64 (aarch64) depuis un hote x86_64
-# (preset "linux-arm64-cross" de CMakePresets.json). Fichier propre au projet.
+# CMake toolchain: cross-compiling for Linux ARM64 (aarch64) from an x86_64 host
+# (preset "linux-arm64-cross" of CMakePresets.json). Specific to this project.
 #
-# Il faut un sysroot ARM64 contenant Qt6 et ses dependances (par exemple un Debian arm64
-# monte avec debootstrap/qemu). Le build natif "linux-arm64" (directement sur la machine
-# ARM64, ex. Raspberry Pi) reste la voie la plus simple.
+# It needs an ARM64 sysroot with Qt6 and its dependencies (for example a Debian arm64
+# mounted with debootstrap/qemu). The native "linux-arm64" build (directly on the ARM64
+# machine, e.g. a Raspberry Pi) remains the simplest way.
 #
-# Variables d'environnement :
-#   ARM64_SYSROOT      (OBLIGATOIRE) chemin du sysroot ARM64.
-#   ARM64_CROSS_PREFIX prefixe des outils croises. Defaut : "aarch64-linux-gnu-".
-#   ARM64_QT_HOST_PATH Qt6 HOTE x86_64 de MEME version que la cible (moc/rcc/uic natifs).
-#                      Sans lui, les outils Qt arm64 du sysroot sont executes sous qemu-user
-#                      (le preset exporte QEMU_LD_PREFIX=$ARM64_SYSROOT).
+# Environment variables:
+#   ARM64_SYSROOT      (REQUIRED) path of the ARM64 sysroot.
+#   ARM64_CROSS_PREFIX prefix of the cross tools. Default: "aarch64-linux-gnu-".
+#   ARM64_QT_HOST_PATH x86_64 HOST Qt6 of the SAME version as the target (native moc/rcc/uic).
+#                      Without it, the arm64 Qt tools of the sysroot run under qemu-user
+#                      (the preset exports QEMU_LD_PREFIX=$ARM64_SYSROOT).
 
 if(NOT DEFINED ENV{ARM64_SYSROOT})
     message(FATAL_ERROR
-        "ARM64_SYSROOT n'est pas defini. Le cross-build ARM64 exige un sysroot arm64 avec Qt6 ; "
-        "exporter ARM64_SYSROOT=<chemin> avant `cmake --preset linux-arm64-cross`.")
+        "ARM64_SYSROOT is not set. The ARM64 cross build needs an arm64 sysroot with Qt6; "
+        "export ARM64_SYSROOT=<path> before `cmake --preset linux-arm64-cross`.")
 endif()
 
 set(CMAKE_SYSTEM_NAME Linux)
@@ -31,17 +31,17 @@ set(CMAKE_CXX_COMPILER "${_prefix}g++")
 
 set(CMAKE_SYSROOT        "$ENV{ARM64_SYSROOT}")
 set(CMAKE_FIND_ROOT_PATH "$ENV{ARM64_SYSROOT}")
-set(CMAKE_LIBRARY_ARCHITECTURE aarch64-linux-gnu)  # multiarch Debian
+set(CMAKE_LIBRARY_ARCHITECTURE aarch64-linux-gnu)  # Debian multiarch
 
-# Programmes (compilateur, moc...) cherches sur l'hote ; bibliotheques, en-tetes et paquets
-# uniquement dans le sysroot.
+# Programs (compiler, moc...) are looked up on the host; libraries, headers and packages
+# only in the sysroot.
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
 if(DEFINED ENV{ARM64_QT_HOST_PATH})
-    set(QT_HOST_PATH "$ENV{ARM64_QT_HOST_PATH}" CACHE PATH "Qt6 hote (outils moc/rcc/uic)")
+    set(QT_HOST_PATH "$ENV{ARM64_QT_HOST_PATH}" CACHE PATH "Host Qt6 (moc/rcc/uic tools)")
 endif()
 
 set(ENV{PKG_CONFIG_SYSROOT_DIR} "$ENV{ARM64_SYSROOT}")
