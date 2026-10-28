@@ -4,7 +4,7 @@ Thank you for your interest. ([Version française](CONTRIBUTING_fr.md))
 
 ## Before you start
 
-- **Bug, idea or question?** Open an [issue](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, feature requests) or start a [discussion](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, ideas). Please do not report Ant Renamer Qt problems to the author of the original program.
+- **Bug, idea or question?** Open an [issue](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, feature requests) or start a [discussion](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, ideas). Please do not report Ant Renamer Qt problems to the author of the original program. No GitHub account? Write to [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr).
 - **Bigger change?** Talk about it first in an issue, so nobody works on something that will not be merged.
 - Issues and pull requests can be written in English or in French.
 

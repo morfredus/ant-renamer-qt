@@ -487,7 +487,8 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
                    "program. Port (Windows and Linux): Frédéric Biron.") +
                 u"<br><br>"_s + tr("Ant Renamer Qt support: ") +
                 u"<a href='https://github.com/morfredus/ant-renamer-qt/'>github.com/morfredus/ant-renamer-qt</a> ("_s +
-                tr("issues and discussions") + u")<br><br>"_s + tr("Ant Renamer Qt web site: ") +
+                tr("issues and discussions") + u")<br>"_s + tr("Support by e-mail (no GitHub account needed): ") +
+                u"<a href='mailto:ant-renamer-qt@morfredus.fr'>ant-renamer-qt@morfredus.fr</a><br><br>"_s + tr("Ant Renamer Qt web site: ") +
                 u"<a href='https://morfredus.fr/ant-renamer-qt/'>morfredus.fr/ant-renamer-qt</a><br>"_s +
                 tr("Web site of the original program (Antoine Potten): ") +
                 u"<a href='https://www.antp.be/software/renamer/'>www.antp.be/software/renamer/</a><br><br>"_s + u"<b>"_s +

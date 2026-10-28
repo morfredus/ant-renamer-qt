@@ -198,7 +198,7 @@ Users of Ant Renamer 2.x asked for a number of things on the forum of the origin
 Questions, bug reports and ideas about Ant Renamer Qt go to
 [Issues](https://github.com/morfredus/ant-renamer-qt/issues) and
 [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions). Support for the port is separate from the
-original program: please do not report its problems to the author of the original Ant Renamer.
+original program: please do not report its problems to the author of the original Ant Renamer. No GitHub account? Write to [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr).
 
 Thanks to Antoine Potten for the program and for publishing its sources: without them this port would not exist.
 

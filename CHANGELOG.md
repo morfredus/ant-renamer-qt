@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Added
+
+- Support by e-mail for people without a GitHub account: [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr) in the About box (new text `supportByEmail` in `English.lng` and `French.lng`, other languages show the English text), in the About help pages (en, fr, hr, ta), and in README, SECURITY, CONTRIBUTING and PRESENTATION (EN, FR).
+
 ## [3.1.0-beta.1] - 2026-10-28
 
 ### Added

@@ -203,7 +203,7 @@ Les utilisateurs d'Ant Renamer 2.x ont formulé plusieurs demandes sur le forum 
 
 Questions, signalements de bogues et idées concernant Ant Renamer Qt : [Issues](https://github.com/morfredus/ant-renamer-qt/issues)
 et [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions). L'assistance du portage est séparée de celle du
-programme d'origine : merci de ne pas signaler ses problèmes à l'auteur d'Ant Renamer.
+programme d'origine : merci de ne pas signaler ses problèmes à l'auteur d'Ant Renamer. Pas de compte GitHub ? Écrivez à [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr).
 
 Merci à Antoine Potten pour le programme et pour la publication de ses sources : sans elles ce portage n'existerait pas.
 

@@ -4,7 +4,7 @@ Merci de votre intérêt. ([English version](CONTRIBUTING.md))
 
 ## Avant de commencer
 
-- **Un bug, une idée, une question ?** Ouvrez une [issue](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, demandes de fonctionnalités) ou lancez une [discussion](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, idées). Merci de ne pas signaler les problèmes d'Ant Renamer Qt à l'auteur du programme d'origine.
+- **Un bug, une idée, une question ?** Ouvrez une [issue](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, demandes de fonctionnalités) ou lancez une [discussion](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, idées). Merci de ne pas signaler les problèmes d'Ant Renamer Qt à l'auteur du programme d'origine. Pas de compte GitHub ? Écrivez à [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr).
 - **Un changement important ?** Parlez-en d'abord dans une issue, pour que personne ne travaille sur quelque chose qui ne sera pas intégré.
 - Les issues et les pull requests peuvent être écrites en anglais ou en français.
 

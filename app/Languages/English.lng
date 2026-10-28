@@ -480,6 +480,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="antRenamerQtIs" Value="Ant Renamer Qt is a C++/Qt port of Ant Renamer by Antoine Potten, developed in parallel with the original program. Port (Windows and Linux): Frédéric Biron."/>
     <Item Name="antRenamerQtSupport" Value="Ant Renamer Qt support: "/>
     <Item Name="issuesAndDiscussions" Value="issues and discussions"/>
+    <Item Name="supportByEmail" Value="Support by e-mail (no GitHub account needed): "/>
     <Item Name="port" Value="Port:"/>
     <Item Name="cQtPortAnd" Value="C++/Qt 6 port and Linux port: "/>
     <Item Name="components" Value="Components:"/>
