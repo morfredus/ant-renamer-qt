@@ -6,10 +6,10 @@ This chapter is specific to Ant Renamer Qt. In addition to the classic layout de
 
 Open the [options window](options_hr.md#display), *Display* page:
 
-- **Modern interface layout (used at the next start)** : shows the modern layout instead of the classic one.
+- **Modern interface layout** : shows the modern layout instead of the classic one.
 - **Pages layout (modern interface)** : how the three pages (Files, Actions, Log) are arranged: *Tabs*, *Single screen, in bands* or *Single screen, in columns*, see [below](#layouts). This choice is only available when the modern layout is enabled.
 
-The changes are applied the next time the program starts. The modern layout keeps its own window size, column widths and splitter positions, so the classic layout is not affected: you can go back to it at any time.
+The changes are applied as soon as you click "OK" in the options: the window is rebuilt, and your files, batch and log are kept. The modern layout keeps its own window size, column widths and splitter positions, so the classic layout is not affected: you can go back to it at any time.
 
 ## Main bar and page bars {#bar}
 

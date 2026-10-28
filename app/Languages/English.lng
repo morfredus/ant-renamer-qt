@@ -3,10 +3,10 @@
 Icon=Qk32AAAAAAAAAHYAAAAoAAAAEAAAABAAAAABAAQAAAAAAIAAAAAzCwAAMwsAABAAAAAQAAAAAAAAAFAAAABmAAAAmAAAAK4AAACYMgAA/QAyAP9mMwAAAJgAAAC0AAAA/QBlZf8AmZmZAP//mQD//8sA////AP//////////AAAAAAAAAAAJUSLIjCIVkAHqQ+quNK1gAj6j6q4642ACM+rqrq4zYAzu7uqu7u7gCKqqqqqqqrAIqqqqqqqqsAzu7uqu7u7gAjTq6q6uM2ACPqPqrjrjYAHqQ+quM65gCXZm675mZrAAAAAAAAAAAP//////////
 Name=English for translations
 LocalName=English
-Version=2.13
+Version=3.1
 VersionFormat=2.13
-Comments=Reference/sample file for other translations.|If you want to use the program in English it is recommended to select "English (default)", unless you want to modify it.
-Authors=Antoine Potten|antrenamer-contact@antp.be
+Comments=Reference/sample file for other translations.|If you want to use the program in English it is recommended to select "English (default)", unless you want to modify it.|English text of the original by Antoine Potten, extended by Frédéric Biron for Ant Renamer Qt.
+Authors=Antoine Potten|antrenamer-contact@antp.be|Frédéric Biron (Ant Renamer Qt)
 -->
 <!--
 Note for translators: If you want to submit a new language, simply copy this file to another name and replace the English text by the correct translation.
@@ -444,7 +444,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="theNewLanguageIs" Value="The new language is used the next time the program starts."/>
     <Item Name="history" Value="History"/>
     <Item Name="naturalSortInFiles" Value="Natural sort in files list (2 before 10) instead of alphabetical"/>
-    <Item Name="modernInterfaceLayoutUsed" Value="Modern interface layout (used at the next start)"/>
+    <Item Name="modernInterfaceLayoutUsed" Value="Modern interface layout"/>
     <Item Name="theNewInterfaceIs" Value="The new interface is used the next time the program starts."/>
     <Item Name="modify" Value="Modify"/>
     <Item Name="pagesLayoutModernInterface" Value="Pages layout (modern interface):"/>
@@ -489,6 +489,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="thisProgramIsFree" Value="This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the &lt;a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'&gt;GNU General Public License&lt;/a&gt; for more details."/>
     <Item Name="updatesHeader" Value="Updates"/>
     <Item Name="updatesCheckAtStart" Value="Look for a new version at start (once a day, asks GitHub; nothing else is sent)"/>
+    <Item Name="updatesIncludePre" Value="Also tell me about beta and release candidates (otherwise final versions only)"/>
     <Item Name="updatesCheckButton" Value="Check for updates"/>
     <Item Name="updatesTitle" Value="Update check"/>
     <Item Name="updatesError" Value="Could not check for updates: %1"/>
@@ -518,5 +519,12 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="versionNumber" Value="Version %1"/>
     <Item Name="helpBack" Value="Back"/>
     <Item Name="helpForward" Value="Forward"/>
+    <Item Name="exportPreviewMenu" Value="Export preview..."/>
+    <Item Name="exportPreview" Value="Export preview"/>
+    <Item Name="exportPreviewCsv" Value="CSV file, current and new names (*.csv)"/>
+    <Item Name="exportPreviewTxt" Value="Text file, new names only (*.txt)"/>
+    <Item Name="typeFolderPath" Value="Or type the path of a folder"/>
+    <Item Name="webSiteQt" Value="Ant Renamer Qt web site: "/>
+    <Item Name="webSiteOriginal" Value="Web site of the original program (Antoine Potten): "/>
   </QtPort>
 </Application>

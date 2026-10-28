@@ -23,7 +23,7 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 
 1. Faites un fork du dépôt et créez une branche depuis `main`.
 2. Gardez le changement ciblé : un sujet par pull request.
-3. Suivez le style du code voisin (noms, densité des commentaires, idiomes). Il n'y a pas de formateur à lancer.
+3. Formatez les fichiers C++ avec `clang-format -i` (les règles sont dans `.clang-format` : 4 espaces, accolades sur tous les `if`/`else`/boucles, 130 colonnes ; `.editorconfig` couvre les autres fichiers). Les commentaires sont en anglais partout (code, CMake, scripts, workflow), aucun marqueur `TODO`/`FIXME`/`HACK` dans le code, et la compilation doit rester sans avertissement (`-Wall -Wextra -Wshadow` sont activés). Pour le reste, suivez le code voisin (noms, densité des commentaires, idiomes).
 4. Ajoutez ou mettez à jour un test quand le moteur change (`tests/test_core.cpp`) : un nouveau cas qui échoue sans votre correctif est la meilleure preuve qu'il fonctionne.
 5. Lancez les tests (`ctest`) avant d'ouvrir la pull request ; le workflow GitHub compile sous Linux et Windows et les lance aussi.
 6. Ajoutez une ligne sous `## [Unreleased]` dans [CHANGELOG.md](CHANGELOG.md) (Added, Changed ou Fixed). Les numéros de version sont donnés par le mainteneur au moment d'une release : ne modifiez pas `VERSION`.
@@ -54,7 +54,7 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 ## À savoir
 
 - **Séparateurs de chemin.** Sous Windows `\` et `/` cohabitent dans le moteur (sous Linux seul `/` est un séparateur). Normalisez les chemins avant d'en comparer deux.
-- **Fils d'exécution.** Le moteur tourne dans un fil de travail (`RenWorker`). L'interface ne doit lire que les copies `Snapshot` qu'elle reçoit, jamais un `File` pendant un renommage.
+- **Fils d'exécution.** Le moteur tourne dans un fil de travail (`RenWorker`). L'interface ne doit lire que les copies `Snapshot` qu'elle reçoit, jamais un `File` pendant un renommage. Les lignes des listes gardent l'`id()` de leur `File` ou `Action`, jamais un pointeur : utilisez `FileList::byId` / `ActionList::byId`, qui renvoient `nullptr` pour ce qui a été retiré.
 - **Un job renomme réellement à chaque opération**, pas une seule fois à la fin. Chaque opération est une passe du `Journal` : l'annulation remonte passe après passe (50 passes au plus, strictement dans l'ordre).
 - **Traductions.** Le texte anglais du code doit être identique à une entrée de `English.lng` pour être traduit, sinon il reste en anglais. `ANTREN_MISSING=1` liste les textes sans traduction.
 - **Fins de ligne.** Tous les fichiers texte sont en LF, dans le dépôt et dans le dossier de travail (`.gitattributes`). Si votre éditeur ou un script écrit du CRLF, Git le reconvertit, mais corrigez l'outil si possible. Les encodages ne sont pas touchés : les pages d'aide et les fichiers `.lng` gardent les leurs, ne les réenregistrez pas dans un autre encodage.

@@ -20,19 +20,22 @@ tests/            test_core (engine; includes id3_check.h, robust_check.h, updat
 cmake/toolchains/ ARM64 cross-compilation toolchain
 scripts/          windows/ (MinGW build helper, zip and installer) and linux/ (.deb, AppImage, .desktop)
 installer/        Inno Setup script of the Windows installer
+packaging/        flatpak/ (Flathub manifest, AppStream file, icon)
 docs/             Guides, presentation, release notes
 .github/          CI workflow, Dependabot, issue templates
 CMakeLists.txt, CMakePresets.json, VERSION   Build files and the version, the single source
+.clang-format, .editorconfig   Code style (see CONTRIBUTING.md)
 LICENSE           GNU General Public License
 ```
 
 | In `app/` | Compiled? |
 |---|---|
 | `*.cpp`, `*.h` | Yes |
-| `resources.qrc`: `renamer.ico`, the three toolbar bitmap sets (the fourth, "Modern", is drawn in code), `ant.bmp`, `default.xml` | Embedded in the executable by Qt's `rcc` |
+| `resources.qrc`: `renamer.ico`, the three toolbar bitmap sets (the fourth, "Modern", is drawn in code), `antrenamer-qt.png` (icon of the About box), `default.xml` | Embedded in the executable by Qt's `rcc` |
 | `app.rc`, `app.manifest` (icon, long paths, UTF-8, per-monitor DPI) | Windows only, compiled with `windres` |
 | `Languages/`, `help/` | Not compiled: copied next to the executable (and installed by the packages) |
-| `antrenamer-qt.png` | Not compiled: Linux icon, used by the packaging scripts |
+| `antrenamer-qt.svg`, `antrenamer-qt.png` (256 px) | Not compiled: master of the icon and its PNG (the PNG and `renamer.ico` are made from the SVG) |
+| `icons/hicolor/` | Not compiled: the SVG and the PNG sizes 16, 24, 32, 48, 64, 128 and 256 in the layout of the freedesktop icon theme, installed by the `.deb` package in `/usr/share/icons/hicolor` (made from the SVG with `rsvg-convert -w <size> -h <size>`) |
 
 ## Vocabulary
 
@@ -107,7 +110,7 @@ An operation can report a problem without failing (`setInfo`): the file keeps it
 **Job file (`.arb`).** XML written with `QXmlStreamWriter`:
 
 ```xml
-<AntRenamer Version="3.0.0" Date="2026-10-23">
+<AntRenamer Version="3.1.0-beta.1" Date="2026-10-27">
  <Batch>
   <StrRepl Search="old" Repl="new" AllOccurences="True" CaseSensitive="True" .../>
   <Enum Mask="File %num%%ext%" Start="1" Digits="3" Incr="1" Restart="False" SharePairs="False"/>
@@ -126,13 +129,14 @@ Settings are attributes (`True` / `False`), long texts (replacement table, list 
 | File | Role |
 |---|---|
 | `main.cpp` | Entry point: single instance, language, `--install-shell`, main window |
-| `mainwindow.h/.cpp` | Main window: files list, job, preview, start, log |
+| `mainwindow.h`, `mainwindow.cpp`, `mainwindow_files.cpp`, `mainwindow_batch.cpp`, `mainwindow_run.cpp`, `mainwindow_internal.h` | Main window, one class split by topic: construction and settings / files list / batch / run, log and command line; the `.h` shared by the four `.cpp` holds their helpers |
 | `actionpanel.h/.cpp` | The "Operations" page: the 14 types and their settings |
 | `dialogs.h/.cpp` | Add folders, drag and drop, Options, About |
 | `appsettings.h/.cpp` | Program options in an INI file |
 | `lngtranslator.h/.cpp` | Translation with the original `.lng` files |
 | `helpwindow.h/.cpp` | Built-in help viewer (Markdown) |
 | `icons.h/.cpp` | Toolbar icons cut from the bitmap sets |
+| `devaids.h/.cpp` | Developer aids driven by `ANTREN_*` environment variables (screenshots, untranslated texts); called from `main` |
 | `shellmenu.h/.cpp` | Windows Explorer context menu entry (registry, Windows only) |
 | `theme.h/.cpp` | Colour theme (system, light, dark) |
 | `updatecheck.h/.cpp` | `UpdateChecker`: asks GitHub for the releases list (Qt Network), optional |
@@ -143,7 +147,7 @@ Settings are attributes (`True` / `False`), long texts (replacement table, list 
 
 **Settings.** `appSettings()` is a `QSettings` in INI format: next to the executable if `antrenamer-qt.ini` exists (portable), otherwise in the user profile. `AppOptions` holds every option of the Options dialog with the defaults of the original; a macro `KEYS(...)` lists each field once to generate `load()` and `save()` (keys `options/name`), and `applyToCore()` copies the processing options to `ren::options()`. Other keys: `window/*` (geometry, columns, splitters, per layout), `last/*` (last values of the operation settings), `history/*`, `mru/batch`, `view/changedOnly`, `log/*`.
 
-**Main window.** Three pages: Files, Actions, Log. Depending on an option: tabs (classic) or the modern single-screen layout (bands or columns). `files_` (`FileList`) and `batch_` (`ActionList`) are the real data; the views (`fileView_`, `batchView_`, `QTreeWidget`s that accept drag and drop) only mirror them: each row carries a pointer to its `File` or `Action`, and `updateItem` copies a file's state into the columns (and hides the row when "Changed only" is on and the preview equals the name).
+**Main window.** Three pages: Files, Actions, Log. Depending on an option: tabs (classic) or the modern single-screen layout (bands or columns). `files_` (`FileList`) and `batch_` (`ActionList`) are the real data; the views (`fileView_`, `batchView_`, `QTreeWidget`s that accept drag and drop) only mirror them: each row carries the `id()` of its `File` or `Action` (never a pointer: `FileList::byId` and `ActionList::byId` return `nullptr` for an object that was removed), and `updateItem` copies a file's state into the columns (and hides the row when "Changed only" is on and the preview equals the name).
 
 **The Operations panel** (`ActionPanel`) owns **one** action being configured. The list on the left holds the 14 types (the row index **is** the `ActionType` value), with one page of controls per type. Every control is created by a helper (`combo`, `spin`, `check`, `radios`) that registers it with a key, a getter and a setter, which is how the last values are saved and restored. Two functions are the reverse of each other: `makeAction()` reads the controls and builds the `Action`; `setFromAction()` loads an existing action into the controls (to edit an action of the job). `test_panel` checks that they round-trip for every field and every type: **adding a field to an action without updating `setFromAction` makes it fail**.
 
@@ -153,7 +157,7 @@ Settings are attributes (`True` / `False`), long texts (replacement table, list 
 1. Checks that nothing is already running (`worker_`), that there are files and an action.
 2. Logs, numbers files and actions. With an empty job, the action configured on screen is run and then forgotten.
 3. Creates a **`RenWorker`** (a `QThread`) and starts it: the work runs **off the interface thread**, so the window stays responsive and Stop works.
-4. The worker calls `ActionList::perform` and, after each file, emits `progress(Snapshot)`. A `Snapshot` is a **copy** (pointer, description, state, positions): the interface never reads a `File` that the other thread is modifying. It is delivered with a queued connection.
+4. The worker calls `ActionList::perform` and, after each file, emits `progress(Snapshot)`. A `Snapshot` is a **copy** (`File` id, description, state, positions): the interface never reads a `File` that the other thread is modifying. It is delivered with a queued connection.
 5. `onProgress` updates the row (option "real time"), the log, the progress bar.
 6. `onFinished` drains the pending signals, logs, applies the end-of-process options (switch page, clear the list or the job, save the log to a file with a UTF-8 BOM), re-enables the buttons and exits if `-x` was given.
 

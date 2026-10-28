@@ -8,19 +8,30 @@ namespace ren {
 
 #ifdef Q_OS_WIN
 constexpr QChar kSep = u'\\';  // the separator the helpers add
-inline bool isDelim(QChar c) { return c == u'\\' || c == u'/' || c == u':'; }
+inline bool isDelim(QChar c) {
+    return c == u'\\' || c == u'/' || c == u':';
+}
 #else
 constexpr QChar kSep = u'/';
-inline bool isDelim(QChar c) { return c == u'/'; }
+inline bool isDelim(QChar c) {
+    return c == u'/';
+}
 #endif
 
 inline int lastDelim(const QString& p) {
-    for (int i = int(p.size()) - 1; i >= 0; --i)
-        if (isDelim(p[i])) return i;
+    for (int i = int(p.size()) - 1; i >= 0; --i) {
+        if (isDelim(p[i])) {
+            return i;
+        }
+    }
     return -1;
 }
-inline QString extractFileName(const QString& p) { return p.mid(lastDelim(p) + 1); }
-inline QString extractFilePath(const QString& p) { return p.left(lastDelim(p) + 1); }
+inline QString extractFileName(const QString& p) {
+    return p.mid(lastDelim(p) + 1);
+}
+inline QString extractFilePath(const QString& p) {
+    return p.left(lastDelim(p) + 1);
+}
 inline QString extractFileExt(const QString& p) {
     int dot = int(p.lastIndexOf(u'.'));
     return dot > lastDelim(p) ? p.mid(dot) : QString();

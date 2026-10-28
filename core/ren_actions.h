@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QString>
 #include <QXmlStreamWriter>
+
 #include <functional>
 #include <memory>
 #include <vector>
@@ -14,8 +15,21 @@ namespace ren {
 
 // Numeric values are the ones stored by the Delphi version (and used by its UI).
 enum class ActionType {
-    Unknown = -1, ChangeExt = 0, StringRepl, MultstrRepl, StringInsert, MoveString, CharDel,
-    Enum, MP3Tag, DateTime, Random, Case, FromList, Regexp, Exif
+    Unknown = -1,
+    ChangeExt = 0,
+    StringRepl,
+    MultstrRepl,
+    StringInsert,
+    MoveString,
+    CharDel,
+    Enum,
+    MP3Tag,
+    DateTime,
+    Random,
+    Case,
+    FromList,
+    Regexp,
+    Exif
 };
 
 enum class Op { Rename, Preview, Revert, Undo };  // Undo: passes of the session journal (FileList::undoPasses)
@@ -40,6 +54,7 @@ public:
 
     ActionType type() const { return type_; }
     int position = 0;
+    quint64 id() const { return id_; }
 
     void perform(FileList& list, Op op, const Progress& progress = {});
     virtual QString description() const;
@@ -58,6 +73,7 @@ protected:
     QString sourcePath() const { return curFile_ ? curFile_->filePath() : fileName_; }
     void setInfo(const QString& what);  // "<file> was not renamed : <what>", status Info
 
+    quint64 id_ = nextId();
     ActionType type_;
     QString fileName_;
     bool isFolder_ = false;
@@ -141,7 +157,10 @@ struct PairGroup {
     QString key;
     QStringList exts;
     bool continues(const QString& fn);
-    void clear() { key.clear(); exts.clear(); }
+    void clear() {
+        key.clear();
+        exts.clear();
+    }
 };
 
 class ActionEnum : public Action {
@@ -155,9 +174,15 @@ public:
     QString makeNewName(const QString&, bool) override;
     void save(QXmlStreamWriter&) const override;
     void load(const XmlElem&) override;
+
 protected:
     bool getTag(const QString&, QString&) override;
-    void init() override { curPos_ = startAt; prevFolder_.clear(); group_.clear(); }
+    void init() override {
+        curPos_ = startAt;
+        prevFolder_.clear();
+        group_.clear();
+    }
+
 private:
     int curPos_ = 0;
     QString prevFolder_;
@@ -173,8 +198,10 @@ public:
     QString makeNewName(const QString&, bool) override;
     void save(QXmlStreamWriter&) const override;
     void load(const XmlElem&) override;
+
 protected:
     bool getTag(const QString&, QString&) override;
+
 private:
     Id3Info id3_;
 };
@@ -201,6 +228,7 @@ public:
     QString makeNewName(const QString&, bool) override;
     void save(QXmlStreamWriter&) const override;
     void load(const XmlElem&) override;
+
 protected:
     bool getTag(const QString&, QString&) override;
 };
@@ -226,8 +254,10 @@ public:
     QString makeNewName(const QString&, bool) override;
     void save(QXmlStreamWriter&) const override;
     void load(const XmlElem&) override;
+
 protected:
     void init() override;
+
 private:
     QStringList list_;
 };
@@ -255,9 +285,15 @@ public:
     QString makeNewName(const QString&, bool) override;
     void save(QXmlStreamWriter&) const override;
     void load(const XmlElem&) override;
+
 protected:
     bool getTag(const QString&, QString&) override;
-    void init() override { curNum_ = numStart; prevFolder_.clear(); group_.clear(); }
+    void init() override {
+        curNum_ = numStart;
+        prevFolder_.clear();
+        group_.clear();
+    }
+
 private:
     QMap<QString, QString> tags_;
     int curNum_ = 0;
@@ -271,6 +307,14 @@ public:
     Action& add(std::unique_ptr<Action> a);  // takes ownership, appended at the end
     size_t size() const { return items_.size(); }
     Action& at(size_t i) { return *items_[i]; }
+    Action* byId(quint64 id) const {  // nullptr if that action is no longer in the batch
+        for (const auto& a : items_) {
+            if (a->id() == id) {
+                return a.get();
+            }
+        }
+        return nullptr;
+    }
     void clear() { items_.clear(); }
     void replace(size_t i, std::unique_ptr<Action> a) {  // edit in place: same position in the batch
         a->position = int(i);
@@ -278,7 +322,9 @@ public:
     }
     void remove(size_t i) {
         items_.erase(items_.begin() + i);
-        for (size_t k = 0; k < items_.size(); ++k) items_[k]->position = int(k);
+        for (size_t k = 0; k < items_.size(); ++k) {
+            items_[k]->position = int(k);
+        }
     }
     void sort();  // by position
     void perform(FileList& files, Op op, const Progress& progress = {});

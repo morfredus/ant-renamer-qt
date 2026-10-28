@@ -17,13 +17,17 @@ AppOptions& appOptions() {
 }
 
 // --- storage -------------------------------------------------------------------------------------------
-static QString portableFile() { return QDir(QCoreApplication::applicationDirPath()).filePath(u"antrenamer-qt.ini"_s); }
+static QString portableFile() {
+    return QDir(QCoreApplication::applicationDirPath()).filePath(u"antrenamer-qt.ini"_s);
+}
 
 static QString profileFile() {
     return QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)).filePath(u"antrenamer-qt.ini"_s);
 }
 
-bool isPortable() { return QFileInfo::exists(portableFile()); }
+bool isPortable() {
+    return QFileInfo::exists(portableFile());
+}
 
 QSettings appSettings() {
     const QString path = isPortable() ? portableFile() : profileFile();
@@ -32,7 +36,9 @@ QSettings appSettings() {
 }
 
 bool setPortable(bool on) {
-    if (on == isPortable()) return true;
+    if (on == isPortable()) {
+        return true;
+    }
     const QString from = on ? profileFile() : portableFile();
     const QString to = on ? portableFile() : profileFile();
     {
@@ -40,21 +46,22 @@ bool setPortable(bool on) {
         src.sync();
         QDir().mkpath(QFileInfo(to).absolutePath());
         QSettings dst(to, QSettings::IniFormat);
-        for (const QString& k : src.allKeys()) dst.setValue(k, src.value(k));
+        for (const QString& k : src.allKeys()) {
+            dst.setValue(k, src.value(k));
+        }
         dst.sync();
-        if (dst.status() != QSettings::NoError || !QFileInfo::exists(to)) return false;
+        if (dst.status() != QSettings::NoError || !QFileInfo::exists(to)) {
+            return false;
+        }
     }
-    QFile::remove(from);
-    return true;
+    // The old file is what decides the mode while it exists: if it cannot be removed the switch did not happen.
+    return QFile::remove(from) || !QFileInfo::exists(from);
 }
 
 // --- options ----------------------------------------------------------------------------------------------
-#define KEYS(X)                                                                                  \
-    X(realtime) X(resizeCols) X(fileIcons) X(forceFont) X(fontName) X(fontSize) X(iconSet)       \
-    X(historyMax) X(autoComplete) X(dragNoAsk) X(launchFile) X(addHidden) X(naturalSort) X(undoButton) X(newUi) X(pageLayout) X(theme) X(checkUpdates) X(lastUpdateCheck)                                   \
-    X(addFiles) X(addFolders) X(recursive) X(forceDir) X(detectAbsDir) X(folderExt) X(renameSidecar) X(copy)      \
-    X(genLog) X(dstRelativeToFile) X(startSwitch) X(finishSwitch) X(startClearLog)               \
-    X(finishClearFiles) X(finishClearBatch) X(saveLog) X(saveLogAppend) X(saveLogFile)
+// clang-format off
+#define KEYS(X)     X(realtime) X(resizeCols) X(fileIcons) X(forceFont) X(fontName) X(fontSize) X(iconSet) X(historyMax)     X(autoComplete) X(dragNoAsk) X(launchFile) X(addHidden) X(naturalSort) X(undoButton) X(newUi)     X(pageLayout) X(theme) X(checkUpdates) X(checkPrereleases) X(lastUpdateCheck) X(addFiles) X(addFolders)     X(recursive) X(forceDir) X(detectAbsDir) X(folderExt) X(renameSidecar) X(copy) X(genLog)     X(dstRelativeToFile) X(startSwitch) X(finishSwitch) X(startClearLog) X(finishClearFiles)     X(finishClearBatch) X(saveLog) X(saveLogAppend) X(saveLogFile)
+// clang-format on
 
 void AppOptions::load() {
     QSettings s = appSettings();
@@ -64,7 +71,9 @@ void AppOptions::load() {
     // Settings written before the "Modern" set existed carry iconSet=0 although nobody chose it (every key is saved):
     // that stale value takes the new default once. A deliberate choice of another set (Windows XP, XP Large) is kept.
     // From the first save of this version on the choice is the user's own.
-    if (!s.contains(QStringLiteral("options/iconSetChosen")) && iconSet == 0) iconSet = kDefaultIconSet;
+    if (!s.contains(QStringLiteral("options/iconSetChosen")) && iconSet == 0) {
+        iconSet = kDefaultIconSet;
+    }
     // values read from an INI file are never trusted: an index out of range would reach the interface as is
     iconSet = qBound(0, iconSet, iconSetCount() - 1);
     historyMax = qBound(1, historyMax, 200);
@@ -95,6 +104,9 @@ void AppOptions::applyToCore() const {
 
 void AppOptions::applyFont() const {
     static const QFont original = QApplication::font();
-    if (forceFont && !fontName.isEmpty()) QApplication::setFont(QFont(fontName, fontSize));
-    else QApplication::setFont(original);
+    if (forceFont && !fontName.isEmpty()) {
+        QApplication::setFont(QFont(fontName, fontSize));
+    } else {
+        QApplication::setFont(original);
+    }
 }

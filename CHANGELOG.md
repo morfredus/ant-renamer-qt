@@ -8,6 +8,60 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.0-beta.1] - 2026-10-28
+
+### Added
+
+- Funding: `.github/FUNDING.yml` (GitHub Sponsors and a PayPal donation link, for the work on the Qt port) and a "Support the port" section in the README (EN, FR), with the link to the donation page of the original program's author.
+
+- Screenshots of the program in `docs/screenshots/English` and `docs/screenshots/French` (22 each): classic and modern interface page by page (Files, Actions, Log), the two single-screen arrangements, About, help and Options, in light and dark theme, with sample files. One of them is in the README (EN, FR). Made with the developer aid `ANTREN_SHOT`.
+
+- Export of the preview: *Export preview...* in the context menu of the files list writes the files shown (the "Changed only" and hidden-files filters apply) to a CSV file (`Folder;Name;New name`, semicolon, every field quoted, UTF-8 with BOM so that Excel reads the accents) or to a text file with the new names only, one per line. A file with no preview keeps its current name. `ren::exportPreview` in the engine, tested in `tests/test_core.cpp`; texts in `English.lng` and `French.lng`.
+
+- "Add folders" window: a field to type the path of a folder (added with the folders selected in the tree, if it exists).
+
+- Flatpak (Flathub) packaging files in `packaging/flatpak/`: manifest (KDE runtime, built from the Git tag, access to the user's files, no network), AppStream file (the icon is installed as SVG and as a 256 px PNG), and a `.local.yaml` manifest that builds from the working copy to try it before a tag exists. Under Flatpak the new-version check (start-up option, button of the About box) is hidden, since the store updates the program. BUILDING and ARCHITECTURE (EN, FR) describe it.
+
+- New-version check: option "Also tell me about beta and release candidates" (Options > Display, off by default; `checkPrereleases` in the settings). Before, only a user of a beta or rc was told about the next one; a user of a final version is now told about candidates only if the box is ticked. `ren::newerRelease(json, current, includePrereleases)`, tests added in `tests/update_check.h`; the check at start and the "Check for updates" button of the About window both follow the option. Text in `English.lng` and `French.lng` (`updatesIncludePre`); hidden under Flatpak with the other update options. The Windows installer offers both choices as unticked tasks ("New-version check": look for a new version at start; also beta and release candidates): `installer/antrenamer-qt.iss` writes `checkUpdates` / `checkPrereleases` in the `[options]` section of `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` only for a ticked task, so a choice already made in the program is kept (compiled with Inno Setup; the INI keys checked by reading such a file in the program, the install itself not run on this machine).
+
+### Added (signatures)
+
+- Linux files of the releases are signed with GPG (detached `.asc`, also for `SHA256SUMS-linux.txt`) by the release script, which lives outside the repository. Public key `docs/antrenamer-qt-public.asc` (fingerprint in the README, EN and FR, with the verification commands). Windows files are not signed.
+
+### Fixed
+
+- Linux `.deb`: the icon of the menu entry. The package installed a single 256 px PNG; it now installs the icon as the freedesktop icon theme expects it: the SVG in `hicolor/scalable/apps` and PNG files of 16, 24, 32, 48, 64, 128 and 256 px (`app/icons/hicolor/`, made from `antrenamer-qt.svg`), so every menu, panel and dock finds the size it asks for instead of scaling one big picture. `scripts/linux/package-deb.sh` copies that folder. The AppImage and the Flatpak are unchanged.
+
+- EXIF date offset ("Use EXIF info" action): the code used `QTimeZone::UTC`, which only exists from Qt 6.5, so the program did not compile with Qt 6.4 (Ubuntu 24.04, Linux Mint 22). It now builds a `QDateTime` in the "UTC" zone from the date and the time read separately, which works from Qt 6.4 and, unlike a local parse, has no invalid hour at a daylight saving change. Checked by building and testing on Ubuntu 24.04 (Qt 6.4.2) with the warnings on.
+
+- Options > Language: for French and English, the version and the author shown were still those of the original files ("2.13", "Antoine Potten"). The headers of `French.lng` and `English.lng` now say version 3.1 and credit Frédéric Biron (Ant Renamer Qt) next to Antoine Potten, with a comment on the origin of the texts. The other language files keep their own translators and versions. Help pictures of the Language tab (EN, FR) made again.
+
+- Options window: the object holding its controls was freed only when the window was accepted, so it leaked on Cancel; it is now owned by a `std::unique_ptr`.
+
+- Portable mode: switching it on or off reported success even when the old settings file could not be removed, so the mode did not change; it now reports the failure.
+
+- Windows build: the executable kept the old icon after `renamer.ico` changed (CMake did not rebuild `app.rc`, which does not `#include` the icon). `app/CMakeLists.txt` now declares `renamer.ico` and `app.manifest` as dependencies of `app.rc`. A build folder made before this change needs one more build to pick the new icon; the Explorer and the taskbar may also show a cached icon until it is refreshed.
+
+- Command line: a folder given with a trailing slash or backslash (`-afr d:\Data\`) is added like one without it. The name after the last separator was used as the mask and was empty, so nothing was added (0 files instead of 13 on a test folder); the path is now cleaned (`QDir::cleanPath`) before the mask is read. Wildcards (`-af d:\Data\*.jpg`) are unchanged.
+
+### Changed
+
+- The language and the interface (classic or modern, and the pages layout) are applied as soon as the Options window is closed with OK, without restarting the program. `MainWindow::buildUi()` makes the whole interface from the options and `rebuildUi()` throws it away and makes it again; the files, the batch, the journal (Undo) and the log belong to the window and are put back in the new views. Not done while a run is in progress (the Options button is disabled then). `switchLanguage()` loads the new language in the installed translator (one is installed even when the program started in English). The two "used the next time the program starts" texts and the message box of the Options are gone; the help pages (EN, FR, HR, TA) follow.
+
+- Options: the "Portable mode" box moves from the Language tab to the end of the Display tab, in its own "Settings storage" section (it has nothing to do with the language). Help pages (`options_*.md`, `qt_*.md`, EN, FR, HR, TA), USER_GUIDE and README (EN, FR) updated; the help pictures of the Display and Language tabs (EN, FR) are made again (they also show the Updates and Theme options added since the old pictures).
+
+- Code review pass: the developer aids (`ANTREN_*` variables: screenshots, untranslated texts) moved out of `main()` into `app/devaids.cpp`; `MainWindow::run` split (`confirmHiddenFiles`, `showPreviewHint`); the shift of the EXIF date by an offset now uses `QDateTime` in UTC instead of hand-written Julian day arithmetic (same result in every time zone, covered by the existing test).
+
+- Code style made uniform: `.clang-format` and `.editorconfig` added, all the C++ files formatted with `clang-format` (braces on every `if`/`else`/loop, 4 spaces, 130 columns; formatting only, no change in behaviour; the commit is listed in `.git-blame-ignore-revs`). The comments of the CMake files, of the toolchain, of the GitHub workflow, of the Windows and Linux scripts and of the Inno Setup script, and the messages of those scripts, are now in English like those of the C++ code. CONTRIBUTING (EN, FR) describes the rules; BUILDING and ARCHITECTURE (EN, FR) updated.
+
+- Main window code: the rows of the files list and of the batch now store the `id()` of their `File` or `Action` instead of a raw pointer (`FileList::byId`, `ActionList::byId`; an id whose object was removed finds `nullptr`, where a pointer was undefined behaviour), and the worker's `Snapshot` carries the id too. `mainwindow.cpp` (1,700 lines) is split by topic into `mainwindow.cpp`, `mainwindow_files.cpp`, `mainwindow_batch.cpp`, `mainwindow_run.cpp` and `mainwindow_internal.h` (same class, same behaviour). Test added in `tests/test_core.cpp`; ARCHITECTURE (EN, FR) updated.
+
+- Compiler warnings: the project now builds with `-Wall -Wextra -Wshadow` (GCC and Clang) and compiles with no warning. Fixed the three that showed up: names shadowing a member or a parameter in `ren_actions.cpp` and `ren_files.cpp`, and a missing initializer in `mainwindow.cpp`. No change in behaviour.
+
+- About window (General tab): the web site of the port, `https://morfredus.fr/ant-renamer-qt/`, is shown next to the address of the original program (`www.antp.be/software/renamer/`), which stays and is now labelled as the original program's site (Antoine Potten). Texts in `English.lng` and `French.lng`.
+- New program icon (`app/antrenamer-qt.svg`, on a light blue rounded square): `renamer.ico` (16 to 256 px, window and executable), `antrenamer-qt.png` (now 256 px; the .deb installs it in `hicolor/256x256`) and the picture of the About box (replaces `ant.bmp`, removed) are made from it; it is also the Flatpak icon. PRESENTATION (EN, FR) no longer lists `renamer.ico` and `ant.bmp` among the graphics reused from the original program; ARCHITECTURE (EN, FR) describes the files.
+- TESTED_PLATFORMS (EN, FR): 3.0.0 tried on the four machines (published packages, AppImage included on Mint; offered by the new-version check); the rc.16 entries are no longer marked as drafts.
+
 ## [3.0.0] - 2026-10-23
 
 First stable version: the code is the code of 3.0.0-rc.16 (five days of use of the candidate, no feedback and no open bug); only the version number, a few texts of the language files and the documentation change.

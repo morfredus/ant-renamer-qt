@@ -2,8 +2,11 @@
 #include <QDialog>
 #include <QStringList>
 
+#include <memory>
+
 class QCheckBox;
 class QFileSystemModel;
+class QLineEdit;
 class QTreeView;
 
 struct AddChoice {
@@ -21,6 +24,7 @@ public:
 private:
     QTreeView* view_;
     QFileSystemModel* model_;
+    QLineEdit* path_;
     QCheckBox *files_, *folders_, *recursive_, *hidden_;
 };
 
@@ -38,11 +42,12 @@ private:
 class OptionsDialog : public QDialog {
 public:
     explicit OptionsDialog(QWidget* parent);
+    ~OptionsDialog() override;
     void accept() override;
 
 private:
     struct Ui;
-    Ui* ui_;
+    std::unique_ptr<Ui> ui_;
 };
 
 class AboutDialog : public QDialog {

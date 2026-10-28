@@ -5,8 +5,8 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-# Retrouve MSYS2 sans chemin en dur : variable MSYS2_ROOT, outils MinGW deja dans le PATH, registre
-# (desinstallation de MSYS2), puis dossier "msys64"/"msys2" a la racine de chaque disque fixe.
+# Finds MSYS2 without a hard-coded path: MSYS2_ROOT variable, MinGW tools already in the PATH, registry
+# (MSYS2 uninstall entry), then an "msys64"/"msys2" folder at the root of each fixed drive.
 function Find-MsysBash {
     $roots = @()
     if ($env:MSYS2_ROOT) { $roots += $env:MSYS2_ROOT }
@@ -32,7 +32,7 @@ function Find-MsysBash {
         $bash = Join-Path $root "usr\bin\bash.exe"
         if (Test-Path $bash) { return $bash }
     }
-    throw "MSYS2 introuvable. Installe MSYS2 ou definis MSYS2_ROOT vers son dossier d'installation."
+    throw "MSYS2 not found. Install MSYS2 or set MSYS2_ROOT to its install folder."
 }
 
 function Convert-ToMsysPath {
@@ -61,14 +61,14 @@ function Reset-StaleBuildDir {
     $resolvedBuild = (Resolve-Path $BuildDir).Path
     $resolvedSource = (Resolve-Path $SourceDir).Path
     if (-not ((Normalize-PathText $resolvedBuild).StartsWith((Normalize-PathText $resolvedSource) + "/"))) {
-        throw "Refus de supprimer un dossier de build hors du projet: $resolvedBuild"
+        throw "Refusing to delete a build folder outside the project: $resolvedBuild"
     }
-    Write-Host "Le cache CMake pointe vers '$cachedSource'. Reinitialisation de '$resolvedBuild'."
+    Write-Host "The CMake cache points to '$cachedSource'. Resetting '$resolvedBuild'."
     Remove-Item -LiteralPath $resolvedBuild -Recurse -Force
 }
 
 $bash = Find-MsysBash
-# Ce script vit dans scripts/windows/ : la racine du projet est deux niveaux plus haut.
+# This script lives in scripts/windows/: the project root is two levels up.
 $root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 $buildDir = Join-Path $root "build-mingw"
 Reset-StaleBuildDir -BuildDir $buildDir -SourceDir $root
@@ -82,7 +82,7 @@ $env:MSYS2_PATH_TYPE = "inherit"
 
 $command = switch ($Action) {
     "configure" { "cd $quotedRoot && cmake --preset mingw" }
-    "build" { "cd $quotedRoot && { test -f build-mingw/build.ninja || cmake --preset mingw; } && { cmake --build --preset mingw || { echo 'Nouvel essai de la compilation (lien refuse, antivirus ?)'; cmake --build --preset mingw; }; }" }
+    "build" { "cd $quotedRoot && { test -f build-mingw/build.ninja || cmake --preset mingw; } && { cmake --build --preset mingw || { echo 'Retrying the build (link refused, antivirus?)'; cmake --build --preset mingw; }; }" }
     "run" { "cd $quotedRoot && ./build-mingw/app/antrenamer-qt.exe" }
     "clean" { "cd $quotedRoot && cmake --build --preset mingw --target clean" }
 }

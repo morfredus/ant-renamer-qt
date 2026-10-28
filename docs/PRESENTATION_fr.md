@@ -55,8 +55,8 @@ jobs de l'autre.
 - **L'aide d'origine** : les pages d'aide (anglais, français, croate, tamoul) et l'historique des versions sont
   livrés et ouverts depuis F1 et depuis les liens « aide » des notes des actions. Les pages ne sont plus en HTML (CHM)
   mais en 76 fichiers Markdown (UTF-8) avec une table des matières en Markdown ; le texte est le même, révisé pour le portage.
-- **Les graphismes d'origine** : les jeux d'icônes de barres d'outils (Scrows, Windows XP, Windows XP Large), `renamer.ico`,
-  `ant.bmp` et le set prédéfini « Remove west-european accents » de `default.xml`.
+- **Les graphismes d'origine** : les jeux d'icônes de barres d'outils (Scrows, Windows XP, Windows XP Large)
+  et le set prédéfini « Remove west-european accents » de `default.xml`.
 - **Le comportement** : renommage dans un fil séparé avec Stop et Annuler, renommage de dossiers avec mise à jour
   de la liste, « forcer les dossiers », détection des chemins absolus, « copier au lieu de renommer », règle de
   l'extension des dossiers, option d'heure d'été pour les dates de fichiers, sauvegarde du journal, événements au
@@ -196,7 +196,7 @@ Les utilisateurs d'Ant Renamer 2.x ont formulé plusieurs demandes sur le forum 
 - Code tiers utilisé par le portage : Qt 6 (LGPL v3 / GPL), rien d'autre. Les composants Delphi de l'original ne
   sont plus nécessaires.
 - Repris de l'original sans modification : `Languages/*.lng`, `help/` (images ; les pages ont été converties de HTML en Markdown et révisées pour le portage), bitmaps des barres
-  d'outils, `renamer.ico`, `ant.bmp`, `default.xml`, textes des notes des actions. Les traducteurs sont cités dans
+  d'outils, `default.xml`, textes des notes des actions. Les traducteurs sont cités dans
   l'onglet Crédits comme dans la boîte À propos d'origine.
 
 ## Retours et assistance

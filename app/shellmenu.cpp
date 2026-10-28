@@ -4,8 +4,8 @@
 #include <QDir>
 
 #ifdef Q_OS_WIN
-#include <windows.h>
 #include <string>
+#include <windows.h>
 
 namespace {
 
@@ -23,7 +23,9 @@ bool setString(HKEY key, const wchar_t* name, const QString& value) {
 bool shellMenuInstalled() {
     HKEY k;
     const bool ok = RegOpenKeyExW(HKEY_CURRENT_USER, kTargets[0], 0, KEY_READ, &k) == ERROR_SUCCESS;
-    if (ok) RegCloseKey(k);
+    if (ok) {
+        RegCloseKey(k);
+    }
     return ok;
 }
 
@@ -44,7 +46,8 @@ bool setShellMenu(bool on, const QString& label) {
         ok = setString(k, nullptr, label) && setString(k, L"Icon", QStringLiteral("\"") + exe + QStringLiteral("\",0")) && ok;
         RegCloseKey(k);
         const std::wstring cmdPath = std::wstring(path) + L"\\command";
-        if (RegCreateKeyExW(HKEY_CURRENT_USER, cmdPath.c_str(), 0, nullptr, 0, KEY_WRITE, nullptr, &k, nullptr) != ERROR_SUCCESS) {
+        if (RegCreateKeyExW(HKEY_CURRENT_USER, cmdPath.c_str(), 0, nullptr, 0, KEY_WRITE, nullptr, &k, nullptr) !=
+            ERROR_SUCCESS) {
             ok = false;
             continue;
         }
@@ -56,7 +59,11 @@ bool setShellMenu(bool on, const QString& label) {
 
 #else
 
-bool shellMenuInstalled() { return false; }
-bool setShellMenu(bool, const QString&) { return false; }
+bool shellMenuInstalled() {
+    return false;
+}
+bool setShellMenu(bool, const QString&) {
+    return false;
+}
 
 #endif

@@ -1,7 +1,7 @@
+#include "devaids.h"
 #include "dialogs.h"
-#include "helpwindow.h"
-#include "lngtranslator.h"
 #include "icons.h"
+#include "lngtranslator.h"
 #include "mainwindow.h"
 #include "shellmenu.h"
 
@@ -9,9 +9,9 @@
 #include <QDir>
 #include <QElapsedTimer>
 #include <QIcon>
+#include <QListWidget>
 #include <QLocalServer>
 #include <QLocalSocket>
-#include <QListWidget>
 #include <QLockFile>
 #include <QTabWidget>
 #include <QThread>
@@ -19,7 +19,9 @@
 
 namespace {
 
-QString serverName() { return QStringLiteral("AntRenamerQt-shell-") + qEnvironmentVariable("USERNAME", QStringLiteral("user")); }
+QString serverName() {
+    return QStringLiteral("AntRenamerQt-shell-") + qEnvironmentVariable("USERNAME", QStringLiteral("user"));
+}
 
 // Hands paths to the instance that owns the lock. Explorer starts one process per selected item, all at
 // once, so the first one may still be starting up: keep trying for a while.
@@ -54,8 +56,11 @@ int main(int argc, char** argv) {
     const QStringList args = QCoreApplication::arguments().mid(1);
     QLockFile lock(QDir::temp().filePath(QStringLiteral("AntRenamerQt-instance.lock")));
     const bool primary = lock.tryLock(0);
-    if (const int shellAt = int(args.indexOf(QStringLiteral("--shell"))); shellAt >= 0 && !primary)
-        if (forwardToRunningInstance(args.mid(shellAt + 1), 10000)) return 0;
+    if (const int shellAt = int(args.indexOf(QStringLiteral("--shell"))); shellAt >= 0 && !primary) {
+        if (forwardToRunningInstance(args.mid(shellAt + 1), 10000)) {
+            return 0;
+        }
+    }
 
     QFont base = app.font();  // the original uses 8 pt controls
     base.setPointSize(8);
@@ -80,7 +85,8 @@ int main(int argc, char** argv) {
         server.listen(serverName());
         QObject::connect(&server, &QLocalServer::newConnection, &w, [&server, &w] {
             while (QLocalSocket* s = server.nextPendingConnection()) {
-                QObject::connect(s, &QLocalSocket::readyRead, s, [s] { s->setProperty("buf", s->property("buf").toByteArray() + s->readAll()); });
+                QObject::connect(s, &QLocalSocket::readyRead, s,
+                                 [s] { s->setProperty("buf", s->property("buf").toByteArray() + s->readAll()); });
                 QObject::connect(s, &QLocalSocket::disconnected, &w, [s, &w] {
                     const QByteArray data = s->property("buf").toByteArray() + s->readAll();
                     s->deleteLater();
@@ -91,50 +97,6 @@ int main(int argc, char** argv) {
     }
     w.show();
     w.processCommandLine(args);
-    // Developer aid: ANTREN_MISSING=1 also builds every dialog so their untranslated strings get logged.
-    if (qEnvironmentVariableIsSet("ANTREN_MISSING")) {
-        OptionsDialog d1(&w);
-        AboutDialog d2(&w);
-        DragDropDialog d3(&w);
-        AddFoldersDialog d4({}, &w);
-    }
-    // Developer aid: ANTREN_SHOT=out.png renders the window (optionally switching to ANTREN_TAB) and exits.
-    if (const QByteArray shot = qgetenv("ANTREN_SHOT"); !shot.isEmpty()) {
-        if (const QByteArray tab = qgetenv("ANTREN_TAB"); !tab.isEmpty()) w.showTab(tab.toInt());
-        // ANTREN_ACTION=n picks action n (0-13) on the Actions page; ANTREN_PREVIEW=1 refreshes the preview (F5);
-        // ANTREN_SIZE=WxH sizes the window.
-        if (const QByteArray act = qgetenv("ANTREN_ACTION"); !act.isEmpty())
-            for (auto* l : w.findChildren<QListWidget*>())
-                if (l->count() == 14) l->setCurrentRow(act.toInt());
-        if (qEnvironmentVariableIsSet("ANTREN_PREVIEW"))  // from the event loop: the preview waits for its worker thread
-            QTimer::singleShot(0, &w, [&w] {
-                for (auto* a : w.findChildren<QAction*>())
-                    if (a->shortcut() == QKeySequence(Qt::Key_F5)) { a->trigger(); break; }
-            });
-        if (const int n = qEnvironmentVariableIntValue("ANTREN_THEME_TOGGLE"); n > 0)  // presses the light / dark button n times
-            QTimer::singleShot(0, &w, [&w, n] {
-                for (auto* a : w.findChildren<QAction*>())
-                    if (a->data().toInt() == TbTheme && a->data().isValid()) { for (int i = 0; i < n; ++i) a->trigger(); break; }
-            });
-        if (const QByteArray size = qgetenv("ANTREN_SIZE"); size.contains('x'))  // e.g. 900x640
-            w.resize(size.split('x')[0].toInt(), size.split('x')[1].toInt());
-        QTimer::singleShot(qEnvironmentVariableIntValue("ANTREN_DELAY") + 300, [&w, &app, shot] {
-            const QByteArray which = qgetenv("ANTREN_DIALOG");  // "options" / "about": grab that dialog instead
-            if (which == "help") {  // the help window: grab the visible top-level that is not the main window
-                showHelp(QString::fromLocal8Bit(qgetenv("ANTREN_HELPTOPIC").isEmpty() ? "index" : qgetenv("ANTREN_HELPTOPIC")), &w);
-                for (QWidget* t : QApplication::topLevelWidgets())
-                    if (t != &w && t->isVisible() && t->windowTitle().contains(QStringLiteral(" - "))) { t->grab().save(QString::fromLocal8Bit(shot)); break; }
-            } else if (which == "options" || which == "about") {
-                QDialog* d = which == "options" ? static_cast<QDialog*>(new OptionsDialog(&w)) : static_cast<QDialog*>(new AboutDialog(&w));
-                d->show();
-                if (const QByteArray tab = qgetenv("ANTREN_DTAB"); !tab.isEmpty())
-                    if (auto* tw = d->findChild<QTabWidget*>()) tw->setCurrentIndex(tab.toInt());
-                d->grab().save(QString::fromLocal8Bit(shot));
-            } else {
-                w.grab().save(QString::fromLocal8Bit(shot));
-            }
-            app.quit();
-        });
-    }
+    runDeveloperAids(w, app);
     return app.exec();
 }
