@@ -10,7 +10,7 @@ Seule la dernière version publiée d'Ant Renamer Qt reçoit des correctifs. Si 
 
 Merci de **ne pas** ouvrir d'issue ni de discussion publique pour un problème de sécurité.
 
-Utilisez plutôt le signalement privé de GitHub : sur l'[onglet Security du dépôt](https://github.com/morfredus/ant-renamer-qt/security), cliquez sur *Report a vulnerability*. Seul le mainteneur voit le signalement.
+Utilisez plutôt le signalement privé de GitHub : sur l'[onglet Security du dépôt](https://github.com/morfredus/ant-renamer-qt/security), cliquez sur *Report a vulnerability*. Seul le mainteneur voit le signalement. Sans compte GitHub, écrivez à [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr) (ne mettez pas les détails dans un lieu public).
 
 Indiquez la version, le système, ce que vous avez fait et ce qui s'est passé (un fichier renommé, déplacé ou lu alors qu'il ne devrait pas l'être, un plantage sur un nom de fichier ou un fichier `.lng` forgé, etc.).
 

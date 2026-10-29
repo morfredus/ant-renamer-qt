@@ -47,7 +47,7 @@ LICENSE           Licence publique générale GNU
 | Job (lot, *batch*) | `ren::ActionList` | La suite ordonnée d'opérations, enregistrée dans un fichier XML `.arb` |
 | Masque | chaîne comme `%IptcDateCreated%_%num%%ext%` | Modèle de nom dont les `%tags%` sont remplacés par leurs valeurs |
 | Aperçu | `Op::Preview`, `File::preview` | Le nom calculé, sans toucher au disque |
-| Fichier associé (sidecar) | `.xmp`, `.dop` | Fichier qui suit son image |
+| Fichier associé (sidecar) | `.xmp`, `.dop`, `.pp3`, `.cos`, `.acr`, `.on1`, `.thm`, `.aae` et les fichiers RAW (`rawExtensions()`) | Fichier qui suit son image ; un RAW n'emporte pas un autre RAW |
 
 ## Le moteur (`core/`)
 
@@ -110,7 +110,7 @@ Une opération peut signaler un problème sans échouer (`setInfo`) : le fichier
 **Fichier de job (`.arb`).** XML écrit avec `QXmlStreamWriter` :
 
 ```xml
-<AntRenamer Version="3.1.0-beta.1" Date="2026-10-27">
+<AntRenamer Version="3.1.0-beta.2" Date="2026-10-29">
  <Batch>
   <StrRepl Search="old" Repl="new" AllOccurences="True" CaseSensitive="True" .../>
   <Enum Mask="File %num%%ext%" Start="1" Digits="3" Incr="1" Restart="False" SharePairs="False"/>
@@ -175,7 +175,7 @@ Job : une opération *Énumération* avec le masque `Photo %num%%ext%` ; fichier
 2. `init()` met le compteur à sa valeur de départ.
 3. Pour `a.jpg` : ce n'est pas un sidecar de la liste. `makeNewName` appelle `advancedFormat("Photo %num%%ext%", ...)` ; le getter renvoie `num` = `001` et `ext` = `.jpg`, ce qui donne `Photo 001.jpg`.
 4. `File::rename("Photo 001.jpg")` déplace le fichier. Le texte du journal devient « ... renamed to Photo 001.jpg ».
-5. Avec l'option sidecar activée, `moveSidecars` calcule les candidats de `a.jpg` (`a.xmp`, `a.XMP`, `a.jpg.xmp`, `a.jpg.XMP`, idem `.dop`) et de `Photo 001.jpg`, déplace ceux qui existent, et ajoute « (sidecar file ... renamed to ...) » au texte du journal. La ligne `a.xmp` de la liste suit (`followPath`).
+5. Avec l'option sidecar activée, `moveSidecars` calcule les candidats de `a.jpg` (`a.xmp`, `a.XMP`, `a.jpg.xmp`, `a.jpg.XMP`, idem pour les autres extensions) et de `Photo 001.jpg`, déplace ceux qui existent, et ajoute « (sidecar file ... renamed to ...) » au texte du journal. La ligne `a.xmp` de la liste suit (`followPath`).
 6. Pour `a.xmp` dans la liste : son image `a.jpg` est dans la liste, il est donc sauté.
 7. Le compteur avance, le worker émet `progress`, l'interface met à jour la ligne et le journal.
 8. `onFinished` applique les options de fin de traitement.

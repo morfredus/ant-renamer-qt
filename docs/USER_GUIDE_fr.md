@@ -1,6 +1,6 @@
 # Ant Renamer Qt : guide des fonctions
 
-*Toutes les fonctions d'Ant Renamer Qt 3.1.0-beta.1, avec le mode d'emploi.*
+*Toutes les fonctions d'Ant Renamer Qt 3.1.0-beta.2, avec le mode d'emploi.*
 English version : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détails complets, page par page, avec captures d'écran : l'aide intégrée (F1). Différences entre Windows et Linux : §13.
 
 ## 1. Principe général
@@ -59,7 +59,8 @@ Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau 
 
 ### Fichiers associés d'une photo
 Quand une photo est renommée, ses fichiers associés sont renommés avec elle, sans rien faire de plus :
-- **Reconnus** : `.xmp` (Lightroom, Capture One : `IMG.xmp` ; digiKam, darktable : `IMG.CR2.xmp`) et `.dop` de DxO PhotoLab (`IMG.dop`, `IMG.CR2.dop`), extensions en majuscules comprises.
+- **Reconnus** : `.xmp` (Lightroom, Capture One : `IMG.xmp` ; digiKam, darktable : `IMG.CR2.xmp`) `.dop` de DxO PhotoLab (`IMG.dop`, `IMG.CR2.dop`), `.pp3` de RawTherapee, `.cos` de Capture One, `.acr` de Camera Raw, `.on1` d'ON1, `.thm` des appareils et `.aae` d'Apple, extensions en majuscules comprises.
+- **Fichiers RAW** : renommer un JPEG renomme aussi le fichier RAW de même nom (`IMG.jpg` et `IMG.ORF`, `.CR2`, `.CR3`, `.NEF`, `.ARW`, `.RAF`, `.DNG`, `.RW2`, `.PEF`, `.SRW`... 27 formats), avec ses propres fichiers associés. Renommer un RAW emporte ses fichiers associés mais pas le JPEG : mettez le JPEG dans la liste pour renommer le couple.
 - **Méthode** : dans Options > Traitement, cocher « Renommer aussi les fichiers associés (.xmp, .dop) d'une image renommée » (activé par défaut). Puis renommer la photo comme d'habitude (par exemple `IMG_0001.CR2` → `Paris 001.CR2`) : `IMG_0001.xmp` ou `IMG_0001.CR2.xmp` devient `Paris 001.xmp` ou `Paris 001.CR2.xmp`.
 - **Annuler** (F12) : les fichiers associés retrouvent leur ancien nom avec la photo.
 - **Journal** : la ligne de la photo mentionne le fichier associé renommé.
@@ -157,7 +158,7 @@ Sans `-a`, comportement de la 2.07 : un nom finissant par `.arb` est un job, un 
 
 Chaque fichier traité donne une ligne : **verte** (renommé, ancien → nouveau nom ; le chemin complet quand le dossier change ; fichiers associés mentionnés), **bleue** (non renommé : nom identique, tag absent, ligne vide ou fin de liste, fichier manquant), **rouge** (erreur : nom déjà pris, caractère invalide, fichier verrouillé).
 Boutons : **Filtrer** (Succès / Erreurs / Non renommés), **Vider**, **Sauver** (fichier texte), **Copier** (presse-papiers).
-L'option *Stocker le journal* (Options > Événements) l'enregistre automatiquement après chaque exécution en UTF-8, deux colonnes séparées par une tabulation (`v` succès, `x` erreur), avec une option pour ajouter à un fichier existant.
+L'option *Stocker le journal* (Options > Événements) l'enregistre automatiquement après chaque exécution en UTF-8, avec une option pour ajouter à un fichier existant. Avec un nom de fichier `.csv` (le choix par défaut de la fenêtre de fichier), c'est un CSV qu'Excel ou LibreOffice ouvrent avec les accents corrects, une ligne par fichier et quatre colonnes : Folder, Original name, New name, Reason (raison du non-renommage), prêtes à filtrer ; avec `.log` ou `.txt`, ce sont deux colonnes séparées par une tabulation (`v` succès, `x` erreur). Le bouton *Sauver* de la page Journal propose les mêmes deux formats.
 
 ## 10. Options (F10)
 
@@ -167,7 +168,7 @@ Les changements s'appliquent en cliquant sur OK ; la langue et la disposition mo
 |---|---|
 | **Affichage** | mise à jour en temps réel, redimensionnement automatique des colonnes, icônes selon l'extension, disposition moderne et son arrangement des pages (Onglets, Écran unique en bandes, Écran unique en colonnes), police et taille forcées, taille de l'historique des listes déroulantes (1 à 200), **thème** (système, clair, sombre), **rechercher une nouvelle version au démarrage** (désactivé par défaut : une fois par jour il interroge GitHub pour la liste des versions, rien d'autre n'est envoyé ; aussi le bouton « Rechercher une mise à jour » de la fenêtre À propos), **me signaler aussi les versions bêta et release candidates** (désactivé par défaut : seules les versions finales sont signalées), complétion automatique, **set d'icônes** (§12), **mode portable** (réglages gardés dans le dossier du programme) |
 | **Fichiers & Dossiers** | ne pas demander lors d'un glisser-déposer et options à utiliser, tri naturel, ouvrir le fichier au double-clic, inclure les fichiers cachés et système des dossiers ajoutés, entrée du menu de l'Explorateur (Windows) |
-| **Traitement** | copier plutôt que renommer, générer un journal, heure d'été selon la date du fichier, renommer aussi les fichiers associés (`.xmp`, `.dop` de DxO ; ils retrouvent leur ancien nom à l'annulation), forcer les dossiers (les crée), détecter `x:\` et `\\` (Linux : `/`) comme chemins absolus, dernier point d'un nom de dossier = extension |
+| **Traitement** | copier plutôt que renommer, générer un journal, heure d'été selon la date du fichier, renommer aussi les fichiers associés (`.xmp`, `.dop`, `.pp3`... et les fichiers RAW d'un JPEG renommé ; ils retrouvent leur ancien nom à l'annulation), forcer les dossiers (les crée), détecter `x:\` et `\\` (Linux : `/`) comme chemins absolus, dernier point d'un nom de dossier = extension |
 | **Événements** | au début d'une exécution : basculer vers une page, vider le journal ; à la fin : basculer vers une page, vider la liste de fichiers, vider le job, stocker le journal dans un fichier (avec « ajouter ») |
 | **Langue** | langue de l'interface (27 fichiers `.lng` ; traducteur et version affichés) |
 

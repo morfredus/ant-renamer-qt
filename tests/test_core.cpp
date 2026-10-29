@@ -322,6 +322,30 @@ int main(int argc, char** argv) {
             CHECK_EQ(nl.at(1).fileName(), u"q.dng.xmp"_s);
         }
 
+        {  // a JPEG takes its RAW along; a RAW takes its sidecar, not the JPEG
+            QTemporaryDir rd;
+            const QString r = rd.path() + u'/';
+            for (const char* f : {"c.jpg", "c.ORF", "c.xmp"}) {
+                QFile w(r + QString::fromLatin1(f));
+                if (w.open(QIODevice::WriteOnly)) {
+                    w.write("x");
+                }
+            }
+            FileList rl;
+            rl.add(r + u"c.ORF"_s);
+            rl.add(r + u"c.jpg"_s);
+            ActionList rb;
+            static_cast<ActionEnum&>(rb.add(ActionType::Enum)).mask = u"n%num%%ext%"_s;
+            rb.perform(rl, Op::Preview);  // the RAW shows the new name of its JPEG
+            CHECK_EQ(rl.at(0).preview + u" "_s + rl.at(1).preview, u"n001.ORF n001.jpg"_s);
+            rb.perform(rl, Op::Rename);
+            CHECK_EQ(rl.at(0).fileName() + u" "_s + rl.at(1).fileName(), u"n001.ORF n001.jpg"_s);
+            CHECK_EQ(QFile::exists(r + u"n001.xmp"_s) ? u"y"_s : u"n"_s, u"y"_s);
+            rl.at(1).rename(u"d.jpg"_s);
+            CHECK_EQ(QFile::exists(r + u"d.ORF"_s) ? u"y"_s : u"n"_s, u"y"_s);
+            CHECK_EQ(QFile::exists(r + u"d.xmp"_s) ? u"y"_s : u"n"_s, u"y"_s);
+        }
+
         options().renameSidecar = false;
         fl.at(0).rename(u"z.jpg"_s);
         CHECK_EQ(has("a.jpg.xmp") + has("z.jpg.xmp"), u"yn"_s);
@@ -337,7 +361,7 @@ int main(int argc, char** argv) {
         File& b = el.add(u"/tmp/d.txt"_s);
         const std::vector<const File*> v = {&a, &b};
         CHECK_EQ(exportPreview(v, true),
-                 u"\"Folder\";\"Name\";\"New name\"\n\"/tmp/\";\"a\"\"b.txt\";\"c.txt\"\n\"/tmp/\";\"d.txt\";\"d.txt\"\n"_s);
+                 u"\"Folder\";\"Name\";\"New name\"\r\n\"/tmp/\";\"a\"\"b.txt\";\"c.txt\"\r\n\"/tmp/\";\"d.txt\";\"d.txt\"\r\n"_s);
         CHECK_EQ(exportPreview(v, false), u"c.txt\nd.txt\n"_s);
     }
     robustnessChecks();

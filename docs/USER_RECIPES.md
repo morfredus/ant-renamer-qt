@@ -112,7 +112,7 @@ Sort by name so `IMG_1234.JPG` and `IMG_1234.CR2` follow each other, then tick *
 Multiple values are joined with ", ". For a RAW, keywords and title entered in the photo software are in the neighbouring `.xmp`, read automatically.
 
 ### 3.6 Rename photos with their sidecar files
-Nothing to do if "Also rename the sidecar files (.xmp, .dop) of a renamed picture" (Options > Processing) is ticked, which is the default. `IMG_0001.CR2` and `IMG_0001.CR2.xmp` leave together, undo (F12) puts both back. The log says so. See also §2.4.
+Nothing to do if "Also rename the sidecar files (.xmp, .dop) of a renamed picture" (Options > Processing) is ticked, which is the default. `IMG_0001.CR2` and `IMG_0001.CR2.xmp` leave together (and `IMG_0001.JPG` takes its `IMG_0001.CR2` RAW along), undo (F12) puts both back. The log says so. See also §2.4.
 
 ### 3.7 File photos into year / month folders
 *Date and time* (or EXIF if the shooting date matters): mask `yyyy'/'mm'/'fe` → `2026/10/name.jpg`. The `/` makes a subfolder, created next to the file. Tick **Force folders** (Options > Processing) so they are created automatically; otherwise the folder must exist.

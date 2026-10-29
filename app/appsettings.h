@@ -54,3 +54,13 @@ struct AppOptions {
 };
 
 AppOptions& appOptions();
+
+// Name chosen in a "Save log" dialog: .csv or .log is added when the user typed none of .csv, .log, .txt (.log and .txt are the
+// same text format), according to the filter selected in the dialog.
+inline QString withLogExtension(QString path, bool csvFilter) {
+    const QString ext = path.section(u'.', -1).toLower();
+    if (ext != u"csv" && ext != u"log" && ext != u"txt") {
+        path += csvFilter ? u".csv" : u".log";
+    }
+    return path;
+}

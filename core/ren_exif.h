@@ -13,8 +13,12 @@ namespace ren {
 bool readExif(const QString& path, QMap<QString, QString>& tags);
 
 // Extensions of the sidecar files that follow a picture when it is renamed: XMP (Lightroom, Capture One,
-// digiKam, darktable...) and DxO PhotoLab's .dop.
+// digiKam, darktable...), DxO PhotoLab .dop, RawTherapee .pp3, Capture One .cos, Camera Raw .acr, ON1 .on1,
+// camera .thm, Apple .aae, and the RAW files (rawExtensions()) that go with a JPEG.
 const QStringList& sidecarExtensions();
+
+// RAW formats (CR2, NEF, ARW, ORF, RAF, DNG...). A JPEG takes its RAW along; a RAW takes its sidecars, not the JPEG.
+const QStringList& rawExtensions();
 
 // The sidecar files a picture can have for these extensions, existing or not: IMG.ext (Lightroom...) and
 // IMG.CR2.ext (digiKam...), also with an upper-case extension, always in that order.

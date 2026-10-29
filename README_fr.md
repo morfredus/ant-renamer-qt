@@ -1,6 +1,6 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.1.0--beta.1-blue)
+![version](https://img.shields.io/badge/version-3.1.0--beta.2-blue)
 
 Portage C++/Qt 6 d'[Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (Delphi 7 à l'origine,
 GPL v2 ou ultérieure). Renommage de fichiers par lots : remplacer, insérer, déplacer, supprimer, énumérer, changer
@@ -103,7 +103,7 @@ Le programme n'utilise pas le réseau, sauf pour la recherche de nouvelle versio
 
 ## Assistance
 
-L'assistance pour Ant Renamer Qt se fait sur GitHub : [Issues](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, demandes de fonctions) et [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, idées). Merci de ne pas signaler les problèmes d'Ant Renamer Qt à l'auteur du programme d'origine.
+L'assistance pour Ant Renamer Qt se fait sur GitHub : [Issues](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, demandes de fonctions) et [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, idées). Merci de ne pas signaler les problèmes d'Ant Renamer Qt à l'auteur du programme d'origine. Sans compte GitHub, écrivez à [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr).
 
 ## Soutenir le portage
 

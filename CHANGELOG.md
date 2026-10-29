@@ -8,6 +8,19 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.0-beta.2] - 2026-10-29
+
+### Added
+
+- The log is saved as a CSV by default (Save button of the Log page, and the file of the *Save log to file* option when its name ends with `.csv`): semicolon-separated, quoted, UTF-8 with a BOM so Excel and LibreOffice read the accents, one line per file with the columns Folder, Original name, New name and Reason (why it was not renamed). Lines end with CRLF (RFC 4180), also in the preview export; the file is no longer opened in text mode, which doubled the CR and showed a blank line between rows. `.log` and `.txt` stay plain text. The file dialogs add `.csv` or `.log` (according to the chosen file type) when the typed name has no `.csv`, `.log` or `.txt` extension (`withLogExtension()` in `app/appsettings.h`). New text `saveLogCsv` in `English.lng` and `French.lng`.
+- More sidecar files follow a renamed picture: `.pp3` (RawTherapee), `.cos` (Capture One), `.acr` (Camera Raw), `.on1` (ON1), `.thm` (camera), `.aae` (Apple), in addition to `.xmp` and `.dop`, and the RAW files (CR2, CR3, NEF, ARW, ORF, RAF, DNG, RW2, PEF, SRW... see `rawExtensions()` in `core/ren_exif.cpp`): renaming `IMG.jpg` renames `IMG.ORF` and `IMG.xmp` with it. A RAW takes its sidecars along, not the JPEG.
+- Documentation and help pages (EN, FR) updated for the new sidecar types and the RAW files that follow their JPEG: User guide, recipes, presentation, architecture, contributing, TODO, Options, Actions, Metadata tags, What, Qt pages. The Croatian and Tamil help pages are not translated yet.
+- Support by e-mail for people without a GitHub account: [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr) in the About box (new text `supportByEmail` in `English.lng` and `French.lng`, other languages show the English text), in the About help pages (en, fr, hr, ta), and in README, SECURITY, CONTRIBUTING and PRESENTATION (EN, FR).
+
+### Fixed
+
+- A RAW or a sidecar that is in the files list (JPEG + ORF...) had no new name in the preview (its metadata cannot be read) and the preview numbering differed from the real renaming; it now shows the new name of its picture, with the case of its own extension (`listedPicture()` in `core/ren_actions.cpp`). On Windows, `IMG.ORF` is no longer renamed with a lower-case `.orf` (`moveSidecars`).
+
 ## [3.1.0-beta.1] - 2026-10-28
 
 ### Added

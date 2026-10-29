@@ -12,7 +12,7 @@ Here are the commands:
 
 - ![Filter](img/filter.png) "Filter" button will show a menu, which allows you to specify which kind of items you want to see in the log: "Successes", "Errors" and "Not renamed" (see next paragraph). The filter only hides lines, nothing is lost: tick the entry again to see them.
 - ![Clear](img/logclear.png) "Clear" button will empty the log.
-- ![Save](img/save.png) "Save" button will open a standard file selection window, allowing you to choose where to save the log contents.
+- ![Save](img/save.png) "Save" button will open a standard file selection window, allowing you to choose where to save the log contents, by default as a CSV file (`.csv`, semicolon-separated, UTF-8) that Excel or LibreOffice open with the accents right: one line per file, with the columns Folder, Original name, New name and Reason (why it was not renamed), easy to filter; a `.log` or `.txt` file is plain text. The extension is added to the name when you do not type one: `.csv` or `.log` according to the file type chosen in the window.
 - ![copy](img/copy.png) "Copy" button will copy the log contents to the clipboard.
 
 When the renaming was fine, a line in the log is added specifying the old and new name of the file. It is written in green. If the file moved to another folder, the full new path is shown. When a picture takes its sidecar files along, the line mentions them.

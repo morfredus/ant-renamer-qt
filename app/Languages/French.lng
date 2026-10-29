@@ -476,6 +476,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="antRenamerQtIs" Value="Ant Renamer Qt est un portage C++/Qt d'Ant Renamer d'Antoine Potten, développé en parallèle du programme d'origine. Portage (Windows et Linux) : Frédéric Biron."/>
     <Item Name="antRenamerQtSupport" Value="Assistance pour Ant Renamer Qt : "/>
     <Item Name="issuesAndDiscussions" Value="issues et discussions"/>
+    <Item Name="supportByEmail" Value="Assistance par e-mail (sans compte GitHub) : "/>
     <Item Name="port" Value="Portage :"/>
     <Item Name="cQtPortAnd" Value="Portage C++/Qt 6 et portage Linux : "/>
     <Item Name="components" Value="Composants :"/>
@@ -518,6 +519,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="exportPreviewMenu" Value="Exporter l'aperçu..."/>
     <Item Name="exportPreview" Value="Exporter l'aperçu"/>
     <Item Name="exportPreviewCsv" Value="Fichier CSV, noms actuels et nouveaux (*.csv)"/>
+    <Item Name="saveLogCsv" Value="Fichier CSV (*.csv)"/>
     <Item Name="exportPreviewTxt" Value="Fichier texte, nouveaux noms seulement (*.txt)"/>
     <Item Name="typeFolderPath" Value="Ou saisir le chemin d'un dossier"/>
     <Item Name="webSiteQt" Value="Site web d'Ant Renamer Qt : "/>

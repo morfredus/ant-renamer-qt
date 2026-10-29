@@ -344,10 +344,12 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(std::make_u
         browse->setToolTip(tr("Browse..."));
         browse->setMaximumWidth(30);
         connect(browse, &QPushButton::clicked, this, [this] {
-            const QString f =
-                QFileDialog::getSaveFileName(this, tr("Save log"), ui_->logFile->text(), tr("Text files (*.log *.txt)"));
+            const QString csvFilter = tr("CSV file (*.csv)");
+            QString filter;
+            const QString f = QFileDialog::getSaveFileName(this, tr("Save log"), ui_->logFile->text(),
+                                                           csvFilter + u";;"_s + tr("Text files (*.log *.txt)"), &filter);
             if (!f.isEmpty()) {
-                ui_->logFile->setText(QDir::toNativeSeparators(f));
+                ui_->logFile->setText(QDir::toNativeSeparators(withLogExtension(f, filter == csvFilter)));
             }
         });
         r3->addWidget(ui_->saveLog);
@@ -487,7 +489,8 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
                    "program. Port (Windows and Linux): Frédéric Biron.") +
                 u"<br><br>"_s + tr("Ant Renamer Qt support: ") +
                 u"<a href='https://github.com/morfredus/ant-renamer-qt/'>github.com/morfredus/ant-renamer-qt</a> ("_s +
-                tr("issues and discussions") + u")<br><br>"_s + tr("Ant Renamer Qt web site: ") +
+                tr("issues and discussions") + u")<br>"_s + tr("Support by e-mail (no GitHub account needed): ") +
+                u"<a href='mailto:ant-renamer-qt@morfredus.fr'>ant-renamer-qt@morfredus.fr</a><br><br>"_s + tr("Ant Renamer Qt web site: ") +
                 u"<a href='https://morfredus.fr/ant-renamer-qt/'>morfredus.fr/ant-renamer-qt</a><br>"_s +
                 tr("Web site of the original program (Antoine Potten): ") +
                 u"<a href='https://www.antp.be/software/renamer/'>www.antp.be/software/renamer/</a><br><br>"_s + u"<b>"_s +

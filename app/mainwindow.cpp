@@ -49,16 +49,17 @@ void RenWorker::run() {
     try {
         if (op_ == Op::Undo) {
             files_->undoPasses(undoCount_, [this](File& f) {
-                emit progress({f.id(), f.description(), int(f.status()), 0, 0, f.fileFolder(), f.fileName(), f.preview});
+                emit progress({f.id(), f.description(), int(f.status()), 0, 0, QString(), f.fileFolder(), f.fileName(), f.preview});
             });
             return;
         }
         actions_->perform(*files_, op_, [this](File& f, int batchPos, int idx) {
-            emit progress({f.id(), f.description(), int(f.status()), batchPos, idx, f.fileFolder(), f.fileName(), f.preview});
+            const QString from = op_ == Op::Rename && f.status() == State::Ok ? f.oldName() : QString();
+            emit progress({f.id(), f.description(), int(f.status()), batchPos, idx, from, f.fileFolder(), f.fileName(), f.preview});
         });
     } catch (const std::exception& e) {
         emit progress(
-            {0, QStringLiteral("Thread error caught: ") + QString::fromLocal8Bit(e.what()), int(State::Error), 0, 0, {}, {}, {}});
+            {0, QStringLiteral("Thread error caught: ") + QString::fromLocal8Bit(e.what()), int(State::Error), 0, 0, {}, {}, {}, {}});
     }
 }
 

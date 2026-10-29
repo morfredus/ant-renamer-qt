@@ -14,7 +14,7 @@ It reads the information stored inside some files to build the new names:
 - the EXIF, IPTC and XMP data of the pictures (JPEG, and TIFF-based files such as most RAW files; XMP also from PNG, WebP... and from `.xmp` files);
 - the date and time of the files.
 
-When a picture is renamed, its sidecar files (`.xmp`, DxO `.dop`) can be renamed with it, see the [options](options_en.md#processing).
+When a picture is renamed, its sidecar files (`.xmp`, `.dop`, `.pp3`..., and the RAW file of a JPEG) can be renamed with it, see the [options](options_en.md#processing).
 
 Ant Renamer Qt runs on Windows and on Linux.
 

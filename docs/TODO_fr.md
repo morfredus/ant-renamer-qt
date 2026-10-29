@@ -20,7 +20,6 @@ Ce sont des idées, pas des promesses : certaines ne seront peut-être jamais r�
 
 ### Petites idées, sans version
 
-- Plus de types de fichiers associés (par exemple `.pp3` de RawTherapee).
 - Lire les données `.dop` ? Pas prévu : c'est un format propre à DxO.
 - Propriétés XMP pas encore reprises : les attributs `exif:` d'un fichier associé (date, GPS), les réglages `crs:` (Camera Raw).
 - Filtrer les fichiers à traiter par un masque ou une expression régulière, avant ou après l'ajout (seuls les fichiers cachés et système sont filtrés aujourd'hui).

@@ -131,7 +131,16 @@ void MainWindow::onProgress(const Snapshot& s) {
         }
     }
     if (o.genLog) {
-        addLog(s.description, State(s.state));
+        // CSV row: a renamed file shows its old and new names, any other one the reason (the end of the log text)
+        QStringList row;
+        if (State(s.state) == State::Ok && !s.from.isEmpty()) {
+            const bool sameFolder = extractFilePath(s.from) == s.folder;
+            row = {extractFilePath(s.from), extractFileName(s.from), sameFolder ? s.name : s.folder + s.name, QString()};
+        } else {
+            const int k = s.description.lastIndexOf(u": "_s);
+            row = {s.folder, s.name, QString(), State(s.state) == State::Ok ? tr_("Reverted") : s.description.mid(k < 0 ? 0 : k + 2)};
+        }
+        addLog(s.description, State(s.state), row);
     }
     if (o.realtime) {
         const bool undo = worker_ && worker_->op() == Op::Revert;  // an undo makes one pass, whatever the batch holds
@@ -141,6 +150,17 @@ void MainWindow::onProgress(const Snapshot& s) {
         }
     }
 }
+
+// CSV of the log: Folder, Original name, New name, Reason (semicolon and quotes like the preview export, UTF-8 with a BOM:
+// Excel and LibreOffice read the accents). Only the lines about files have a row.
+static QByteArray logCsvLine(const QStringList& row) {
+    QStringList q;
+    for (QString v : row) {
+        q << u'"' + v.replace(u'"', u"\"\""_s) + u'"';
+    }
+    return (q.join(u';') + u"\r\n"_s).toUtf8();
+}
+static const QByteArray logCsvHeader = "\"Folder\";\"Original name\";\"New name\";\"Reason\"\r\n";
 
 void MainWindow::onFinished() {
     // the queued progress signals were posted before finished(); drain them first
@@ -170,8 +190,12 @@ void MainWindow::onFinished() {
     if (o.saveLog && op != Op::Preview && !o.saveLogFile.isEmpty()) {
         QFile f(o.saveLogFile);
         if (f.open(QIODevice::WriteOnly | (o.saveLogAppend ? QIODevice::Append : QIODevice::Truncate))) {
+            const bool csv = o.saveLogFile.endsWith(u".csv"_s, Qt::CaseInsensitive);
             if (f.size() == 0) {
-                f.write("\xEF\xBB\xBF");
+                f.write("\xEF\xBB\xBF");  // BOM: Excel reads the accents
+                if (csv) {
+                    f.write(logCsvHeader);
+                }
             }
             for (size_t i = qMin(runLogStart_, logEntries_.size()); i < logEntries_.size(); ++i) {  // this run only
                 const LogEntry& e = logEntries_[i];
@@ -179,7 +203,11 @@ void MainWindow::onFinished() {
                                    : e.state == State::Ok       ? "v"
                                    : e.state == State::Error    ? "x"
                                                                 : nullptr;
-                if (mark) {
+                if (csv) {
+                    if (!e.row.isEmpty()) {
+                        f.write(logCsvLine(e.row));
+                    }
+                } else if (mark) {
                     f.write(QByteArray(mark) + '\t' + e.text.toUtf8() + "\r\n");
                 }
             }
@@ -257,11 +285,11 @@ void MainWindow::showHistory() {
 }
 
 // --- log ------------------------------------------------------------------------------------------------------------------
-void MainWindow::addLog(const QString& text, State st) {
+void MainWindow::addLog(const QString& text, State st, const QStringList& row) {
     if (text.isEmpty()) {
         return;
     }
-    logEntries_.push_back({text, st});
+    logEntries_.push_back({text, st, row});
     const bool shown = (st == State::Ok && logShowOk_) || (st == State::Error && logShowError_) ||
                        (st == State::NotRenamed && logShowNot_) || st == State::Info;
     if (!shown) {
@@ -284,7 +312,7 @@ void MainWindow::rebuildLog() {
     logEntries_.clear();
     logView_->clear();
     for (const LogEntry& e : all) {
-        addLog(e.text, e.state);
+        addLog(e.text, e.state, e.row);
     }
 }
 
@@ -301,13 +329,29 @@ void MainWindow::logAction(int which) {
     if (which == 2) {
         QApplication::clipboard()->setText(lines.join(u'\n'));
     } else {
-        const QString p = QFileDialog::getSaveFileName(this, tr_("Save log"), {}, tr_("Text files (*.log *.txt)"));
-        QFile f(p);
+        const QString csvFilter = tr_("CSV file (*.csv)");
+        QString filter;
+        QString p = QFileDialog::getSaveFileName(this, tr_("Save log"), {}, csvFilter + u";;"_s + tr_("Text files (*.log *.txt)"),
+                                                 &filter);
         if (p.isEmpty()) {
             return;
         }
-        if (f.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            f.write(lines.join(u"\r\n"_s).toUtf8());
+        p = withLogExtension(p, filter == csvFilter);
+        const bool csv = p.endsWith(u".csv"_s, Qt::CaseInsensitive);
+        QFile f(p);
+        if (f.open(QIODevice::WriteOnly)) {  // not Text: the lines already end with CRLF, Text would make it CR CR LF
+            if (csv) {  // the entries shown, with their status
+                QByteArray out = "\xEF\xBB\xBF" + logCsvHeader;
+                for (const LogEntry& e : logEntries_) {
+                    if (!e.row.isEmpty() && ((e.state == State::Ok && logShowOk_) || (e.state == State::Error && logShowError_) ||
+                        (e.state == State::NotRenamed && logShowNot_))) {
+                        out += logCsvLine(e.row);
+                    }
+                }
+                f.write(out);
+            } else {
+                f.write(lines.join(u"\r\n"_s).toUtf8());
+            }
         } else {
             QMessageBox::critical(this, windowTitle(), tr_("Could not write %1").arg(native(p)));
         }

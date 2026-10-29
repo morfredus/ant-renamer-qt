@@ -4,7 +4,7 @@ Thank you for your interest. ([Version française](CONTRIBUTING_fr.md))
 
 ## Before you start
 
-- **Bug, idea or question?** Open an [issue](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, feature requests) or start a [discussion](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, ideas). Please do not report Ant Renamer Qt problems to the author of the original program.
+- **Bug, idea or question?** Open an [issue](https://github.com/morfredus/ant-renamer-qt/issues) (bugs, feature requests) or start a [discussion](https://github.com/morfredus/ant-renamer-qt/discussions) (questions, ideas). Please do not report Ant Renamer Qt problems to the author of the original program. No GitHub account? Write to [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr).
 - **Bigger change?** Talk about it first in an issue, so nobody works on something that will not be merged.
 - Issues and pull requests can be written in English or in French.
 
@@ -45,7 +45,7 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 
 **Add an EXIF, IPTC or XMP tag.** A line in the matching table (`tagNames`, `iptcNames`, `xmpProps` in `core/ren_exif.cpp`), the help page of the tags, and a test with a synthetic file in `test_core.cpp`.
 
-**Add a sidecar type.** Add the extension to `sidecarExtensions()` in `core/ren_exif.cpp`: finding the candidates, moving, reverting and skipping the sidecars that are in the list all follow from it.
+**Add a sidecar type.** Add the extension to `sidecarExtensions()` (or `rawExtensions()` for a RAW format) in `core/ren_exif.cpp`: finding the candidates, moving, reverting and skipping the sidecars that are in the list all follow from it.
 
 **Add a source file.** Add the `.cpp` to `add_library(rencore ...)` (engine) or to `set(SRC ...)` in `app/CMakeLists.txt`: the lists of sources are written by hand, nothing is detected automatically. A forgotten file shows up as an "undefined reference" at link time. If `test_panel` also needs it, add it to its list too.
 

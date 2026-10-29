@@ -10,7 +10,7 @@ Only the latest published version of Ant Renamer Qt receives fixes. If you find 
 
 Please do **not** open a public issue or discussion for a security problem.
 
-Use the private reporting of GitHub instead: on the [Security tab of the repository](https://github.com/morfredus/ant-renamer-qt/security), click *Report a vulnerability*. Only the maintainer sees the report.
+Use the private reporting of GitHub instead: on the [Security tab of the repository](https://github.com/morfredus/ant-renamer-qt/security), click *Report a vulnerability*. Only the maintainer sees the report. Without a GitHub account, write to [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr) (do not put the details in a public place).
 
 Please include the version, the system, what you did and what happened (a file that is renamed, moved or read when it should not be, a crash on a crafted file name or `.lng` file, and so on).
 

@@ -19,6 +19,7 @@ Ce programme est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE GAR
 ## Contact
 
 - Assistance pour Ant Renamer Qt (issues et discussions) : [github.com/morfredus/ant-renamer-qt](https://github.com/morfredus/ant-renamer-qt/)
+- Assistance par e-mail (sans compte GitHub) : [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr)
 - Page de l'Ant Renamer d'origine : [www.antp.be/software/renamer/fr](https://www.antp.be/software/renamer/fr)
 
 ## Liens

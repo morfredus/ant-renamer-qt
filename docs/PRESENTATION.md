@@ -175,7 +175,7 @@ Users of Ant Renamer 2.x asked for a number of things on the forum of the origin
 ## Known limits
 
 - 36 EXIF tags (IFD0 and Exif IFD only, no MakerNote decoding); IPTC is read from JPEG only; XMP
-  sidecar files are read and renamed with their picture (IMG.xmp, IMG.CR2.xmp and DxO `.dop`; other sidecar types are not).
+  sidecar files are read and renamed with their picture (IMG.xmp, IMG.CR2.xmp, DxO `.dop`, RawTherapee `.pp3`, Capture One `.cos`... and the RAW files of a renamed JPEG).
 - Only ID3 tags; no other audio tag formats.
 - The Windows 11 short context menu needs a packaged COM component and a signed package, not done.
 - The executable is not code-signed, so SmartScreen may warn on the first download.
@@ -198,7 +198,7 @@ Users of Ant Renamer 2.x asked for a number of things on the forum of the origin
 Questions, bug reports and ideas about Ant Renamer Qt go to
 [Issues](https://github.com/morfredus/ant-renamer-qt/issues) and
 [Discussions](https://github.com/morfredus/ant-renamer-qt/discussions). Support for the port is separate from the
-original program: please do not report its problems to the author of the original Ant Renamer.
+original program: please do not report its problems to the author of the original Ant Renamer. No GitHub account? Write to [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr).
 
 Thanks to Antoine Potten for the program and for publishing its sources: without them this port would not exist.
 

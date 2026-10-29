@@ -4,7 +4,14 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.1.0-beta.1**.
+Version courante : **3.1.0-beta.2**.
+
+## 3.1.0-beta.2
+
+| Nouveauté | Depuis |
+|---|---|
+| **Plus de fichiers associés, et les fichiers RAW, suivent leur image** : renommer `IMG.jpg` renomme aussi `IMG.ORF` (ou CR2, NEF, ARW, RAF, DNG... 27 formats RAW) et ses fichiers associés (`.xmp`, `.dop`, et maintenant `.pp3`, `.cos`, `.acr`, `.on1`, `.thm`, `.aae`). Un RAW ou un fichier associé présent dans la liste affiche dans l'aperçu le nouveau nom de son image et garde la casse de son extension. | 3.1.0-beta.2 |
+| **Le journal s'enregistre en CSV par défaut** : le bouton Sauver de la page Journal et l'option *Stocker le journal* écrivent un `.csv` qu'Excel et LibreOffice ouvrent avec les accents corrects, une ligne par fichier (Folder, Original name, New name, Reason) pour filtrer. `.log` et `.txt` restent possibles. | 3.1.0-beta.2 |
 
 ## 3.1.0-beta.1
 
