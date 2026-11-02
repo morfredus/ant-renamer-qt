@@ -94,7 +94,7 @@ Options > Display). Otherwise settings live in `%APPDATA%\AntRenamerQt\Ant Renam
 Explorer context menu (Windows): Options > Files & Folders adds "Add to Ant Renamer Qt" to files and folders (Windows 11:
 "Show more options"). Everything selected is sent to the window that is already open.
 
-Command line: `-b file.arb` load a batch, `-g` start, `-x` exit when done, `-a[fFr]` choose what the
+Command line: `-b file.arb` load a batch, `-g` start, `-x` exit when done, `-q` silent (no window, for scripts), `-a[fFr]` choose what the
 following paths add (f files, F folders, r recursive; wildcards allowed).
 
 ## Privacy

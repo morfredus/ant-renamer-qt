@@ -11,6 +11,8 @@ Version courante : **3.1.0-beta.3**.
 | Nouveauté | Depuis |
 |---|---|
 | **L'historique d'annulation est conservé à la fermeture du programme.** Relancez le programme : **Annuler** (F12) ou **Historique** (Maj+F12) remontent encore les 50 dernières passes, même le lendemain ; la fenêtre d'historique regroupe les passes par session (une session = un lancement du programme) et affiche la date : on peut annuler une session sans toucher aux suivantes. Avant d'annuler, le programme vérifie que chaque fichier a toujours la taille et la date qu'il avait juste après le renommage ; un fichier remplacé ou modifié en dehors du programme n'est pas touché (l'annulation s'arrête là). Un nouveau bouton *Effacer l'historique* oublie les passes. L'historique est enregistré dans `antrenamer-qt-history.json`, à côté du fichier de réglages. | *(à venir)* |
+| **La disposition moderne est celle d'une nouvelle installation** (écran unique, en bandes). Rien ne change pour qui a déjà des réglages : la disposition choisie est conservée, et la classique reste à un clic (Options > Affichage, *Disposition moderne de l'interface*). | *(à venir)* |
+| **Ligne de commande silencieuse** : `-q` exécute un job sans fenêtre ni boîte de dialogue (comme `-g -x`, sans la fenêtre), pour les scripts et les menus contextuels. Le code de sortie dit comment ça s'est passé (0 fait, 1 un fichier a échoué, 2 rien n'a été fait). | *(à venir)* |
 
 ## 3.1.0-beta.3
 

@@ -55,7 +55,8 @@ int main(int argc, char** argv) {
     // Explorer context menu: `--shell <path>` adds the path to the window that is already open.
     const QStringList args = QCoreApplication::arguments().mid(1);
     QLockFile lock(QDir::temp().filePath(QStringLiteral("AntRenamerQt-instance.lock")));
-    const bool primary = lock.tryLock(0);
+    const bool silent = args.contains(QStringLiteral("-q"));  // no window: neither the instance lock nor the Explorer server
+    const bool primary = !silent && lock.tryLock(0);
     if (const int shellAt = int(args.indexOf(QStringLiteral("--shell"))); shellAt >= 0 && !primary) {
         if (forwardToRunningInstance(args.mid(shellAt + 1), 10000)) {
             return 0;
@@ -95,8 +96,12 @@ int main(int argc, char** argv) {
             }
         });
     }
-    w.show();
+    if (!silent) {
+        w.show();
+    }
     w.processCommandLine(args);
-    runDeveloperAids(w, app);
+    if (!silent) {
+        runDeveloperAids(w, app);
+    }
     return app.exec();
 }

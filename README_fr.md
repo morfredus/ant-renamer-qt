@@ -94,7 +94,7 @@ Options > Affichage). Sinon les réglages sont dans `%APPDATA%\AntRenamerQt\Ant 
 Menu contextuel de l'Explorateur (Windows) : Options > Fichiers & Dossiers ajoute « Ajouter à Ant Renamer Qt » aux fichiers et
 dossiers (Windows 11 : « Afficher plus d'options »). Tout ce qui est sélectionné arrive dans la fenêtre déjà ouverte.
 
-Ligne de commande : `-b fichier.arb` charge un job, `-g` démarre, `-x` quitte à la fin, `-a[fFr]`
+Ligne de commande : `-b fichier.arb` charge un job, `-g` démarre, `-x` quitte à la fin, `-q` silencieux (sans fenêtre, pour les scripts), `-a[fFr]`
 choisit ce qu'ajoutent les chemins suivants (f fichiers, F dossiers, r récursif ; jokers acceptés).
 
 ## Confidentialité

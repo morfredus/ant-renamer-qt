@@ -11,6 +11,10 @@ bool MainWindow::confirmHiddenFiles() {
             hidden += files_.at(i).hidden;
         }
     }
+    if (hidden && silent_) {  // nobody to ask: nothing is renamed
+        quitSilently(2);
+        return false;
+    }
     return !hidden || QMessageBox::warning(this, windowTitle(),
                                            tr_("%1 hidden or system file(s) are in the list and will be renamed. Renaming them "
                                                "can break programs or the system. Continue?")
@@ -41,12 +45,19 @@ void MainWindow::showPreviewHint() {
 }
 
 void MainWindow::run(Op op, int undoCount, int undoSession) {
+    if (quitting_) {
+        return;
+    }
     if (worker_) {
         QMessageBox::information(this, windowTitle(), tr_("Application is busy: Renaming operation in progress."));
         return;
     }
     if (op == Op::Undo ? journal_.size() == 0
                        : (files_.size() == 0 || (batch_.size() == 0 && panel_->currentIndex() < 0 && op != Op::Revert))) {
+        if (silent_) {
+            quitSilently(2);
+            return;
+        }
         QMessageBox::warning(this, windowTitle(),
                              op == Op::Undo ? tr_("Nothing to undo: no renaming pass in the history.")
                                             : tr_("Nothing to do: please select at least one file and an action to perform."));
@@ -71,6 +82,7 @@ void MainWindow::run(Op op, int undoCount, int undoSession) {
         showPreviewHint();
     }
     runLogStart_ = logEntries_.size();
+    runErrors_ = 0;
     addLog(op == Op::Rename    ? tr_("Renaming process started")
            : op == Op::Preview ? tr_("Refreshing preview")
            : op == Op::Undo    ? tr_("Undoing the last renaming passes")
@@ -111,6 +123,7 @@ void MainWindow::run(Op op, int undoCount, int undoSession) {
 
 void MainWindow::onProgress(const Snapshot& s) {
     const AppOptions& o = appOptions();
+    runErrors_ += State(s.state) == State::Error;
     if (!s.file) {
         addLog(s.description, State(s.state));
         return;
@@ -225,9 +238,21 @@ void MainWindow::onFinished() {
     setStatus();
     updateAllItems();
     updateSamplePreview();
-    if (exitAfterRun_) {
+    if (exitAfterRun_ && silent_) {
+        quitSilently(runErrors_ ? 1 : 0);
+    } else if (exitAfterRun_) {
         close();
     }
+}
+
+// From the event loop, so that it also works before exec() has started. closeEvent() is not used: the window was never
+// shown, its geometry must not overwrite the saved one.
+void MainWindow::quitSilently(int code) {
+    if (quitting_) {  // the first reason is the one that counts
+        return;
+    }
+    quitting_ = true;
+    QTimer::singleShot(0, qApp, [code] { QCoreApplication::exit(code); });
 }
 
 // While a run is in progress the lists, the batch and the options belong to the worker thread. The handlers also test
@@ -404,9 +429,11 @@ void MainWindow::logAction(int which) {
 
 // --- command line (same switches as the original) ---------------------------------------------------------------------------
 // -b file.arb  load a batch      -g  start renaming      -x  exit when finished
+// -q           silent: no window, no dialog; same as -g -x, the exit code tells how it went
 // -a[fFr]      what the following paths add: f = files, F = folders, r = recursive; wildcards allowed
 void MainWindow::processCommandLine(const QStringList& args) {
-    bool go = false, exit = false;
+    silent_ = args.contains(u"-q"_s);
+    bool go = silent_, exit = silent_;
     AddChoice add{false, false, false};
     bool haveAdd = false;
     const QString start = QDir::currentPath();
@@ -418,6 +445,8 @@ void MainWindow::processCommandLine(const QStringList& args) {
         }
         if (a == u"-b" && i + 1 < args.size()) {
             openBatchFile(QDir(start).absoluteFilePath(args[++i]));
+        } else if (a == u"-q") {  // read before the loop (silent_)
+            continue;
         } else if (a == u"-g") {
             go = true;
         } else if (a == u"-x") {
@@ -459,6 +488,8 @@ void MainWindow::processCommandLine(const QStringList& args) {
     if (go && files_.size() > 0) {
         exitAfterRun_ = exit;
         run(Op::Rename);
+    } else if (silent_) {
+        quitSilently(2);  // no file to rename
     } else if (exit) {
         QTimer::singleShot(0, this, [this] { close(); });  // from the event loop, so quitting always works
     }

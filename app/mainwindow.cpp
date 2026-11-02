@@ -816,7 +816,7 @@ void MainWindow::loadSettings() {
 void MainWindow::startUpdateCheck() {
     const AppOptions& o = appOptions();
     const QString today = QDate::currentDate().toString(Qt::ISODate);
-    if (runsInFlatpak() || !o.checkUpdates || o.lastUpdateCheck == today || exitAfterRun_ || worker_ ||
+    if (runsInFlatpak() || !o.checkUpdates || o.lastUpdateCheck == today || exitAfterRun_ || silent_ || worker_ ||
         qEnvironmentVariableIsSet("ANTREN_SHOT")) {
         return;
     }

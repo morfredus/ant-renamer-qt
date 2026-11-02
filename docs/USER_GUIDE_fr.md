@@ -147,6 +147,7 @@ Bon à savoir : un tag absent donne un texte vide ; les valeurs multiples sont j
 | `-b fichier.arb` | charge un job |
 | `-g` | démarre le traitement une fois fichiers et job chargés |
 | `-x` | quitte à la fin du traitement |
+| `-q` | mode silencieux pour les scripts : ni fenêtre ni boîte de dialogue, comme `-g -x`. Code de sortie : 0 tout est fait, 1 au moins un fichier a échoué, 2 rien n'a été fait (aucun fichier, aucun batch, fichier batch illisible, fichiers cachés dans la liste) |
 | `-af` / `-aF` / `-afr` | ajoute les fichiers / dossiers / contenu récursif des dossiers qui suivent (jokers `*` `?` acceptés) |
 | `--shell chemin` | ajoute le chemin à la fenêtre déjà ouverte (utilisé par le menu de l'Explorateur) |
 | `--install-shell` / `--remove-shell` | ajoute / retire l'entrée du menu de l'Explorateur (Windows), puis quitte |
@@ -174,9 +175,9 @@ Les changements s'appliquent en cliquant sur OK ; la langue et la disposition mo
 
 Les réglages sont stockés dans votre profil (`%APPDATA%\AntRenamerQt` sous Windows, `~/.local/share/AntRenamerQt` sous Linux). Mode portable : un fichier `antrenamer-qt.ini` à côté du programme garde tous les réglages dans ce dossier (la case d'Options > Affichage le crée ou le supprime ; un fichier vide suffit).
 
-## 11. Disposition moderne (facultative)
+## 11. Disposition moderne
 
-Même moteur, autre présentation, activée dans Options > Affichage. Compteurs « Fichiers (100) », « Opérations (2) » sur les boutons de pages ; une fine barre d'outils par page ; en écran unique, Ctrl+1/2/3 affiche ou masque un volet ; les séparateurs se déplacent et sont mémorisés ; la disposition en colonnes retombe en bandes sous ~900 pixels de large ; les opérations du job se modifient par double-clic.
+Même moteur, autre présentation, choisie dans Options > Affichage. C'est celle d'une **nouvelle installation** depuis la 3.1 (écran unique, en bandes : pas encore de fichier de réglages, ou un fichier vide) ; si vous avez déjà des réglages, votre disposition est conservée, et vous pouvez passer à la moderne dans les options. Décochez *Disposition moderne de l'interface* pour revenir à la classique à tout moment. Compteurs « Fichiers (100) », « Opérations (2) » sur les boutons de pages ; une fine barre d'outils par page ; en écran unique, Ctrl+1/2/3 affiche ou masque un volet ; les séparateurs se déplacent et sont mémorisés ; la disposition en colonnes retombe en bandes sous ~900 pixels de large ; les opérations du job se modifient par double-clic.
 
 ## 12. Icônes, aide et langues
 

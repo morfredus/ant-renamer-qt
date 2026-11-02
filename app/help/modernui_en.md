@@ -1,6 +1,6 @@
 # Modern interface layout
 
-This chapter is specific to Ant Renamer Qt. In addition to the classic layout described in the rest of this help, the program can show its main window with a modern layout: the same functions and the same renaming engine, with another presentation. The classic layout stays the default one.
+This chapter is specific to Ant Renamer Qt. In addition to the classic layout described in the rest of this help, the program can show its main window with a modern layout: the same functions and the same renaming engine, with another presentation. Since version 3.1 the modern layout is the default of a new installation (single screen, in bands); whoever already had settings keeps the layout they had. The classic layout is always available: untick this option to go back to it.
 
 ## Enabling it {#enable}
 

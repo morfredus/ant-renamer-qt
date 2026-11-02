@@ -1,6 +1,6 @@
 # Disposition moderne de l'interface
 
-Ce chapitre est propre à Ant Renamer Qt. En plus de la disposition classique décrite dans le reste de cette aide, le programme peut afficher sa fenêtre principale avec une disposition moderne : les mêmes fonctions et le même moteur de renommage, avec une autre présentation. La disposition classique reste celle par défaut.
+Ce chapitre est propre à Ant Renamer Qt. En plus de la disposition classique décrite dans le reste de cette aide, le programme peut afficher sa fenêtre principale avec une disposition moderne : les mêmes fonctions et le même moteur de renommage, avec une autre présentation. Depuis la version 3.1, la disposition moderne est celle d'une nouvelle installation (écran unique, en bandes) ; qui avait déjà des réglages garde la disposition qu'il avait. La disposition classique reste toujours disponible : décochez cette option pour y revenir.
 
 ## L'activer {#enable}
 

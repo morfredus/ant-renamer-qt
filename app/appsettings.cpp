@@ -78,6 +78,16 @@ bool setPortable(bool on) {
 
 void AppOptions::load() {
     QSettings s = appSettings();
+    // First start (no settings file, or an empty one made by hand for the portable mode): the modern layout, single screen
+    // in bands. Written now, so that it stays the choice once other settings exist. Anyone who already has settings keeps
+    // what they have, the classic layout when they never chose (the member defaults).
+    if (s.allKeys().isEmpty()) {
+        newUi = true;
+        pageLayout = 1;
+        s.setValue(QStringLiteral("options/newUi"), newUi);
+        s.setValue(QStringLiteral("options/pageLayout"), pageLayout);
+        s.sync();
+    }
 #define LOAD(k) k = s.value(QStringLiteral("options/" #k), k).value<decltype(k)>();
     KEYS(LOAD)
 #undef LOAD

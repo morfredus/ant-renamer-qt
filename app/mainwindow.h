@@ -191,6 +191,10 @@ private:
     RenWorker* worker_ = nullptr;
     bool clearBatchAfter_ = false;
     bool exitAfterRun_ = false;
+    bool silent_ = false;  // -q: no window, no dialog; the result is the exit code (0 done, 1 some file failed, 2 nothing done)
+    int runErrors_ = 0;    // files that failed during the run in progress
+    bool quitting_ = false;  // quitSilently() was called: nothing may start any more (the exit code is already decided)
+    void quitSilently(int code);
     QHash<quint64, QTreeWidgetItem*> rows_;
 
     struct LogEntry {

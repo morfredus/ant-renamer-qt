@@ -147,6 +147,7 @@ Good to know: a missing tag gives an empty text; multiple values are joined with
 | `-b file.arb` | loads a batch |
 | `-g` | starts the processing once files and batch are loaded |
 | `-x` | exits when the processing is done |
+| `-q` | silent mode for scripts: no window, no dialog, same as `-g -x`. Exit code: 0 all done, 1 at least one file failed, 2 nothing done (no file, no batch, unreadable batch file, hidden files in the list) |
 | `-af` / `-aF` / `-afr` | adds the following files / folders / recursive content of folders (wildcards `*` `?` accepted) |
 | `--shell path` | adds the path to the window that is already open (used by the Explorer menu) |
 | `--install-shell` / `--remove-shell` | adds / removes the Explorer menu entry (Windows), then exits |
@@ -174,9 +175,9 @@ Changes apply when you click OK; the language and the modern layout too, without
 
 Settings are stored in your profile (`%APPDATA%\AntRenamerQt` on Windows, `~/.local/share/AntRenamerQt` on Linux). Portable mode: an `antrenamer-qt.ini` file next to the program keeps all settings in that folder (the checkbox in Options > Display creates or removes it; an empty file is enough).
 
-## 11. Modern layout (optional)
+## 11. Modern layout
 
-Same engine, other presentation, enabled in Options > Display. Counters "Files (100)", "Actions (2)" on the page buttons; a thin toolbar per page; in single-screen modes Ctrl+1/2/3 shows or hides a pane; splitters can be dragged and are remembered; the columns layout falls back to bands below ~900 pixels wide; batch actions can be edited by double-click.
+Same engine, other presentation, set in Options > Display. It is the default of a **new installation** since 3.1 (single screen, in bands: no settings file yet, or an empty one); if you already have settings, your layout is kept, and you can switch to the modern one in the options. Untick *Modern interface layout* to go back to the classic layout at any time. Counters "Files (100)", "Actions (2)" on the page buttons; a thin toolbar per page; in single-screen modes Ctrl+1/2/3 shows or hides a pane; splitters can be dragged and are remembered; the columns layout falls back to bands below ~900 pixels wide; batch actions can be edited by double-click.
 
 ## 12. Icons, help and languages
 

@@ -29,7 +29,7 @@ struct AppOptions {
     // Files & folders
     bool dragNoAsk = false;
     int pageLayout = 0;             // modern layout: 0 tabs, 1 single screen in bands, 2 single screen in columns
-    bool newUi = false;             // modern layout (taken into account at the next start)
+    bool newUi = false;             // modern layout (taken into account at the next start); true on a first start, see load()
     bool checkUpdates = false;      // look for a new release on GitHub at start (once a day)
     bool checkPrereleases = false;  // the new-version check also announces beta and rc (otherwise final versions only)
     QString lastUpdateCheck;        // yyyy-MM-dd of the last successful check
