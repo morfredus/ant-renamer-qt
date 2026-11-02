@@ -4,7 +4,15 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.1.0-beta.2**.
+Version courante : **3.1.0-beta.3**.
+
+## 3.1.0-beta.3
+
+| Nouveauté | Depuis |
+|---|---|
+| **Le remplacement de chaîne peut cibler seulement le début ou la fin d'un nom** : nouveau choix *N'importe où dans le nom / Seulement au début / Seulement à la fin* (les jokers fonctionnent aussi). Avant, le texte était remplacé où qu'il se trouve. | 3.1.0-beta.3 |
+| **La fenêtre garde sa taille après un changement de langue.** | 3.1.0-beta.3 |
+| **Vocabulaire français** : le bouton d'ajout de fichiers s'appelle *Ajouter...*, et *Sensible à la casse* devient *Respecter la casse (A ≠ a)*. | 3.1.0-beta.3 |
 
 ## 3.1.0-beta.2
 

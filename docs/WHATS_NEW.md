@@ -4,7 +4,15 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.1.0-beta.2**.
+Current version: **3.1.0-beta.3**.
+
+## 3.1.0-beta.3
+
+| What is new | Since |
+|---|---|
+| **String replacement can match only at the beginning or only at the end of a name**: a new choice *Anywhere in the name / Only at the beginning / Only at the end* (wildcards work with it too). Before, the text was replaced wherever it was found. | 3.1.0-beta.3 |
+| **The window keeps its size after a language change.** | 3.1.0-beta.3 |
+| **French wording**: the Add files button is called *Ajouter...*, and *Sensible à la casse* is now *Respecter la casse (A ≠ a)*. | 3.1.0-beta.3 |
 
 ## 3.1.0-beta.2
 

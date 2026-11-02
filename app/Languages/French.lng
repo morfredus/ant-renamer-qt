@@ -106,7 +106,7 @@ Authors=Antoine Potten|antrenamer-contact@antp.be|Frédéric Biron (Ant Renamer Qt
     <lblStrReplSearch Caption="Rechercher :"/>
     <lblStrReplBy Caption="Remplacer par :"/>
     <cbxStrReplAll Caption="Remplacer toutes les occurences"/>
-    <cbxStrReplCase Caption="Sensible à la casse"/>
+    <cbxStrReplCase Caption="Respecter la casse (A &#8800; a)"/>
     <cbxStrReplExt Caption="Inclure l'extension dans la recherche"/>
     <cbxStrReplOnlyExt Caption="Appliquer à l'extension plutôt qu'au nom"/>
     <cbxStrReplWildcards Caption="Utiliser les jokers (* = n'importe quel texte, ? = n'importe quel caractère)"/>
@@ -117,7 +117,7 @@ Authors=Antoine Potten|antrenamer-contact@antp.be|Frédéric Biron (Ant Renamer Qt
     <lblMultstrReplBy Caption="Remplacer par :"/>
     <lblMultstrReplSet Caption="Sets prédéfinis :"/>
     <cbxMultstrReplExt Caption="Inclure l'extension dans la recherche"/>
-    <cbxMultstrCase Caption="Sensible à la casse"/>
+    <cbxMultstrCase Caption="Respecter la casse (A &#8800; a)"/>
     <lblMultstrReplNotes Caption="Notes :&lt;BR&gt;- Utilisez Ctrl+Plus (+) et Ctrl+Moins (-) pour insérer ou supprimer une ligne à la position courante"/>
     <lblStrInsStr Caption="Chaîne à insérer :"/>
     <lblStrInsPos Caption="À la position :"/>

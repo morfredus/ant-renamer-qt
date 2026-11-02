@@ -8,6 +8,8 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.0-beta.3] - 2026-11-02
+
 ### Added
 
 - String replacement: choice *Anywhere in the name / Only at the beginning / Only at the end* (user feedback: it was not possible to replace a text only at the start or the end of a name). It works with wildcards too (anchored with `\A` / `\z`). Saved in job files as `Where` (0, 1, 2; older files read as 0). New texts `rbtStrReplAnywhere`, `rbtStrReplBegin`, `rbtStrReplEnd`, `stradStringReplBegin`, `stradStringReplEnd` in `English.lng` and `French.lng` (other languages show the English text). Tests added in `test_core.cpp`; Actions help (EN, FR) updated.
@@ -15,6 +17,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 ### Fixed
 
 - After a language change in the Options the window came back small even when it had been large or maximized: `MainWindow::rebuildUi()` now puts the window geometry back after rebuilding the interface.
+- French: *Sensible à la casse* (String replacement and Multiple string replacement) is now *Respecter la casse (A ≠ a)*, clearer for people who do not know the printers' word (`cbxStrReplCase`, `cbxMultstrCase` in `French.lng`; the ≠ is written `&#8800;`, the file is not UTF-8).
 - French: the *Add files* button was called *Fichiers*, like the *Files* page; it is now *Ajouter...* (`ActionAddFiles` in `French.lng`).
 
 ### Changed
