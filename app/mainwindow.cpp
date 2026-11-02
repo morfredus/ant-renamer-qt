@@ -48,9 +48,12 @@ void ItemTree::dropEvent(QDropEvent* e) {
 void RenWorker::run() {
     try {
         if (op_ == Op::Undo) {
-            files_->undoPasses(undoCount_, [this](File& f) {
-                emit progress({f.id(), f.description(), int(f.status()), 0, 0, QString(), f.fileFolder(), f.fileName(), f.preview});
-            });
+            files_->undoPasses(
+                undoCount_,
+                [this](File& f) {
+                    emit progress({f.id(), f.description(), int(f.status()), 0, 0, QString(), f.fileFolder(), f.fileName(), f.preview});
+                },
+                undoSession_);
             return;
         }
         actions_->perform(*files_, op_, [this](File& f, int batchPos, int idx) {

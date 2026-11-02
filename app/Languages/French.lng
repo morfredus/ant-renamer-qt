@@ -504,7 +504,8 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="undoHistoryCaption" Value="Historique"/>
     <Item Name="undoHistoryHint" Value="Passes de renommage : revenir à une passe précise"/>
     <Item Name="undoHistoryTitle" Value="Historique des renommages"/>
-    <Item Name="undoHistoryInfo" Value="Passes, de la plus récente à la plus ancienne (conservées à la fermeture du programme). Les passes s'annulent l'une après l'autre en partant de la dernière : choisir une passe l'annule ainsi que toutes celles faites après."/>
+    <Item Name="undoHistoryInfo" Value="Passes, de la plus récente à la plus ancienne, par session (conservées à la fermeture du programme). Dans une session, les passes s'annulent l'une après l'autre en partant de la dernière : choisir une passe l'annule ainsi que celles faites après dans la même session. Les autres sessions ne sont pas touchées."/>
+    <Item Name="undoHistorySession" Value="Session du %1"/>
     <Item Name="undoHistoryRow" Value="n°%1  %2  -  %3 déplacement(s)  -  %4"/>
     <Item Name="undoHistoryButton" Value="Annuler jusqu'à cette passe"/>
     <Item Name="undoHistoryConfirm" Value="Annuler %1 passes ?"/>

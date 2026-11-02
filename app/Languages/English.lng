@@ -508,7 +508,8 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="undoHistoryCaption" Value="History"/>
     <Item Name="undoHistoryHint" Value="Renaming passes: go back to a given pass"/>
     <Item Name="undoHistoryTitle" Value="Renaming history"/>
-    <Item Name="undoHistoryInfo" Value="Passes, newest first (kept when the program is closed). Passes are undone one after the other from the last one: choosing a pass undoes it and all the passes made after it."/>
+    <Item Name="undoHistoryInfo" Value="Passes, newest first, by session (kept when the program is closed). Inside a session, passes are undone one after the other from the last one: choosing a pass undoes it and the passes made after it in the same session. The other sessions are not touched."/>
+    <Item Name="undoHistorySession" Value="Session of %1"/>
     <Item Name="undoHistoryRow" Value="#%1  %2  -  %3 move(s)  -  %4"/>
     <Item Name="undoHistoryButton" Value="Undo up to this pass"/>
     <Item Name="undoHistoryConfirm" Value="Undo %1 passes?"/>

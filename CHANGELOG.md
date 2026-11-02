@@ -10,10 +10,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Added
 
-- Undo history kept between two runs of the program: the passes are written to `antrenamer-qt-history.json` (JSON, next to the settings file: program folder in portable mode, user profile otherwise; it follows the file when portable mode is switched) after every run, and read at start. Undo (F12) and History (Shift+F12) work on the passes of the previous runs, still linear, the last 50 passes. `Journal::toJson` / `fromJson` in `core/ren_files.cpp`.
+- Undo history kept between two runs of the program: the passes are written to `antrenamer-qt-history.json` (JSON, next to the settings file: program folder in portable mode, user profile otherwise; it follows the file when portable mode is switched) after every run, and read at start. Undo (F12) and History (Shift+F12) work on the passes of the previous runs, the last 50 passes. The passes are grouped by session (one run of the program; `Pass::session`): inside a session the undo is linear, from its last pass; a session can be undone without touching the later ones (a file renamed again since is not found and the undo stops). The history window shows a heading per session. `FileList::undoPasses(count, progress, session)`. `Journal::toJson` / `fromJson` in `core/ren_files.cpp`.
 - Safeguard: each move records the size and modification time of the file; the undo refuses a file that differs (another file under the same name, or an edit made outside the program) with the message "The file was changed after the renaming", and stops there, the pass stays. Not for folders (their date follows their content). No hash, see `docs/TODO.md`.
 - History window: *Clear the history* button (a pass that cannot be undone blocks the ones before it), date and time of each pass. English and French texts; the other languages show the three new texts in English.
-- Tests in `test_core`: round trip of the journal, undo in a new run, refusal of a replaced file.
+- Tests in `test_core`: round trip of the journal, undo in a new run, undo of an older session under a newer one, refusal of a replaced file.
 
 ### Changed
 

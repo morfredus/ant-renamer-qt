@@ -54,8 +54,8 @@ private:
 class RenWorker : public QThread {
     Q_OBJECT
 public:
-    RenWorker(ren::ActionList* a, ren::FileList* f, ren::Op op, int undoCount = 1)
-        : actions_(a), files_(f), op_(op), undoCount_(undoCount) {}
+    RenWorker(ren::ActionList* a, ren::FileList* f, ren::Op op, int undoCount = 1, int undoSession = -1)
+        : actions_(a), files_(f), op_(op), undoCount_(undoCount), undoSession_(undoSession) {}
     ren::Op op() const { return op_; }
 signals:
     void progress(const Snapshot& s);
@@ -68,6 +68,7 @@ private:
     ren::FileList* files_;
     ren::Op op_;
     int undoCount_;
+    int undoSession_;  // Undo: the session whose passes are undone (-1: that of the newest pass)
 };
 
 class MainWindow : public QMainWindow {
@@ -171,7 +172,7 @@ private:
 
     // running
     void updateSamplePreview();
-    void run(ren::Op op, int undoCount = 1);
+    void run(ren::Op op, int undoCount = 1, int undoSession = -1);
     void showHistory();
     void updateUndoState();
     void saveHistory();

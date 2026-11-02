@@ -507,6 +507,41 @@ int main(int argc, char** argv) {
         CHECK_EQ(QString::number(f2.undoPasses(1)), u"1"_s);
         CHECK_EQ(QFile::exists(d4 + u"x.txt"_s) && QFile::exists(d4 + u"y.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
 
+        // Two sessions: the passes of the first one are undone without touching the second one
+        {
+            QTemporaryDir t6;
+            const QString d6 = t6.path() + u'/';
+            for (const char* n : {"a.txt", "b.txt"}) {
+                touch(d6 + QString::fromLatin1(n));
+            }
+            FileList fa;
+            Journal ja;
+            fa.setJournal(&ja);
+            fa.add(d6 + u"a.txt"_s).position = 0;
+            ActionList toP;
+            auto& ep = static_cast<ActionEnum&>(toP.add(ActionType::Enum));
+            ep.mask = u"p%num%%ext%"_s;
+            ep.digits = 1;
+            toP.perform(fa, Op::Rename);  // session 1: a.txt -> p1.txt
+            Journal jb;                   // next run: session 2 renames b.txt
+            CHECK_EQ(jb.fromJson(ja.toJson()) ? u"y"_s : u"n"_s, u"y"_s);
+            FileList fb;
+            fb.setJournal(&jb);
+            fb.add(d6 + u"b.txt"_s).position = 0;
+            ActionList toQ;
+            auto& eq = static_cast<ActionEnum&>(toQ.add(ActionType::Enum));
+            eq.mask = u"q%num%%ext%"_s;
+            eq.digits = 1;
+            toQ.perform(fb, Op::Rename);  // session 2: b.txt -> q1.txt
+            CHECK_EQ(QString::number(jb.size()), u"2"_s);
+            CHECK_EQ(QString::number(jb.passes().front().session) + QString::number(jb.passes().back().session), u"12"_s);
+            CHECK_EQ(QString::number(fb.undoPasses(1, {}, 1)), u"1"_s);  // session 1, under the newest pass
+            CHECK_EQ(QFile::exists(d6 + u"a.txt"_s) && QFile::exists(d6 + u"q1.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
+            CHECK_EQ(QString::number(jb.size()), u"1"_s);
+            CHECK_EQ(QString::number(fb.undoPasses(1)), u"1"_s);  // the newest one: session 2
+            CHECK_EQ(QFile::exists(d6 + u"b.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
+        }
+
         // Again, then another file takes the name of the last renamed one (other size): it is not renamed back
         FileList f4;
         Journal j4;

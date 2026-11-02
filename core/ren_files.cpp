@@ -333,13 +333,21 @@ File* FileList::findByPath(const QString& path) {
     return loose;
 }
 
-int FileList::undoPasses(int count, const std::function<void(File&)>& progress) {
+int FileList::undoPasses(int count, const std::function<void(File&)>& progress, int session) {
     if (!journal_) {
         return 0;
     }
+    auto& passes = journal_->passes_;
     int done = 0;
-    while (done < count && !journal_->passes_.empty() && !stopFlag()) {
-        Pass& pass = journal_->passes_.back();
+    while (done < count && !passes.empty() && !stopFlag()) {
+        if (session < 0) {
+            session = passes.back().session;
+        }
+        const auto last = std::find_if(passes.rbegin(), passes.rend(), [session](const Pass& p) { return p.session == session; });
+        if (last == passes.rend()) {
+            break;
+        }
+        Pass& pass = *last;
         while (!pass.moves.empty() && !stopFlag()) {
             const Move& m = pass.moves.back();
             File* f = findByPath(m.to);
@@ -369,14 +377,14 @@ int FileList::undoPasses(int count, const std::function<void(File&)>& progress) 
         if (!pass.moves.empty()) {
             return done;  // stopped by the user
         }
-        journal_->passes_.pop_back();
+        passes.erase(std::next(last).base());
         ++done;
     }
     return done;
 }
 
 void Journal::beginPass(const QString& summary) {
-    cur_ = Pass{next_, QDateTime::currentDateTime(), summary, {}};
+    cur_ = Pass{next_, QDateTime::currentDateTime(), summary, {}, session_};
     open_ = true;
 }
 
@@ -416,7 +424,8 @@ QByteArray Journal::toJson() const {
         ps.append(QJsonObject{{u"number"_s, p.number},
                               {u"when"_s, p.when.toString(Qt::ISODate)},
                               {u"summary"_s, p.summary},
-                              {u"moves"_s, ms}});
+                              {u"moves"_s, ms},
+                              {u"session"_s, p.session}});
     }
     return QJsonDocument(QJsonObject{{u"version"_s, 1}, {u"next"_s, next_}, {u"passes"_s, ps}}).toJson(QJsonDocument::Compact);
 }
@@ -428,13 +437,14 @@ bool Journal::fromJson(const QByteArray& data) {
     }
     passes_.clear();
     open_ = false;
-    int last = 0;
+    int last = 0, lastSession = 0;
     for (const QJsonValue pv : root.value(u"passes"_s).toArray()) {
         const QJsonObject po = pv.toObject();
         Pass p;
         p.number = po.value(u"number"_s).toInt();
         p.when = QDateTime::fromString(po.value(u"when"_s).toString(), Qt::ISODate);
         p.summary = po.value(u"summary"_s).toString();
+        p.session = po.value(u"session"_s).toInt();
         for (const QJsonValue mv : po.value(u"moves"_s).toArray()) {
             const QJsonObject mo = mv.toObject();
             Move m;
@@ -454,10 +464,12 @@ bool Journal::fromJson(const QByteArray& data) {
         }
         if (!p.moves.empty()) {
             last = qMax(last, p.number);
+            lastSession = qMax(lastSession, p.session);
             passes_.push_back(std::move(p));
         }
     }
     next_ = std::max({root.value(u"next"_s).toInt(), last + 1, 1});
+    session_ = lastSession + 1;  // this run is a new session
     trim();
     return true;
 }

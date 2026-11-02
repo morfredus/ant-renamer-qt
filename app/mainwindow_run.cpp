@@ -40,7 +40,7 @@ void MainWindow::showPreviewHint() {
     }
 }
 
-void MainWindow::run(Op op, int undoCount) {
+void MainWindow::run(Op op, int undoCount, int undoSession) {
     if (worker_) {
         QMessageBox::information(this, windowTitle(), tr_("Application is busy: Renaming operation in progress."));
         return;
@@ -102,7 +102,7 @@ void MainWindow::run(Op op, int undoCount) {
     }
 
     stopFlag() = false;
-    worker_ = new RenWorker(&batch_, &files_, op, undoCount);
+    worker_ = new RenWorker(&batch_, &files_, op, undoCount, undoSession);
     connect(worker_, &RenWorker::progress, this, &MainWindow::onProgress, Qt::QueuedConnection);
     connect(worker_, &QThread::finished, this, &MainWindow::onFinished);
     setBusy(true);
@@ -267,19 +267,33 @@ void MainWindow::showHistory() {
     dlg.setWindowTitle(tr_("Renaming history"));
     auto* lay = new QVBoxLayout(&dlg);
     lay->addWidget(
-        new QLabel(tr_("Passes, newest first (kept when the program is closed). Passes are undone one after the other from "
-                       "the last one: choosing a pass undoes it and all the passes made after it.")));
+        new QLabel(tr_("Passes, newest first, by session (kept when the program is closed). Inside a session, passes are "
+                       "undone one after the other from the last one: choosing a pass undoes it and the passes made after it "
+                       "in the same session. The other sessions are not touched.")));
     dynamic_cast<QLabel*>(lay->itemAt(0)->widget())->setWordWrap(true);
     auto* list = new QListWidget;
     const auto& passes = journal_.passes();
+    int shownSession = -1;
     for (auto it = passes.rbegin(); it != passes.rend(); ++it) {
-        list->addItem(tr_("#%1  %2  -  %3 move(s)  -  %4")
-                          .arg(it->number)
-                          .arg(QLocale().toString(it->when, QLocale::ShortFormat))  // the history spans several days
-                          .arg(it->moves.size())
-                          .arg(it->summary));
+        if (it->session != shownSession) {  // a heading for each session, dated by its first pass
+            shownSession = it->session;
+            const auto first = std::find_if(passes.begin(), passes.end(), [&](const ren::Pass& p) { return p.session == shownSession; });
+            auto* head = new QListWidgetItem(tr_("Session of %1").arg(QLocale().toString(first->when, QLocale::ShortFormat)), list);
+            head->setFlags(Qt::NoItemFlags);
+            QFont f = head->font();
+            f.setBold(true);
+            head->setFont(f);
+        }
+        auto* item = new QListWidgetItem(tr_("#%1  %2  -  %3 move(s)  -  %4")
+                                             .arg(it->number)
+                                             .arg(QLocale().toString(it->when, QLocale::ShortFormat))
+                                             .arg(it->moves.size())
+                                             .arg(it->summary),
+                                         list);
+        item->setData(Qt::UserRole, it->session);
+        item->setData(Qt::UserRole + 1, it->number);
     }
-    list->setCurrentRow(0);
+    list->setCurrentRow(1);  // row 0 is the heading of the newest session
     lay->addWidget(list, 1);
     auto* box = new QDialogButtonBox(QDialogButtonBox::Close);
     auto* undoBtn = box->addButton(tr_("Undo up to this pass"), QDialogButtonBox::AcceptRole);
@@ -299,14 +313,19 @@ void MainWindow::showHistory() {
     connect(list, &QListWidget::itemDoubleClicked, undoBtn, &QPushButton::click);
     lay->addWidget(box);
     dlg.resize(620, 360);
-    if (dlg.exec() != QDialog::Accepted || list->currentRow() < 0) {
+    if (dlg.exec() != QDialog::Accepted) {
         return;
     }
-    const int count = list->currentRow() + 1;
+    const QListWidgetItem* chosen = list->currentItem();
+    if (!chosen || !chosen->data(Qt::UserRole).isValid()) {
+        return;
+    }
+    const int session = chosen->data(Qt::UserRole).toInt(), number = chosen->data(Qt::UserRole + 1).toInt();
+    const int count = int(std::count_if(passes.begin(), passes.end(), [&](const ren::Pass& p) { return p.session == session && p.number >= number; }));
     if (count > 1 && QMessageBox::question(this, windowTitle(), tr_("Undo %1 passes?").arg(count)) != QMessageBox::Yes) {
         return;
     }
-    run(Op::Undo, count);
+    run(Op::Undo, count, session);
 }
 
 // --- log ------------------------------------------------------------------------------------------------------------------

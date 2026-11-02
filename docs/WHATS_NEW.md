@@ -10,7 +10,7 @@ Current version: **3.1.0-beta.3**.
 
 | What is new | Since |
 |---|---|
-| **The undo history is kept when the program is closed.** Start the program again and **Undo** (F12) or **History** (Shift+F12) still go back through the last 50 passes, even the next day; the history window now shows the date. Before undoing, the program checks that each file still has the size and date it had right after the renaming; a file that was replaced or edited outside the program is left alone (the undo stops there). A new *Clear the history* button forgets the passes. The history is saved in `antrenamer-qt-history.json`, next to the settings file. | *(upcoming)* |
+| **The undo history is kept when the program is closed.** Start the program again and **Undo** (F12) or **History** (Shift+F12) still go back through the last 50 passes, even the next day; the history window groups the passes by session (one session = one run of the program) and shows the date: a session can be undone without touching the later ones. Before undoing, the program checks that each file still has the size and date it had right after the renaming; a file that was replaced or edited outside the program is left alone (the undo stops there). A new *Clear the history* button forgets the passes. The history is saved in `antrenamer-qt-history.json`, next to the settings file. | *(upcoming)* |
 
 ## 3.1.0-beta.3
 
