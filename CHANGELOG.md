@@ -8,6 +8,8 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.0-beta.4] - 2026-11-02
+
 ### Added
 
 - End of a renaming: a log line and the status bar tell *Files renamed: N, errors: M* (counted in `MainWindow::onProgress`, shown in `onFinished`). English and French texts.

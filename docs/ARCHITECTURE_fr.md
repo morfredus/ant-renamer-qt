@@ -110,7 +110,7 @@ Une opération peut signaler un problème sans échouer (`setInfo`) : le fichier
 **Fichier de job (`.arb`).** XML écrit avec `QXmlStreamWriter` :
 
 ```xml
-<AntRenamer Version="3.1.0-beta.3" Date="2026-11-02">
+<AntRenamer Version="3.1.0-beta.4" Date="2026-11-02">
  <Batch>
   <StrRepl Search="old" Repl="new" AllOccurences="True" CaseSensitive="True" .../>
   <Enum Mask="File %num%%ext%" Start="1" Digits="3" Incr="1" Restart="False" SharePairs="False"/>
