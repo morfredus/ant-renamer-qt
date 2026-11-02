@@ -4,6 +4,17 @@
 
 English version: [TODO.md](TODO.md).
 
+### P1 : annuler après un redémarrage (fait, voir le CHANGELOG, Unreleased)
+
+Demandé par un utilisateur du forum (qui craint d'abîmer ses archives après une faute de frappe ou un changement d'avis). Aujourd'hui l'historique d'annulation est gardé en mémoire (`ren::Journal`, `core/ren_files.h`) et il est perdu à la fermeture du programme. L'idée : l'écrire sur disque (JSON dans le dossier de données) à la fin de chaque passe, le recharger au démarrage, et garder la fenêtre d'historique d'une session à l'autre (une cinquantaine de passes). L'annulation reste linéaire, de la dernière passe vers la première, et les contrôles actuels restent (fichier toujours là, ancien nom libre ; arrêt au premier échec, le reste de la passe est conservé). Coût estimé : 100 à 150 lignes de code, plus les tests, les traductions (EN, FR, HR, TA) et la documentation. Risque technique faible.
+
+Garde-fous pour les fichiers modifiés hors du programme entre deux sessions :
+- Fichier renommé ou déplacé ailleurs : déjà géré (« fichier source introuvable », l'annulation s'arrête sur cette passe).
+- Un autre fichier porte maintenant le nom (le seul vrai danger : on renommerait le mauvais fichier) : mémoriser la taille et la date de modification de chaque fichier dans chaque déplacement (un renommage garde les deux), les vérifier avant d'annuler, refuser avec un message clair si elles diffèrent. Décidé : pas de hash, pas même partiel. Il n'ajouterait que le cas très rare d'un remplacement de même taille et de même date, pour plus de code et plus de lecture des fichiers.
+- Dossier renommé hors du programme : les chemins sont périmés, l'annulation s'arrête, sans deviner.
+
+À trancher : après un redémarrage, proposer de reprendre seule la dernière session, ou seulement par le bouton Annuler et la fenêtre d'historique (le plus simple, à privilégier).
+
 ### Versions possibles
 
 Ce sont des idées, pas des promesses : certaines ne seront peut-être jamais réalisées. Si elles le sont, un thème par version mineure, une à la fois : chacune est éprouvée par les utilisateurs (rc, puis au moins quelques semaines de version stable) avant de commencer la suivante. Rien n'est commencé avant la publication de la 3.0.0. Les versions sont triées par urgence : ce que les utilisateurs du programme d'origine ont demandé le plus souvent, depuis le plus longtemps, passe en premier (source : le forum « Comments » du programme d'origine, forum.antp.be, 120 sujets lus le 22/10/2026). L'ordre peut changer selon les retours.
@@ -25,7 +36,7 @@ Ce sont des idées, pas des promesses : certaines ne seront peut-être jamais r�
 - Filtrer les fichiers à traiter par un masque ou une expression régulière, avant ou après l'ajout (seuls les fichiers cachés et système sont filtrés aujourd'hui).
 - Ligne de commande : choisir ce que le journal garde (réussites, erreurs, fichiers inchangés) ; aujourd'hui le filtre ne vaut que pour la fenêtre.
 - Changement de casse : majuscule à une position donnée.
-- Un fichier de commandes (`.cmd`/`.sh`) écrit pour un renommage différé, ou pour annuler une fois le programme fermé (l'historique d'annulation n'est gardé que pour la session).
+- Un fichier de commandes (`.cmd`/`.sh`) écrit pour un renommage différé (annuler une fois le programme fermé est fait : l'historique est conservé).
 
 ### Vérifié dans le code (22/10/2026)
 

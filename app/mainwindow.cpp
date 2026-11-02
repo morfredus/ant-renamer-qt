@@ -91,9 +91,12 @@ MainWindow::MainWindow() {
         }
     });
     buildUi();
+    if (QFile f(historyFile()); f.open(QIODevice::ReadOnly)) {  // the passes of the previous runs
+        journal_.fromJson(f.readAll());
+    }
     aStop_->setEnabled(false);
-    aUndo_->setEnabled(false);  // nothing to undo before the first pass
-    aHistory_->setEnabled(false);
+    aUndo_->setEnabled(journal_.size() > 0);
+    aHistory_->setEnabled(journal_.size() > 0);
 }
 
 // Everything the user sees, from the options as they are now. The files, the batch, the journal and the log belong to the
@@ -221,7 +224,7 @@ void MainWindow::createActions() {
     aGo_ = makeAction(tr_("Go"), tr_("Start the renaming process"), TbGo, K(Qt::Key_F9));
     aStop_ = makeAction(tr_("Stop"), tr_("Stop the renaming process"), TbStop, K(Qt::Key_Escape));
     aUndo_ = makeAction(tr_("Undo"), tr_("Undo last renaming"), TbUndo, K(Qt::Key_F12));
-    aHistory_ = makeAction(tr_("History"), tr_("Renaming passes of this session: go back to a given pass"), TbHistory,
+    aHistory_ = makeAction(tr_("History"), tr_("Renaming passes: go back to a given pass"), TbHistory,
                            K(Qt::SHIFT | Qt::Key_F12));
     aOnTop_ = makeAction(tr_("On top"), tr_("Keep window always on top"), TbAlwaysOnTop, K(Qt::Key_F11));
     aOnTop_->setCheckable(true);

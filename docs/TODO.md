@@ -4,6 +4,17 @@
 
 French version: [TODO_fr.md](TODO_fr.md).
 
+### P1: undo after a restart (done, see the CHANGELOG, Unreleased)
+
+Asked by a forum user (afraid of wrecking an archive after a typing error or a change of mind). Today the undo history lives in memory (`ren::Journal`, `core/ren_files.h`) and is lost when the program is closed. The idea: write it to disk (JSON in the data folder) at the end of each pass, reload it at startup, and keep the history window across sessions (about 50 passes). The undo stays linear, from the last pass backwards, and the existing checks stay (file still there, old name free; stop at the first failure and keep the rest of the pass). Estimated cost: 100 to 150 lines of code plus tests, translations (EN, FR, HR, TA), docs. Low technical risk.
+
+Safeguards for files changed outside the program between two sessions:
+- File renamed or moved elsewhere: already handled ("source file not found", the undo stops on that pass).
+- Another file now has the name (the only real danger: the wrong file would be renamed): store the size and the modification date of each file in each move (a rename keeps both), check them before undoing, refuse with a clear message if they differ. Decided: no hash, not even a partial one. It would only add the very rare case of a replacement with the same size and date, for more code and more reading of the files.
+- Folder renamed outside the program: the paths are stale, the undo stops, no guessing.
+
+To decide: after a restart, offer to resume the last session by itself, or only through the Undo button and the history window (the simpler one, preferred).
+
 ### Possible versions
 
 These are ideas, not promises: some of them may never be done. If they are, one theme per minor version, one at a time: each one is tried by users (rc, then at least a few weeks of stable use) before the next one is started. Nothing is started before 3.0.0 is published. The versions are sorted by urgency: what users of the original program asked for most often, for the longest time, comes first (source: the "Comments" forum of the original program, forum.antp.be, 120 topics read on 2026-10-22). The order may change with the feedback.
@@ -25,7 +36,7 @@ These are ideas, not promises: some of them may never be done. If they are, one 
 - Filter the files to process with a mask or a regular expression, before or after adding them (only the hidden and system files are filtered today).
 - Command line: choose what the log keeps (successes, errors, unchanged files); today the filter only applies to the window.
 - Case change: capital letter at a given position.
-- A batch file (`.cmd`/`.sh`) written for a later renaming, or to undo after the program is closed (the undo history is kept for the session only).
+- A batch file (`.cmd`/`.sh`) written for a later renaming (undoing after the program is closed is done: the history is kept).
 
 ### Checked in the code (2026-10-22)
 

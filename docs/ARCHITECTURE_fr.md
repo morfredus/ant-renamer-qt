@@ -54,7 +54,7 @@ LICENSE           Licence publique générale GNU
 | Fichier | Rôle |
 |---|---|
 | `ren_actions.h/.cpp` | Les 14 opérations, chargement et sauvegarde des jobs, boucle d'exécution (`Action::perform`) |
-| `ren_files.h/.cpp` | `File` (renommer, annuler, fichiers associés), `FileList`, `Journal` (passes de la session, annulation), `Options` |
+| `ren_files.h/.cpp` | `File` (renommer, annuler, fichiers associés), `FileList`, `Journal` (passes, annulation, enregistré en JSON par l'application), `Options` |
 | `ren_format.h/.cpp` | Le langage des masques et le format de date |
 | `ren_exif.h/.cpp` | Lecteur EXIF, IPTC et XMP, noms des fichiers associés |
 | `ren_id3.h/.cpp` | Lecteur ID3 (MP3) |

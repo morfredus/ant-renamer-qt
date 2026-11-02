@@ -1,5 +1,6 @@
 #pragma once
 // Port of Files.pas: one entry of the list to rename, plus the list itself.
+#include <QByteArray>
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
@@ -42,6 +43,9 @@ std::atomic<bool>& stopFlag();
 struct Move {
     QString from, to;
     std::vector<std::pair<QString, QString>> sidecars;  // (from, to) of each sidecar
+    // Size and modification time (ms) of the file at `to` right after the move; the undo refuses a file that differs (a
+    // renaming keeps both, so a difference means another file or an edit). size -1: not checked (folders).
+    qint64 size = -1, mtime = 0;
 };
 
 // One run of the batch ("Go"): everything it moved, in order.
@@ -69,6 +73,10 @@ public:
     bool recording() const { return open_; }
     size_t size() const { return passes_.size(); }
     const std::deque<Pass>& passes() const { return passes_; }  // oldest first
+
+    // The passes kept between two runs of the program (JSON). fromJson replaces the passes; false if the data is not a journal.
+    QByteArray toJson() const;
+    bool fromJson(const QByteArray& data);
 
 private:
     friend class FileList;

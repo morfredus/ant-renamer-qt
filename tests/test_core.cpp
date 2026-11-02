@@ -480,6 +480,53 @@ int main(int argc, char** argv) {
         CHECK_EQ(QString::number(journal.size()), u"1"_s);
     }
 
+    {  // the journal kept on disk: a new run undoes the passes of the previous one, but not a file that changed
+        QTemporaryDir t4;
+        const QString d4 = t4.path() + u'/';
+        for (const char* n : {"x.txt", "y.txt"}) {
+            touch(d4 + QString::fromLatin1(n));
+        }
+        FileList f1;
+        Journal j1;
+        f1.setJournal(&j1);
+        f1.add(d4 + u"x.txt"_s).position = 0;
+        f1.add(d4 + u"y.txt"_s).position = 1;
+        ActionList enumA;
+        auto& enc = static_cast<ActionEnum&>(enumA.add(ActionType::Enum));
+        enc.mask = u"pic%num%%ext%"_s;
+        enc.digits = 1;
+        enumA.perform(f1, Op::Rename);
+        const QByteArray saved = j1.toJson();
+
+        Journal j2;  // "next run": nothing in the list, only the file
+        FileList f2;
+        f2.setJournal(&j2);
+        CHECK_EQ(j2.fromJson(saved) ? u"y"_s : u"n"_s, u"y"_s);
+        CHECK_EQ(j2.fromJson("not json") ? u"y"_s : u"n"_s, u"n"_s);
+        CHECK_EQ(QString::number(j2.size()), u"1"_s);
+        CHECK_EQ(QString::number(f2.undoPasses(1)), u"1"_s);
+        CHECK_EQ(QFile::exists(d4 + u"x.txt"_s) && QFile::exists(d4 + u"y.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
+
+        // Again, then another file takes the name of the last renamed one (other size): it is not renamed back
+        FileList f4;
+        Journal j4;
+        f4.setJournal(&j4);
+        f4.add(d4 + u"x.txt"_s).position = 0;
+        f4.add(d4 + u"y.txt"_s).position = 1;
+        enumA.perform(f4, Op::Rename);
+        QFile other(d4 + u"pic2.txt"_s);
+        CHECK_EQ(other.open(QIODevice::WriteOnly) ? u"y"_s : u"n"_s, u"y"_s);
+        other.write("another file");
+        other.close();
+        Journal j5;
+        FileList f5;
+        f5.setJournal(&j5);
+        CHECK_EQ(j5.fromJson(j4.toJson()) ? u"y"_s : u"n"_s, u"y"_s);
+        CHECK_EQ(QString::number(f5.undoPasses(1)), u"0"_s);
+        CHECK_EQ(QFile::exists(d4 + u"y.txt"_s) ? u"y"_s : u"n"_s, u"n"_s);  // not touched
+        CHECK_EQ(QString::number(j5.size()), u"1"_s);
+    }
+
     ActionList upper;  // a.txt -> A.TXT must work although the volume is case-insensitive
     static_cast<ActionCase&>(upper.add(ActionType::Case)).caseType = 2;
     static_cast<ActionCase&>(upper.at(0)).includeExt = true;

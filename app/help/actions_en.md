@@ -49,6 +49,18 @@ You can replace a text by another in the filenames. The options are:
 - **Use wildcards** (off by default): see below.
 - **Anywhere in the name / Only at the beginning / Only at the end**: where the search text must be. "Only at the beginning" with `IMG_` replaces `IMG_` in `IMG_001.jpg` but leaves `my_IMG_001.jpg` alone. With one of the two anchored choices at most one replacement is made, and "Replace all occurences" has no effect.
 
+Examples, with the file `IMG_001_IMG.jpg` (the extension is not touched):
+
+| Search for | Replace by | Position | Result |
+|---|---|---|---|
+| `IMG` | `Photo` | Anywhere in the name | `Photo_001_Photo.jpg` |
+| `IMG` | `Photo` | Only at the beginning | `Photo_001_IMG.jpg` |
+| `IMG` | `Photo` | Only at the end | `IMG_001_Photo.jpg` |
+| `_001` | (empty) | Anywhere in the name | `IMG_IMG.jpg` |
+| `IMG` | `Photo` | Only at the beginning, on `my_IMG.jpg` | `my_IMG.jpg` (unchanged: the name does not start with `IMG`) |
+
+Careful with "Anywhere in the name": a short search text such as `a` or `1` is found in many names. Look at the preview before starting.
+
 This action can be also used for inserting a string before or after an existing one (if you do not know the position where the new string has to be placed). For example, if you want to insert "2" after all the "test" contained in names, replace "test" by "test2".
 
 It can also be used for deleting a specified string: simply leave the second field empty for that.

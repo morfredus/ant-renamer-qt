@@ -137,7 +137,7 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   thème clair ou sombre du système. Les pages peuvent être en onglets ou en **écran unique** (en bandes ou en colonnes,
   séparateurs déplaçables et mémorisés) ; une opération du job se modifie par double-clic. La disposition classique
   reste celle par défaut.
-- **Historique des renommages** pour la session : une passe par action, annulation linéaire, fenêtre Historique, et le
+- **Historique des renommages**, conservé d'un lancement à l'autre : une passe par action, annulation linéaire, fenêtre Historique, et le
   bouton Annuler peut au choix défaire la dernière passe ou ouvrir l'historique (Options > Fichiers & Dossiers).
 - **Système de build** : presets CMake pour Windows (MinGW), Linux x86_64, Linux ARM64 et compilation croisée
   ARM64 ; les DLL Qt et MinGW sont déployées automatiquement à côté de l'exécutable sous Windows.

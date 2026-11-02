@@ -10,6 +10,8 @@
 
 QSettings appSettings();
 bool isPortable();
+// File of the undo history: in the same folder as the settings (program folder when portable, user profile otherwise).
+QString historyFile();
 // Moves the settings between the program folder and the user profile. False if the target is not writable.
 bool setPortable(bool on);
 

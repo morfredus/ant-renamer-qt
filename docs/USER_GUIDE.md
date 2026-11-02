@@ -111,7 +111,7 @@ The **Batch contents** panel lists the planned actions (tick box to show/hide it
 - **Go** (F9): renames in a separate thread; the window stays usable, but what would modify the list, the batch or the options is disabled until the end.
 - **Stop** (Esc): interrupts the processing; the files already processed stay renamed.
 - **Undo** (F12): restores the old names of the **last pass**, sidecar files included. Every action of the batch run by Go is a pass (a batch of three actions leaves three passes), so you can undo again and again, always from the last one.
-- **History** (Shift+F12, clock): lists the passes of the session, newest first (time, number of moves, action). *Undo up to this pass* undoes the chosen pass and all those made after it; a pass in the middle cannot be undone alone. If a file was moved outside the program, the undo stops there and the pass stays in the list. The last 50 passes are kept, and they are lost when the program is closed. In *Options > Files & Folders* the Undo button can open the history instead of undoing the last pass.
+- **History** (Shift+F12, clock): lists the passes, newest first (date and time, number of moves, action). *Undo up to this pass* undoes the chosen pass and all those made after it; a pass in the middle cannot be undone alone. If a file was moved, deleted or changed outside the program (another size or date than right after the renaming), the undo stops there and the pass stays in the list; *Clear the history* forgets all the passes if one of them blocks the others. The last 50 passes are kept, **also after the program is closed**: you can undo the next day. The history is saved next to the settings file (the program folder in portable mode, the user profile otherwise: `antrenamer-qt-history.json`). In *Options > Files & Folders* the Undo button can open the history instead of undoing the last pass.
 - **Always on top** (F11): keeps the window above the others.
 - **Light / dark** (half-filled circle): switches the theme at once; *Options > Display > Theme* also offers "Follow the system" (default).
 - **Copy instead of rename** (Options > Processing): the originals stay, the copies carry the new names.
@@ -201,6 +201,6 @@ Same engine, other presentation, enabled in Options > Display. Counters "Files (
 
 - EXIF: 36 tags only, MakerNote not decoded; IPTC read only in JPEG.
 - Audio tags: ID3 only (MP3); FLAC, OGG, M4A are not read.
-- Undo: pass after pass (the last 50 of the session), only from the last one; files copied with "Copy instead of rename" are not removed.
+- Undo: pass after pass (the last 50, kept when the program is closed), only from the last one; files copied with "Copy instead of rename" are not removed.
 - The short Windows 11 context menu is not supported (use "Show more options").
 - The help in Croatian and Tamil shows English for the pages written for Ant Renamer Qt.

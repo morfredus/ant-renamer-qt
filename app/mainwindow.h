@@ -174,6 +174,7 @@ private:
     void run(ren::Op op, int undoCount = 1);
     void showHistory();
     void updateUndoState();
+    void saveHistory();
     void onProgress(const Snapshot& s);
     void onFinished();
     void setBusy(bool busy);  // disables what would modify the lists, the batch or the options while a run is in progress
@@ -183,7 +184,7 @@ private:
     void rebuildLog();
     void logAction(int which);
 
-    ren::Journal journal_;  // the passes of this session, for Undo and the history window
+    ren::Journal journal_;  // the passes (kept between runs, see historyFile()), for Undo and the history window
     ren::FileList files_;
     ren::ActionList batch_;
     RenWorker* worker_ = nullptr;

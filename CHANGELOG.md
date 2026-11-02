@@ -8,6 +8,19 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Added
+
+- Undo history kept between two runs of the program: the passes are written to `antrenamer-qt-history.json` (JSON, next to the settings file: program folder in portable mode, user profile otherwise; it follows the file when portable mode is switched) after every run, and read at start. Undo (F12) and History (Shift+F12) work on the passes of the previous runs, still linear, the last 50 passes. `Journal::toJson` / `fromJson` in `core/ren_files.cpp`.
+- Safeguard: each move records the size and modification time of the file; the undo refuses a file that differs (another file under the same name, or an edit made outside the program) with the message "The file was changed after the renaming", and stops there, the pass stays. Not for folders (their date follows their content). No hash, see `docs/TODO.md`.
+- History window: *Clear the history* button (a pass that cannot be undone blocks the ones before it), date and time of each pass. English and French texts; the other languages show the three new texts in English.
+- Tests in `test_core`: round trip of the journal, undo in a new run, refusal of a replaced file.
+
+### Changed
+
+- The texts "Passes of this session", "Nothing to undo: no renaming pass was made in this session" and the History hint no longer say "session" (English, French; the other languages fall back to English for these three texts).
+- TODO (EN, FR): new P1 idea, undo after a restart of the program (journal saved to disk, safeguards for files changed outside the program: size and date, no hash).
+- Actions help (EN, FR): examples for the position choice of the String replacement (beginning, end, anywhere, and a name that does not match), with a reminder to look at the preview with a short search text. To remove them if the *Anywhere in the name* choice is dropped.
+
 ## [3.1.0-beta.3] - 2026-11-02
 
 ### Added

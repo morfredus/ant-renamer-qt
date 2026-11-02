@@ -6,6 +6,12 @@ conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.
 
 Version courante : **3.1.0-beta.3**.
 
+## À venir
+
+| Nouveauté | Depuis |
+|---|---|
+| **L'historique d'annulation est conservé à la fermeture du programme.** Relancez le programme : **Annuler** (F12) ou **Historique** (Maj+F12) remontent encore les 50 dernières passes, même le lendemain ; la fenêtre d'historique affiche maintenant la date. Avant d'annuler, le programme vérifie que chaque fichier a toujours la taille et la date qu'il avait juste après le renommage ; un fichier remplacé ou modifié en dehors du programme n'est pas touché (l'annulation s'arrête là). Un nouveau bouton *Effacer l'historique* oublie les passes. L'historique est enregistré dans `antrenamer-qt-history.json`, à côté du fichier de réglages. | *(à venir)* |
+
 ## 3.1.0-beta.3
 
 | Nouveauté | Depuis |

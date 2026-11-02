@@ -48,7 +48,7 @@ void MainWindow::run(Op op, int undoCount) {
     if (op == Op::Undo ? journal_.size() == 0
                        : (files_.size() == 0 || (batch_.size() == 0 && panel_->currentIndex() < 0 && op != Op::Revert))) {
         QMessageBox::warning(this, windowTitle(),
-                             op == Op::Undo ? tr_("Nothing to undo: no renaming pass was made in this session.")
+                             op == Op::Undo ? tr_("Nothing to undo: no renaming pass in the history.")
                                             : tr_("Nothing to do: please select at least one file and an action to perform."));
         if (op != Op::Undo) {
             showTab(1);
@@ -218,6 +218,9 @@ void MainWindow::onFinished() {
     }
     aGo_->setEnabled(true);
     aStop_->setEnabled(false);
+    if (op != Op::Preview) {
+        saveHistory();
+    }
     updateUndoState();
     setStatus();
     updateAllItems();
@@ -244,7 +247,18 @@ void MainWindow::updateUndoState() {
     setBusy(worker_ != nullptr);
 }
 
-// The passes of the session, newest first. Undo goes back linearly: choosing a pass undoes it and every pass after it.
+// The history is written after every run, so it survives a crash or a closed program. A failure is not worth a dialog.
+void MainWindow::saveHistory() {
+    const QString path = historyFile();
+    if (journal_.size() == 0) {
+        QFile::remove(path);
+    } else if (QSaveFile f(path); f.open(QIODevice::WriteOnly)) {
+        f.write(journal_.toJson());
+        f.commit();
+    }
+}
+
+// The passes of the history, newest first. Undo goes back linearly: choosing a pass undoes it and every pass after it.
 void MainWindow::showHistory() {
     if (worker_ || journal_.size() == 0) {
         return;
@@ -253,15 +267,15 @@ void MainWindow::showHistory() {
     dlg.setWindowTitle(tr_("Renaming history"));
     auto* lay = new QVBoxLayout(&dlg);
     lay->addWidget(
-        new QLabel(tr_("Passes of this session, newest first. Passes are undone one after the other from the last one: "
-                       "choosing a pass undoes it and all the passes made after it.")));
+        new QLabel(tr_("Passes, newest first (kept when the program is closed). Passes are undone one after the other from "
+                       "the last one: choosing a pass undoes it and all the passes made after it.")));
     dynamic_cast<QLabel*>(lay->itemAt(0)->widget())->setWordWrap(true);
     auto* list = new QListWidget;
     const auto& passes = journal_.passes();
     for (auto it = passes.rbegin(); it != passes.rend(); ++it) {
         list->addItem(tr_("#%1  %2  -  %3 move(s)  -  %4")
                           .arg(it->number)
-                          .arg(it->when.toString(u"hh:mm:ss"_s))
+                          .arg(QLocale().toString(it->when, QLocale::ShortFormat))  // the history spans several days
                           .arg(it->moves.size())
                           .arg(it->summary));
     }
@@ -269,6 +283,17 @@ void MainWindow::showHistory() {
     lay->addWidget(list, 1);
     auto* box = new QDialogButtonBox(QDialogButtonBox::Close);
     auto* undoBtn = box->addButton(tr_("Undo up to this pass"), QDialogButtonBox::AcceptRole);
+    // A pass that cannot be undone (file deleted or changed outside the program) blocks the ones before it: a way out.
+    auto* clearBtn = box->addButton(tr_("Clear the history"), QDialogButtonBox::ResetRole);
+    connect(clearBtn, &QPushButton::clicked, &dlg, [this, &dlg] {
+        if (QMessageBox::question(&dlg, windowTitle(), tr_("Forget all the passes? They can no longer be undone.")) ==
+            QMessageBox::Yes) {
+            journal_.clear();
+            saveHistory();
+            updateUndoState();
+            dlg.reject();
+        }
+    });
     connect(box, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
     connect(box, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
     connect(list, &QListWidget::itemDoubleClicked, undoBtn, &QPushButton::click);

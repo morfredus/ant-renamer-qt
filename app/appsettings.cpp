@@ -35,6 +35,13 @@ QSettings appSettings() {
     return QSettings(path, QSettings::IniFormat);
 }
 
+// The undo history lives next to the settings file, so it follows the mode (program folder or user profile).
+static const QString historyName = u"antrenamer-qt-history.json"_s;
+
+QString historyFile() {
+    return QFileInfo(appSettings().fileName()).absolutePath() + u'/' + historyName;
+}
+
 bool setPortable(bool on) {
     if (on == isPortable()) {
         return true;
@@ -53,6 +60,12 @@ bool setPortable(bool on) {
         if (dst.status() != QSettings::NoError || !QFileInfo::exists(to)) {
             return false;
         }
+    }
+    const QString histFrom = QFileInfo(from).absolutePath() + u'/' + historyName;
+    const QString histTo = QFileInfo(to).absolutePath() + u'/' + historyName;
+    if (QFileInfo::exists(histFrom)) {  // the history follows the settings; losing it is not worth failing the switch
+        QFile::remove(histTo);
+        QFile::rename(histFrom, histTo);
     }
     // The old file is what decides the mode while it exists: if it cannot be removed the switch did not happen.
     return QFile::remove(from) || !QFileInfo::exists(from);

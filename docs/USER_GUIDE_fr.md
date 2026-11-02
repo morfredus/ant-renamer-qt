@@ -111,7 +111,7 @@ Le panneau **Contenu du job** liste les opérations planifiées (case à cocher 
 - **Démarrer** (F9) : renomme dans un fil séparé ; la fenêtre reste utilisable, mais ce qui modifierait la liste, le job ou les options est désactivé jusqu'à la fin.
 - **Arrêter** (Échap) : interrompt le traitement ; les fichiers déjà traités restent renommés.
 - **Annuler** (F12) : restaure les anciens noms de la **dernière passe**, fichiers associés compris. Chaque opération du job lancé par Démarrer est une passe (un job de trois opérations laisse trois passes) : vous pouvez donc annuler encore et encore, toujours à partir de la dernière.
-- **Historique** (Maj+F12, horloge) : liste les passes de la session, la plus récente en premier (heure, nombre de déplacements, opération). *Annuler jusqu'à cette passe* annule la passe choisie et toutes celles faites après ; une passe au milieu ne peut pas être annulée seule. Si un fichier a été déplacé en dehors du programme, l'annulation s'arrête là et la passe reste dans la liste. Les 50 dernières passes sont gardées, et perdues à la fermeture du programme. Dans *Options > Fichiers & Dossiers*, le bouton Annuler peut ouvrir l'historique au lieu d'annuler la dernière passe.
+- **Historique** (Maj+F12, horloge) : liste les passes, la plus récente en premier (date et heure, nombre de déplacements, opération). *Annuler jusqu'à cette passe* annule la passe choisie et toutes celles faites après ; une passe au milieu ne peut pas être annulée seule. Si un fichier a été déplacé, supprimé ou modifié en dehors du programme (taille ou date différentes de celles de juste après le renommage), l'annulation s'arrête là et la passe reste dans la liste ; *Effacer l'historique* oublie toutes les passes si l'une d'elles bloque les autres. Les 50 dernières passes sont gardées, **même après la fermeture du programme** : vous pouvez annuler le lendemain. L'historique est enregistré à côté du fichier de réglages (le dossier du programme en mode portable, le profil de l'utilisateur sinon : `antrenamer-qt-history.json`). Dans *Options > Fichiers & Dossiers*, le bouton Annuler peut ouvrir l'historique au lieu d'annuler la dernière passe.
 - **Avant-plan** (F11) : garde la fenêtre au-dessus des autres.
 - **Clair / sombre** (cercle à moitié plein) : change aussitôt de thème ; *Options > Affichage > Thème* propose aussi « Suivre le système » (par défaut).
 - **Copier plutôt que renommer** (Options > Traitement) : les originaux restent, les copies portent les nouveaux noms.
@@ -201,6 +201,6 @@ Même moteur, autre présentation, activée dans Options > Affichage. Compteurs 
 
 - EXIF : 36 tags seulement, MakerNote non décodée ; IPTC lu seulement dans les JPEG.
 - Tags audio : ID3 seulement (MP3) ; FLAC, OGG, M4A ne sont pas lus.
-- Annuler : passe après passe (les 50 dernières de la session), uniquement à partir de la dernière ; les fichiers copiés avec « Copier au lieu de renommer » ne sont pas supprimés.
+- Annuler : passe après passe (les 50 dernières, gardées à la fermeture du programme), uniquement à partir de la dernière ; les fichiers copiés avec « Copier au lieu de renommer » ne sont pas supprimés.
 - Le menu contextuel court de Windows 11 n'est pas pris en charge (utiliser « Afficher plus d'options »).
 - L'aide en croate et en tamoul affiche l'anglais pour les pages écrites pour Ant Renamer Qt.

@@ -502,13 +502,16 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="showHiddenCaption" Value="Fichiers cachés"/>
     <Item Name="showHiddenHint" Value="Afficher les fichiers cachés et système de la liste ; masqués, ils ne sont pas renommés"/>
     <Item Name="undoHistoryCaption" Value="Historique"/>
-    <Item Name="undoHistoryHint" Value="Passes de renommage de cette session : revenir à une passe précise"/>
+    <Item Name="undoHistoryHint" Value="Passes de renommage : revenir à une passe précise"/>
     <Item Name="undoHistoryTitle" Value="Historique des renommages"/>
-    <Item Name="undoHistoryInfo" Value="Passes de cette session, de la plus récente à la plus ancienne. Les passes s'annulent l'une après l'autre en partant de la dernière : choisir une passe l'annule ainsi que toutes celles faites après."/>
+    <Item Name="undoHistoryInfo" Value="Passes, de la plus récente à la plus ancienne (conservées à la fermeture du programme). Les passes s'annulent l'une après l'autre en partant de la dernière : choisir une passe l'annule ainsi que toutes celles faites après."/>
     <Item Name="undoHistoryRow" Value="n°%1  %2  -  %3 déplacement(s)  -  %4"/>
     <Item Name="undoHistoryButton" Value="Annuler jusqu'à cette passe"/>
     <Item Name="undoHistoryConfirm" Value="Annuler %1 passes ?"/>
-    <Item Name="undoNothing" Value="Rien à annuler : aucune passe de renommage n'a été faite dans cette session."/>
+    <Item Name="undoNothing" Value="Rien à annuler : aucune passe de renommage dans l'historique."/>
+    <Item Name="undoHistoryClear" Value="Effacer l'historique"/>
+    <Item Name="undoHistoryClearConfirm" Value="Oublier toutes les passes ? Elles ne pourront plus être annulées."/>
+    <Item Name="undoChanged" Value="Le fichier a été modifié après le renommage"/>
     <Item Name="undoLogStart" Value="Annulation des dernières passes de renommage"/>
     <Item Name="undoOptHeader" Value="Bouton Annuler"/>
     <Item Name="undoOptLabel" Value="Le bouton Annuler :"/>

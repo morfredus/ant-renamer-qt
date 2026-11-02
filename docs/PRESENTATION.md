@@ -133,7 +133,7 @@ These are the places where the port does not do exactly what version 2.13 does. 
   a prominent Go button, a bar per page, the new-name column visible by default, the system light or dark theme. The
   pages can be tabs or a **single screen** (in bands or in columns, movable and remembered splitters); an action of the
   batch is edited by double-click. The classic layout stays the default.
-- **Renaming history** for the session: one pass per action, linear undo, a History window, and the Undo button either
+- **Renaming history**, kept between two runs of the program: one pass per action, linear undo, a History window, and the Undo button either
   undoes the last pass or opens the history (Options > Files & Folders).
 - **Build system**: CMake presets for Windows (MinGW), Linux x86_64, Linux ARM64 and ARM64 cross
   compilation; Qt and MinGW DLLs are deployed automatically next to the executable on Windows.

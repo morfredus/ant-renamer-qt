@@ -54,7 +54,7 @@ LICENSE           GNU General Public License
 | File | Role |
 |---|---|
 | `ren_actions.h/.cpp` | The 14 operations, loading and saving of jobs, the run loop (`Action::perform`) |
-| `ren_files.h/.cpp` | `File` (rename, revert, sidecars), `FileList`, `Journal` (passes of the session, undo), `Options` |
+| `ren_files.h/.cpp` | `File` (rename, revert, sidecars), `FileList`, `Journal` (passes, undo, saved as JSON by the app), `Options` |
 | `ren_format.h/.cpp` | The mask language and the date format |
 | `ren_exif.h/.cpp` | EXIF, IPTC and XMP reader, sidecar file names |
 | `ren_id3.h/.cpp` | ID3 reader (MP3) |
