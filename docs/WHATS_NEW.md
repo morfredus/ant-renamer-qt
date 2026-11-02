@@ -10,6 +10,10 @@ Current version: **3.1.0-beta.3**.
 
 | What is new | Since |
 |---|---|
+| **End of the renaming**: the log and the status bar say how many files were renamed and how many failed. | 3.1.0-beta.4 |
+| **String replacement**: *Only at the beginning* is now the default choice, and *Anywhere in the name* comes last. | 3.1.0-beta.4 |
+| **Fields of the actions**: the first click in a field selects the whole text. | 3.1.0-beta.4 |
+| **Add folders**: a *Paste from clipboard* button for the path of a folder. | 3.1.0-beta.4 |
 | **The undo history is kept when the program is closed.** Start the program again and **Undo** (F12) or **History** (Shift+F12) still go back through the last 50 passes, even the next day; the history window groups the passes by session (one session = one run of the program) and shows the date: a session can be undone without touching the later ones. Before undoing, the program checks that each file still has the size and date it had right after the renaming; a file that was replaced or edited outside the program is left alone (the undo stops there). A new *Clear the history* button forgets the passes. The history is saved in `antrenamer-qt-history.json`, next to the settings file. | *(upcoming)* |
 | **More complete translations**: eight messages that were only in English (unreadable or unwritable batch file, invalid regular expression, help not found...) are now translated in French, and a help page that a language does not have yet is shown in English instead of failing. | *(upcoming)* |
 | **The modern layout is the default of a new installation** (single screen, in bands). Nothing changes for anyone who already has settings: they keep their layout, and the classic layout stays one click away (Options > Display, *Modern interface layout*). | *(upcoming)* |

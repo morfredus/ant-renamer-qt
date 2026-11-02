@@ -47,7 +47,7 @@ Vous pouvez remplacer un texte par un autre dans les noms de fichiers. Les optio
 - **Inclure l'extension dans la recherche** : la recherche se fait dans le nom entier, extension comprise. Par défaut seul le nom sans extension est traité.
 - **Appliquer à l'extension plutôt qu'au nom** : seule l'extension (sans son point) est traitée.
 - **Utiliser les jokers** (décochée par défaut) : voir plus bas.
-- **N'importe où dans le nom / Seulement au début / Seulement à la fin** : où le texte cherché doit se trouver. « Seulement au début » avec `IMG_` remplace `IMG_` dans `IMG_001.jpg` mais laisse `mon_IMG_001.jpg` intact. Avec l'un des deux choix ancrés, il y a au plus un remplacement et « Remplacer toutes les occurences » n'a pas d'effet.
+- **Seulement au début** (par défaut) **/ Seulement à la fin / N'importe où dans le nom** : où le texte cherché doit se trouver. « Seulement au début » avec `IMG_` remplace `IMG_` dans `IMG_001.jpg` mais laisse `mon_IMG_001.jpg` intact. Avec l'un des deux choix ancrés, il y a au plus un remplacement et « Remplacer toutes les occurences » n'a pas d'effet.
 
 Exemples, avec le fichier `IMG_001_IMG.jpg` (l'extension n'est pas touchée) :
 
@@ -59,7 +59,7 @@ Exemples, avec le fichier `IMG_001_IMG.jpg` (l'extension n'est pas touchée) :
 | `_001` | (vide) | N'importe où dans le nom | `IMG_IMG.jpg` |
 | `IMG` | `Photo` | Seulement au début, sur `mon_IMG.jpg` | `mon_IMG.jpg` (inchangé : le nom ne commence pas par `IMG`) |
 
-Attention à « N'importe où dans le nom » : un texte très court comme `a` ou `1` se trouve dans beaucoup de noms. Regardez l'aperçu avant de lancer.
+Attention à « N'importe où dans le nom » (dernier choix, car c'est celui qui change le plus de choses) : un texte très court comme `a` ou `1` se trouve dans beaucoup de noms. Regardez l'aperçu avant de lancer.
 
 Cette opération peut aussi être utilisée pour insérer une chaîne devant ou derrière une autre (si vous ne connaissez pas la position exacte où doit être mise la nouvelle chaîne). Par exemple, si vous voulez insérer "2" après les "test" contenus dans les noms, remplacez "test" par "test2".
 

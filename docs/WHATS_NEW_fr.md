@@ -10,6 +10,10 @@ Version courante : **3.1.0-beta.3**.
 
 | Nouveauté | Depuis |
 |---|---|
+| **Fin du renommage** : le journal et la barre d'état disent combien de fichiers ont été renommés et combien ont échoué. | 3.1.0-beta.4 |
+| **Remplacement de chaîne** : *Seulement au début* est maintenant le choix par défaut, et *N'importe où dans le nom* vient en dernier. | 3.1.0-beta.4 |
+| **Champs des opérations** : le premier clic dans un champ sélectionne tout le texte. | 3.1.0-beta.4 |
+| **Ajouter des dossiers** : un bouton *Coller depuis le presse-papiers* pour le chemin d'un dossier. | 3.1.0-beta.4 |
 | **L'historique d'annulation est conservé à la fermeture du programme.** Relancez le programme : **Annuler** (F12) ou **Historique** (Maj+F12) remontent encore les 50 dernières passes, même le lendemain ; la fenêtre d'historique regroupe les passes par session (une session = un lancement du programme) et affiche la date : on peut annuler une session sans toucher aux suivantes. Avant d'annuler, le programme vérifie que chaque fichier a toujours la taille et la date qu'il avait juste après le renommage ; un fichier remplacé ou modifié en dehors du programme n'est pas touché (l'annulation s'arrête là). Un nouveau bouton *Effacer l'historique* oublie les passes. L'historique est enregistré dans `antrenamer-qt-history.json`, à côté du fichier de réglages. | *(à venir)* |
 | **Traductions plus complètes** : huit messages qui n'existaient qu'en anglais (fichier de job illisible ou impossible à écrire, expression régulière non valide, aide introuvable...) sont maintenant traduits en français, et une page d'aide qu'une langue n'a pas encore s'affiche en anglais au lieu d'échouer. | *(à venir)* |
 | **La disposition moderne est celle d'une nouvelle installation** (écran unique, en bandes). Rien ne change pour qui a déjà des réglages : la disposition choisie est conservée, et la classique reste à un clic (Options > Affichage, *Disposition moderne de l'interface*). | *(à venir)* |

@@ -21,7 +21,7 @@
 - **Bouton "Seulement modifiés"** dans la [liste des fichiers](files_fr.md) : masque les fichiers dont le nom ne change pas dans l'aperçu.
 - **Export de l'aperçu** : « Exporter l'aperçu... » dans le menu clic droit de la [liste des fichiers](files_fr.md) écrit les noms actuels et nouveaux dans un fichier CSV, ou les seuls nouveaux noms dans un fichier texte.
 - **Journal en CSV** : le [journal](log_fr.md) est enregistré par défaut en fichier CSV qu'Excel et LibreOffice ouvrent avec les accents corrects.
-- **Remplacement de chaîne, où** : *N'importe où dans le nom*, *Seulement au début* ou *Seulement à la fin* dans l'opération [Remplacement de chaîne](actions_fr.md#stringrepl).
+- **Remplacement de chaîne, où** : *Seulement au début* (par défaut), *Seulement à la fin* ou *N'importe où dans le nom* dans l'opération [Remplacement de chaîne](actions_fr.md#stringrepl).
 - **Thème clair et sombre** : un bouton de la barre d'outils bascule aussitôt ; *Options* \> *Affichage* peut aussi suivre le système.
 - **Recherche de nouvelle version** : facultative (désactivée par défaut), une fois par jour, voir les [Options](options_fr.md#display).
 

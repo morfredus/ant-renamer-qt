@@ -26,7 +26,7 @@ La première (« Ajouter les fichiers des dossiers sélectionnés ») spécifie 
 
 Une quatrième option (« Inclure les fichiers cachés et système à l'ajout d'un dossier ») ajoute aussi les fichiers cachés et système des dossiers (`desktop.ini`, `.git`...) ; elle est désactivée par défaut.
 
-Sous l'arbre, un champ (« Ou saisir le chemin d'un dossier ») permet de saisir ou coller le chemin d'un dossier : il est ajouté avec les dossiers sélectionnés dans l'arbre, s'il existe.
+Sous l'arbre, un champ (« Ou saisir le chemin d'un dossier ») permet de saisir ou coller le chemin d'un dossier (le bouton *Coller depuis le presse-papiers* à côté colle le chemin copié dans l'Explorateur Windows, même entre guillemets) : il est ajouté avec les dossiers sélectionnés dans l'arbre, s'il existe.
 
 Pour ajouter les fichiers d'un dossier situé sur le réseau, le [drag & drop](#dragdrop) ou la [ligne de commande](#cmdline) peuvent être plus faciles que cette fenêtre.
 

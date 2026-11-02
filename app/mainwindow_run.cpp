@@ -83,6 +83,7 @@ void MainWindow::run(Op op, int undoCount, int undoSession) {
     }
     runLogStart_ = logEntries_.size();
     runErrors_ = 0;
+    runRenamed_ = 0;
     addLog(op == Op::Rename    ? tr_("Renaming process started")
            : op == Op::Preview ? tr_("Refreshing preview")
            : op == Op::Undo    ? tr_("Undoing the last renaming passes")
@@ -124,6 +125,7 @@ void MainWindow::run(Op op, int undoCount, int undoSession) {
 void MainWindow::onProgress(const Snapshot& s) {
     const AppOptions& o = appOptions();
     runErrors_ += State(s.state) == State::Error;
+    runRenamed_ += State(s.state) == State::Ok && !s.from.isEmpty();  // from is set for a rename only
     if (!s.file) {
         addLog(s.description, State(s.state));
         return;
@@ -191,6 +193,10 @@ void MainWindow::onFinished() {
            : op == Op::Preview ? tr_("Preview process finished")
                                : tr_("Revert process finished"),
            State::Info);
+    const QString summary = op == Op::Rename ? tr_("Files renamed: %1, errors: %2").arg(runRenamed_).arg(runErrors_) : QString();
+    if (!summary.isEmpty()) {
+        addLog(summary, runErrors_ ? State::Error : State::Info);
+    }
     if (op != Op::Preview && o.finishSwitch >= 0) {
         showTab(o.finishSwitch);
     }
@@ -236,6 +242,7 @@ void MainWindow::onFinished() {
     }
     updateUndoState();
     setStatus();
+    statusLabel_->setText(summary);  // stays until the next run: the user sees at once that it is done
     updateAllItems();
     updateSamplePreview();
     if (exitAfterRun_ && silent_) {

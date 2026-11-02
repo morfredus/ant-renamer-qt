@@ -21,7 +21,7 @@
 - **"Changed only" button** in the [Files list](files_en.md): hides the files whose name does not change in the preview.
 - **Export of the preview**: "Export preview..." in the right-click menu of the [Files list](files_en.md) writes the current and new names to a CSV file, or the new names only to a text file.
 - **Log as a CSV**: the [log](log_en.md) is saved by default as a CSV file that Excel and LibreOffice open with the accents right.
-- **String replacement, where**: *Anywhere in the name*, *Only at the beginning* or *Only at the end* in the [String replacement](actions_en.md#stringrepl) action.
+- **String replacement, where**: *Only at the beginning* (default), *Only at the end* or *Anywhere in the name* in the [String replacement](actions_en.md#stringrepl) action.
 - **Light and dark theme**: a button of the toolbar switches at once; *Options* \> *Display* can also follow the system.
 - **Check for a new version**: optional (off by default), once a day, see [Options](options_en.md#display).
 

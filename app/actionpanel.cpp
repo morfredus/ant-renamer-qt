@@ -41,6 +41,17 @@ HistoryCombo::HistoryCombo() {
     setEditable(true);
     setInsertPolicy(QComboBox::NoInsert);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    lineEdit()->installEventFilter(this);
+}
+
+// The first click in a field selects its whole text (the "old" / "new" samples are never kept); a second click places the cursor.
+bool HistoryCombo::eventFilter(QObject* o, QEvent* e) {
+    if (o == lineEdit() && e->type() == QEvent::MouseButtonPress && !lineEdit()->hasFocus()) {
+        lineEdit()->setFocus(Qt::MouseFocusReason);
+        lineEdit()->selectAll();
+        return true;
+    }
+    return QComboBox::eventFilter(o, e);
 }
 
 void HistoryCombo::remember() {
@@ -373,7 +384,8 @@ void ActionPanel::buildPages() {
         auto* srExt = check(p, u"Ext"_s, tr("Include extension in search"), false);
         auto* srOnlyExt = check(p, u"OnlyExt"_s, tr("Apply to extension instead of name"), false);
         auto* srWild = check(p, u"Wildcards"_s, tr("Use wildcards (* = any text, ? = any character)"), false);
-        const auto srWhere = radios(p, u"Where"_s, {tr("Anywhere in the name"), tr("Only at the beginning"), tr("Only at the end")}, 0);
+        // shown as beginning, end, anywhere (the safest first); the action keeps 0 anywhere, 1 beginning, 2 end
+        const auto srWhere = radios(p, u"WhereAt"_s, {tr("Only at the beginning"), tr("Only at the end"), tr("Anywhere in the name")}, 0);
         bind(srcSearch, &ActionStringRepl::search);
         bind(srcRepl, &ActionStringRepl::replace);
         bind(srAll, &ActionStringRepl::all);
@@ -381,7 +393,8 @@ void ActionPanel::buildPages() {
         bind(srExt, &ActionStringRepl::inclExt);
         bind(srOnlyExt, &ActionStringRepl::onlyExt);
         bind(srWild, &ActionStringRepl::wildcards);
-        bind(srWhere, &ActionStringRepl::where);
+        bindFn<ActionStringRepl>([srWhere](ActionStringRepl& a, bool) { a.where = (checkedIndex(srWhere) + 1) % 3; },
+                                 [srWhere](const ActionStringRepl& a) { checkIndex(srWhere, (a.where + 2) % 3); });
         p.v->addStretch();
     }
     {  // 2 Multiple string replacement

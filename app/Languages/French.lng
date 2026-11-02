@@ -541,5 +541,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="logReverted" Value="Rétabli"/>
     <Item Name="helpNotFound" Value="Les fichiers d'aide sont introuvables dans :&#10;%1&#10;&#10;Ouvrir plutôt le site web du programme ?"/>
     <Item Name="newNameInvalidChar" Value="le nouveau nom contient un caractère non valide"/>
+    <Item Name="renameSummary" Value="Fichiers renommés : %1, erreurs : %2"/>
+    <Item Name="pasteFolder" Value="Coller depuis le presse-papiers"/>
   </QtPort>
 </Application>

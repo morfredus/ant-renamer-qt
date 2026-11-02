@@ -1,6 +1,6 @@
 # Log page
 
-This page is filled with the results of the renaming process.
+This page is filled with the results of the renaming process. When the renaming is over, the last line of the log (and the status bar) says how many files were renamed and how many failed.
 
 ![Log page](img/log_page_en.png)
 

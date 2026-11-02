@@ -25,7 +25,7 @@ The first one ("Add files of selected folders") specifies if the files contained
 
 A fourth option ("Include hidden and system files when adding a folder") also adds the hidden and system files of the folders (`desktop.ini`, `.git`...); it is off by default.
 
-Under the tree, a field ("Or type the path of a folder") lets you type or paste the path of a folder: it is added together with the folders selected in the tree, if it exists.
+Under the tree, a field ("Or type the path of a folder") lets you type or paste the path of a folder (the *Paste from clipboard* button next to it pastes the path copied in the Windows Explorer, even between quotes): it is added together with the folders selected in the tree, if it exists.
 
 To add the files of a folder located on the network, the [drag & drop](#dragdrop) or the [command line](#cmdline) may be easier than this window.
 

@@ -176,6 +176,8 @@ void MainWindow::rebuildUi() {
     saveSettings();
     endEdit();
     const QByteArray geometry = saveGeometry();  // size and maximized state: the window is shown again at the end
+    const QRect normal = normalGeometry();       // restoreGeometry() can be refused (screen, scaling): this one is applied as is
+    const bool maximized = isMaximized();
     const bool stayOnTop = aOnTop_->isChecked();
     setUpdatesEnabled(false);
     // the widgets first (their signals reach the actions), then the actions and the menus, which are children of the window
@@ -214,6 +216,9 @@ void MainWindow::rebuildUi() {
     updateSamplePreview();
     setUpdatesEnabled(true);
     restoreGeometry(geometry);
+    if (!maximized) {
+        setGeometry(normal);  // buildUi() gave the window the default size of its layout, the user's one comes back
+    }
     show();
 }
 

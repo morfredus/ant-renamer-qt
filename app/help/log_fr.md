@@ -1,6 +1,6 @@
 # Page "Journal"
 
-Cette page est remplie avec le résultat du processus de renommage.
+Cette page est remplie avec le résultat du processus de renommage. Quand le renommage est terminé, la dernière ligne du journal (et la barre d'état) dit combien de fichiers ont été renommés et combien ont échoué.
 
 ![Page Journal](img/log_page_fr.png)
 
