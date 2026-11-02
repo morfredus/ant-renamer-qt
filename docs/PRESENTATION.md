@@ -135,6 +135,14 @@ These are the places where the port does not do exactly what version 2.13 does. 
   batch is edited by double-click. The modern layout, single screen in bands, is the default of a new installation since 3.1; whoever already has settings keeps their layout, and the classic one stays available in the options.
 - **Renaming history**, kept between two runs of the program: one pass per action, linear undo, a History window, and the Undo button either
   undoes the last pass or opens the history (Options > Files & Folders).
+- **String replacement, more**: wildcards (`*` any text, `?` one character) and the choice of where to replace: anywhere in
+  the name, only at the beginning or only at the end.
+- **Sidecar files and RAW files** follow a renamed picture (`.xmp`, `.dop`, `.pp3`, `.cos`, `.acr`, `.on1`, `.thm`, `.aae`;
+  renaming a JPEG renames its RAW file too), and undo puts them back.
+- **Export of the preview** (CSV or text) from the context menu of the files list, and a log saved as a CSV that Excel and
+  LibreOffice open with the accents right.
+- **Optional check for a new version** (off by default, once a day, final versions only unless asked otherwise).
+- **Silent command line** `-q`: no window and no dialog, for scripts; the exit code tells how it went.
 - **Build system**: CMake presets for Windows (MinGW), Linux x86_64, Linux ARM64 and ARM64 cross
   compilation; Qt and MinGW DLLs are deployed automatically next to the executable on Windows.
 - **Packaging**: `scripts/windows/package-win.ps1` builds a portable zip and, with Inno Setup 6, an

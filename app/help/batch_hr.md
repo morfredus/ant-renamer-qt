@@ -11,7 +11,7 @@ Ovdje se naredbe:
 - ![Dodaj u seriju](img/batchadd.png) Tipka "Dodaj akciju u seriju" će dodati odabranu akciju i njene parametare na popis.
 - ![Ukloni iz serije](img/batchdel.png) Tipka "Ukloni izabrane akcije" će ukloniti s popisa stavke koje su odabrane.
 - ![Očisti](img/clear.png) Tipka "Očisti seriju" će ukloniti s popisa sve predefinirane akcije.
-- ![Otvori](img/open.png) Tipka "Otvori" će prikazati standardni prozor za odabir datoteke, tako da možete odabrati datoteku za skupne obradbe za učitavanje u popis.
+- ![Otvori](img/open.png) Tipka "Otvori" će prikazati standardni prozor za odabir datoteke, tako da možete odabrati datoteku za skupne obradbe za učitavanje u popis. The arrow next to the button lists the 9 batch files used most recently.
 - ![Spremi](img/save.png) Tipka "Spremi" će prikazati standardni prozor za odabir datoteke, tako da možete odabrati gdje spremiti sadržaj popisa za buduću uporabu.
 
 Ove datotekame za skupne obrade se mogu koristiti za kombiniranje više radnji u jednom procesu preimenovanja. One se mogu spremiti za buduću uporabu, ili ih koristiti iz [naredbenog retka](params_hr.md).

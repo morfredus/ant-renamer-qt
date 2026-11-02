@@ -139,6 +139,16 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   est, depuis la 3.1, celle d'une nouvelle installation, en écran unique en bandes ; qui a déjà des réglages garde sa disposition, et la classique reste disponible dans les options.
 - **Historique des renommages**, conservé d'un lancement à l'autre : une passe par action, annulation linéaire, fenêtre Historique, et le
   bouton Annuler peut au choix défaire la dernière passe ou ouvrir l'historique (Options > Fichiers & Dossiers).
+- **Remplacement de chaîne, en plus** : jokers (`*` n'importe quel texte, `?` un caractère) et choix de l'endroit où
+  remplacer : n'importe où dans le nom, seulement au début ou seulement à la fin.
+- **Fichiers associés et fichiers RAW** : ils suivent une image renommée (`.xmp`, `.dop`, `.pp3`, `.cos`, `.acr`, `.on1`,
+  `.thm`, `.aae` ; renommer un JPEG renomme aussi son fichier RAW), et l'annulation les remet.
+- **Export de l'aperçu** (CSV ou texte) depuis le menu contextuel de la liste des fichiers, et un journal enregistré en CSV
+  qu'Excel et LibreOffice ouvrent avec les accents corrects.
+- **Vérification facultative d'une nouvelle version** (désactivée par défaut, une fois par jour, versions finales seulement
+  sauf demande contraire).
+- **Ligne de commande silencieuse** `-q` : ni fenêtre ni boîte de dialogue, pour les scripts ; le code de sortie dit
+  comment ça s'est passé.
 - **Système de build** : presets CMake pour Windows (MinGW), Linux x86_64, Linux ARM64 et compilation croisée
   ARM64 ; les DLL Qt et MinGW sont déployées automatiquement à côté de l'exécutable sous Windows.
 - **Livrables** : `scripts/windows/package-win.ps1` produit un zip portable et, avec Inno Setup 6, un installeur

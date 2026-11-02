@@ -11,14 +11,19 @@
 - **Mode portable** : les réglages sont enregistrés dans le fichier `antrenamer-qt.ini`. Quand ce fichier est à côté du programme, tout reste dans ce dossier (clé USB, aucune trace sur l'ordinateur). Sinon il est dans votre profil utilisateur. La case des *Options* \> *Affichage* déplace les réglages de l'un à l'autre. Les anciens réglages `Renamer.xml` ne sont pas importés.
 - **Plus d'options** : jeu d'icônes (Scrows, Windows XP, Windows XP Large, et le nouveau jeu vectoriel « Modern »), police forcée, largeur automatique des colonnes, appliqués immédiatement ; les barres d'outils sont déplaçables ; la liste des langues indique version, auteurs et commentaires.
 - **Aide intégrée** : cette fenêtre, avec la table des matières de l'aide d'origine.
-- **Ligne de commande** : voir [paramètres en ligne de commande](params_fr.md) (`--shell`, `--install-shell`, `--remove-shell`).
+- **Ligne de commande** : voir [paramètres en ligne de commande](params_fr.md) (`-q` pour un lancement silencieux sans aucune fenêtre, `--shell`, `--install-shell`, `--remove-shell`).
 - **Disposition moderne de l'interface** : une autre présentation de la fenêtre principale, avec les trois pages sur un seul écran (en bandes ou en colonnes), et des opérations du job que l'on peut modifier. C'est celle d'une nouvelle installation depuis la 3.1 (écran unique, en bandes) ; si vous aviez déjà des réglages, vous gardez la disposition que vous aviez. La disposition classique reste disponible dans les options. Voir [disposition moderne de l'interface](modernui_fr.md).
 - **Tri naturel** : la liste des fichiers trie « fichier 2 » avant « fichier 10 » par défaut ; l'ordre alphabétique du programme d'origine est une option (*Options* \> *Fichiers & Dossiers*).
 - **IPTC et XMP dans l'opération EXIF** : mots-clés, titre, légende, auteur, lieu, note... utilisables dans le masque (`%IptcKeywords%`, `%XmpTitle%`...), voir [Tags EXIF, IPTC et XMP](metadata_tags_fr.md). Le fichier XMP associé à une image est lu aussi.
 - **Les fichiers associés suivent leur image** : renommer une image renomme aussi ses fichiers `.xmp`, `.dop`, `.pp3`... (IMG.xmp, IMG.CR2.xmp, IMG.dop...), et un JPEG emporte son fichier RAW (IMG.ORF, IMG.CR2...), et l'annulation les remet ([Options](options_fr.md) \> *Traitement*, activé par défaut).
 - **Jokers** dans le [remplacement de chaîne](actions_fr.md#stringrepl) (`*` et `?`), et une option pour donner **le même numéro aux fichiers de même nom** et d'extensions différentes (JPG + RAW) dans les opérations Énumération et EXIF.
-- **Historique des renommages** : chaque opération du job est une passe qui peut être annulée, toujours à partir de la dernière, et le bouton *Historique* (Maj+F12) permet de revenir à une passe précise. Le bouton Annuler peut l'ouvrir à la place (*Options* \> *Fichiers & Dossiers*). Voir [la fenêtre principale](main_fr.md).
+- **Historique des renommages** : chaque opération du job est une passe qui peut être annulée, toujours à partir de la dernière de sa session, et le bouton *Historique* (Maj+F12) permet de revenir à une passe précise. L'historique est conservé à la fermeture du programme, session par session (une session est un lancement du programme). Le bouton Annuler peut l'ouvrir à la place (*Options* \> *Fichiers & Dossiers*). Voir [la fenêtre principale](main_fr.md).
 - **Bouton "Seulement modifiés"** dans la [liste des fichiers](files_fr.md) : masque les fichiers dont le nom ne change pas dans l'aperçu.
+- **Export de l'aperçu** : « Exporter l'aperçu... » dans le menu clic droit de la [liste des fichiers](files_fr.md) écrit les noms actuels et nouveaux dans un fichier CSV, ou les seuls nouveaux noms dans un fichier texte.
+- **Journal en CSV** : le [journal](log_fr.md) est enregistré par défaut en fichier CSV qu'Excel et LibreOffice ouvrent avec les accents corrects.
+- **Remplacement de chaîne, où** : *N'importe où dans le nom*, *Seulement au début* ou *Seulement à la fin* dans l'opération [Remplacement de chaîne](actions_fr.md#stringrepl).
+- **Thème clair et sombre** : un bouton de la barre d'outils bascule aussitôt ; *Options* \> *Affichage* peut aussi suivre le système.
+- **Recherche de nouvelle version** : facultative (désactivée par défaut), une fois par jour, voir les [Options](options_fr.md#display).
 
 ## Corrections par rapport à la 2.13
 

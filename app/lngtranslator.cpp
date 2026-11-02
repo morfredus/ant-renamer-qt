@@ -218,7 +218,6 @@ void openHelp(const QString& topic) {
 bool LngTranslator::loadLanguage(const QString& dir, const QString& language) {
     map_.clear();
     controls_.clear();
-    language_ = language;
     if (language == u"English") {
         return false;
     }

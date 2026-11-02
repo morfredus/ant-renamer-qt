@@ -21,7 +21,7 @@ using namespace Qt::StringLiterals;
 
 namespace ren {
 
-static QString tr(const char* s) {
+QString tr(const char* s) {
     return QCoreApplication::translate("Ren", s);
 }
 

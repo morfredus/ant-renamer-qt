@@ -11,7 +11,7 @@ Voici ses commandes :
 - Le bouton ![Ajouter au job](img/batchadd.png) "Ajouter" (Ctrl+F2, « Ajouter au job » dans l'info-bulle) ajoutera l'opération sélectionnée et ses paramètres à la liste.
 - Le bouton ![Retirer du job](img/batchdel.png) "Suppr. sél." (Maj+F6) retirera de la liste les éléments qui sont sélectionnés.
 - Le bouton ![Vider](img/clear.png) "Vider" (Maj+F7) retirera de la liste toutes les actions prédéfinies.
-- Le bouton ![Ouvrir](img/open.png) "Ouvrir..." (Ctrl+O) affichera une fenêtre standard de sélection de fichier, vous permettant de sélectionner un fichier de job à charger dans la liste.
+- Le bouton ![Ouvrir](img/open.png) "Ouvrir..." (Ctrl+O) affichera une fenêtre standard de sélection de fichier, vous permettant de sélectionner un fichier de job à charger dans la liste. La flèche à côté du bouton liste les 9 fichiers de job utilisés le plus récemment.
 - Le bouton ![Sauver](img/save.png) "Sauver..." (Ctrl+S) affichera une fenêtre standard de sélection de fichier, vous permettant de choisir où sauver le contenu de la liste pour une utilisation ultérieure.
 
 Ces fichiers de jobs peuvent être utilisés pour combiner de multiples actions dans un seul processus de renommage. Ils peuvent être sauvés pour être réutilisés plus tard, ou pour être utilisés depuis la [ligne de commande](params_fr.md).

@@ -107,6 +107,14 @@ AddChoiceBoxes::AddChoiceBoxes()
     hidden->setChecked(o.addHidden);
 }
 
+void rememberAddChoice(const AddChoice& c) {
+    AppOptions& o = appOptions();
+    o.addFiles = c.files;
+    o.addFolders = c.folders;
+    o.recursive = c.recursive;
+    o.addHidden = c.hidden;
+}
+
 AddChoice AddChoiceBoxes::choice() const {
     return {files->isChecked(), folders->isChecked(), recursive->isChecked(), hidden->isChecked()};
 }

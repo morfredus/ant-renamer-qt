@@ -24,6 +24,10 @@ Quelques options dans le bas de la fenêtre permettent de spécifier ce qui doit
 
 La première (« Ajouter les fichiers des dossiers sélectionnés ») spécifie si les fichiers contenus dans le(s) dossier(s) sélectionné(s) doivent être ajoutés ou non. La seconde (« Ajouter les dossiers sélectionnés ») spécifie si les dossiers sélectionnés doivent être ajoutés ou non. La troisième (« Appliquer ces deux options aux sous-dossiers également ») spécifie si les sous-dossiers des dossiers sélectionnés doivent être inclus ou non (cela s'applique à tous les sous-dossiers, pas juste au premier niveau). Les trois choix sont mémorisés pour la fois suivante.
 
+Une quatrième option (« Inclure les fichiers cachés et système à l'ajout d'un dossier ») ajoute aussi les fichiers cachés et système des dossiers (`desktop.ini`, `.git`...) ; elle est désactivée par défaut.
+
+Sous l'arbre, un champ (« Ou saisir le chemin d'un dossier ») permet de saisir ou coller le chemin d'un dossier : il est ajouté avec les dossiers sélectionnés dans l'arbre, s'il existe.
+
 Pour ajouter les fichiers d'un dossier situé sur le réseau, le [drag & drop](#dragdrop) ou la [ligne de commande](#cmdline) peuvent être plus faciles que cette fenêtre.
 
 ## Drag & drop (glisser-déposer) de fichiers {#dragdrop}

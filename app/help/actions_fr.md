@@ -43,9 +43,10 @@ Le point sera ajouté devant l'extension : ne le tapez pas. Pour supprimer l'ext
 Vous pouvez remplacer un texte par un autre dans les noms de fichiers. Les options sont :
 
 - **Remplacer toutes les occurences** (cochée par défaut) : si elle n'est pas cochée, seule la première occurence du texte dans chaque nom de fichier sera remplacée.
-- **Sensible à la casse** (cochée par défaut).
+- **Respecter la casse (A ≠ a)** (cochée par défaut).
 - **Inclure l'extension dans la recherche** : la recherche se fait dans le nom entier, extension comprise. Par défaut seul le nom sans extension est traité.
 - **Appliquer à l'extension plutôt qu'au nom** : seule l'extension (sans son point) est traitée.
+- **Utiliser les jokers** (décochée par défaut) : voir plus bas.
 - **N'importe où dans le nom / Seulement au début / Seulement à la fin** : où le texte cherché doit se trouver. « Seulement au début » avec `IMG_` remplace `IMG_` dans `IMG_001.jpg` mais laisse `mon_IMG_001.jpg` intact. Avec l'un des deux choix ancrés, il y a au plus un remplacement et « Remplacer toutes les occurences » n'a pas d'effet.
 
 Exemples, avec le fichier `IMG_001_IMG.jpg` (l'extension n'est pas touchée) :
@@ -68,7 +69,7 @@ Avec l'option « Utiliser les jokers », `*` dans le champ de recherche représe
 
 ## Remplacement de chaînes multiples {#multstrrepl}
 
-Vous pouvez entrer ici plusieurs chaînes à remplacer. La colonne de gauche contient les chaînes à rechercher dans les noms, la colonne de droite contient le texte à mettre à la place (qui peut être une chaîne vide). Les remplacements sont faits ligne après ligne, du haut vers le bas de la grille. Les options **Inclure l'extension dans la recherche** (décochée par défaut) et **Sensible à la casse** (cochée par défaut) s'appliquent à toute la grille.
+Vous pouvez entrer ici plusieurs chaînes à remplacer. La colonne de gauche contient les chaînes à rechercher dans les noms, la colonne de droite contient le texte à mettre à la place (qui peut être une chaîne vide). Les remplacements sont faits ligne après ligne, du haut vers le bas de la grille. Les options **Inclure l'extension dans la recherche** (décochée par défaut) et **Respecter la casse (A ≠ a)** (cochée par défaut) s'appliquent à toute la grille.
 
 Ceci peut être utilisé pour remplacer des caractères individuels, par exemple remplacer les caractères accentués par leur équivalent latin (un set appelé « Remove west-european accents » est fourni), ou remplacer des chaînes complètes de différentes longueurs.
 

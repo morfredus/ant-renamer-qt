@@ -127,6 +127,7 @@ private:
     void exportPreview();
     void addFolderContents(const QString& dir, const AddChoice& c);
     void addFile(const QString& path);
+    QTreeWidgetItem* addFileRow(const ren::File& f);
     void filesDropped(const QStringList& paths);
     void importDropped(const QStringList& paths);
     void updateItem(QTreeWidgetItem* item);

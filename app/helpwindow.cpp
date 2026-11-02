@@ -41,6 +41,13 @@ protected:
         if (type != QTextDocument::MarkdownResource) {
             return v;
         }
+        if (v.toByteArray().isEmpty() && v.toString().isEmpty()) {  // a page this language does not have yet: the English one
+            static const QRegularExpression lang(u"_(?!en\\.md$)[a-z]{2}\\.md$"_s);
+            QString path = name.toString();
+            if (path.replace(lang, u"_en.md"_s) != name.toString()) {
+                v = QTextBrowser::loadResource(type, QUrl(path));
+            }
+        }
         QString text = v.userType() == QMetaType::QByteArray ? QString::fromUtf8(v.toByteArray()) : v.toString();
         static const QRegularExpression tag(u"^(#+ .*?) *{#([\\w-]+)}$"_s, QRegularExpression::MultilineOption);
         titles_.clear();
@@ -194,7 +201,10 @@ QPointer<HelpWindow> g_window;
 void showHelp(const QString& topic, QWidget* parent) {
     const QString dir = dataPath(u"help"_s);
     const QString lang = helpLanguageCode();
-    const QString page = u"%1_%2.md"_s.arg(topic, lang);
+    QString page = u"%1_%2.md"_s.arg(topic, lang);
+    if (!QFileInfo::exists(QDir(dir).filePath(page))) {
+        page = u"%1_en.md"_s.arg(topic);  // a language with a partial help: the English page
+    }
     if (!QFileInfo::exists(QDir(dir).filePath(page))) {
         // Say exactly where the program looked: installation problems are then obvious.
         const QMessageBox::StandardButton b = QMessageBox::warning(

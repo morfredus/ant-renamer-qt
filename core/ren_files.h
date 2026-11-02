@@ -31,6 +31,9 @@ struct Options {
     bool dstRelativeToFile = true;  // file times use the DST rule of the date itself (else today's offset)
     bool renameSidecar = true;      // a renamed picture takes its sidecars (IMG.xmp, IMG.CR2.xmp, IMG.dop...) along
 };
+// Text of the core in the language of the program (context "Ren"), for the messages of the log.
+QString tr(const char* s);
+
 // Identifier that is never reused during a run: what a view stores to find a File or an Action again. Unlike a pointer,
 // an id whose object was removed finds nothing (FileList::byId, ActionList::byId return nullptr).
 quint64 nextId();
@@ -68,10 +71,6 @@ public:
         passes_.clear();
         open_ = false;
     }
-    void setMaxPasses(int n) {
-        max_ = n < 1 ? 1 : n;
-        trim();
-    }
     bool recording() const { return open_; }
     size_t size() const { return passes_.size(); }
     const std::deque<Pass>& passes() const { return passes_; }  // oldest first
@@ -92,7 +91,7 @@ private:
     bool open_ = false;
     int next_ = 1;
     int session_ = 1;  // session of the passes being recorded: the one after the last stored one
-    int max_ = 50;
+    static constexpr int max_ = 50;  // passes kept
 };
 
 class File {

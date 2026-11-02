@@ -537,5 +537,13 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="typeFolderPath" Value="Or type the path of a folder"/>
     <Item Name="webSiteQt" Value="Ant Renamer Qt web site: "/>
     <Item Name="webSiteOriginal" Value="Web site of the original program (Antoine Potten): "/>
+    <Item Name="batchFilterXml" Value="Ant Renamer batch files (*.arb *.xml)"/>
+    <Item Name="batchFilter" Value="Ant Renamer batch files (*.arb)"/>
+    <Item Name="couldNotRead" Value="Could not read %1"/>
+    <Item Name="couldNotWriteFile" Value="Could not write %1"/>
+    <Item Name="invalidRegexp" Value="Invalid regular expression: %1"/>
+    <Item Name="logReverted" Value="Reverted"/>
+    <Item Name="helpNotFound" Value="The help files were not found in:&#10;%1&#10;&#10;Open the program's web site instead?"/>
+    <Item Name="newNameInvalidChar" Value="the new name contains an invalid character"/>
   </QtPort>
 </Application>

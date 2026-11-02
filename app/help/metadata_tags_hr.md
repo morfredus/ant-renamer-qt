@@ -15,7 +15,7 @@ Tag names are not case-sensitive. A tag that the file does not contain gives an 
 - **Dates.** EXIF, IPTC and XMP dates are all given as `yyyy:MM:dd HH:mm:ss`. The characters that cannot be used in a file name (such as ":") are replaced by "-", so `2024:05:17 14:30:05` gives `2024-05-17 14-30-05`. The "Offset" setting of the action shifts every date tag that has this layout.
 - **Codes.** Tags such as `Flash`, `Orientation` or `MeteringMode` give the number stored in the file (see the EXIF specification for the meaning of each value).
 - **Forbidden characters.** The values are cleaned like every file name: `/ \ : * ? " < > |` are replaced.
-- **XMP sidecar files.** The `.xmp` file next to a picture (`IMG.xmp` or `IMG.CR2.xmp`) is read with the picture and wins over the XMP embedded in it: the keywords, title and rating you gave to a RAW file in your photo manager are usable. The sidecar (and a DxO `.dop` file) is also renamed with the picture (Options, Processing).
+- **XMP sidecar files.** The `.xmp` file next to a picture (`IMG.xmp` or `IMG.CR2.xmp`) is read with the picture and wins over the XMP embedded in it: the keywords, title and rating you gave to a RAW file in your photo manager are usable. The sidecar (and the `.dop`, `.pp3`... files, and the RAW file of a JPEG) is also renamed with the picture (Options, Processing).
 - **Limits.** Only the first 512 KB of each file are examined. IPTC is read from JPEG only.
 
 ## EXIF tags {#exif}
@@ -24,7 +24,7 @@ Tag names are not case-sensitive. A tag that the file does not contain gives an 
 |---|---|
 | `%DateTimeOriginal%` | Date and time the picture was taken |
 | `%DateTimeDigitized%` | Date and time the picture was digitized |
-| `%DateTime%` | Date and time of the last modification of the file |
+| `%DateTime%` | Date and time of the last change of the image, written by the software that edited it (not the date of the file on the disk) |
 | `%Make%` | Camera manufacturer |
 | `%Model%` | Camera model |
 | `%BodySerialNumber%` | Camera serial number |

@@ -25,6 +25,8 @@ Les messages du programme lui-même (début et fin d'un processus, liste des op�
 
 Si vous cliquez sur "Annuler", les lignes du journal indiquent quels fichiers ont retrouvé leur ancien nom.
 
+Quand vous cliquez avec le bouton droit de la souris sur le journal, un menu propose "Vider" et "Copier".
+
 ## Sauver automatiquement le journal dans un fichier {#save}
 
 Cela peut être fait via l'option "Stocker le journal" de la [fenêtre des Options](options_fr.md#events), page "Événements".

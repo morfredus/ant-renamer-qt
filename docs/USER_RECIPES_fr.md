@@ -170,6 +170,8 @@ antrenamer-qt -b d:\jobs\nettoyage.arb -af c:\import\*.* -g -x
 ```
 charge le job, ajoute les fichiers du dossier, renomme et quitte. `-afr dossier` ajoute récursivement, `-aF` ajoute des dossiers. Sous Linux : `antrenamer-qt -b ~/jobs/nettoyage.arb -af "/import/*" -g -x` (mettre les jokers entre guillemets). Le même appel peut être lancé par le Planificateur de tâches Windows, par cron ou depuis un script. Les `*` et `?` de la ligne de commande choisissent les fichiers ; ils n'ont rien à voir avec les jokers du remplacement de chaîne.
 
+**Sans aucune fenêtre (scripts, tâches planifiées).** Remplacez `-g -x` par `-q` : `antrenamer-qt -q -b d:\jobs\nettoyage.arb -af c:\import\*.*`. Aucune fenêtre ni boîte de dialogue n'apparaît, donc rien ne peut bloquer le script, et le code de sortie dit comment ça s'est passé : 0 tout est fait, 1 au moins un fichier a échoué (nom déjà utilisé, fichier verrouillé...), 2 rien n'a été fait (aucun fichier, aucun job, fichier de job illisible). Cochez l'option *Stocker le journal dans un fichier* (Options > Événements) pour garder le journal de chaque exécution.
+
 ### 6.5 Faire entrer des fichiers depuis l'Explorateur
 Activer « Ajouter à Ant Renamer Qt » (Options > Fichiers & Dossiers). Clic droit sur une sélection de fichiers et de dossiers (Windows 11 : *Afficher plus d'options*) : tout arrive dans la fenêtre déjà ouverte.
 

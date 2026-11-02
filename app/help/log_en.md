@@ -25,6 +25,8 @@ The messages of the program itself (start and end of a process, the list of the 
 
 If you click on "Undo", the lines of the log tell which files got their old name back.
 
+When you click with the right mouse button on the log, a menu offers "Clear" and "Copy".
+
 ## Automatically save log to file {#save}
 
 This can be done with the "Save log to file" option from the [Options window](options_en.md#events), "Events" page.

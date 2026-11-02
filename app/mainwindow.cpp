@@ -203,12 +203,7 @@ void MainWindow::rebuildUi() {
 
     // put the work back in the new views
     for (size_t i = 0; i < files_.size(); ++i) {
-        File& f = files_.at(i);
-        auto* item = new FileItem;
-        item->setData(0, IdRole, f.id());
-        item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled);
-        fileView_->addTopLevelItem(item);
-        rows_.insert(f.id(), item);
+        addFileRow(files_.at(i));
     }
     for (size_t i = 0; i < batch_.size(); ++i) {
         addBatchItem(&batch_.at(i));
@@ -386,10 +381,7 @@ void MainWindow::createActions() {
             return;
         }
         const AddChoice c = dlg.choice();
-        appOptions().addFiles = c.files;
-        appOptions().addFolders = c.folders;
-        appOptions().recursive = c.recursive;
-        appOptions().addHidden = c.hidden;
+        rememberAddChoice(c);
         appOptions().save();
         if (!dlg.folders().isEmpty()) {
             s.setValue(u"folders/addFolder"_s, dlg.folders().first());

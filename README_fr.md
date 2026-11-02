@@ -89,7 +89,7 @@ Traduire l'interface (les fichiers `.lng`) : [docs/TRANSLATING_fr.md](docs/TRANS
 ## Réglages
 
 Mode portable : créer un fichier `antrenamer-qt.ini` vide à côté du programme (ou cocher la case dans
-Options > Affichage). Sinon les réglages sont dans `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) ou `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
+Options > Affichage). Sinon les réglages sont dans `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) ou `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux). L'historique d'annulation (50 dernières passes, conservé d'un lancement à l'autre) est enregistré dans `antrenamer-qt-history.json`, dans le même dossier que le fichier de réglages.
 
 Menu contextuel de l'Explorateur (Windows) : Options > Fichiers & Dossiers ajoute « Ajouter à Ant Renamer Qt » aux fichiers et
 dossiers (Windows 11 : « Afficher plus d'options »). Tout ce qui est sélectionné arrive dans la fenêtre déjà ouverte.

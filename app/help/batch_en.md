@@ -11,7 +11,7 @@ Here are the commands:
 - ![Add to batch](img/batchadd.png) "Add to batch" button (Ctrl+F2) will add currently selected action and its parameters to the list.
 - ![Remove from batch](img/batchdel.png) "Remove selected actions" button (Shift+F6) will remove from the list the items that are selected.
 - ![Clear](img/clear.png) "Clear batch" button (Shift+F7) will remove from the list all the predefined actions.
-- ![Open](img/open.png) "Open" button (Ctrl+O) will display a standard file selection window, so you can select a batch file to load in the list.
+- ![Open](img/open.png) "Open" button (Ctrl+O) will display a standard file selection window, so you can select a batch file to load in the list. The arrow next to the button lists the 9 batch files used most recently.
 - ![Save](img/save.png) "Save" button (Ctrl+S) will display a standard file selection window, so you can select where to save the contents of the list for a future use.
 
 These batch files can be used for combining multiple actions in one renaming process. They can be saved for a future use, or to use them from [command-line](params_en.md).

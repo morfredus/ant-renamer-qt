@@ -23,6 +23,10 @@ A few options at the bottom of the window allow to specify what should be added 
 
 The first one ("Add files of selected folders") specifies if the files contained in selected folder(s) should be added or not. The second one ("Add selected folders") specifies if the selected folder(s) should be added or not. The third one ("Apply these two options also to subfolders") specifies if the sub-folders of selected folder(s) have to be included too (this applies to all sub-levels, not only the first one). The three choices are remembered for the next time.
 
+A fourth option ("Include hidden and system files when adding a folder") also adds the hidden and system files of the folders (`desktop.ini`, `.git`...); it is off by default.
+
+Under the tree, a field ("Or type the path of a folder") lets you type or paste the path of a folder: it is added together with the folders selected in the tree, if it exists.
+
 To add the files of a folder located on the network, the [drag & drop](#dragdrop) or the [command line](#cmdline) may be easier than this window.
 
 ## Drag & drop files {#dragdrop}

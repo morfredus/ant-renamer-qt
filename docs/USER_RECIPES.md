@@ -170,6 +170,8 @@ antrenamer-qt -b d:\batches\cleanup.arb -af c:\import\*.* -g -x
 ```
 loads the batch, adds the files of the folder, renames and exits. `-afr folder` adds recursively, `-aF` adds folders. On Linux: `antrenamer-qt -b ~/batches/cleanup.arb -af "/import/*" -g -x` (quote the wildcards). The same call can be run by the Windows Task Scheduler, by cron or from a script. The command line's `*` and `?` select files; they have nothing to do with the wildcards of string replacement.
 
+**Without any window (scripts, scheduled tasks).** Replace `-g -x` by `-q`: `antrenamer-qt -q -b d:\batches\cleanup.arb -af c:\import\*.*`. No window and no dialog appear, so nothing can block the script, and the exit code tells how it went: 0 everything done, 1 at least one file failed (name already used, locked file...), 2 nothing done (no file, no batch, unreadable batch file). Set the *Save log to file* option (Options > Events) to keep the log of each run.
+
 ### 6.5 Send files in from the file manager
 Enable "Add to Ant Renamer Qt" (Options > Files & Folders). Right-click a selection of files and folders (Windows 11: *Show more options*): everything arrives in the window that is already open.
 

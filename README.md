@@ -89,7 +89,7 @@ Translating the interface (the `.lng` files): [docs/TRANSLATING.md](docs/TRANSLA
 ## Settings
 
 Portable mode: create an empty `antrenamer-qt.ini` next to the program (or tick the box in
-Options > Display). Otherwise settings live in `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) or `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
+Options > Display). Otherwise settings live in `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) or `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux). The undo history (last 50 passes, kept between two runs) is saved in `antrenamer-qt-history.json`, in the same folder as the settings file.
 
 Explorer context menu (Windows): Options > Files & Folders adds "Add to Ant Renamer Qt" to files and folders (Windows 11:
 "Show more options"). Everything selected is sent to the window that is already open.

@@ -14,6 +14,9 @@ struct AddChoice {
     bool any() const { return files || folders; }
 };
 
+// Remembers the "what to add" choice in the options (the check boxes below start from it). Not saved to disk.
+void rememberAddChoice(const AddChoice& c);
+
 // The four "what to add" check boxes shared by the Add folders and Drag & drop dialogs, preset from the options.
 struct AddChoiceBoxes {
     AddChoiceBoxes();

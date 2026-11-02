@@ -67,7 +67,9 @@ Les traducteurs de l'Ant Renamer d'origine peuvent envoyer leur fichier tel quel
 
 ## 8. L'aide
 
-L'aide est séparée du fichier `.lng` : des pages Markdown dans `app/help/`, **anglais, français, croate et tamoul** pour l'instant (`<page>_en.md`, `_fr.md`, `_hr.md`, `_ta.md`, avec la table des matières `toc_<code>.md`). Pour les autres langues de l'interface, l'aide s'affiche en anglais.
+L'aide est séparée du fichier `.lng` : des pages Markdown dans `app/help/`, **anglais, français, croate et tamoul** pour l'instant (`<page>_en.md`, `_fr.md`, `_hr.md`, `_ta.md`, avec la table des matières `toc_<code>.md`). Pour les autres langues de l'interface, l'aide s'affiche en anglais. Une page qu'une langue d'aide n'a pas est aussi affichée en anglais (le programme se rabat sur `<page>_en.md`).
+
+**Garder les pages à jour.** L'anglais et le français sont toujours complets et à jour. Les autres langues de l'aide ne restent jamais à moitié anciennes : quand une page anglaise change, la même page du croate et du tamoul reçoit le nouveau texte anglais en attendant que quelqu'un le traduise (les pages écrites pour Ant Renamer Qt sont aujourd'hui de simples copies des pages anglaises dont les liens `_en.md` deviennent `_hr.md` / `_ta.md`). Il en va de même pour les fichiers `.lng` : un texte qu'une langue n'a pas est affiché en anglais.
 
 Pour ajouter une langue à l'aide : copiez les pages anglaises et `toc_en.md` vers `<page>_<code>.md` et `toc_<code>.md`, traduisez-les (gardez les noms de fichiers des liens et les `{#id}` après les titres : ce sont les cibles des liens entre pages), puis ajoutez la langue à `helpLanguageCode()` dans `app/lngtranslator.cpp` (nom de langue du fichier `.lng` -> code). L'aide est longue (18 pages) : une traduction de l'interface seule est déjà très utile, l'aide peut venir plus tard.
 

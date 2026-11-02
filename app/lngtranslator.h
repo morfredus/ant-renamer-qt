@@ -34,7 +34,6 @@ public:
 
 private:
     QHash<QString, QString> map_;  // normalized English -> translated
-    QString language_;
     QHash<QString, QString> controls_;  // control name -> translated Caption
 };
 

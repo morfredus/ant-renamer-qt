@@ -111,6 +111,9 @@ static int lngChecks() {
     expect(tr(fr, "Modification of action %1"), u"Modification de l'action %1"_s, "real French.lng: placeholder");
     expect(tr(fr, "Web site address: "), u"Adresse du site web : "_s, "real French.lng: trailing space");
     expect(tr(fr, "Light / dark"), u"Clair / sombre"_s, "real French.lng: theme button");
+    expect(tr(fr, "Could not read %1"), u"Impossible de lire %1"_s, "real French.lng: message of the batch files");
+    expect(tr(fr, "Invalid regular expression: %1"), u"Expression régulière non valide : %1"_s, "real French.lng: regular expression error");
+    expect(tr(fr, "Reverted"), u"Rétabli"_s, "real French.lng: log column");
     return bad;
 }
 
