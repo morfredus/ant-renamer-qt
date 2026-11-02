@@ -480,6 +480,88 @@ int main(int argc, char** argv) {
         CHECK_EQ(QString::number(journal.size()), u"1"_s);
     }
 
+    {  // the journal kept on disk: a new run undoes the passes of the previous one, but not a file that changed
+        QTemporaryDir t4;
+        const QString d4 = t4.path() + u'/';
+        for (const char* n : {"x.txt", "y.txt"}) {
+            touch(d4 + QString::fromLatin1(n));
+        }
+        FileList f1;
+        Journal j1;
+        f1.setJournal(&j1);
+        f1.add(d4 + u"x.txt"_s).position = 0;
+        f1.add(d4 + u"y.txt"_s).position = 1;
+        ActionList enumA;
+        auto& enc = static_cast<ActionEnum&>(enumA.add(ActionType::Enum));
+        enc.mask = u"pic%num%%ext%"_s;
+        enc.digits = 1;
+        enumA.perform(f1, Op::Rename);
+        const QByteArray saved = j1.toJson();
+
+        Journal j2;  // "next run": nothing in the list, only the file
+        FileList f2;
+        f2.setJournal(&j2);
+        CHECK_EQ(j2.fromJson(saved) ? u"y"_s : u"n"_s, u"y"_s);
+        CHECK_EQ(j2.fromJson("not json") ? u"y"_s : u"n"_s, u"n"_s);
+        CHECK_EQ(QString::number(j2.size()), u"1"_s);
+        CHECK_EQ(QString::number(f2.undoPasses(1)), u"1"_s);
+        CHECK_EQ(QFile::exists(d4 + u"x.txt"_s) && QFile::exists(d4 + u"y.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
+
+        // Two sessions: the passes of the first one are undone without touching the second one
+        {
+            QTemporaryDir t6;
+            const QString d6 = t6.path() + u'/';
+            for (const char* n : {"a.txt", "b.txt"}) {
+                touch(d6 + QString::fromLatin1(n));
+            }
+            FileList fa;
+            Journal ja;
+            fa.setJournal(&ja);
+            fa.add(d6 + u"a.txt"_s).position = 0;
+            ActionList toP;
+            auto& ep = static_cast<ActionEnum&>(toP.add(ActionType::Enum));
+            ep.mask = u"p%num%%ext%"_s;
+            ep.digits = 1;
+            toP.perform(fa, Op::Rename);  // session 1: a.txt -> p1.txt
+            Journal jb;                   // next run: session 2 renames b.txt
+            CHECK_EQ(jb.fromJson(ja.toJson()) ? u"y"_s : u"n"_s, u"y"_s);
+            FileList fb;
+            fb.setJournal(&jb);
+            fb.add(d6 + u"b.txt"_s).position = 0;
+            ActionList toQ;
+            auto& eq = static_cast<ActionEnum&>(toQ.add(ActionType::Enum));
+            eq.mask = u"q%num%%ext%"_s;
+            eq.digits = 1;
+            toQ.perform(fb, Op::Rename);  // session 2: b.txt -> q1.txt
+            CHECK_EQ(QString::number(jb.size()), u"2"_s);
+            CHECK_EQ(QString::number(jb.passes().front().session) + QString::number(jb.passes().back().session), u"12"_s);
+            CHECK_EQ(QString::number(fb.undoPasses(1, {}, 1)), u"1"_s);  // session 1, under the newest pass
+            CHECK_EQ(QFile::exists(d6 + u"a.txt"_s) && QFile::exists(d6 + u"q1.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
+            CHECK_EQ(QString::number(jb.size()), u"1"_s);
+            CHECK_EQ(QString::number(fb.undoPasses(1)), u"1"_s);  // the newest one: session 2
+            CHECK_EQ(QFile::exists(d6 + u"b.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
+        }
+
+        // Again, then another file takes the name of the last renamed one (other size): it is not renamed back
+        FileList f4;
+        Journal j4;
+        f4.setJournal(&j4);
+        f4.add(d4 + u"x.txt"_s).position = 0;
+        f4.add(d4 + u"y.txt"_s).position = 1;
+        enumA.perform(f4, Op::Rename);
+        QFile other(d4 + u"pic2.txt"_s);
+        CHECK_EQ(other.open(QIODevice::WriteOnly) ? u"y"_s : u"n"_s, u"y"_s);
+        other.write("another file");
+        other.close();
+        Journal j5;
+        FileList f5;
+        f5.setJournal(&j5);
+        CHECK_EQ(j5.fromJson(j4.toJson()) ? u"y"_s : u"n"_s, u"y"_s);
+        CHECK_EQ(QString::number(f5.undoPasses(1)), u"0"_s);
+        CHECK_EQ(QFile::exists(d4 + u"y.txt"_s) ? u"y"_s : u"n"_s, u"n"_s);  // not touched
+        CHECK_EQ(QString::number(j5.size()), u"1"_s);
+    }
+
     ActionList upper;  // a.txt -> A.TXT must work although the volume is case-insensitive
     static_cast<ActionCase&>(upper.add(ActionType::Case)).caseType = 2;
     static_cast<ActionCase&>(upper.at(0)).includeExt = true;

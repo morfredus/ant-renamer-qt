@@ -2,6 +2,15 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.1.0-beta.4 (02/11/2026)
+  - L'historique d'annulation est conservé à la fermeture du programme, session par session, avec une vérification de la taille et de la date de chaque fichier avant d'annuler, et un bouton « Effacer l'historique ».
+  - Ligne de commande silencieuse : -q exécute un job sans fenêtre ni boîte de dialogue ; le code de sortie dit comment cela s'est passé.
+  - L'interface moderne (écran unique, en bandes) est celle d'une nouvelle installation ; qui a déjà des réglages garde sa disposition.
+  - Fin d'un renommage : le journal et la barre d'état disent combien de fichiers ont été renommés et combien ont échoué.
+  - Remplacement de chaîne : « Seulement au début » est le choix par défaut, « N'importe où dans le nom » vient en dernier.
+  - Le premier clic dans un champ des opérations sélectionne tout le texte ; Ajouter des dossiers a un bouton « Coller depuis le presse-papiers ».
+  - La fenêtre garde sa taille après un changement de langue (deuxième essai).
+  - Une page d'aide absente dans une langue s'affiche en anglais ; huit messages traduits en français.
 - 3.1.0-beta.3 (02/11/2026)
   - Remplacement de chaîne : nouveau choix « N'importe où dans le nom / Seulement au début / Seulement à la fin » (avec les jokers aussi).
   - La fenêtre garde sa taille après un changement de langue.

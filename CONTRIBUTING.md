@@ -27,7 +27,7 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 4. Add or update a test when the engine changes (`tests/test_core.cpp`): a new case that fails without your fix is the best proof that it works.
 5. Run the tests (`ctest`) before you open the pull request; the GitHub workflow builds on Linux and Windows and runs them too.
 6. Add a line under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md) (Added, Changed or Fixed). Version numbers are given by the maintainer when a release is made: do not change `VERSION`.
-7. If the change is visible to users, add a line to `docs/WHATS_NEW.md` and `docs/WHATS_NEW_fr.md` (under the "Upcoming" / "À venir" section at the top; it takes the version number when released) and update the help pages and the guides when they describe the behaviour. If you do not write French, say so in the pull request and the maintainer will take care of the French texts.
+7. If the change is visible to users, add a line to `docs/WHATS_NEW.md` and `docs/WHATS_NEW_fr.md` (under the "Upcoming" / "À venir" section at the top; it takes the version number when released) and update the help pages and the guides when they describe the behaviour. If you do not write French, say so in the pull request and the maintainer will take care of the French texts. English and French help pages are always complete; when you change an English help page, the same page of the other help languages (`_hr.md`, `_ta.md`) takes the new English text until it is translated (see [docs/TRANSLATING.md](docs/TRANSLATING.md), section 8).
 
 ## How to...
 
@@ -55,7 +55,7 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 
 - **Path separators.** On Windows `\` and `/` live together in the engine (on Linux only `/` is a separator). Normalise paths before comparing two of them.
 - **Threads.** The engine runs in a worker thread (`RenWorker`). The interface must only read the `Snapshot` copies it receives, never a `File` while a renaming runs. The rows of the lists keep the `id()` of their `File` or `Action`, never a pointer: use `FileList::byId` / `ActionList::byId`, which return `nullptr` for something that was removed.
-- **A batch renames for real at each action**, not once at the end. Each action is a pass of the `Journal`, so Undo goes back pass after pass (50 passes at most, strictly in order).
+- **A batch renames for real at each action**, not once at the end. Each action is a pass of the `Journal`, so Undo goes back pass after pass (50 passes at most, strictly in order inside a session; a session is one run of the program, and the history is kept in `antrenamer-qt-history.json` between two runs).
 - **Translations.** The English text in the code must be identical to an entry of `English.lng` to be translated, otherwise it stays in English. `ANTREN_MISSING=1` lists the texts without translation.
 - **Line endings.** Every text file is LF, in the repository and in the working tree (`.gitattributes`). If your editor or a script writes CRLF, Git converts it back, but fix the tool when you can. Encodings are not touched: the help pages and the `.lng` files keep theirs, so do not re-save them with another encoding.
 

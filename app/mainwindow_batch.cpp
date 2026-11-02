@@ -141,6 +141,10 @@ void MainWindow::openBatchFile(const QString& path) {
     }
     QSettings s = appSettings();
     if (!batch_.load(path)) {
+        if (silent_) {
+            quitSilently(2);
+            return;
+        }
         QMessageBox::critical(this, windowTitle(), tr_("Could not read %1").arg(native(path)));
         return;
     }

@@ -7,6 +7,7 @@
 - `-b கோப்பு.arb` : கோப்பு.arb எனப்படும் தொகுதி கோப்பை ஏற்றுகிறது
 - `-g` : கோப்புகள் சேர்க்கப்பட்டு தொகுதி கோப்பு ஏற்றப்பட்ட பிறகு மறுபெயரிடும் செயல்முறையைத் தொடங்குகிறது
 - `-x` : மறுபெயரிடல் செயல்முறைக்குப் பிறகு நிரலை விட்டு வெளியேறுகிறது
+- `-q` : Silent mode, for scripts: no window and no dialog, the renaming starts and the program quits at the end (like `-g -x`, without the window). The exit code tells how it went: 0 everything done, 1 at least one file was not renamed because of an error, 2 nothing done (no file, no batch, batch file unreadable, or hidden files in the list). The log file of the options is still written
 - `--shell Path` : (Explorer context menu) adds the path to the window that is already open, or starts the program if it is not running
 - `--install-shell` / `--remove-shell` : adds / removes the Explorer context menu entry, then quits
 - `-a` : "-a" அளவுருவைப் பின்பற்றும் எழுத்துக்களின் அடிப்படையில் கோப்பு சேர் பயன்முறையை மாற்றவும்:
@@ -15,6 +16,8 @@
   - `r` : கோப்புறைகளின் உள்ளடக்கங்களை மீண்டும் மீண்டும் சேர்த்தல்
 
 கோப்பு பெயர்கள் மற்றும் பாதைகள் உறவினர் அல்லது முழுமையானதாக இருக்கலாம், மேலும் அவை வைல்டு கார்டுகளைக் கொண்டிருக்கலாம் (\* மற்றும் ?).
+
+**Ant Renamer Qt**: the program is called `antrenamer-qt.exe` (Windows) or `antrenamer-qt` (Linux); in the examples below, replace `Renamer.exe` with this name.
 
 இங்கே சில உதாரணங்கள்:
 
@@ -44,4 +47,4 @@
 
 எந்த "-a" அளவுருவும் இல்லாமல் ஒரு பெயர் கொடுக்கப்பட்டால், அது எறும்பு மறுபெயரிடு 2.07 (மற்றும் பழையது) இல் உள்ளதைப் போல பகுப்பாய்வு செய்யப்படும்: ".arb" ஆல் முடிவடையும் கோப்பு பெயர் கொடுக்கப்பட்டால், இது தொகுதி கோப்பாக ஏற்றப்படுகிறது; ஒரு கோப்புறை கொடுக்கப்பட்டால், அதன் உள்ளடக்கங்கள் மீண்டும் மீண்டும் சேர்க்கப்படும் (கோப்புகள் மட்டும், வைல்டு கார்டுகளை ஆதரிக்காது, முழு கோப்புறை பெயர் தேவை).
 
-"அனுப்பு" பட்டியலில் (சாளரங்கள் பிணையம்ல் ஒரு கோப்புறையில் வலது சுட்டி பொத்தானைக் சொடுக்கும் போது தோன்றும் மெனுவில்) எறும்பு மறுபெயரைச் சேர்க்க முடியும். எனவே கோப்புகள் பட்டியலில் அதன் உள்ளடக்கத்தை ஏற்ற, அதன் சூழ்நிலை மெனுவிலிருந்து எறும்பு மறுபெயரிடு க்கு ஒரு கோப்புறையை அனுப்புவதற்கான வாய்ப்பை இது சேர்க்கிறது. அதைச் செய்ய, "தொடங்கு" -\> "இயக்கு" என்பதற்குச் சென்று தட்டச்சு செய்க `இங்கு அனுப்பு`. . ஒரு கோப்புறை சாளரம் திறக்க வேண்டும்; அங்கு எறும்பு மறுபெயருக்கு ஒரு குறுக்கு வழியை வைக்கவும்.
+On Windows, it is possible to add Ant Renamer in the "Send to" list (in the menu that appears when you click with right mouse button on a folder in Windows Explorer). So this adds the possibility to send a folder to Ant Renamer from its contextual menu, to load its content in the files list. To do that, go to "Start" -\> "Run" and type `sendto`. A folder window should open; place there a shortcut to Ant Renamer.

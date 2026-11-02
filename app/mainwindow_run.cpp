@@ -11,6 +11,10 @@ bool MainWindow::confirmHiddenFiles() {
             hidden += files_.at(i).hidden;
         }
     }
+    if (hidden && silent_) {  // nobody to ask: nothing is renamed
+        quitSilently(2);
+        return false;
+    }
     return !hidden || QMessageBox::warning(this, windowTitle(),
                                            tr_("%1 hidden or system file(s) are in the list and will be renamed. Renaming them "
                                                "can break programs or the system. Continue?")
@@ -40,15 +44,22 @@ void MainWindow::showPreviewHint() {
     }
 }
 
-void MainWindow::run(Op op, int undoCount) {
+void MainWindow::run(Op op, int undoCount, int undoSession) {
+    if (quitting_) {
+        return;
+    }
     if (worker_) {
         QMessageBox::information(this, windowTitle(), tr_("Application is busy: Renaming operation in progress."));
         return;
     }
     if (op == Op::Undo ? journal_.size() == 0
                        : (files_.size() == 0 || (batch_.size() == 0 && panel_->currentIndex() < 0 && op != Op::Revert))) {
+        if (silent_) {
+            quitSilently(2);
+            return;
+        }
         QMessageBox::warning(this, windowTitle(),
-                             op == Op::Undo ? tr_("Nothing to undo: no renaming pass was made in this session.")
+                             op == Op::Undo ? tr_("Nothing to undo: no renaming pass in the history.")
                                             : tr_("Nothing to do: please select at least one file and an action to perform."));
         if (op != Op::Undo) {
             showTab(1);
@@ -71,6 +82,8 @@ void MainWindow::run(Op op, int undoCount) {
         showPreviewHint();
     }
     runLogStart_ = logEntries_.size();
+    runErrors_ = 0;
+    runRenamed_ = 0;
     addLog(op == Op::Rename    ? tr_("Renaming process started")
            : op == Op::Preview ? tr_("Refreshing preview")
            : op == Op::Undo    ? tr_("Undoing the last renaming passes")
@@ -102,7 +115,7 @@ void MainWindow::run(Op op, int undoCount) {
     }
 
     stopFlag() = false;
-    worker_ = new RenWorker(&batch_, &files_, op, undoCount);
+    worker_ = new RenWorker(&batch_, &files_, op, undoCount, undoSession);
     connect(worker_, &RenWorker::progress, this, &MainWindow::onProgress, Qt::QueuedConnection);
     connect(worker_, &QThread::finished, this, &MainWindow::onFinished);
     setBusy(true);
@@ -111,6 +124,8 @@ void MainWindow::run(Op op, int undoCount) {
 
 void MainWindow::onProgress(const Snapshot& s) {
     const AppOptions& o = appOptions();
+    runErrors_ += State(s.state) == State::Error;
+    runRenamed_ += State(s.state) == State::Ok && !s.from.isEmpty();  // from is set for a rename only
     if (!s.file) {
         addLog(s.description, State(s.state));
         return;
@@ -178,6 +193,10 @@ void MainWindow::onFinished() {
            : op == Op::Preview ? tr_("Preview process finished")
                                : tr_("Revert process finished"),
            State::Info);
+    const QString summary = op == Op::Rename ? tr_("Files renamed: %1, errors: %2").arg(runRenamed_).arg(runErrors_) : QString();
+    if (!summary.isEmpty()) {
+        addLog(summary, runErrors_ ? State::Error : State::Info);
+    }
     if (op != Op::Preview && o.finishSwitch >= 0) {
         showTab(o.finishSwitch);
     }
@@ -218,13 +237,29 @@ void MainWindow::onFinished() {
     }
     aGo_->setEnabled(true);
     aStop_->setEnabled(false);
+    if (op != Op::Preview) {
+        saveHistory();
+    }
     updateUndoState();
     setStatus();
+    statusLabel_->setText(summary);  // stays until the next run: the user sees at once that it is done
     updateAllItems();
     updateSamplePreview();
-    if (exitAfterRun_) {
+    if (exitAfterRun_ && silent_) {
+        quitSilently(runErrors_ ? 1 : 0);
+    } else if (exitAfterRun_) {
         close();
     }
+}
+
+// From the event loop, so that it also works before exec() has started. closeEvent() is not used: the window was never
+// shown, its geometry must not overwrite the saved one.
+void MainWindow::quitSilently(int code) {
+    if (quitting_) {  // the first reason is the one that counts
+        return;
+    }
+    quitting_ = true;
+    QTimer::singleShot(0, qApp, [code] { QCoreApplication::exit(code); });
 }
 
 // While a run is in progress the lists, the batch and the options belong to the worker thread. The handlers also test
@@ -244,7 +279,18 @@ void MainWindow::updateUndoState() {
     setBusy(worker_ != nullptr);
 }
 
-// The passes of the session, newest first. Undo goes back linearly: choosing a pass undoes it and every pass after it.
+// The history is written after every run, so it survives a crash or a closed program. A failure is not worth a dialog.
+void MainWindow::saveHistory() {
+    const QString path = historyFile();
+    if (journal_.size() == 0) {
+        QFile::remove(path);
+    } else if (QSaveFile f(path); f.open(QIODevice::WriteOnly)) {
+        f.write(journal_.toJson());
+        f.commit();
+    }
+}
+
+// The passes of the history, newest first. Undo goes back linearly: choosing a pass undoes it and every pass after it.
 void MainWindow::showHistory() {
     if (worker_ || journal_.size() == 0) {
         return;
@@ -253,35 +299,65 @@ void MainWindow::showHistory() {
     dlg.setWindowTitle(tr_("Renaming history"));
     auto* lay = new QVBoxLayout(&dlg);
     lay->addWidget(
-        new QLabel(tr_("Passes of this session, newest first. Passes are undone one after the other from the last one: "
-                       "choosing a pass undoes it and all the passes made after it.")));
+        new QLabel(tr_("Passes, newest first, by session (kept when the program is closed). Inside a session, passes are "
+                       "undone one after the other from the last one: choosing a pass undoes it and the passes made after it "
+                       "in the same session. The other sessions are not touched.")));
     dynamic_cast<QLabel*>(lay->itemAt(0)->widget())->setWordWrap(true);
     auto* list = new QListWidget;
     const auto& passes = journal_.passes();
+    int shownSession = -1;
     for (auto it = passes.rbegin(); it != passes.rend(); ++it) {
-        list->addItem(tr_("#%1  %2  -  %3 move(s)  -  %4")
-                          .arg(it->number)
-                          .arg(it->when.toString(u"hh:mm:ss"_s))
-                          .arg(it->moves.size())
-                          .arg(it->summary));
+        if (it->session != shownSession) {  // a heading for each session, dated by its first pass
+            shownSession = it->session;
+            const auto first = std::find_if(passes.begin(), passes.end(), [&](const ren::Pass& p) { return p.session == shownSession; });
+            auto* head = new QListWidgetItem(tr_("Session of %1").arg(QLocale().toString(first->when, QLocale::ShortFormat)), list);
+            head->setFlags(Qt::NoItemFlags);
+            QFont f = head->font();
+            f.setBold(true);
+            head->setFont(f);
+        }
+        auto* item = new QListWidgetItem(tr_("#%1  %2  -  %3 move(s)  -  %4")
+                                             .arg(it->number)
+                                             .arg(QLocale().toString(it->when, QLocale::ShortFormat))
+                                             .arg(it->moves.size())
+                                             .arg(it->summary),
+                                         list);
+        item->setData(Qt::UserRole, it->session);
+        item->setData(Qt::UserRole + 1, it->number);
     }
-    list->setCurrentRow(0);
+    list->setCurrentRow(1);  // row 0 is the heading of the newest session
     lay->addWidget(list, 1);
     auto* box = new QDialogButtonBox(QDialogButtonBox::Close);
     auto* undoBtn = box->addButton(tr_("Undo up to this pass"), QDialogButtonBox::AcceptRole);
+    // A pass that cannot be undone (file deleted or changed outside the program) blocks the ones before it: a way out.
+    auto* clearBtn = box->addButton(tr_("Clear the history"), QDialogButtonBox::ResetRole);
+    connect(clearBtn, &QPushButton::clicked, &dlg, [this, &dlg] {
+        if (QMessageBox::question(&dlg, windowTitle(), tr_("Forget all the passes? They can no longer be undone.")) ==
+            QMessageBox::Yes) {
+            journal_.clear();
+            saveHistory();
+            updateUndoState();
+            dlg.reject();
+        }
+    });
     connect(box, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
     connect(box, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
     connect(list, &QListWidget::itemDoubleClicked, undoBtn, &QPushButton::click);
     lay->addWidget(box);
     dlg.resize(620, 360);
-    if (dlg.exec() != QDialog::Accepted || list->currentRow() < 0) {
+    if (dlg.exec() != QDialog::Accepted) {
         return;
     }
-    const int count = list->currentRow() + 1;
+    const QListWidgetItem* chosen = list->currentItem();
+    if (!chosen || !chosen->data(Qt::UserRole).isValid()) {
+        return;
+    }
+    const int session = chosen->data(Qt::UserRole).toInt(), number = chosen->data(Qt::UserRole + 1).toInt();
+    const int count = int(std::count_if(passes.begin(), passes.end(), [&](const ren::Pass& p) { return p.session == session && p.number >= number; }));
     if (count > 1 && QMessageBox::question(this, windowTitle(), tr_("Undo %1 passes?").arg(count)) != QMessageBox::Yes) {
         return;
     }
-    run(Op::Undo, count);
+    run(Op::Undo, count, session);
 }
 
 // --- log ------------------------------------------------------------------------------------------------------------------
@@ -360,9 +436,11 @@ void MainWindow::logAction(int which) {
 
 // --- command line (same switches as the original) ---------------------------------------------------------------------------
 // -b file.arb  load a batch      -g  start renaming      -x  exit when finished
+// -q           silent: no window, no dialog; same as -g -x, the exit code tells how it went
 // -a[fFr]      what the following paths add: f = files, F = folders, r = recursive; wildcards allowed
 void MainWindow::processCommandLine(const QStringList& args) {
-    bool go = false, exit = false;
+    silent_ = args.contains(u"-q"_s);
+    bool go = silent_, exit = silent_;
     AddChoice add{false, false, false};
     bool haveAdd = false;
     const QString start = QDir::currentPath();
@@ -374,6 +452,8 @@ void MainWindow::processCommandLine(const QStringList& args) {
         }
         if (a == u"-b" && i + 1 < args.size()) {
             openBatchFile(QDir(start).absoluteFilePath(args[++i]));
+        } else if (a == u"-q") {  // read before the loop (silent_)
+            continue;
         } else if (a == u"-g") {
             go = true;
         } else if (a == u"-x") {
@@ -415,6 +495,8 @@ void MainWindow::processCommandLine(const QStringList& args) {
     if (go && files_.size() > 0) {
         exitAfterRun_ = exit;
         run(Op::Rename);
+    } else if (silent_) {
+        quitSilently(2);  // no file to rename
     } else if (exit) {
         QTimer::singleShot(0, this, [this] { close(); });  // from the event loop, so quitting always works
     }

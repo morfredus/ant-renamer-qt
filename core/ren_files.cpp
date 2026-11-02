@@ -7,6 +7,9 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include <algorithm>
 
@@ -18,7 +21,7 @@ using namespace Qt::StringLiterals;
 
 namespace ren {
 
-static QString tr(const char* s) {
+QString tr(const char* s) {
     return QCoreApplication::translate("Ren", s);
 }
 
@@ -76,6 +79,14 @@ bool moveFile(const QString& from, const QString& to, QString& err) {
     return false;
 }
 #endif
+
+bool changedSince(const Move& m) {
+    if (m.size < 0) {
+        return false;
+    }
+    const QFileInfo fi(m.to);
+    return fi.size() != m.size || fi.lastModified().toMSecsSinceEpoch() != m.mtime;
+}
 
 }  // namespace
 
@@ -159,7 +170,13 @@ bool File::rename(QString newName) {
         }
         status_ = State::Ok;
         if (moving && onMoved) {
-            onMoved(Move{source, newName, sidecarsMoved_});
+            Move m{source, newName, sidecarsMoved_};
+            if (!isFolder_) {  // a folder's date changes with its content: not a usable fingerprint
+                const QFileInfo fi(newName);
+                m.size = fi.size();
+                m.mtime = fi.lastModified().toMSecsSinceEpoch();
+            }
+            onMoved(m);
         }
     } else {
         if (pathExists(newName)) {
@@ -316,13 +333,21 @@ File* FileList::findByPath(const QString& path) {
     return loose;
 }
 
-int FileList::undoPasses(int count, const std::function<void(File&)>& progress) {
+int FileList::undoPasses(int count, const std::function<void(File&)>& progress, int session) {
     if (!journal_) {
         return 0;
     }
+    auto& passes = journal_->passes_;
     int done = 0;
-    while (done < count && !journal_->passes_.empty() && !stopFlag()) {
-        Pass& pass = journal_->passes_.back();
+    while (done < count && !passes.empty() && !stopFlag()) {
+        if (session < 0) {
+            session = passes.back().session;
+        }
+        const auto last = std::find_if(passes.rbegin(), passes.rend(), [session](const Pass& p) { return p.session == session; });
+        if (last == passes.rend()) {
+            break;
+        }
+        Pass& pass = *last;
         while (!pass.moves.empty() && !stopFlag()) {
             const Move& m = pass.moves.back();
             File* f = findByPath(m.to);
@@ -332,10 +357,15 @@ int FileList::undoPasses(int count, const std::function<void(File&)>& progress) 
                 wire(*loose);
                 f = loose.get();
             }
-            const bool ok =
-                f->exists()
-                    ? f->undoMove(m.from, m.sidecars)
-                    : (f->setError(tr("%1 was not renamed : %2").arg(m.to, tr("Source file not found")), State::Error), false);
+            bool ok = false;
+            if (!f->exists()) {
+                f->setError(tr("%1 was not renamed : %2").arg(m.to, tr("Source file not found")), State::Error);
+            } else if (changedSince(m)) {  // possibly another file under the same name, put there outside the program
+                f->setError(tr("%1 was not renamed : %2").arg(m.to, tr("The file was changed after the renaming")),
+                            State::Error);
+            } else {
+                ok = f->undoMove(m.from, m.sidecars);
+            }
             if (progress) {
                 progress(*f);
             }
@@ -347,14 +377,14 @@ int FileList::undoPasses(int count, const std::function<void(File&)>& progress) 
         if (!pass.moves.empty()) {
             return done;  // stopped by the user
         }
-        journal_->passes_.pop_back();
+        passes.erase(std::next(last).base());
         ++done;
     }
     return done;
 }
 
 void Journal::beginPass(const QString& summary) {
-    cur_ = Pass{next_, QDateTime::currentDateTime(), summary, {}};
+    cur_ = Pass{next_, QDateTime::currentDateTime(), summary, {}, session_};
     open_ = true;
 }
 
@@ -374,6 +404,74 @@ void Journal::endPass() {
     passes_.push_back(std::move(cur_));
     cur_ = Pass{};
     trim();
+}
+
+QByteArray Journal::toJson() const {
+    QJsonArray ps;
+    for (const Pass& p : passes_) {
+        QJsonArray ms;
+        for (const Move& m : p.moves) {
+            QJsonArray sc;
+            for (const auto& s : m.sidecars) {
+                sc.append(QJsonArray{s.first, s.second});
+            }
+            ms.append(QJsonObject{{u"from"_s, m.from},
+                                  {u"to"_s, m.to},
+                                  {u"size"_s, m.size},
+                                  {u"mtime"_s, m.mtime},
+                                  {u"sidecars"_s, sc}});
+        }
+        ps.append(QJsonObject{{u"number"_s, p.number},
+                              {u"when"_s, p.when.toString(Qt::ISODate)},
+                              {u"summary"_s, p.summary},
+                              {u"moves"_s, ms},
+                              {u"session"_s, p.session}});
+    }
+    return QJsonDocument(QJsonObject{{u"version"_s, 1}, {u"next"_s, next_}, {u"passes"_s, ps}}).toJson(QJsonDocument::Compact);
+}
+
+bool Journal::fromJson(const QByteArray& data) {
+    const QJsonObject root = QJsonDocument::fromJson(data).object();
+    if (root.value(u"version"_s).toInt() != 1) {
+        return false;
+    }
+    passes_.clear();
+    open_ = false;
+    int last = 0, lastSession = 0;
+    for (const QJsonValue pv : root.value(u"passes"_s).toArray()) {
+        const QJsonObject po = pv.toObject();
+        Pass p;
+        p.number = po.value(u"number"_s).toInt();
+        p.when = QDateTime::fromString(po.value(u"when"_s).toString(), Qt::ISODate);
+        p.summary = po.value(u"summary"_s).toString();
+        p.session = po.value(u"session"_s).toInt();
+        for (const QJsonValue mv : po.value(u"moves"_s).toArray()) {
+            const QJsonObject mo = mv.toObject();
+            Move m;
+            m.from = mo.value(u"from"_s).toString();
+            m.to = mo.value(u"to"_s).toString();
+            m.size = qint64(mo.value(u"size"_s).toDouble(-1));
+            m.mtime = qint64(mo.value(u"mtime"_s).toDouble());
+            for (const QJsonValue sv : mo.value(u"sidecars"_s).toArray()) {
+                const QJsonArray pair = sv.toArray();
+                if (pair.size() == 2) {
+                    m.sidecars.emplace_back(pair[0].toString(), pair[1].toString());
+                }
+            }
+            if (!m.from.isEmpty() && !m.to.isEmpty()) {
+                p.moves.push_back(std::move(m));
+            }
+        }
+        if (!p.moves.empty()) {
+            last = qMax(last, p.number);
+            lastSession = qMax(lastSession, p.session);
+            passes_.push_back(std::move(p));
+        }
+    }
+    next_ = std::max({root.value(u"next"_s).toInt(), last + 1, 1});
+    session_ = lastSession + 1;  // this run is a new session
+    trim();
+    return true;
 }
 
 void FileList::sort() {

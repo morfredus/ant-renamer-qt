@@ -47,8 +47,8 @@ common, on purpose: both programs read each other's batches.
 - **The interface layout**: the three pages (Files / Actions / Log), the toolbars and their icons, the
   action list with its settings page, the live preview of the selected file, the collapsible batch list,
   drag and drop with the options window, the Options dialog with its tabs, the log filter, the MRU list of
-  batches, the status bar with progress, the same keyboard shortcuts. This classic layout is still the default; the
-  modern layout is an option (see "What was added").
+  batches, the status bar with progress, the same keyboard shortcuts. This classic layout is kept for
+  existing settings (the modern layout is the default of a new installation since 3.1, see "What was added").
 - **The original language files**: the 28 `.lng` files (English and 27 translations) are used as they are (each with its own encoding), and the
   language can be changed in Options. The French interface is built from the original `French.lng`, plus a few strings added by the port.
 - **The original help**: the help pages (English, French, Croatian, Tamil) and the version history are shipped
@@ -132,9 +132,17 @@ These are the places where the port does not do exactly what version 2.13 does. 
 - **Modern layout**, as an option (Options > Display): one main bar with tabs showing the number of files and actions,
   a prominent Go button, a bar per page, the new-name column visible by default, the system light or dark theme. The
   pages can be tabs or a **single screen** (in bands or in columns, movable and remembered splitters); an action of the
-  batch is edited by double-click. The classic layout stays the default.
-- **Renaming history** for the session: one pass per action, linear undo, a History window, and the Undo button either
+  batch is edited by double-click. The modern layout, single screen in bands, is the default of a new installation since 3.1; whoever already has settings keeps their layout, and the classic one stays available in the options.
+- **Renaming history**, kept between two runs of the program: one pass per action, linear undo, a History window, and the Undo button either
   undoes the last pass or opens the history (Options > Files & Folders).
+- **String replacement, more**: wildcards (`*` any text, `?` one character) and the choice of where to replace: anywhere in
+  the name, only at the beginning or only at the end.
+- **Sidecar files and RAW files** follow a renamed picture (`.xmp`, `.dop`, `.pp3`, `.cos`, `.acr`, `.on1`, `.thm`, `.aae`;
+  renaming a JPEG renames its RAW file too), and undo puts them back.
+- **Export of the preview** (CSV or text) from the context menu of the files list, and a log saved as a CSV that Excel and
+  LibreOffice open with the accents right.
+- **Optional check for a new version** (off by default, once a day, final versions only unless asked otherwise).
+- **Silent command line** `-q`: no window and no dialog, for scripts; the exit code tells how it went.
 - **Build system**: CMake presets for Windows (MinGW), Linux x86_64, Linux ARM64 and ARM64 cross
   compilation; Qt and MinGW DLLs are deployed automatically next to the executable on Windows.
 - **Packaging**: `scripts/windows/package-win.ps1` builds a portable zip and, with Inno Setup 6, an

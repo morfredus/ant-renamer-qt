@@ -25,7 +25,7 @@ There are also four buttons allowing to move items within the list (up, down, to
 
 This order can also be changed by sorting the files by clicking on column headers (click again to reverse the order). Sorting really changes the order of the list, so it is also the order in which the files are processed: it decides, for example, which file gets which number in an [Enumeration](actions_en.md#enum). In Ant Renamer Qt, clicking on a column header sorts the text columns in natural order by default ("file 2" before "file 10"). The [options](options_en.md#files) allow to get the alphabetical order of the original program instead. To disable the automatic sort, you can click with right mouse button on the headers of the list and select the "Unsorted items" command.
 
-When you click with right mouse button on the list, a menu appears allowing to remove the selected files or all the files, to select all items of the list, to select none or to invert the selection, and to refresh the preview.
+When you click with right mouse button on the list, a menu appears allowing to remove the selected files or all the files, to select all items of the list, to select none or to invert the selection, to refresh the preview, and to export it: "Export preview..." writes the files shown (the "Changed only" and "Hidden files" filters apply) to a CSV file (columns Folder, Name, New name; semicolon, UTF-8 with a BOM so that Excel and LibreOffice read the accents) or to a text file with the new names only, one per line. A file with no preview keeps its current name, so refresh the preview first.
 
 The icon of each file (based on its extension) can be displayed, and a double-click can open the file with the program associated with it: see the [options](options_en.md#display).
 

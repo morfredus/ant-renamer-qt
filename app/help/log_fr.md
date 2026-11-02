@@ -1,6 +1,6 @@
 # Page "Journal"
 
-Cette page est remplie avec le résultat du processus de renommage.
+Cette page est remplie avec le résultat du processus de renommage. Quand le renommage est terminé, la dernière ligne du journal (et la barre d'état) dit combien de fichiers ont été renommés et combien ont échoué.
 
 ![Page Journal](img/log_page_fr.png)
 
@@ -24,6 +24,8 @@ Quand le système refuse le renommage, une erreur en rouge est affichée. Les er
 Les messages du programme lui-même (début et fin d'un processus, liste des opérations du job, « Operation stopped by user ») sont écrits en gris. Ils sont toujours affichés, quel que soit le filtre.
 
 Si vous cliquez sur "Annuler", les lignes du journal indiquent quels fichiers ont retrouvé leur ancien nom.
+
+Quand vous cliquez avec le bouton droit de la souris sur le journal, un menu propose "Vider" et "Copier".
 
 ## Sauver automatiquement le journal dans un fichier {#save}
 

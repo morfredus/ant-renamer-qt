@@ -1,6 +1,6 @@
 # Ant Renamer Qt: function guide
 
-*Every function of Ant Renamer Qt 3.1.0-beta.3 with instructions.*
+*Every function of Ant Renamer Qt 3.1.0-beta.4 with instructions.*
 French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use cases): [USER_RECIPES.md](USER_RECIPES.md). Full details, page by page, with screenshots: the built-in help (F1). Differences between Windows and Linux: §13.
 
 ## 1. General principle
@@ -34,7 +34,7 @@ The program only changes **names** (or copies the files under a new name); it ne
 
 ### Adding files
 - **Files** (F2): standard file picker (Ctrl and Shift select several files). The order the system returns is not always the order displayed: sort the list afterwards if the order matters.
-- **Folders** (F3): shows the drives and folders as a tree; select one or more, then tick what to add: the files they contain, the folders themselves, the subfolders (all levels). The three choices are remembered.
+- **Folders** (F3): shows the drives and folders as a tree; select one or more, then tick what to add: the files they contain, the folders themselves, the subfolders (all levels). A field under the tree takes the path of a folder typed or pasted (added with the selection, if it exists). The choices are remembered.
 - **Drag and drop** from the file manager (Explorer, Nautilus, Dolphin, Total Commander...): a window offers the same options. "Do not show this window again" remembers them (changeable in Options > Files & Folders); holding Ctrl or Shift when dropping shows the window once more.
 - **Explorer menu** "Add to Ant Renamer Qt" (Windows; enable it in Options > Files & Folders). Several selected items arrive together in the window that is already open. Windows 11: *Show more options* (or Shift+F10).
 - **Hidden and system files** (`desktop.ini`, `.git`...) of an added folder are skipped, unless *Include hidden and system files when adding a folder* is ticked (Options > Files & Folders). A file picked or dropped on its own is always added. Before a renaming, a warning (Yes/No) is shown if the list holds hidden or system files.
@@ -53,7 +53,8 @@ The program only changes **names** (or copies the files under a new name); it ne
 
 - **Columns**: right-click the header to show Folder, File name, Full path, Ext., Preview, Size, Creation date, Modification date. They can be resized and moved; one column at least stays visible.
 - **Sorting**: click a header (again to reverse). By default the sort is natural: "file 2" before "file 10" (Options > Files & Folders gives the alphabetical order back). **Sorting really reorders the list, so it sets the processing order**, hence the numbering order of an enumeration. Right-click > *Unsorted items* removes the sort indicator.
-- Right-click in the list: remove selected / all, select all, select none, invert the selection, refresh the preview.
+- Right-click in the list: remove selected / all, select all, select none, invert the selection, refresh the preview, **Export preview...**.
+- **Export preview...** writes the files shown (the "Changed only" and "Hidden files" filters apply) to a CSV file (columns Folder, Name, New name; semicolon, every field quoted, UTF-8 with a BOM so that Excel and LibreOffice read the accents) or to a text file with the new names only, one per line. A file with no preview keeps its current name: refresh the preview first. Useful to proofread a big batch or to keep a trace.
 - Double-click a file: opens it with its associated program, if "Launch file on double click" is ticked (Options > Files & Folders).
 - Folders can be in the list too: they are renamed like files (in list order); the files of the list that are inside a renamed folder follow it.
 
@@ -76,7 +77,7 @@ Pick the action in the list, set its parameters (the *Notes* area under the para
 | # | Action | Purpose | How to use it |
 |---|---|---|---|
 | 1 | **Change extension** | Replace or add an extension | Enter the new extension (without the dot). Empty field = removes the extension. Option: add after the existing one instead of replacing. |
-| 2 | **String replacement** | Replace one text with another | "Search" / "Replace by" fields. Empty = deletes the text. Options: replace all occurrences (on by default, otherwise only the first), case sensitive (on by default), include the extension in the search, apply to the extension instead of the name, **wildcards** (see below). |
+| 2 | **String replacement** | Replace one text with another | "Search" / "Replace by" fields. Empty = deletes the text. Options: replace all occurrences (on by default, otherwise only the first), case sensitive (on by default), include the extension in the search, apply to the extension instead of the name, **wildcards** (see below), and **where to replace**: only at the beginning (default), only at the end or anywhere in the name (this works with wildcards too). |
 | 3 | **Multiple string replacement** | Several replacements at once (accents, etc.) | 2-column grid (searched / replaced), applied line after line. Ctrl++ adds a line, Ctrl+- deletes the current line. Options: include the extension, case sensitive. A grid can be named and saved ("Predefined sets" list + *Save*; *Delete* removes a set, *Clear Table* empties the grid). Copy/Export and Paste/Import exchange the grid with Excel or a text editor (tab between columns). A "Remove west-european accents" set is provided. |
 | 4 | **String insertion** | Insert a text at a position | Text, position (0 = before the first character or after the last one), from the start or from the end. Option: apply to the extension instead of the name. Tags `%name%`, `%ext%`, `%folderN%`, `%%`. |
 | 5 | **Move string** | Move N characters | Number of characters, "from" position and "to" position (the second counts after the characters are removed), each from the start or the end. E.g. `abcdef`, 1 character from 2 to 4 → `abdecf`. |
@@ -102,7 +103,7 @@ Pick the action in the list, set its parameters (the *Notes* area under the para
 ### Managing the batch
 The **Batch contents** panel lists the planned actions (tick box to show/hide it).
 - **Add to batch** (Ctrl+F2), **Remove selected** (Shift+F6), **Clear** (Shift+F7).
-- **Open** (Ctrl+O) / **Save** (Ctrl+S): `.arb` files (XML), compatible with Ant Renamer 2 in both directions.
+- **Open** (Ctrl+O) / **Save** (Ctrl+S): `.arb` files (XML), compatible with Ant Renamer 2 in both directions. The arrow next to *Open* lists the 9 most recently used batch files.
 - Reorder by drag and drop or with the 4 move buttons.
 - In the classic layout an added action cannot be edited (remove it and redo it). In the modern layout: double-click to reload it in the editor, then *Validate the modification* (or the *Modify* button).
 
@@ -111,7 +112,7 @@ The **Batch contents** panel lists the planned actions (tick box to show/hide it
 - **Go** (F9): renames in a separate thread; the window stays usable, but what would modify the list, the batch or the options is disabled until the end.
 - **Stop** (Esc): interrupts the processing; the files already processed stay renamed.
 - **Undo** (F12): restores the old names of the **last pass**, sidecar files included. Every action of the batch run by Go is a pass (a batch of three actions leaves three passes), so you can undo again and again, always from the last one.
-- **History** (Shift+F12, clock): lists the passes of the session, newest first (time, number of moves, action). *Undo up to this pass* undoes the chosen pass and all those made after it; a pass in the middle cannot be undone alone. If a file was moved outside the program, the undo stops there and the pass stays in the list. The last 50 passes are kept, and they are lost when the program is closed. In *Options > Files & Folders* the Undo button can open the history instead of undoing the last pass.
+- **History** (Shift+F12, clock): lists the passes, newest first, grouped by **session** (one session = one run of the program: the heading gives its date and time), with the date and time, number of moves and action of each pass. *Undo up to this pass* undoes the chosen pass and all those made after it **in the same session**; a pass in the middle of a session cannot be undone alone. The other sessions are not touched, so you can undo yesterday's session while keeping today's. If today's session has renamed the same files again, the undo of the older one stops (file not found or changed). If a file was moved, deleted or changed outside the program (another size or date than right after the renaming), the undo stops there and the pass stays in the list; *Clear the history* forgets all the passes if one of them blocks the others. The last 50 passes are kept, **also after the program is closed**: you can undo the next day. The history is saved next to the settings file (the program folder in portable mode, the user profile otherwise: `antrenamer-qt-history.json`). In *Options > Files & Folders* the Undo button can open the history instead of undoing the last pass.
 - **Always on top** (F11): keeps the window above the others.
 - **Light / dark** (half-filled circle): switches the theme at once; *Options > Display > Theme* also offers "Follow the system" (default).
 - **Copy instead of rename** (Options > Processing): the originals stay, the copies carry the new names.
@@ -147,6 +148,7 @@ Good to know: a missing tag gives an empty text; multiple values are joined with
 | `-b file.arb` | loads a batch |
 | `-g` | starts the processing once files and batch are loaded |
 | `-x` | exits when the processing is done |
+| `-q` | silent mode for scripts: no window, no dialog, same as `-g -x`. Exit code: 0 all done, 1 at least one file failed, 2 nothing done (no file, no batch, unreadable batch file, hidden files in the list) |
 | `-af` / `-aF` / `-afr` | adds the following files / folders / recursive content of folders (wildcards `*` `?` accepted) |
 | `--shell path` | adds the path to the window that is already open (used by the Explorer menu) |
 | `--install-shell` / `--remove-shell` | adds / removes the Explorer menu entry (Windows), then exits |
@@ -157,7 +159,7 @@ Without `-a`, 2.07 behaviour: a name ending in `.arb` is a batch, a folder is ad
 ## 9. Log page
 
 Each processed file gives one line: **green** (renamed, old → new name; the full path when the folder changes; sidecar files mentioned), **blue** (not renamed: identical name, missing tag, empty line or end of the list, file missing), **red** (error: name already used, invalid character, file locked).
-Buttons: **Filter** (Successes / Errors / Not renamed), **Clear**, **Save** (text file), **Copy** (clipboard).
+Buttons: **Filter** (Successes / Errors / Not renamed), **Clear**, **Save** (CSV or text file), **Copy** (clipboard); right-click in the log: Clear, Copy.
 The *Save log to file* option (Options > Events) saves it automatically after each run in UTF-8, with an option to append to an existing file. With a `.csv` file name (the default choice in the file dialog) it is a CSV that Excel or LibreOffice open with the accents right, one line per file with four columns: Folder, Original name, New name, Reason (why it was not renamed), ready to filter; with `.log` or `.txt` it is two tab-separated columns (`v` success, `x` error). The *Save* button of the Log page offers the same two formats.
 
 ## 10. Options (F10)
@@ -167,16 +169,16 @@ Changes apply when you click OK; the language and the modern layout too, without
 | Page | Settings |
 |---|---|
 | **Display** | live update, automatic column resizing, icons by extension, modern layout and its page arrangement (Tabs, Single screen in bands, Single screen in columns), forced font and size, history size of the drop-down lists (1 to 200), **theme** (system, light, dark), **look for a new version at start** (off by default: once a day it asks GitHub for the list of releases, nothing else is sent; also the "Check for updates" button of the About window), **also tell me about beta and release candidates** (off by default: only final versions are announced), auto-completion, **icon set** (§12), **portable mode** (settings kept in the program folder) |
-| **Files & Folders** | do not ask on drag and drop and the options to use, natural sort, open the file on double-click, include hidden and system files of added folders, Explorer menu entry (Windows) |
+| **Files & Folders** | do not ask on drag and drop and the options to use, natural sort, open the file on double-click, include hidden and system files of added folders, what the Undo button does (undo the last pass, or open the history), Explorer menu entry (Windows) |
 | **Processing** | copy instead of rename, generate a log, daylight saving by file date, also rename sidecar files (`.xmp`, `.dop`, `.pp3`..., and the RAW files of a renamed JPEG; they get their old name back on undo), force folders (creates them), detect `x:\` and `\\` (Linux: `/`) as absolute paths, last dot of a folder name = extension |
 | **Events** | at the start of a run: switch to a page, clear the log; at the end: switch to a page, clear the files list, clear the batch, save the log to a file (with "append") |
 | **Language** | interface language (27 `.lng` files; translator and version shown) |
 
 Settings are stored in your profile (`%APPDATA%\AntRenamerQt` on Windows, `~/.local/share/AntRenamerQt` on Linux). Portable mode: an `antrenamer-qt.ini` file next to the program keeps all settings in that folder (the checkbox in Options > Display creates or removes it; an empty file is enough).
 
-## 11. Modern layout (optional)
+## 11. Modern layout
 
-Same engine, other presentation, enabled in Options > Display. Counters "Files (100)", "Actions (2)" on the page buttons; a thin toolbar per page; in single-screen modes Ctrl+1/2/3 shows or hides a pane; splitters can be dragged and are remembered; the columns layout falls back to bands below ~900 pixels wide; batch actions can be edited by double-click.
+Same engine, other presentation, set in Options > Display. It is the default of a **new installation** since 3.1 (single screen, in bands: no settings file yet, or an empty one); if you already have settings, your layout is kept, and you can switch to the modern one in the options. Untick *Modern interface layout* to go back to the classic layout at any time. Counters "Files (100)", "Actions (2)" on the page buttons; a thin toolbar per page; in single-screen modes Ctrl+1/2/3 shows or hides a pane; splitters can be dragged and are remembered; the columns layout falls back to bands below ~900 pixels wide; batch actions can be edited by double-click.
 
 ## 12. Icons, help and languages
 
@@ -201,6 +203,6 @@ Same engine, other presentation, enabled in Options > Display. Counters "Files (
 
 - EXIF: 36 tags only, MakerNote not decoded; IPTC read only in JPEG.
 - Audio tags: ID3 only (MP3); FLAC, OGG, M4A are not read.
-- Undo: pass after pass (the last 50 of the session), only from the last one; files copied with "Copy instead of rename" are not removed.
+- Undo: pass after pass (the last 50, kept when the program is closed), inside a session only from its last pass; files copied with "Copy instead of rename" are not removed.
 - The short Windows 11 context menu is not supported (use "Show more options").
 - The help in Croatian and Tamil shows English for the pages written for Ant Renamer Qt.

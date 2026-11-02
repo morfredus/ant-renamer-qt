@@ -502,13 +502,17 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="showHiddenCaption" Value="Fichiers cachés"/>
     <Item Name="showHiddenHint" Value="Afficher les fichiers cachés et système de la liste ; masqués, ils ne sont pas renommés"/>
     <Item Name="undoHistoryCaption" Value="Historique"/>
-    <Item Name="undoHistoryHint" Value="Passes de renommage de cette session : revenir à une passe précise"/>
+    <Item Name="undoHistoryHint" Value="Passes de renommage : revenir à une passe précise"/>
     <Item Name="undoHistoryTitle" Value="Historique des renommages"/>
-    <Item Name="undoHistoryInfo" Value="Passes de cette session, de la plus récente à la plus ancienne. Les passes s'annulent l'une après l'autre en partant de la dernière : choisir une passe l'annule ainsi que toutes celles faites après."/>
+    <Item Name="undoHistoryInfo" Value="Passes, de la plus récente à la plus ancienne, par session (conservées à la fermeture du programme). Dans une session, les passes s'annulent l'une après l'autre en partant de la dernière : choisir une passe l'annule ainsi que celles faites après dans la même session. Les autres sessions ne sont pas touchées."/>
+    <Item Name="undoHistorySession" Value="Session du %1"/>
     <Item Name="undoHistoryRow" Value="n°%1  %2  -  %3 déplacement(s)  -  %4"/>
     <Item Name="undoHistoryButton" Value="Annuler jusqu'à cette passe"/>
     <Item Name="undoHistoryConfirm" Value="Annuler %1 passes ?"/>
-    <Item Name="undoNothing" Value="Rien à annuler : aucune passe de renommage n'a été faite dans cette session."/>
+    <Item Name="undoNothing" Value="Rien à annuler : aucune passe de renommage dans l'historique."/>
+    <Item Name="undoHistoryClear" Value="Effacer l'historique"/>
+    <Item Name="undoHistoryClearConfirm" Value="Oublier toutes les passes ? Elles ne pourront plus être annulées."/>
+    <Item Name="undoChanged" Value="Le fichier a été modifié après le renommage"/>
     <Item Name="undoLogStart" Value="Annulation des dernières passes de renommage"/>
     <Item Name="undoOptHeader" Value="Bouton Annuler"/>
     <Item Name="undoOptLabel" Value="Le bouton Annuler :"/>
@@ -529,5 +533,15 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="typeFolderPath" Value="Ou saisir le chemin d'un dossier"/>
     <Item Name="webSiteQt" Value="Site web d'Ant Renamer Qt : "/>
     <Item Name="webSiteOriginal" Value="Site web du programme d'origine (Antoine Potten) : "/>
+    <Item Name="batchFilterXml" Value="Fichiers job Ant Renamer (*.arb *.xml)"/>
+    <Item Name="batchFilter" Value="Fichiers job Ant Renamer (*.arb)"/>
+    <Item Name="couldNotRead" Value="Impossible de lire %1"/>
+    <Item Name="couldNotWriteFile" Value="Impossible d'écrire %1"/>
+    <Item Name="invalidRegexp" Value="Expression régulière non valide : %1"/>
+    <Item Name="logReverted" Value="Rétabli"/>
+    <Item Name="helpNotFound" Value="Les fichiers d'aide sont introuvables dans :&#10;%1&#10;&#10;Ouvrir plutôt le site web du programme ?"/>
+    <Item Name="newNameInvalidChar" Value="le nouveau nom contient un caractère non valide"/>
+    <Item Name="renameSummary" Value="Fichiers renommés : %1, erreurs : %2"/>
+    <Item Name="pasteFolder" Value="Coller depuis le presse-papiers"/>
   </QtPort>
 </Application>

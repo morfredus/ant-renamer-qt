@@ -11,13 +11,19 @@
 - **Portable mode**: the settings are stored in the file `antrenamer-qt.ini`. When this file sits next to the program, everything stays in that folder (USB key, no trace on the computer). Otherwise it is in your user profile. The checkbox in *Options* \> *Display* moves the settings from one place to the other. Old `Renamer.xml` settings are not imported.
 - **More options**: icon set (Scrows, Windows XP, Windows XP Large, and the new vector set "Modern"), forced font, automatic column width, applied immediately; toolbars can be moved; the list of languages shows version, authors and comments.
 - **Built-in help**: this window, with the table of contents of the original help.
-- **Command line**: see [command-line parameters](params_hr.md) (`--shell`, `--install-shell`, `--remove-shell`).
-- **Modern interface layout (option)**: another presentation of the main window, with the three pages on one screen if you prefer (in bands or in columns), and actions of the batch that can be edited. The classic layout stays the default. See [modern interface layout](modernui_hr.md).
+- **Command line**: see [command-line parameters](params_hr.md) (`-q` for a silent run without any window, `--shell`, `--install-shell`, `--remove-shell`).
+- **Modern interface layout**: another presentation of the main window, with the three pages on one screen (in bands or in columns), and actions of the batch that can be edited. It is the default of a new installation since 3.1 (single screen, in bands); if you already had settings, you keep the layout you had. The classic layout stays available in the options. See [modern interface layout](modernui_hr.md).
 - **Natural sort**: the Files list sorts "file 2" before "file 10" by default; the alphabetical order of the original program is an option (*Options* \> *Files & Folders*).
 - **IPTC and XMP in the EXIF action**: keywords, title, caption, author, place, rating... can be used in the mask (`%IptcKeywords%`, `%XmpTitle%`...), see [EXIF, IPTC and XMP tags](metadata_tags_hr.md). The XMP sidecar file of a picture is read too.
-- **Sidecar files follow their picture**: renaming a picture also renames its `.xmp` and DxO `.dop` files (IMG.xmp, IMG.CR2.xmp, IMG.dop...), and the revert puts them back ([Options](options_hr.md) \> *Processing*, enabled by default).
+- **Sidecar files follow their picture**: renaming a picture also renames its `.xmp`, `.dop`, `.pp3`... files (IMG.xmp, IMG.CR2.xmp, IMG.dop...), and a JPEG takes its RAW file along (IMG.ORF, IMG.CR2...), and the revert puts them back ([Options](options_hr.md) \> *Processing*, enabled by default).
 - **Wildcards** in [String replacement](actions_hr.md#stringrepl) (`*` and `?`), and an option to give **the same number to files with the same name** and different extensions (JPG + RAW) in the Enumeration and EXIF actions.
+- **History of the renamings**: every action of the batch is a pass that can be undone, always from the last one of its session, and the *History* button (Shift+F12) lets you go back to a given pass. The history is kept when the program is closed, session by session (a session is one run of the program). The Undo button can open it instead (*Options* \> *Files & Folders*). See [the main window](main_hr.md).
 - **"Changed only" button** in the [Files list](files_hr.md): hides the files whose name does not change in the preview.
+- **Export of the preview**: "Export preview..." in the right-click menu of the [Files list](files_hr.md) writes the current and new names to a CSV file, or the new names only to a text file.
+- **Log as a CSV**: the [log](log_hr.md) is saved by default as a CSV file that Excel and LibreOffice open with the accents right.
+- **String replacement, where**: *Anywhere in the name*, *Only at the beginning* or *Only at the end* in the [String replacement](actions_hr.md#stringrepl) action.
+- **Light and dark theme**: a button of the toolbar switches at once; *Options* \> *Display* can also follow the system.
+- **Check for a new version**: optional (off by default), once a day, see [Options](options_hr.md#display).
 
 ## Corrections compared with 2.13
 

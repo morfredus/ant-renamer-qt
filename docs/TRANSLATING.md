@@ -67,7 +67,9 @@ The translators of the original Ant Renamer can send their file as it is: the fo
 
 ## 8. The help
 
-The help is separate from the `.lng` file: Markdown pages in `app/help/`, **English, French, Croatian and Tamil** for now (`<page>_en.md`, `_fr.md`, `_hr.md`, `_ta.md`, with the table of contents `toc_<code>.md`). For the other languages of the interface the help is displayed in English.
+The help is separate from the `.lng` file: Markdown pages in `app/help/`, **English, French, Croatian and Tamil** for now (`<page>_en.md`, `_fr.md`, `_hr.md`, `_ta.md`, with the table of contents `toc_<code>.md`). For the other languages of the interface the help is displayed in English. A page that a help language does not have is shown in English too (the program falls back to `<page>_en.md`).
+
+**Keeping the pages in step.** English and French are always complete and up to date. The other help languages are never left half old: when an English page changes, the same page of Croatian and Tamil receives the new English text until someone translates it (the pages written for Ant Renamer Qt are, today, plain copies of the English ones with the links `_en.md` changed to `_hr.md` / `_ta.md`). The same goes for the `.lng` files: a text that a language does not have is displayed in English.
 
 To add a language to the help: copy the English pages and `toc_en.md` to `<page>_<code>.md` and `toc_<code>.md`, translate them (keep the file names of the links and the `{#id}` after the headings: they are the targets of the links between pages), then add the language to `helpLanguageCode()` in `app/lngtranslator.cpp` (language name of the `.lng` file -> code). The help is long (18 pages): a translation of the interface alone is already very useful, the help can come later.
 

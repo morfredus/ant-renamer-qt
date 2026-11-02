@@ -27,7 +27,7 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 4. Ajoutez ou mettez à jour un test quand le moteur change (`tests/test_core.cpp`) : un nouveau cas qui échoue sans votre correctif est la meilleure preuve qu'il fonctionne.
 5. Lancez les tests (`ctest`) avant d'ouvrir la pull request ; le workflow GitHub compile sous Linux et Windows et les lance aussi.
 6. Ajoutez une ligne sous `## [Unreleased]` dans [CHANGELOG.md](CHANGELOG.md) (Added, Changed ou Fixed). Les numéros de version sont donnés par le mainteneur au moment d'une release : ne modifiez pas `VERSION`.
-7. Si le changement est visible par les utilisateurs, ajoutez une ligne à `docs/WHATS_NEW.md` et `docs/WHATS_NEW_fr.md` (sous la section « Upcoming » / « À venir » en tête ; elle prend le numéro de version à la publication) et mettez à jour les pages d'aide et les guides qui décrivent le comportement. Si vous n'écrivez pas en français, dites-le dans la pull request : le mainteneur s'occupera des textes français.
+7. Si le changement est visible par les utilisateurs, ajoutez une ligne à `docs/WHATS_NEW.md` et `docs/WHATS_NEW_fr.md` (sous la section « Upcoming » / « À venir » en tête ; elle prend le numéro de version à la publication) et mettez à jour les pages d'aide et les guides qui décrivent le comportement. Si vous n'écrivez pas en français, dites-le dans la pull request : le mainteneur s'occupera des textes français. Les pages d'aide anglaises et françaises sont toujours complètes ; quand vous modifiez une page d'aide anglaise, la même page des autres langues d'aide (`_hr.md`, `_ta.md`) reçoit le nouveau texte anglais en attendant d'être traduite (voir [docs/TRANSLATING_fr.md](docs/TRANSLATING_fr.md), section 8).
 
 ## Comment faire pour...
 
@@ -55,7 +55,7 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 
 - **Séparateurs de chemin.** Sous Windows `\` et `/` cohabitent dans le moteur (sous Linux seul `/` est un séparateur). Normalisez les chemins avant d'en comparer deux.
 - **Fils d'exécution.** Le moteur tourne dans un fil de travail (`RenWorker`). L'interface ne doit lire que les copies `Snapshot` qu'elle reçoit, jamais un `File` pendant un renommage. Les lignes des listes gardent l'`id()` de leur `File` ou `Action`, jamais un pointeur : utilisez `FileList::byId` / `ActionList::byId`, qui renvoient `nullptr` pour ce qui a été retiré.
-- **Un job renomme réellement à chaque opération**, pas une seule fois à la fin. Chaque opération est une passe du `Journal` : l'annulation remonte passe après passe (50 passes au plus, strictement dans l'ordre).
+- **Un job renomme réellement à chaque opération**, pas une seule fois à la fin. Chaque opération est une passe du `Journal` : l'annulation remonte passe après passe (50 passes au plus, strictement dans l'ordre à l'intérieur d'une session ; une session est un lancement du programme, et l'historique est conservé dans `antrenamer-qt-history.json` d'un lancement à l'autre).
 - **Traductions.** Le texte anglais du code doit être identique à une entrée de `English.lng` pour être traduit, sinon il reste en anglais. `ANTREN_MISSING=1` liste les textes sans traduction.
 - **Fins de ligne.** Tous les fichiers texte sont en LF, dans le dépôt et dans le dossier de travail (`.gitattributes`). Si votre éditeur ou un script écrit du CRLF, Git le reconvertit, mais corrigez l'outil si possible. Les encodages ne sont pas touchés : les pages d'aide et les fichiers `.lng` gardent les leurs, ne les réenregistrez pas dans un autre encodage.
 

@@ -54,8 +54,8 @@ private:
 class RenWorker : public QThread {
     Q_OBJECT
 public:
-    RenWorker(ren::ActionList* a, ren::FileList* f, ren::Op op, int undoCount = 1)
-        : actions_(a), files_(f), op_(op), undoCount_(undoCount) {}
+    RenWorker(ren::ActionList* a, ren::FileList* f, ren::Op op, int undoCount = 1, int undoSession = -1)
+        : actions_(a), files_(f), op_(op), undoCount_(undoCount), undoSession_(undoSession) {}
     ren::Op op() const { return op_; }
 signals:
     void progress(const Snapshot& s);
@@ -68,6 +68,7 @@ private:
     ren::FileList* files_;
     ren::Op op_;
     int undoCount_;
+    int undoSession_;  // Undo: the session whose passes are undone (-1: that of the newest pass)
 };
 
 class MainWindow : public QMainWindow {
@@ -126,6 +127,7 @@ private:
     void exportPreview();
     void addFolderContents(const QString& dir, const AddChoice& c);
     void addFile(const QString& path);
+    QTreeWidgetItem* addFileRow(const ren::File& f);
     void filesDropped(const QStringList& paths);
     void importDropped(const QStringList& paths);
     void updateItem(QTreeWidgetItem* item);
@@ -171,9 +173,10 @@ private:
 
     // running
     void updateSamplePreview();
-    void run(ren::Op op, int undoCount = 1);
+    void run(ren::Op op, int undoCount = 1, int undoSession = -1);
     void showHistory();
     void updateUndoState();
+    void saveHistory();
     void onProgress(const Snapshot& s);
     void onFinished();
     void setBusy(bool busy);  // disables what would modify the lists, the batch or the options while a run is in progress
@@ -183,12 +186,17 @@ private:
     void rebuildLog();
     void logAction(int which);
 
-    ren::Journal journal_;  // the passes of this session, for Undo and the history window
+    ren::Journal journal_;  // the passes (kept between runs, see historyFile()), for Undo and the history window
     ren::FileList files_;
     ren::ActionList batch_;
     RenWorker* worker_ = nullptr;
     bool clearBatchAfter_ = false;
     bool exitAfterRun_ = false;
+    bool silent_ = false;  // -q: no window, no dialog; the result is the exit code (0 done, 1 some file failed, 2 nothing done)
+    int runErrors_ = 0;    // files that failed during the run in progress
+    int runRenamed_ = 0;   // files renamed so far in the run in progress
+    bool quitting_ = false;  // quitSilently() was called: nothing may start any more (the exit code is already decided)
+    void quitSilently(int code);
     QHash<quint64, QTreeWidgetItem*> rows_;
 
     struct LogEntry {

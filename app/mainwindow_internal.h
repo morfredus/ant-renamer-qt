@@ -36,6 +36,7 @@
 #include <QMimeData>
 #include <QProgressBar>
 #include <QPushButton>
+#include <QSaveFile>
 #include <QScreen>
 #include <QSettings>
 #include <QSplitter>

@@ -48,8 +48,8 @@ jobs de l'autre.
 - **La disposition de l'interface** : les trois pages (Fichiers / Opérations / Journal), les barres d'outils et
   leurs icônes, la liste des actions avec sa page de réglages, l'aperçu en direct du fichier sélectionné, le
   contenu du job repliable, le glisser-déposer avec sa fenêtre d'options, la fenêtre Options et ses onglets, le
-  filtre du journal, la liste des jobs récents, la barre d'état avec progression, les mêmes raccourcis clavier. Cette disposition classique reste celle par défaut ; la
-  disposition moderne est une option (voir « Ce qui a été ajouté »).
+  filtre du journal, la liste des jobs récents, la barre d'état avec progression, les mêmes raccourcis clavier. Cette disposition classique est conservée
+  pour les réglages existants (la disposition moderne est celle d'une nouvelle installation depuis la 3.1, voir « Ce qui a été ajouté »).
 - **Les fichiers de langue d'origine** : les 28 fichiers `.lng` (l'anglais et 27 traductions) sont utilisés tels quels (chacun avec son encodage), et la
   langue se change dans les Options. L'interface française est construite à partir du `French.lng` d'origine, plus quelques textes ajoutés par le portage.
 - **L'aide d'origine** : les pages d'aide (anglais, français, croate, tamoul) et l'historique des versions sont
@@ -136,9 +136,19 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   fichiers et d'opérations, un bouton Go bien visible, une barre par page, la colonne du nouveau nom visible par défaut,
   thème clair ou sombre du système. Les pages peuvent être en onglets ou en **écran unique** (en bandes ou en colonnes,
   séparateurs déplaçables et mémorisés) ; une opération du job se modifie par double-clic. La disposition classique
-  reste celle par défaut.
-- **Historique des renommages** pour la session : une passe par action, annulation linéaire, fenêtre Historique, et le
+  est, depuis la 3.1, celle d'une nouvelle installation, en écran unique en bandes ; qui a déjà des réglages garde sa disposition, et la classique reste disponible dans les options.
+- **Historique des renommages**, conservé d'un lancement à l'autre : une passe par action, annulation linéaire, fenêtre Historique, et le
   bouton Annuler peut au choix défaire la dernière passe ou ouvrir l'historique (Options > Fichiers & Dossiers).
+- **Remplacement de chaîne, en plus** : jokers (`*` n'importe quel texte, `?` un caractère) et choix de l'endroit où
+  remplacer : n'importe où dans le nom, seulement au début ou seulement à la fin.
+- **Fichiers associés et fichiers RAW** : ils suivent une image renommée (`.xmp`, `.dop`, `.pp3`, `.cos`, `.acr`, `.on1`,
+  `.thm`, `.aae` ; renommer un JPEG renomme aussi son fichier RAW), et l'annulation les remet.
+- **Export de l'aperçu** (CSV ou texte) depuis le menu contextuel de la liste des fichiers, et un journal enregistré en CSV
+  qu'Excel et LibreOffice ouvrent avec les accents corrects.
+- **Vérification facultative d'une nouvelle version** (désactivée par défaut, une fois par jour, versions finales seulement
+  sauf demande contraire).
+- **Ligne de commande silencieuse** `-q` : ni fenêtre ni boîte de dialogue, pour les scripts ; le code de sortie dit
+  comment ça s'est passé.
 - **Système de build** : presets CMake pour Windows (MinGW), Linux x86_64, Linux ARM64 et compilation croisée
   ARM64 ; les DLL Qt et MinGW sont déployées automatiquement à côté de l'exécutable sous Windows.
 - **Livrables** : `scripts/windows/package-win.ps1` produit un zip portable et, avec Inno Setup 6, un installeur

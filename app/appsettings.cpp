@@ -35,6 +35,13 @@ QSettings appSettings() {
     return QSettings(path, QSettings::IniFormat);
 }
 
+// The undo history lives next to the settings file, so it follows the mode (program folder or user profile).
+static const QString historyName = u"antrenamer-qt-history.json"_s;
+
+QString historyFile() {
+    return QFileInfo(appSettings().fileName()).absolutePath() + u'/' + historyName;
+}
+
 bool setPortable(bool on) {
     if (on == isPortable()) {
         return true;
@@ -54,6 +61,12 @@ bool setPortable(bool on) {
             return false;
         }
     }
+    const QString histFrom = QFileInfo(from).absolutePath() + u'/' + historyName;
+    const QString histTo = QFileInfo(to).absolutePath() + u'/' + historyName;
+    if (QFileInfo::exists(histFrom)) {  // the history follows the settings; losing it is not worth failing the switch
+        QFile::remove(histTo);
+        QFile::rename(histFrom, histTo);
+    }
     // The old file is what decides the mode while it exists: if it cannot be removed the switch did not happen.
     return QFile::remove(from) || !QFileInfo::exists(from);
 }
@@ -65,6 +78,16 @@ bool setPortable(bool on) {
 
 void AppOptions::load() {
     QSettings s = appSettings();
+    // First start (no settings file, or an empty one made by hand for the portable mode): the modern layout, single screen
+    // in bands. Written now, so that it stays the choice once other settings exist. Anyone who already has settings keeps
+    // what they have, the classic layout when they never chose (the member defaults).
+    if (s.allKeys().isEmpty()) {
+        newUi = true;
+        pageLayout = 1;
+        s.setValue(QStringLiteral("options/newUi"), newUi);
+        s.setValue(QStringLiteral("options/pageLayout"), pageLayout);
+        s.sync();
+    }
 #define LOAD(k) k = s.value(QStringLiteral("options/" #k), k).value<decltype(k)>();
     KEYS(LOAD)
 #undef LOAD

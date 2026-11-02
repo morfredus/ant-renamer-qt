@@ -14,7 +14,6 @@ int compareVersions(const QString& a, const QString& b);
 struct Release {
     QString version;  // as tagged, without the leading "v"
     QString url;      // page of the release
-    bool prerelease = false;
 };
 
 // `json` is the answer of GET /repos/<owner>/<repo>/releases. Returns the newest published release that is newer than

@@ -1,5 +1,6 @@
 #pragma once
 // Port of Files.pas: one entry of the list to rename, plus the list itself.
+#include <QByteArray>
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
@@ -30,6 +31,9 @@ struct Options {
     bool dstRelativeToFile = true;  // file times use the DST rule of the date itself (else today's offset)
     bool renameSidecar = true;      // a renamed picture takes its sidecars (IMG.xmp, IMG.CR2.xmp, IMG.dop...) along
 };
+// Text of the core in the language of the program (context "Ren"), for the messages of the log.
+QString tr(const char* s);
+
 // Identifier that is never reused during a run: what a view stores to find a File or an Action again. Unlike a pointer,
 // an id whose object was removed finds nothing (FileList::byId, ActionList::byId return nullptr).
 quint64 nextId();
@@ -42,6 +46,9 @@ std::atomic<bool>& stopFlag();
 struct Move {
     QString from, to;
     std::vector<std::pair<QString, QString>> sidecars;  // (from, to) of each sidecar
+    // Size and modification time (ms) of the file at `to` right after the move; the undo refuses a file that differs (a
+    // renaming keeps both, so a difference means another file or an edit). size -1: not checked (folders).
+    qint64 size = -1, mtime = 0;
 };
 
 // One run of the batch ("Go"): everything it moved, in order.
@@ -50,9 +57,11 @@ struct Pass {
     QDateTime when;
     QString summary;  // the actions of the batch
     std::vector<Move> moves;
+    int session = 0;  // the run of the program that made it: the passes of a session are undone one after the other, sessions are independent
 };
 
-// What this session renamed, pass by pass. Passes can only be undone from the last one backwards.
+// What was renamed, pass by pass. Within a session the passes can only be undone from the last one backwards; the passes of
+// another session are not affected (a file that has been renamed since is simply not found, and the undo stops).
 class Journal {
 public:
     void beginPass(const QString& summary);
@@ -62,13 +71,13 @@ public:
         passes_.clear();
         open_ = false;
     }
-    void setMaxPasses(int n) {
-        max_ = n < 1 ? 1 : n;
-        trim();
-    }
     bool recording() const { return open_; }
     size_t size() const { return passes_.size(); }
     const std::deque<Pass>& passes() const { return passes_; }  // oldest first
+
+    // The passes kept between two runs of the program (JSON). fromJson replaces the passes; false if the data is not a journal.
+    QByteArray toJson() const;
+    bool fromJson(const QByteArray& data);
 
 private:
     friend class FileList;
@@ -81,7 +90,8 @@ private:
     Pass cur_;
     bool open_ = false;
     int next_ = 1;
-    int max_ = 50;
+    int session_ = 1;  // session of the passes being recorded: the one after the last stored one
+    static constexpr int max_ = 50;  // passes kept
 };
 
 class File {
@@ -171,9 +181,10 @@ public:
     // The journal records every move made by the files of this list (optional, owned by the caller).
     void setJournal(Journal* j) { journal_ = j; }
     Journal* journal() const { return journal_; }
-    // Undoes the last `count` passes, newest first, each one from its last move to its first. Stops at the first pass
-    // that cannot be completely undone (the moves that failed stay in the journal). Returns the passes fully undone.
-    int undoPasses(int count, const std::function<void(File&)>& progress = {});
+    // Undoes the last `count` passes of `session` (-1: the session of the newest pass), newest first, each one from its last
+    // move to its first. Stops at the first pass that cannot be completely undone (the moves that failed stay in the
+    // journal). Returns the passes fully undone.
+    int undoPasses(int count, const std::function<void(File&)>& progress = {}, int session = -1);
 
 private:
     void wire(File& f);

@@ -25,10 +25,6 @@ namespace ren {
 
 namespace {
 
-QString tr(const char* s) {
-    return QCoreApplication::translate("Ren", s);
-}
-
 // --- Pascal string semantics (1-based, forgiving about out-of-range) -------------------
 QString pasCopy(const QString& s, int idx, int count = INT_MAX) {
     if (idx < 1) {
@@ -890,7 +886,7 @@ bool ActionRandom::getTag(const QString& tag, QString& v) {
     }
     switch (method) {
         case 0:
-            v = padNum(int(QRandomGenerator::global()->bounded(100000000)), 8);
+            v = padNum(QRandomGenerator::global()->bounded(100000000), 8);
             break;
         case 1:
             v = QString::number(tickCount());

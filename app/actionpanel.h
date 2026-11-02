@@ -25,6 +25,9 @@ class HistoryCombo : public QComboBox {
 public:
     HistoryCombo();
     void remember();
+
+protected:
+    bool eventFilter(QObject* o, QEvent* e) override;
 };
 
 class ActionPanel : public QWidget {

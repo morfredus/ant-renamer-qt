@@ -1,6 +1,6 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.1.0--beta.3-blue)
+![version](https://img.shields.io/badge/version-3.1.0--beta.4-blue)
 
 Portage C++/Qt 6 d'[Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (Delphi 7 à l'origine,
 GPL v2 ou ultérieure). Renommage de fichiers par lots : remplacer, insérer, déplacer, supprimer, énumérer, changer
@@ -89,12 +89,12 @@ Traduire l'interface (les fichiers `.lng`) : [docs/TRANSLATING_fr.md](docs/TRANS
 ## Réglages
 
 Mode portable : créer un fichier `antrenamer-qt.ini` vide à côté du programme (ou cocher la case dans
-Options > Affichage). Sinon les réglages sont dans `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) ou `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux).
+Options > Affichage). Sinon les réglages sont dans `%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini` (Windows) ou `~/.local/share/AntRenamerQt/Ant Renamer Qt/antrenamer-qt.ini` (Linux). L'historique d'annulation (50 dernières passes, conservé d'un lancement à l'autre) est enregistré dans `antrenamer-qt-history.json`, dans le même dossier que le fichier de réglages.
 
 Menu contextuel de l'Explorateur (Windows) : Options > Fichiers & Dossiers ajoute « Ajouter à Ant Renamer Qt » aux fichiers et
 dossiers (Windows 11 : « Afficher plus d'options »). Tout ce qui est sélectionné arrive dans la fenêtre déjà ouverte.
 
-Ligne de commande : `-b fichier.arb` charge un job, `-g` démarre, `-x` quitte à la fin, `-a[fFr]`
+Ligne de commande : `-b fichier.arb` charge un job, `-g` démarre, `-x` quitte à la fin, `-q` silencieux (sans fenêtre, pour les scripts), `-a[fFr]`
 choisit ce qu'ajoutent les chemins suivants (f fichiers, F dossiers, r récursif ; jokers acceptés).
 
 ## Confidentialité

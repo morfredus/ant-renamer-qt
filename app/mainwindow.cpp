@@ -48,9 +48,12 @@ void ItemTree::dropEvent(QDropEvent* e) {
 void RenWorker::run() {
     try {
         if (op_ == Op::Undo) {
-            files_->undoPasses(undoCount_, [this](File& f) {
-                emit progress({f.id(), f.description(), int(f.status()), 0, 0, QString(), f.fileFolder(), f.fileName(), f.preview});
-            });
+            files_->undoPasses(
+                undoCount_,
+                [this](File& f) {
+                    emit progress({f.id(), f.description(), int(f.status()), 0, 0, QString(), f.fileFolder(), f.fileName(), f.preview});
+                },
+                undoSession_);
             return;
         }
         actions_->perform(*files_, op_, [this](File& f, int batchPos, int idx) {
@@ -91,9 +94,12 @@ MainWindow::MainWindow() {
         }
     });
     buildUi();
+    if (QFile f(historyFile()); f.open(QIODevice::ReadOnly)) {  // the passes of the previous runs
+        journal_.fromJson(f.readAll());
+    }
     aStop_->setEnabled(false);
-    aUndo_->setEnabled(false);  // nothing to undo before the first pass
-    aHistory_->setEnabled(false);
+    aUndo_->setEnabled(journal_.size() > 0);
+    aHistory_->setEnabled(journal_.size() > 0);
 }
 
 // Everything the user sees, from the options as they are now. The files, the batch, the journal and the log belong to the
@@ -170,6 +176,8 @@ void MainWindow::rebuildUi() {
     saveSettings();
     endEdit();
     const QByteArray geometry = saveGeometry();  // size and maximized state: the window is shown again at the end
+    const QRect normal = normalGeometry();       // restoreGeometry() can be refused (screen, scaling): this one is applied as is
+    const bool maximized = isMaximized();
     const bool stayOnTop = aOnTop_->isChecked();
     setUpdatesEnabled(false);
     // the widgets first (their signals reach the actions), then the actions and the menus, which are children of the window
@@ -197,12 +205,7 @@ void MainWindow::rebuildUi() {
 
     // put the work back in the new views
     for (size_t i = 0; i < files_.size(); ++i) {
-        File& f = files_.at(i);
-        auto* item = new FileItem;
-        item->setData(0, IdRole, f.id());
-        item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled);
-        fileView_->addTopLevelItem(item);
-        rows_.insert(f.id(), item);
+        addFileRow(files_.at(i));
     }
     for (size_t i = 0; i < batch_.size(); ++i) {
         addBatchItem(&batch_.at(i));
@@ -213,6 +216,9 @@ void MainWindow::rebuildUi() {
     updateSamplePreview();
     setUpdatesEnabled(true);
     restoreGeometry(geometry);
+    if (!maximized) {
+        setGeometry(normal);  // buildUi() gave the window the default size of its layout, the user's one comes back
+    }
     show();
 }
 
@@ -221,7 +227,7 @@ void MainWindow::createActions() {
     aGo_ = makeAction(tr_("Go"), tr_("Start the renaming process"), TbGo, K(Qt::Key_F9));
     aStop_ = makeAction(tr_("Stop"), tr_("Stop the renaming process"), TbStop, K(Qt::Key_Escape));
     aUndo_ = makeAction(tr_("Undo"), tr_("Undo last renaming"), TbUndo, K(Qt::Key_F12));
-    aHistory_ = makeAction(tr_("History"), tr_("Renaming passes of this session: go back to a given pass"), TbHistory,
+    aHistory_ = makeAction(tr_("History"), tr_("Renaming passes: go back to a given pass"), TbHistory,
                            K(Qt::SHIFT | Qt::Key_F12));
     aOnTop_ = makeAction(tr_("On top"), tr_("Keep window always on top"), TbAlwaysOnTop, K(Qt::Key_F11));
     aOnTop_->setCheckable(true);
@@ -380,10 +386,7 @@ void MainWindow::createActions() {
             return;
         }
         const AddChoice c = dlg.choice();
-        appOptions().addFiles = c.files;
-        appOptions().addFolders = c.folders;
-        appOptions().recursive = c.recursive;
-        appOptions().addHidden = c.hidden;
+        rememberAddChoice(c);
         appOptions().save();
         if (!dlg.folders().isEmpty()) {
             s.setValue(u"folders/addFolder"_s, dlg.folders().first());
@@ -810,7 +813,7 @@ void MainWindow::loadSettings() {
 void MainWindow::startUpdateCheck() {
     const AppOptions& o = appOptions();
     const QString today = QDate::currentDate().toString(Qt::ISODate);
-    if (runsInFlatpak() || !o.checkUpdates || o.lastUpdateCheck == today || exitAfterRun_ || worker_ ||
+    if (runsInFlatpak() || !o.checkUpdates || o.lastUpdateCheck == today || exitAfterRun_ || silent_ || worker_ ||
         qEnvironmentVariableIsSet("ANTREN_SHOT")) {
         return;
     }

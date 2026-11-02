@@ -79,15 +79,20 @@ void MainWindow::updateAllItems() {
     fileView_->setUpdatesEnabled(true);
 }
 
-void MainWindow::addFile(const QString& path) {
-    File& f = files_.add(path);
-    f.hidden = isHiddenOrSystem(QFileInfo(path));
+// The row of the files list that shows `f`.
+QTreeWidgetItem* MainWindow::addFileRow(const File& f) {
     auto* item = new FileItem;
     item->setData(0, IdRole, f.id());
     item->setFlags(item->flags() & ~Qt::ItemIsDropEnabled);
     fileView_->addTopLevelItem(item);
     rows_.insert(f.id(), item);
-    updateItem(item);
+    return item;
+}
+
+void MainWindow::addFile(const QString& path) {
+    File& f = files_.add(path);
+    f.hidden = isHiddenOrSystem(QFileInfo(path));
+    updateItem(addFileRow(f));
 }
 
 // The files shown in the list (the "Changed only" and hidden-files filters apply), as a CSV or a list of new names.
@@ -210,10 +215,7 @@ void MainWindow::importDropped(const QStringList& paths) {
             return;
         }
         c = dlg.choice();
-        appOptions().addFiles = c.files;
-        appOptions().addFolders = c.folders;
-        appOptions().recursive = c.recursive;
-        appOptions().addHidden = c.hidden;
+        rememberAddChoice(c);
         appOptions().dragNoAsk = dlg.dontAskAgain();
         appOptions().save();
     }

@@ -1,6 +1,6 @@
 # Log page
 
-This page is filled with the results of the renaming process.
+This page is filled with the results of the renaming process. When the renaming is over, the last line of the log (and the status bar) says how many files were renamed and how many failed.
 
 ![Log page](img/log_page_en.png)
 
@@ -24,6 +24,8 @@ When the system refuses the renaming, an error is displayed in red. The errors c
 The messages of the program itself (start and end of a process, the list of the actions of the batch, "Operation stopped by user") are written in grey. They are always shown, whatever the filter.
 
 If you click on "Undo", the lines of the log tell which files got their old name back.
+
+When you click with the right mouse button on the log, a menu offers "Clear" and "Copy".
 
 ## Automatically save log to file {#save}
 

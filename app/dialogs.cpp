@@ -8,6 +8,7 @@
 
 #include <QApplication>
 #include <QCheckBox>
+#include <QClipboard>
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QDir>
@@ -65,7 +66,18 @@ AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent) 
 
     path_ = new QLineEdit;
     path_->setPlaceholderText(tr("Or type the path of a folder"));
-    v->addWidget(path_);
+    auto* pathRow = new QHBoxLayout;
+    pathRow->addWidget(path_, 1);
+    auto* paste = new QPushButton(tr("Paste from clipboard"));
+    connect(paste, &QPushButton::clicked, this, [this] {  // Explorer's "Copy as path" puts the path between quotes
+        QString t = QApplication::clipboard()->text().trimmed();
+        if (t.size() > 1 && t.startsWith(u'"') && t.endsWith(u'"')) {
+            t = t.mid(1, t.size() - 2);
+        }
+        path_->setText(t);
+    });
+    pathRow->addWidget(paste);
+    v->addLayout(pathRow);
 
     for (auto* c : {boxes_.files, boxes_.folders, boxes_.recursive, boxes_.hidden}) {
         v->addWidget(c);
@@ -105,6 +117,14 @@ AddChoiceBoxes::AddChoiceBoxes()
     folders->setChecked(o.addFolders);
     recursive->setChecked(o.recursive);
     hidden->setChecked(o.addHidden);
+}
+
+void rememberAddChoice(const AddChoice& c) {
+    AppOptions& o = appOptions();
+    o.addFiles = c.files;
+    o.addFolders = c.folders;
+    o.recursive = c.recursive;
+    o.addHidden = c.hidden;
 }
 
 AddChoice AddChoiceBoxes::choice() const {

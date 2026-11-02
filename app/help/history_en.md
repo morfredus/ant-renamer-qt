@@ -2,6 +2,15 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.1.0-beta.4 (02/11/2026)
+  - The undo history is kept when the program is closed, session by session, with a check of the size and date of each file before undoing, and a "Clear the history" button.
+  - Silent command line: -q runs a batch with no window and no dialog; the exit code says how it went.
+  - The modern layout (single screen, in bands) is the default of a new installation; existing settings keep their layout.
+  - End of a renaming: the log and the status bar say how many files were renamed and how many failed.
+  - String replacement: "Only at the beginning" is the default choice, "Anywhere in the name" comes last.
+  - The first click in a field of the actions selects the whole text; Add folders has a "Paste from clipboard" button.
+  - The window keeps its size after a language change (second try).
+  - Help pages missing in a language are shown in English; eight messages translated in French.
 - 3.1.0-beta.3 (02/11/2026)
   - String replacement: new choice "Anywhere in the name / Only at the beginning / Only at the end" (it works with wildcards too).
   - The window keeps its size after a language change.

@@ -1,6 +1,6 @@
 # Ant Renamer Qt : guide des fonctions
 
-*Toutes les fonctions d'Ant Renamer Qt 3.1.0-beta.3, avec le mode d'emploi.*
+*Toutes les fonctions d'Ant Renamer Qt 3.1.0-beta.4, avec le mode d'emploi.*
 English version : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détails complets, page par page, avec captures d'écran : l'aide intégrée (F1). Différences entre Windows et Linux : §13.
 
 ## 1. Principe général
@@ -34,7 +34,7 @@ Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau 
 
 ### Ajouter des fichiers
 - **Fichiers** (F2) : sélecteur de fichiers standard (Ctrl et Maj sélectionnent plusieurs fichiers). L'ordre que renvoie le système n'est pas toujours l'ordre affiché : triez la liste ensuite si l'ordre compte.
-- **Dossiers** (F3) : affiche les lecteurs et dossiers sous forme d'arbre ; en choisir un ou plusieurs, puis cocher ce qu'il faut ajouter : les fichiers qu'ils contiennent, les dossiers eux-mêmes, les sous-dossiers (tous niveaux). Les trois choix sont mémorisés.
+- **Dossiers** (F3) : affiche les lecteurs et dossiers sous forme d'arbre ; en choisir un ou plusieurs, puis cocher ce qu'il faut ajouter : les fichiers qu'ils contiennent, les dossiers eux-mêmes, les sous-dossiers (tous niveaux). Un champ sous l'arbre accepte le chemin d'un dossier saisi ou collé (ajouté avec la sélection, s'il existe). Les choix sont mémorisés.
 - **Glisser-déposer** depuis le gestionnaire de fichiers (Explorateur, Nautilus, Dolphin, Total Commander...) : une fenêtre propose les mêmes options. « Ne plus afficher cette fenêtre » les mémorise (modifiable dans Options > Fichiers & Dossiers) ; maintenir Ctrl ou Maj en déposant réaffiche la fenêtre une fois.
 - **Menu de l'Explorateur** « Ajouter à Ant Renamer Qt » (Windows ; à activer dans Options > Fichiers & Dossiers). Plusieurs éléments sélectionnés arrivent ensemble dans la fenêtre déjà ouverte. Windows 11 : *Afficher plus d'options* (ou Maj+F10).
 - **Fichiers cachés et système** (`desktop.ini`, `.git`...) d'un dossier ajouté : ignorés, sauf si *Inclure les fichiers cachés et système à l'ajout d'un dossier* est coché (Options > Fichiers & Dossiers). Un fichier choisi ou déposé seul est toujours ajouté. Avant un renommage, un avertissement (Oui/Non) s'affiche si la liste contient des fichiers cachés ou système.
@@ -53,7 +53,8 @@ Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau 
 
 - **Colonnes** : clic droit sur l'en-tête pour afficher Dossier, Nom de fichier, Chemin complet, Ext., Aperçu, Taille, Date de création, Date de modification. Elles se redimensionnent et se déplacent ; une colonne au moins reste visible.
 - **Tri** : clic sur un en-tête (à nouveau pour inverser). Par défaut le tri est naturel : « fichier 2 » avant « fichier 10 » (Options > Fichiers & Dossiers redonne l'ordre alphabétique). **Trier réordonne vraiment la liste, donc fixe l'ordre de traitement**, et donc l'ordre de numérotation d'une énumération. Clic droit > *Non trié* retire l'indicateur de tri.
-- Clic droit dans la liste : retirer la sélection / tout, tout sélectionner, ne rien sélectionner, inverser la sélection, actualiser l'aperçu.
+- Clic droit dans la liste : retirer la sélection / tout, tout sélectionner, ne rien sélectionner, inverser la sélection, actualiser l'aperçu, **Exporter l'aperçu...**.
+- **Exporter l'aperçu...** écrit les fichiers affichés (les filtres « Seulement modifiés » et « Fichiers cachés » s'appliquent) dans un fichier CSV (colonnes Dossier, Nom, Nouveau nom ; point-virgule, chaque champ entre guillemets, UTF-8 avec BOM pour qu'Excel et LibreOffice lisent les accents) ou dans un fichier texte avec les seuls nouveaux noms, un par ligne. Un fichier sans aperçu garde son nom actuel : actualisez d'abord l'aperçu. Utile pour relire un gros lot ou en garder une trace.
 - Double-clic sur un fichier : l'ouvre avec son programme associé, si « Exécuter le fichier lors d'un double clic » est coché (Options > Fichiers & Dossiers).
 - Des dossiers peuvent aussi être dans la liste : ils sont renommés comme les fichiers (dans l'ordre de la liste) ; les fichiers de la liste qui se trouvent dans un dossier renommé le suivent.
 
@@ -76,8 +77,8 @@ Choisir l'opération dans la liste, régler ses paramètres (la zone *Notes* sou
 | # | Opération | Usage | Mode d'emploi |
 |---|---|---|---|
 | 1 | **Changer l'extension** | Remplacer ou ajouter une extension | Saisir la nouvelle extension (sans le point). Champ vide = supprime l'extension. Option : l'ajouter après l'existante au lieu de la remplacer. |
-| 2 | **Remplacement de chaîne** | Remplacer un texte par un autre | Champs « Rechercher » / « Remplacer par ». Vide = supprime le texte. Options : remplacer toutes les occurrences (cochée par défaut, sinon seulement la première), sensible à la casse (cochée par défaut), inclure l'extension dans la recherche, appliquer à l'extension plutôt qu'au nom, **jokers** (voir plus bas). |
-| 3 | **Remplacement de chaînes multiples** | Plusieurs remplacements d'un coup (accents, etc.) | Grille à 2 colonnes (cherché / remplacé), appliquée ligne après ligne. Ctrl++ ajoute une ligne, Ctrl+- supprime la ligne courante. Options : inclure l'extension, sensible à la casse. Une grille peut être nommée et sauvée (liste « Sets prédéfinis » + *Sauver* ; *Supprimer* enlève un set, *Effacer* vide la grille). Copier/Exporter et Coller/Importer échangent la grille avec Excel ou un éditeur de texte (tabulation entre les colonnes). Un set « Remove west-european accents » est fourni. |
+| 2 | **Remplacement de chaîne** | Remplacer un texte par un autre | Champs « Rechercher » / « Remplacer par ». Vide = supprime le texte. Options : remplacer toutes les occurrences (cochée par défaut, sinon seulement la première), *Respecter la casse (A ≠ a)* (cochée par défaut), inclure l'extension dans la recherche, appliquer à l'extension plutôt qu'au nom, **jokers** (voir plus bas), et **où remplacer** : seulement au début (par défaut), seulement à la fin ou n'importe où dans le nom (cela fonctionne aussi avec les jokers). |
+| 3 | **Remplacement de chaînes multiples** | Plusieurs remplacements d'un coup (accents, etc.) | Grille à 2 colonnes (cherché / remplacé), appliquée ligne après ligne. Ctrl++ ajoute une ligne, Ctrl+- supprime la ligne courante. Options : inclure l'extension, *Respecter la casse (A ≠ a)*. Une grille peut être nommée et sauvée (liste « Sets prédéfinis » + *Sauver* ; *Supprimer* enlève un set, *Effacer* vide la grille). Copier/Exporter et Coller/Importer échangent la grille avec Excel ou un éditeur de texte (tabulation entre les colonnes). Un set « Remove west-european accents » est fourni. |
 | 4 | **Insertion de chaîne** | Insérer un texte à une position | Texte, position (0 = avant le premier caractère ou après le dernier), depuis le début ou depuis la fin. Option : appliquer à l'extension au lieu du nom. Tags `%name%`, `%ext%`, `%folderN%`, `%%`. |
 | 5 | **Déplacement d'une chaîne** | Déplacer N caractères | Nombre de caractères, position « de » et position « vers » (la seconde compte après le retrait des caractères), chacune depuis le début ou la fin. Ex. `abcdef`, 1 caractère de 2 vers 4 → `abdecf`. |
 | 6 | **Suppression de caractères** | Effacer N caractères | Trois modes : à partir d'une position (depuis le début ou la fin), après une chaîne donnée, ou avant une chaîne donnée. Rien n'est supprimé si la chaîne n'est pas trouvée. Option : appliquer à l'extension. |
@@ -102,7 +103,7 @@ Choisir l'opération dans la liste, régler ses paramètres (la zone *Notes* sou
 ### Gérer le job
 Le panneau **Contenu du job** liste les opérations planifiées (case à cocher pour l'afficher/masquer).
 - **Ajouter au job** (Ctrl+F2), **Retirer la sélection** (Maj+F6), **Vider** (Maj+F7).
-- **Ouvrir** (Ctrl+O) / **Sauver** (Ctrl+S) : fichiers `.arb` (XML), compatibles avec Ant Renamer 2 dans les deux sens.
+- **Ouvrir** (Ctrl+O) / **Sauver** (Ctrl+S) : fichiers `.arb` (XML), compatibles avec Ant Renamer 2 dans les deux sens. La flèche à côté de *Ouvrir* liste les 9 derniers fichiers de job utilisés.
 - Réordonner par glisser-déposer ou avec les 4 boutons de déplacement.
 - Dans la disposition classique, une opération ajoutée ne peut pas être modifiée (la retirer et la refaire). Dans la disposition moderne : double-clic pour la recharger dans l'éditeur, puis *Valider la modification* (ou le bouton *Modifier*).
 
@@ -111,7 +112,7 @@ Le panneau **Contenu du job** liste les opérations planifiées (case à cocher 
 - **Démarrer** (F9) : renomme dans un fil séparé ; la fenêtre reste utilisable, mais ce qui modifierait la liste, le job ou les options est désactivé jusqu'à la fin.
 - **Arrêter** (Échap) : interrompt le traitement ; les fichiers déjà traités restent renommés.
 - **Annuler** (F12) : restaure les anciens noms de la **dernière passe**, fichiers associés compris. Chaque opération du job lancé par Démarrer est une passe (un job de trois opérations laisse trois passes) : vous pouvez donc annuler encore et encore, toujours à partir de la dernière.
-- **Historique** (Maj+F12, horloge) : liste les passes de la session, la plus récente en premier (heure, nombre de déplacements, opération). *Annuler jusqu'à cette passe* annule la passe choisie et toutes celles faites après ; une passe au milieu ne peut pas être annulée seule. Si un fichier a été déplacé en dehors du programme, l'annulation s'arrête là et la passe reste dans la liste. Les 50 dernières passes sont gardées, et perdues à la fermeture du programme. Dans *Options > Fichiers & Dossiers*, le bouton Annuler peut ouvrir l'historique au lieu d'annuler la dernière passe.
+- **Historique** (Maj+F12, horloge) : liste les passes, la plus récente en premier, regroupées par **session** (une session = un lancement du programme : le titre donne sa date et son heure), avec la date et l'heure, le nombre de déplacements et l'opération de chaque passe. *Annuler jusqu'à cette passe* annule la passe choisie et toutes celles faites après **dans la même session** ; une passe au milieu d'une session ne peut pas être annulée seule. Les autres sessions ne sont pas touchées : vous pouvez annuler la session d'hier en gardant celle d'aujourd'hui. Si la session d'aujourd'hui a renommé encore les mêmes fichiers, l'annulation de l'ancienne s'arrête (fichier introuvable ou modifié). Si un fichier a été déplacé, supprimé ou modifié en dehors du programme (taille ou date différentes de celles de juste après le renommage), l'annulation s'arrête là et la passe reste dans la liste ; *Effacer l'historique* oublie toutes les passes si l'une d'elles bloque les autres. Les 50 dernières passes sont gardées, **même après la fermeture du programme** : vous pouvez annuler le lendemain. L'historique est enregistré à côté du fichier de réglages (le dossier du programme en mode portable, le profil de l'utilisateur sinon : `antrenamer-qt-history.json`). Dans *Options > Fichiers & Dossiers*, le bouton Annuler peut ouvrir l'historique au lieu d'annuler la dernière passe.
 - **Avant-plan** (F11) : garde la fenêtre au-dessus des autres.
 - **Clair / sombre** (cercle à moitié plein) : change aussitôt de thème ; *Options > Affichage > Thème* propose aussi « Suivre le système » (par défaut).
 - **Copier plutôt que renommer** (Options > Traitement) : les originaux restent, les copies portent les nouveaux noms.
@@ -147,6 +148,7 @@ Bon à savoir : un tag absent donne un texte vide ; les valeurs multiples sont j
 | `-b fichier.arb` | charge un job |
 | `-g` | démarre le traitement une fois fichiers et job chargés |
 | `-x` | quitte à la fin du traitement |
+| `-q` | mode silencieux pour les scripts : ni fenêtre ni boîte de dialogue, comme `-g -x`. Code de sortie : 0 tout est fait, 1 au moins un fichier a échoué, 2 rien n'a été fait (aucun fichier, aucun batch, fichier batch illisible, fichiers cachés dans la liste) |
 | `-af` / `-aF` / `-afr` | ajoute les fichiers / dossiers / contenu récursif des dossiers qui suivent (jokers `*` `?` acceptés) |
 | `--shell chemin` | ajoute le chemin à la fenêtre déjà ouverte (utilisé par le menu de l'Explorateur) |
 | `--install-shell` / `--remove-shell` | ajoute / retire l'entrée du menu de l'Explorateur (Windows), puis quitte |
@@ -157,7 +159,7 @@ Sans `-a`, comportement de la 2.07 : un nom finissant par `.arb` est un job, un 
 ## 9. Page Journal
 
 Chaque fichier traité donne une ligne : **verte** (renommé, ancien → nouveau nom ; le chemin complet quand le dossier change ; fichiers associés mentionnés), **bleue** (non renommé : nom identique, tag absent, ligne vide ou fin de liste, fichier manquant), **rouge** (erreur : nom déjà pris, caractère invalide, fichier verrouillé).
-Boutons : **Filtrer** (Succès / Erreurs / Non renommés), **Vider**, **Sauver** (fichier texte), **Copier** (presse-papiers).
+Boutons : **Filtrer** (Succès / Erreurs / Non renommés), **Vider**, **Sauver** (fichier texte), **Copier** (presse-papiers) ; clic droit dans le journal : Vider, Copier.
 L'option *Stocker le journal* (Options > Événements) l'enregistre automatiquement après chaque exécution en UTF-8, avec une option pour ajouter à un fichier existant. Avec un nom de fichier `.csv` (le choix par défaut de la fenêtre de fichier), c'est un CSV qu'Excel ou LibreOffice ouvrent avec les accents corrects, une ligne par fichier et quatre colonnes : Folder, Original name, New name, Reason (raison du non-renommage), prêtes à filtrer ; avec `.log` ou `.txt`, ce sont deux colonnes séparées par une tabulation (`v` succès, `x` erreur). Le bouton *Sauver* de la page Journal propose les mêmes deux formats.
 
 ## 10. Options (F10)
@@ -167,16 +169,16 @@ Les changements s'appliquent en cliquant sur OK ; la langue et la disposition mo
 | Page | Réglages |
 |---|---|
 | **Affichage** | mise à jour en temps réel, redimensionnement automatique des colonnes, icônes selon l'extension, disposition moderne et son arrangement des pages (Onglets, Écran unique en bandes, Écran unique en colonnes), police et taille forcées, taille de l'historique des listes déroulantes (1 à 200), **thème** (système, clair, sombre), **rechercher une nouvelle version au démarrage** (désactivé par défaut : une fois par jour il interroge GitHub pour la liste des versions, rien d'autre n'est envoyé ; aussi le bouton « Rechercher une mise à jour » de la fenêtre À propos), **me signaler aussi les versions bêta et release candidates** (désactivé par défaut : seules les versions finales sont signalées), complétion automatique, **set d'icônes** (§12), **mode portable** (réglages gardés dans le dossier du programme) |
-| **Fichiers & Dossiers** | ne pas demander lors d'un glisser-déposer et options à utiliser, tri naturel, ouvrir le fichier au double-clic, inclure les fichiers cachés et système des dossiers ajoutés, entrée du menu de l'Explorateur (Windows) |
+| **Fichiers & Dossiers** | ne pas demander lors d'un glisser-déposer et options à utiliser, tri naturel, ouvrir le fichier au double-clic, inclure les fichiers cachés et système des dossiers ajoutés, ce que fait le bouton Annuler (annuler la dernière passe, ou ouvrir l'historique), entrée du menu de l'Explorateur (Windows) |
 | **Traitement** | copier plutôt que renommer, générer un journal, heure d'été selon la date du fichier, renommer aussi les fichiers associés (`.xmp`, `.dop`, `.pp3`... et les fichiers RAW d'un JPEG renommé ; ils retrouvent leur ancien nom à l'annulation), forcer les dossiers (les crée), détecter `x:\` et `\\` (Linux : `/`) comme chemins absolus, dernier point d'un nom de dossier = extension |
 | **Événements** | au début d'une exécution : basculer vers une page, vider le journal ; à la fin : basculer vers une page, vider la liste de fichiers, vider le job, stocker le journal dans un fichier (avec « ajouter ») |
 | **Langue** | langue de l'interface (27 fichiers `.lng` ; traducteur et version affichés) |
 
 Les réglages sont stockés dans votre profil (`%APPDATA%\AntRenamerQt` sous Windows, `~/.local/share/AntRenamerQt` sous Linux). Mode portable : un fichier `antrenamer-qt.ini` à côté du programme garde tous les réglages dans ce dossier (la case d'Options > Affichage le crée ou le supprime ; un fichier vide suffit).
 
-## 11. Disposition moderne (facultative)
+## 11. Disposition moderne
 
-Même moteur, autre présentation, activée dans Options > Affichage. Compteurs « Fichiers (100) », « Opérations (2) » sur les boutons de pages ; une fine barre d'outils par page ; en écran unique, Ctrl+1/2/3 affiche ou masque un volet ; les séparateurs se déplacent et sont mémorisés ; la disposition en colonnes retombe en bandes sous ~900 pixels de large ; les opérations du job se modifient par double-clic.
+Même moteur, autre présentation, choisie dans Options > Affichage. C'est celle d'une **nouvelle installation** depuis la 3.1 (écran unique, en bandes : pas encore de fichier de réglages, ou un fichier vide) ; si vous avez déjà des réglages, votre disposition est conservée, et vous pouvez passer à la moderne dans les options. Décochez *Disposition moderne de l'interface* pour revenir à la classique à tout moment. Compteurs « Fichiers (100) », « Opérations (2) » sur les boutons de pages ; une fine barre d'outils par page ; en écran unique, Ctrl+1/2/3 affiche ou masque un volet ; les séparateurs se déplacent et sont mémorisés ; la disposition en colonnes retombe en bandes sous ~900 pixels de large ; les opérations du job se modifient par double-clic.
 
 ## 12. Icônes, aide et langues
 
@@ -201,6 +203,6 @@ Même moteur, autre présentation, activée dans Options > Affichage. Compteurs 
 
 - EXIF : 36 tags seulement, MakerNote non décodée ; IPTC lu seulement dans les JPEG.
 - Tags audio : ID3 seulement (MP3) ; FLAC, OGG, M4A ne sont pas lus.
-- Annuler : passe après passe (les 50 dernières de la session), uniquement à partir de la dernière ; les fichiers copiés avec « Copier au lieu de renommer » ne sont pas supprimés.
+- Annuler : passe après passe (les 50 dernières, gardées à la fermeture du programme), dans une session uniquement à partir de sa dernière passe ; les fichiers copiés avec « Copier au lieu de renommer » ne sont pas supprimés.
 - Le menu contextuel court de Windows 11 n'est pas pris en charge (utiliser « Afficher plus d'options »).
 - L'aide en croate et en tamoul affiche l'anglais pour les pages écrites pour Ant Renamer Qt.

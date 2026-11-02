@@ -7,6 +7,7 @@ Voici la liste des paramètres supportés :
 - `-b FileName.arb` : Charge le fichier batch nommé FileName.arb
 - `-g` : Démarre le traitement après que les fichiers aient été ajoutés et que le fichier batch ait été chargé
 - `-x` : Quitte le programme après le traitement
+- `-q` : Mode silencieux, pour les scripts : ni fenêtre ni boîte de dialogue, le traitement démarre et le programme quitte à la fin (comme `-g -x`, sans la fenêtre). Le code de sortie dit comment ça s'est passé : 0 tout est fait, 1 au moins un fichier n'a pas été renommé à cause d'une erreur, 2 rien n'a été fait (aucun fichier, aucun batch, fichier batch illisible, ou fichiers cachés dans la liste). Le fichier journal des options est toujours écrit
 - `--shell Chemin` : (menu contextuel de l'Explorateur) ajoute le chemin à la fenêtre déjà ouverte, ou ouvre le programme s'il n'est pas lancé
 - `--install-shell` / `--remove-shell` : ajoute / retire l'entrée du menu contextuel de l'Explorateur, puis quitte
 - `-a` : Change le mode d'ajout de fichiers, sur base des lettres suivant le paramètre "-a" :
