@@ -412,6 +412,11 @@ QString ActionStringRepl::description() const {
     if (wildcards) {
         r += tr(", with wildcards");
     }
+    if (where == 1) {
+        r += tr(", only at the beginning");
+    } else if (where == 2) {
+        r += tr(", only at the end");
+    }
     if (onlyExt) {
         r += tr(", apply to extension instead of name");
     } else if (inclExt) {
@@ -440,6 +445,11 @@ QString ActionStringRepl::makeNewName(const QString& fn, bool isFolder) {
         for (const QChar c : search) {
             pat += c == u'*' ? QStringLiteral(".*?") : c == u'?' ? QStringLiteral(".") : QRegularExpression::escape(c);
         }
+        if (where == 1) {
+            pat.prepend(u"\\A"_s);
+        } else if (where == 2) {
+            pat.append(u"\\z"_s);
+        }
         QRegularExpression re(pat,
                               QRegularExpression::DotMatchesEverythingOption |
                                   (caseSens ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption));
@@ -457,6 +467,14 @@ QString ActionStringRepl::makeNewName(const QString& fn, bool isFolder) {
             }
         }
         r = out + r.mid(last);
+    } else if (!search.isEmpty() && where == 1) {
+        if (r.startsWith(search, cs)) {
+            r.replace(0, search.size(), replace);
+        }
+    } else if (!search.isEmpty() && where == 2) {
+        if (r.endsWith(search, cs)) {
+            r.replace(r.size() - search.size(), search.size(), replace);
+        }
     } else if (!search.isEmpty()) {
         if (all) {
             r.replace(search, replace, cs);
@@ -480,7 +498,8 @@ void ActionStringRepl::save(QXmlStreamWriter& w) const {
            {"CaseSensitive", caseSens},
            {"IncludeExt", inclExt},
            {"OnlyExt", onlyExt},
-           {"Wildcards", wildcards}});
+           {"Wildcards", wildcards},
+           {"Where", where}});
     w.writeEndElement();
 }
 void ActionStringRepl::load(const XmlElem& e) {
@@ -491,6 +510,7 @@ void ActionStringRepl::load(const XmlElem& e) {
     inclExt = e.flag("IncludeExt", false);
     onlyExt = e.flag("OnlyExt", false);
     wildcards = e.flag("Wildcards", false);
+    where = qBound(0, e.num("Where", 0), 2);
 }
 
 // --- MultstrRepl --------------------------------------------------------------------------
@@ -689,30 +709,33 @@ bool PairGroup::continues(const QString& fn) {
     exts = {e};
     return false;
 }
+void Counter::step(const QString& fn, int start, int incr, bool restart, bool sharePairs) {
+    if (restart) {
+        const QString folder = extractFilePath(fn);
+        if (folder != prevFolder) {
+            cur = start;
+            prevFolder = folder;
+        }
+    }
+    if (sharePairs && group.continues(fn)) {
+        cur -= incr;
+    }
+}
 QString ActionEnum::description() const {
     return tr("Generate an enumeration with \"%1\" from %2 to %3 by %4").arg(mask).arg(startAt).arg(digits).arg(increment);
 }
 bool ActionEnum::getTag(const QString& tag, QString& value) {
     if (tag == u"num") {
-        value = padNum(curPos_, digits);
+        value = padNum(counter_.cur, digits);
         return true;
     }
     return Action::getTag(tag, value);
 }
 QString ActionEnum::makeNewName(const QString& fn, bool isFolder) {
     Action::makeNewName(fn, isFolder);
-    if (restart) {
-        const QString cur = extractFilePath(fn);
-        if (cur != prevFolder_) {
-            curPos_ = startAt;
-            prevFolder_ = cur;
-        }
-    }
-    if (sharePairs && group_.continues(fn)) {
-        curPos_ -= increment;
-    }
+    counter_.step(fn, startAt, increment, restart, sharePairs);
     QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); });
-    curPos_ += increment;
+    counter_.cur += increment;
     return r;
 }
 void ActionEnum::save(QXmlStreamWriter& w) const {
@@ -1076,7 +1099,7 @@ QString ActionExif::description() const {
 bool ActionExif::getTag(const QString& tag, QString& v) {
     bool ok = true;
     if (tag == u"num") {
-        v = padNum(curNum_, numDigits);
+        v = padNum(counter_.cur, numDigits);
         return true;
     }
     if (isKnownExifTag(tag)) {
@@ -1112,18 +1135,9 @@ QString ActionExif::makeNewName(const QString& fn, bool isFolder) {
         setInfo(tr("No EXIF info found"));
         return {};
     }
-    if (numRestart) {
-        const QString folder = extractFilePath(fn);
-        if (folder != prevFolder_) {
-            curNum_ = numStart;
-            prevFolder_ = folder;
-        }
-    }
-    if (numSharePairs && group_.continues(fn)) {
-        curNum_ -= numIncr;
-    }
+    counter_.step(fn, numStart, numIncr, numRestart, numSharePairs);
     const QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
-    curNum_ += numIncr;
+    counter_.cur += numIncr;
     return r;
 }
 void ActionExif::save(QXmlStreamWriter& w) const {

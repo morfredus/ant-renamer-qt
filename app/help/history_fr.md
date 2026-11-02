@@ -2,6 +2,10 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.1.0-beta.3 (02/11/2026)
+  - Remplacement de chaîne : nouveau choix « N'importe où dans le nom / Seulement au début / Seulement à la fin » (avec les jokers aussi).
+  - La fenêtre garde sa taille après un changement de langue.
+  - Français : le bouton « Fichiers » d'ajout devient « Ajouter... », et « Sensible à la casse » devient « Respecter la casse (A ≠ a) ».
 - 3.1.0-beta.2 (29/10/2026)
   - Une image emporte son fichier RAW (ORF, CR2, CR3, NEF, ARW, RAF, DNG... 27 formats) quand elle est renommée, et ses fichiers associés : .pp3, .cos, .acr, .on1, .thm et .aae en plus de .xmp et .dop. Un RAW ou un fichier associé présent dans la liste des fichiers affiche dans l'aperçu le nouveau nom de son image.
   - Le journal s'enregistre en CSV par défaut (Folder, Original name, New name, Reason ; point-virgule, UTF-8 avec BOM, CRLF) qu'Excel et LibreOffice ouvrent avec les accents corrects ; .log et .txt restent du texte simple, et l'extension est ajoutée si vous n'en tapez pas.

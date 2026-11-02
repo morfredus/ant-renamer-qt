@@ -84,7 +84,15 @@ private:
     QTableWidget* table_ = nullptr;
     QComboBox* setName_ = nullptr;
     QPlainTextEdit* listEdit_ = nullptr;
-    // widgets read by makeAction()
-    struct W;
-    std::unique_ptr<W> w_;
+    // Each control is tied once to a member of its action (bind / bindFn, called where the control is built):
+    // makeAction() and setFromAction() just run the list of the selected type.
+    struct Binding {
+        std::function<void(ren::Action&, bool)> toAction;  // bool: remember the values in the history combos
+        std::function<void(const ren::Action&)> fromAction;
+    };
+    template <class A, class Wd, class T>
+    void bind(const Wd& control, T A::*member);
+    template <class A, class To, class From>
+    void bindFn(To to, From from);  // when the control does not map straight onto the member
+    std::vector<std::vector<Binding>> binds_;  // by ren::ActionType
 };

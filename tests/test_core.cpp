@@ -145,6 +145,10 @@ int main(int argc, char** argv) {
                                         a.wildcards = true;
                                     }),
              u".2.txt"_s);
+    CHECK_EQ(prev<ActionStringRepl>(u"foo foo.txt"_s, [](auto& a) { a.search = u"foo"_s; a.replace = u"X"_s; a.where = 1; }), u"X foo.txt"_s);
+    CHECK_EQ(prev<ActionStringRepl>(u"foo foo.txt"_s, [](auto& a) { a.search = u"foo"_s; a.replace = u"X"_s; a.where = 2; }), u"foo X.txt"_s);
+    CHECK_EQ(prev<ActionStringRepl>(u"a foo.txt"_s, [](auto& a) { a.search = u"foo"_s; a.replace = u"X"_s; a.where = 1; }), u"a foo.txt"_s);
+    CHECK_EQ(prev<ActionStringRepl>(u"IMG_1_x.txt"_s, [](auto& a) { a.search = u"IMG_*_"_s; a.replace = u"P"_s; a.wildcards = true; a.where = 1; }), u"Px.txt"_s);
     CHECK_EQ(prev<ActionStringIns>(u"abc.txt"_s,
                                    [](auto& a) {
                                        a.newString = u"__"_s;

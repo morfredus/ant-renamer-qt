@@ -34,12 +34,12 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 **Add an action (a 15th type).**
 1. `core/ren_actions.h`: add the value at the **end** of `enum class ActionType` (the numbers are those of the original and are the row numbers of the list on screen) and declare `class ActionXxx : public Action` with its fields, `description`, `makeNewName`, `save`, `load` (and `getTag` / `init` if needed).
 2. `core/ren_actions.cpp`: implement them, add the XML tag to the `kNames` table and the type to `ActionList::create`.
-3. `app/actionpanel.cpp`: add the page in `buildPages` (the order of the pages is the type index), then the branch in `makeAction` and in `setFromAction`.
+3. `app/actionpanel.cpp`: add the page in `buildPages` (the order of the pages is the type index), then one `bind(control, &Action::member)` per control right after it is created (`bindFn` when the control does not map straight onto the member).
 4. Add the English texts in the code and their translations in the `.lng` files (`app/Languages/`).
 5. Add a case to `tests/test_core.cpp`. `tests/test_panel.cpp` catches a forgotten `setFromAction`.
 6. Documentation: help pages (`app/help/actions_*.md`), `docs/USER_GUIDE*.md`, `docs/WHATS_NEW*.md`, `CHANGELOG.md`.
 
-**Add a setting to an existing action.** A field in the class (with its default), `save` / `load` (an XML attribute; use the default when it is missing so older batches still load), the use in `makeNewName`, the control in `buildPages`, `makeAction` **and** `setFromAction`, the text in the `.lng` files, a case in `test_core.cpp`.
+**Add a setting to an existing action.** A field in the class (with its default), `save` / `load` (an XML attribute; use the default when it is missing so older batches still load), the use in `makeNewName`, the control in `buildPages` with its `bind(...)` (one call serves both directions: panel to action and back), the text in the `.lng` files, a case in `test_core.cpp`.
 
 **Add a program option.** A field in `AppOptions` (`app/appsettings.h`), its name in the `KEYS` macro (`app/appsettings.cpp`), the control in `OptionsDialog` (`app/dialogs.cpp`); if the engine needs it, a field in `ren::Options` and the copy in `applyToCore()`.
 

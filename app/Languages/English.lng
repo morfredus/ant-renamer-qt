@@ -114,6 +114,9 @@ Once done, you can send the file to antrenamer-contact@antp.be to have it includ
     <cbxStrReplExt Caption="Include extension in search"/>
     <cbxStrReplOnlyExt Caption="Apply to extension instead of name"/>
     <cbxStrReplWildcards Caption="Use wildcards (* = any text, ? = any character)"/>
+    <rbtStrReplAnywhere Caption="Anywhere in the name"/>
+    <rbtStrReplBegin Caption="Only at the beginning"/>
+    <rbtStrReplEnd Caption="Only at the end"/>
     <lblMultstrSearch Caption="Search for:"/>
     <lblMultstrReplBy Caption="Replace by:"/>
     <lblMultstrReplSet Caption="Predefined sets:"/>
@@ -246,6 +249,8 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
       <Item Name="stradStringReplAll" Value=", replace all occurences"/>
       <Item Name="stradStringReplCase" Value=", case-sensitive"/>
       <Item Name="stradStringReplWild" Value=", with wildcards"/>
+      <Item Name="stradStringReplBegin" Value=", only at the beginning"/>
+      <Item Name="stradStringReplEnd" Value=", only at the end"/>
       <Item Name="stradMultstrRepl" Value="Replace multiple strings using set &#34;%s&#34;"/>
       <Item Name="stradStringIns" Value="Insert &#34;%s&#34; at position %d"/>
       <Item Name="stradMoveStr" Value="Move %d characters from position %d%s, to position %d%s"/>
