@@ -14,6 +14,13 @@ struct AddChoice {
     bool any() const { return files || folders; }
 };
 
+// The four "what to add" check boxes shared by the Add folders and Drag & drop dialogs, preset from the options.
+struct AddChoiceBoxes {
+    AddChoiceBoxes();
+    AddChoice choice() const;
+    QCheckBox *files, *folders, *recursive, *hidden;
+};
+
 // "Add folders": pick one or more folders and what to take from them (fSelectDirectory.pas).
 class AddFoldersDialog : public QDialog {
 public:
@@ -25,7 +32,7 @@ private:
     QTreeView* view_;
     QFileSystemModel* model_;
     QLineEdit* path_;
-    QCheckBox *files_, *folders_, *recursive_, *hidden_;
+    AddChoiceBoxes boxes_;
 };
 
 // Shown when files are dropped on the list (fDragdropOptions.pas).
@@ -36,7 +43,8 @@ public:
     bool dontAskAgain() const;
 
 private:
-    QCheckBox *files_, *folders_, *recursive_, *hidden_, *notAgain_;
+    AddChoiceBoxes boxes_;
+    QCheckBox* notAgain_;
 };
 
 class OptionsDialog : public QDialog {

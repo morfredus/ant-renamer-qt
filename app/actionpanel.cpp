@@ -59,16 +59,63 @@ void HistoryCombo::remember() {
     }
 }
 
-// --- widgets read by makeAction() ---------------------------------------------------------------
-struct ActionPanel::W {
-    HistoryCombo *extNew, *srcSearch, *srcRepl, *insStr, *delStr, *enumMask, *mp3Mask, *dtMask, *rndMask, *caseAfter, *reExpr,
-        *reRepl, *exifMask;
-    QCheckBox *extNoRepl, *srAll, *srCase, *srExt, *srOnlyExt, *srWild, *msExt, *msCase, *insExt, *delExt, *enumRestart,
-        *enumShare, *exShare, *mp3Two, *dtSuffix, *caseLocale, *caseIncl, *caseOnly, *flAppend, *flOnlyExt, *exRestart;
-    QSpinBox *insPos, *mvFrom, *mvCount, *mvTo, *delNb, *delPos, *enumStart, *enumDigits, *enumIncr, *dtOffset, *exifOffset,
-        *exStart, *exDigits, *exIncr;
-    std::vector<QRadioButton*> insDir, mvFrom_, mvTo_, delWhere, delDir, dtWhich, rndMethod, caseType;
-};
+// --- control <-> action member -------------------------------------------------------------------
+namespace {
+using Radios = std::vector<QRadioButton*>;
+
+int checkedIndex(const Radios& r) {
+    for (size_t i = 0; i < r.size(); ++i) {
+        if (r[i]->isChecked()) {
+            return int(i);
+        }
+    }
+    return 0;
+}
+void checkIndex(const Radios& r, int i) {
+    if (i >= 0 && i < int(r.size())) {
+        r[size_t(i)]->setChecked(true);
+    }
+}
+
+void read(const QComboBox* c, QString& v) { v = c->currentText(); }
+void write(QComboBox* c, const QString& v) { c->setCurrentText(v); }
+void read(const QCheckBox* c, bool& v) { v = c->isChecked(); }
+void write(QCheckBox* c, bool v) { c->setChecked(v); }
+void read(const QSpinBox* s, int& v) { v = s->value(); }
+void write(QSpinBox* s, int v) { s->setValue(v); }
+void read(const QPlainTextEdit* e, QString& v) { v = e->toPlainText(); }
+void write(QPlainTextEdit* e, const QString& v) { e->setPlainText(v); }
+void read(const Radios& r, int& v) { v = checkedIndex(r); }
+void write(const Radios& r, int v) { checkIndex(r, v); }
+void read(const Radios& r, bool& v) { v = checkedIndex(r) == 0; }  // "From begin" / "From end"
+void write(const Radios& r, bool v) { checkIndex(r, v ? 0 : 1); }
+
+void remember(QComboBox* c) {
+    if (auto* h = dynamic_cast<HistoryCombo*>(c)) {
+        h->remember();
+    }
+}
+void remember(void*) {}
+void remember(const Radios&) {}
+}  // namespace
+
+template <class A, class Wd, class T>
+void ActionPanel::bind(const Wd& control, T A::*member) {
+    binds_[size_t(A().type())].push_back(
+        {[control, member](Action& a, bool history) {
+             read(control, static_cast<A&>(a).*member);
+             if (history) {
+                 remember(control);
+             }
+         },
+         [control, member](const Action& a) { write(control, static_cast<const A&>(a).*member); }});
+}
+
+template <class A, class To, class From>
+void ActionPanel::bindFn(To to, From from) {
+    binds_[size_t(A().type())].push_back(
+        {[to](Action& a, bool history) { to(static_cast<A&>(a), history); }, [from](const Action& a) { from(static_cast<const A&>(a)); }});
+}
 
 static const char* const kNames[] = {
     QT_TRANSLATE_NOOP("Ren", "Change extension"),
@@ -87,7 +134,7 @@ static const char* const kNames[] = {
     QT_TRANSLATE_NOOP("Ren", "Use EXIF info"),
 };
 
-ActionPanel::ActionPanel(QWidget* parent) : QWidget(parent), w_(std::make_unique<W>()) {
+ActionPanel::ActionPanel(QWidget* parent) : QWidget(parent), binds_(std::size(kNames)) {
     auto* split = new QSplitter(Qt::Horizontal);
     split->setChildrenCollapsible(false);
     list_ = new QListWidget;
@@ -285,7 +332,6 @@ void ActionPanel::notes(Page& p, const QString& control, const QString& english)
 // --- the 14 pages --------------------------------------------------------------------------------
 void ActionPanel::buildPages() {
     newPage(QStringLiteral("empty"));
-    W& w = *w_;
     const QString tagNotes = tr("- %name% = Original file name (without extension)<BR>"
                                 "- %ext% = Original extension (including the dot)<BR>");
     const QString folderNote = tr("- %folderN% = Folder name, where N is the level (1 = current, 2 = parent, etc.)<BR>"
@@ -294,22 +340,48 @@ void ActionPanel::buildPages() {
 
     {  // 0 Change extension
         Page p = newPage(u"ChangeExt"_s);
-        w.extNew = combo(p, u"NewExt"_s, tr("Replace extension by:"), u"ext"_s);
-        w.extNoRepl = check(p, u"NoReplace"_s, tr("Do not replace extension, append it to current full name"), false);
+        auto* extNew = combo(p, u"NewExt"_s, tr("Replace extension by:"), u"ext"_s);
+        auto* extNoRepl = check(p, u"NoReplace"_s, tr("Do not replace extension, append it to current full name"), false);
         notes(p, u"lblChangeExtNotes"_s,
               notesHead + tr("- Do not include the dot, just enter the new extension<br>"
                              "- If you want to make an incremented extension, use the <LINK>Enumeration</LINK> action"));
+        bindFn<ActionChangeExt>(
+            [extNew](ActionChangeExt& a, bool history) {
+                a.newExtension = extNew->currentText();
+                if (!a.newExtension.isEmpty() && a.newExtension[0] != u'.') {
+                    a.newExtension.prepend(u'.');
+                }
+                if (a.newExtension == u".") {
+                    a.newExtension.clear();
+                }
+                if (history) {
+                    extNew->remember();
+                }
+            },
+            [extNew](const ActionChangeExt& a) {  // shown without the dot
+                extNew->setCurrentText(a.newExtension.startsWith(u'.') ? a.newExtension.mid(1) : a.newExtension);
+            });
+        bind(extNoRepl, &ActionChangeExt::noReplace);
         p.v->addStretch();
     }
     {  // 1 String replacement
         Page p = newPage(u"StrRepl"_s);
-        w.srcSearch = combo(p, u"Search"_s, tr("Search for:"), u"old"_s);
-        w.srcRepl = combo(p, u"Repl"_s, tr("Replace by:"), u"new"_s);
-        w.srAll = check(p, u"All"_s, tr("Replace all occurences"), true);
-        w.srCase = check(p, u"Case"_s, tr("Case sensitive"), true);
-        w.srExt = check(p, u"Ext"_s, tr("Include extension in search"), false);
-        w.srOnlyExt = check(p, u"OnlyExt"_s, tr("Apply to extension instead of name"), false);
-        w.srWild = check(p, u"Wildcards"_s, tr("Use wildcards (* = any text, ? = any character)"), false);
+        auto* srcSearch = combo(p, u"Search"_s, tr("Search for:"), u"old"_s);
+        auto* srcRepl = combo(p, u"Repl"_s, tr("Replace by:"), u"new"_s);
+        auto* srAll = check(p, u"All"_s, tr("Replace all occurences"), true);
+        auto* srCase = check(p, u"Case"_s, tr("Case sensitive"), true);
+        auto* srExt = check(p, u"Ext"_s, tr("Include extension in search"), false);
+        auto* srOnlyExt = check(p, u"OnlyExt"_s, tr("Apply to extension instead of name"), false);
+        auto* srWild = check(p, u"Wildcards"_s, tr("Use wildcards (* = any text, ? = any character)"), false);
+        const auto srWhere = radios(p, u"Where"_s, {tr("Anywhere in the name"), tr("Only at the beginning"), tr("Only at the end")}, 0);
+        bind(srcSearch, &ActionStringRepl::search);
+        bind(srcRepl, &ActionStringRepl::replace);
+        bind(srAll, &ActionStringRepl::all);
+        bind(srCase, &ActionStringRepl::caseSens);
+        bind(srExt, &ActionStringRepl::inclExt);
+        bind(srOnlyExt, &ActionStringRepl::onlyExt);
+        bind(srWild, &ActionStringRepl::wildcards);
+        bind(srWhere, &ActionStringRepl::where);
         p.v->addStretch();
     }
     {  // 2 Multiple string replacement
@@ -318,10 +390,14 @@ void ActionPanel::buildPages() {
     }
     {  // 3 String insertion
         Page p = newPage(u"StrIns"_s);
-        w.insStr = combo(p, u"Str"_s, tr("String to insert:"), u"new"_s);
-        w.insPos = spin(p, u"Pos"_s, tr("At position:"), 0, 0, 1000);
-        w.insDir = radios(p, u"Dir"_s, {tr("From begin"), tr("From end")}, 0);
-        w.insExt = check(p, u"Ext"_s, tr("Apply to extension instead of name"), false);
+        auto* insStr = combo(p, u"Str"_s, tr("String to insert:"), u"new"_s);
+        auto* insPos = spin(p, u"Pos"_s, tr("At position:"), 0, 0, 1000);
+        const auto insDir = radios(p, u"Dir"_s, {tr("From begin"), tr("From end")}, 0);
+        auto* insExt = check(p, u"Ext"_s, tr("Apply to extension instead of name"), false);
+        bind(insStr, &ActionStringIns::newString);
+        bind(insPos, &ActionStringIns::pos);
+        bind(insDir, &ActionStringIns::fromBegin);
+        bind(insExt, &ActionStringIns::ext);
         notes(p, u"lblStrInsNotes"_s,
               notesHead +
                   tr("- If you want to insert a string after or before another one, use the <LINK>String replacement</LINK> "
@@ -331,11 +407,16 @@ void ActionPanel::buildPages() {
     }
     {  // 4 Move string
         Page p = newPage(u"MoveStr"_s);
-        w.mvFrom = spin(p, u"FromPos"_s, tr("From position:"), 0, 0, 1000);
-        w.mvFrom_ = radios(p, u"FromDir"_s, {tr("From begin"), tr("From end")}, 0);
-        w.mvCount = spin(p, u"Count"_s, tr("Number of characters to move:"), 1, 1, 1000);
-        w.mvTo = spin(p, u"ToPos"_s, tr("To position:"), 0, 0, 1000);
-        w.mvTo_ = radios(p, u"ToDir"_s, {tr("From begin"), tr("From end")}, 0);
+        auto* mvFrom = spin(p, u"FromPos"_s, tr("From position:"), 0, 0, 1000);
+        const auto mvFromDir = radios(p, u"FromDir"_s, {tr("From begin"), tr("From end")}, 0);
+        auto* mvCount = spin(p, u"Count"_s, tr("Number of characters to move:"), 1, 1, 1000);
+        auto* mvTo = spin(p, u"ToPos"_s, tr("To position:"), 0, 0, 1000);
+        const auto mvToDir = radios(p, u"ToDir"_s, {tr("From begin"), tr("From end")}, 0);
+        bind(mvFrom, &ActionMoveStr::fromPos);
+        bind(mvFromDir, &ActionMoveStr::fromBegin);
+        bind(mvCount, &ActionMoveStr::count);
+        bind(mvTo, &ActionMoveStr::toPos);
+        bind(mvToDir, &ActionMoveStr::toBegin);
         notes(p, u"lblMoveStrNotes"_s,
               notesHead + tr("- If you want to move a specified string but that is not always at the same position, use the "
                              "<link>String replacement</link> to delete it, and then the <link>String insertion</link> to insert "
@@ -346,12 +427,18 @@ void ActionPanel::buildPages() {
     }
     {  // 5 Characters deletion
         Page p = newPage(u"CharDel"_s);
-        w.delNb = spin(p, u"Nb"_s, tr("Number of characters to delete:"), 1, 1, 1000);
-        w.delWhere = radios(p, u"Where"_s, {tr("From position:"), tr("After the string:"), tr("Before the string:")}, 0);
-        w.delPos = spin(p, u"Pos"_s, tr("Position:"), 0, 0, 1000);
-        w.delDir = radios(p, u"Dir"_s, {tr("From begin"), tr("From end")}, 0);
-        w.delStr = combo(p, u"Str"_s, tr("String:"), u"str"_s);
-        w.delExt = check(p, u"Ext"_s, tr("Apply to extension instead of name"), false);
+        auto* delNb = spin(p, u"Nb"_s, tr("Number of characters to delete:"), 1, 1, 1000);
+        const auto delWhere = radios(p, u"Where"_s, {tr("From position:"), tr("After the string:"), tr("Before the string:")}, 0);
+        auto* delPos = spin(p, u"Pos"_s, tr("Position:"), 0, 0, 1000);
+        const auto delDir = radios(p, u"Dir"_s, {tr("From begin"), tr("From end")}, 0);
+        auto* delStr = combo(p, u"Str"_s, tr("String:"), u"str"_s);
+        auto* delExt = check(p, u"Ext"_s, tr("Apply to extension instead of name"), false);
+        bind(delNb, &ActionCharDel::nbChar);
+        bind(delWhere, &ActionCharDel::afterString);
+        bind(delPos, &ActionCharDel::pos);
+        bind(delDir, &ActionCharDel::fromBegin);
+        bind(delStr, &ActionCharDel::str);
+        bind(delExt, &ActionCharDel::ext);
         notes(p, u"lblCharDelNotes"_s,
               notesHead + tr("- To delete a specified string, use the <LINK>String replacement</LINK> action and replace the "
                              "string by an empty one"));
@@ -359,21 +446,28 @@ void ActionPanel::buildPages() {
     }
     {  // 6 Enumeration
         Page p = newPage(u"Enum"_s);
-        w.enumMask = combo(p, u"Mask"_s, tr("Mask:"), u"File %num%%ext%"_s);
-        w.enumStart = spin(p, u"Start"_s, tr("Start at:"), 1, -999999999, 999999999);
-        w.enumDigits = spin(p, u"Digits"_s, tr("Number of digits:"), 3, 1, 20);
-        w.enumIncr = spin(p, u"Incr"_s, tr("Increment by:"), 1, -999999, 999999);
-        w.enumRestart = check(p, u"Restart"_s, tr("Go back to start value when changing folder"), false);
-        w.enumShare =
-            check(p, u"SharePairs"_s,
+        auto* enumMask = combo(p, u"Mask"_s, tr("Mask:"), u"File %num%%ext%"_s);
+        auto* enumStart = spin(p, u"Start"_s, tr("Start at:"), 1, -999999999, 999999999);
+        auto* enumDigits = spin(p, u"Digits"_s, tr("Number of digits:"), 3, 1, 20);
+        auto* enumIncr = spin(p, u"Incr"_s, tr("Increment by:"), 1, -999999, 999999);
+        auto* enumRestart = check(p, u"Restart"_s, tr("Go back to start value when changing folder"), false);
+        auto* enumShare = check(p, u"SharePairs"_s,
                   tr("Same number for files with the same name and different extensions (e.g. JPG + RAW + XMP)"), false);
+        bind(enumMask, &ActionEnum::mask);
+        bind(enumStart, &ActionEnum::startAt);
+        bind(enumDigits, &ActionEnum::digits);
+        bind(enumIncr, &ActionEnum::increment);
+        bind(enumRestart, &ActionEnum::restart);
+        bind(enumShare, &ActionEnum::sharePairs);
         notes(p, u"lblEnumNotes"_s, notesHead + tagNotes + tr("- %num% = Number<BR>") + folderNote);
         p.v->addStretch();
     }
     {  // 7 MP3
         Page p = newPage(u"MP3"_s);
-        w.mp3Mask = combo(p, u"Mask"_s, tr("Mask:"), u"%author% - %title%%ext%"_s);
-        w.mp3Two = check(p, u"TwoDigit"_s, tr("Two-digit track number (insert a '0' in front of the number if required)"), false);
+        auto* mp3Mask = combo(p, u"Mask"_s, tr("Mask:"), u"%author% - %title%%ext%"_s);
+        auto* mp3Two = check(p, u"TwoDigit"_s, tr("Two-digit track number (insert a '0' in front of the number if required)"), false);
+        bind(mp3Mask, &ActionMP3::mask);
+        bind(mp3Two, &ActionMP3::twoDigit);
         notes(p, u"lblMP3Notes"_s,
               notesHead +
                   tr("- %author% = Author<BR>- %title% = Title<BR>- %album% = Album<BR>- %year% = Year<BR>"
@@ -385,11 +479,15 @@ void ActionPanel::buildPages() {
     }
     {  // 8 Date & time
         Page p = newPage(u"DateTime"_s);
-        w.dtMask = combo(p, u"Mask"_s, tr("Mask:"), u"yyyy'-'mm'-'dde"_s);
+        auto* dtMask = combo(p, u"Mask"_s, tr("Mask:"), u"yyyy'-'mm'-'dde"_s);
         p.v->addWidget(new QLabel(tr("Date to use:")));
-        w.dtWhich = radios(p, u"Which"_s, {tr("Creation"), tr("Last modification")}, 1);
-        w.dtOffset = spin(p, u"Offset"_s, tr("Offset:"), 0, -999999999, 999999999, tr("seconds"));
-        w.dtSuffix = check(p, u"Suffix"_s, tr("Add suffix if more than one file with the same date/time"), false);
+        const auto dtWhich = radios(p, u"Which"_s, {tr("Creation"), tr("Last modification")}, 1);
+        auto* dtOffset = spin(p, u"Offset"_s, tr("Offset:"), 0, -999999999, 999999999, tr("seconds"));
+        auto* dtSuffix = check(p, u"Suffix"_s, tr("Add suffix if more than one file with the same date/time"), false);
+        bind(dtMask, &ActionDateTime::mask);
+        bind(dtSuffix, &ActionDateTime::addSuffix);
+        bind(dtWhich, &ActionDateTime::whichDate);
+        bind(dtOffset, &ActionDateTime::offset);
         p.v->addWidget(new QLabel(tr("Notes:")));
         auto* memo = new QPlainTextEdit(
             tr("f\tOriginal filename (without extension)\ne\tOriginal extension (including dot)\n"
@@ -411,9 +509,11 @@ void ActionPanel::buildPages() {
     }
     {  // 9 Random
         Page p = newPage(u"Random"_s);
-        w.rndMask = combo(p, u"Mask"_s, tr("Mask:"), u"%random%%ext%"_s);
+        auto* rndMask = combo(p, u"Mask"_s, tr("Mask:"), u"%random%%ext%"_s);
         p.v->addWidget(new QLabel(tr("Method:")));
-        w.rndMethod = radios(p, u"Method"_s, {tr("Random number (8 digits)"), tr("Windows tick count"), tr("GUID")}, 0);
+        const auto rndMethod = radios(p, u"Method"_s, {tr("Random number (8 digits)"), tr("Windows tick count"), tr("GUID")}, 0);
+        bind(rndMask, &ActionRandom::mask);
+        bind(rndMethod, &ActionRandom::method);
         notes(p, u"lblRandomNotes"_s,
               notesHead + tagNotes +
                   tr("- %random% = Random generated string<BR>- %% = % character<BR>see <LINK>Help</LINK> for more information"));
@@ -421,14 +521,19 @@ void ActionPanel::buildPages() {
     }
     {  // 10 Change case
         Page p = newPage(u"Case"_s);
-        w.caseAfter = combo(p, u"After"_s, QString(), u"- .+("_s, false);
-        w.caseType = radios(p, u"Type"_s,
+        auto* caseAfter = combo(p, u"After"_s, QString(), u"- .+("_s, false);
+        const auto caseType = radios(p, u"Type"_s,
                             {tr("Upper first letter following any of these characters:"),
                              tr("Upper the first letter of the filename"), tr("Upper"), tr("Lower")},
-                            0, true, w.caseAfter);
-        w.caseLocale = check(p, u"Locale"_s, tr("Use Windows' locale settings to change accentuated characters"), true);
-        w.caseIncl = check(p, u"IncludeExt"_s, tr("Also apply to extension"), false);
-        w.caseOnly = check(p, u"OnlyExt"_s, tr("Apply to extension instead of name"), false);
+                            0, true, caseAfter);
+        auto* caseLocale = check(p, u"Locale"_s, tr("Use Windows' locale settings to change accentuated characters"), true);
+        auto* caseIncl = check(p, u"IncludeExt"_s, tr("Also apply to extension"), false);
+        auto* caseOnly = check(p, u"OnlyExt"_s, tr("Apply to extension instead of name"), false);
+        bind(caseType, &ActionCase::caseType);
+        bind(caseAfter, &ActionCase::afterChars);
+        bind(caseLocale, &ActionCase::useLocale);
+        bind(caseIncl, &ActionCase::includeExt);
+        bind(caseOnly, &ActionCase::onlyExt);
         p.v->addStretch();
     }
     {  // 11 From list
@@ -437,8 +542,10 @@ void ActionPanel::buildPages() {
     }
     {  // 12 Regexp
         Page p = newPage(u"Regexp"_s);
-        w.reExpr = combo(p, u"Expr"_s, tr("Expression:"), QString());
-        w.reRepl = combo(p, u"Repl"_s, tr("New name:"), QString());
+        auto* reExpr = combo(p, u"Expr"_s, tr("Expression:"), QString());
+        auto* reRepl = combo(p, u"Repl"_s, tr("New name:"), QString());
+        bind(reExpr, &ActionRegexp::expr);
+        bind(reRepl, &ActionRegexp::repl);
         notes(p, u"lblRegexpNotes"_s,
               notesHead + tr("- \\ character can be used to escape special characters (like $ and others), use a \\\\ for a "
                              "simple \\ in new name "
@@ -450,14 +557,21 @@ void ActionPanel::buildPages() {
     }
     {  // 13 EXIF
         Page p = newPage(u"Exif"_s);
-        w.exifMask = combo(p, u"Mask"_s, tr("Mask:"), u"%datetime%%ext%"_s);
-        w.exifOffset = spin(p, u"Offset"_s, tr("Offset:"), 0, -999999999, 999999999, tr("seconds"));
-        w.exStart = spin(p, u"NumStart"_s, tr("Start at:"), 1, -999999999, 999999999);
-        w.exDigits = spin(p, u"NumDigits"_s, tr("Number of digits:"), 3, 1, 20);
-        w.exIncr = spin(p, u"NumIncr"_s, tr("Increment by:"), 1, -999999, 999999);
-        w.exRestart = check(p, u"NumRestart"_s, tr("Go back to start value when changing folder"), false);
-        w.exShare = check(p, u"NumSharePairs"_s,
+        auto* exifMask = combo(p, u"Mask"_s, tr("Mask:"), u"%datetime%%ext%"_s);
+        auto* exifOffset = spin(p, u"Offset"_s, tr("Offset:"), 0, -999999999, 999999999, tr("seconds"));
+        auto* exStart = spin(p, u"NumStart"_s, tr("Start at:"), 1, -999999999, 999999999);
+        auto* exDigits = spin(p, u"NumDigits"_s, tr("Number of digits:"), 3, 1, 20);
+        auto* exIncr = spin(p, u"NumIncr"_s, tr("Increment by:"), 1, -999999, 999999);
+        auto* exRestart = check(p, u"NumRestart"_s, tr("Go back to start value when changing folder"), false);
+        auto* exShare = check(p, u"NumSharePairs"_s,
                           tr("Same number for files with the same name and different extensions (e.g. JPG + RAW + XMP)"), false);
+        bind(exifMask, &ActionExif::mask);
+        bind(exifOffset, &ActionExif::offset);
+        bind(exStart, &ActionExif::numStart);
+        bind(exDigits, &ActionExif::numDigits);
+        bind(exIncr, &ActionExif::numIncr);
+        bind(exRestart, &ActionExif::numRestart);
+        bind(exShare, &ActionExif::numSharePairs);
         notes(p, u"lblExifNotes"_s,
               notesHead + tagNotes +
                   tr("- %datetimeoriginal% or %datetime% = Original date and time of the picture<BR>"
@@ -470,7 +584,6 @@ void ActionPanel::buildPages() {
 
 // --- multiple string replacement ----------------------------------------------------------------------
 void ActionPanel::buildMultstr(Page& p) {
-    W& w = *w_;
     auto* top = new QHBoxLayout;
     top->addWidget(new QLabel(tr("Predefined sets:")));
     setName_ = new QComboBox;
@@ -534,8 +647,13 @@ void ActionPanel::buildMultstr(Page& p) {
     btns->addStretch();
     p.v->addLayout(btns);
 
-    w.msExt = check(p, u"IncludeExt"_s, tr("Include extension in search"), false);
-    w.msCase = check(p, u"Case"_s, tr("Case sensitive"), true);
+    auto* msExt = check(p, u"IncludeExt"_s, tr("Include extension in search"), false);
+    auto* msCase = check(p, u"Case"_s, tr("Case sensitive"), true);
+    bind(setName_, &ActionMultstrRepl::setName);
+    bindFn<ActionMultstrRepl>([this](ActionMultstrRepl& a, bool) { a.setChars = tableText(); },
+                              [this](const ActionMultstrRepl& a) { setTableText(a.setChars); });
+    bind(msExt, &ActionMultstrRepl::includeExt);
+    bind(msCase, &ActionMultstrRepl::caseSens);
     notes(p, u"lblMultstrReplNotes"_s,
           tr("Notes:") + u"<BR>"_s + tr("- Use Ctrl+Plus (+) and Ctrl+Minus (-) to insert or delete a line at current position"));
 
@@ -605,7 +723,6 @@ void ActionPanel::setTableText(const QString& text) {
 
 // --- take names from list ---------------------------------------------------------------------------
 void ActionPanel::buildFromList(Page& p) {
-    W& w = *w_;
     listEdit_ = new QPlainTextEdit;
     p.v->addWidget(listEdit_, 1);
     connect(listEdit_, &QPlainTextEdit::textChanged, this, &ActionPanel::changed);
@@ -632,8 +749,11 @@ void ActionPanel::buildFromList(Page& p) {
     });
     btns->addStretch();
     p.v->addLayout(btns);
-    w.flAppend = check(p, u"AppendExt"_s, tr("Append original extension of the file"), false);
-    w.flOnlyExt = check(p, u"OnlyExt"_s, tr("Use items as extensions instead of names"), false);
+    auto* flAppend = check(p, u"AppendExt"_s, tr("Append original extension of the file"), false);
+    auto* flOnlyExt = check(p, u"OnlyExt"_s, tr("Use items as extensions instead of names"), false);
+    bind(listEdit_, &ActionFromList::listContents);
+    bind(flAppend, &ActionFromList::appendExt);
+    bind(flOnlyExt, &ActionFromList::onlyExt);
     notes(p, u"lblFromListNotes"_s,
           tr("Notes:") + u"<BR>"_s +
               tr("- Each line from this list will be used as a name for a file. Items are used sequentially<BR>"
@@ -643,296 +763,23 @@ void ActionPanel::buildFromList(Page& p) {
 }
 
 // --- building the action ----------------------------------------------------------------------------
-static int checkedIndex(const std::vector<QRadioButton*>& r) {
-    for (size_t i = 0; i < r.size(); ++i) {
-        if (r[i]->isChecked()) {
-            return int(i);
-        }
-    }
-    return 0;
-}
-
 std::unique_ptr<Action> ActionPanel::makeAction(bool updateHistory) {
     const int idx = currentIndex();
     if (idx < 0) {
         return nullptr;
     }
-    W& w = *w_;
-    auto remember = [&](HistoryCombo* c) {
-        if (updateHistory) {
-            c->remember();
-        }
-    };
     auto act = ActionList::create(ActionType(idx));
-    switch (ActionType(idx)) {
-        case ActionType::ChangeExt: {
-            auto& a = static_cast<ActionChangeExt&>(*act);
-            a.newExtension = w.extNew->currentText();
-            if (!a.newExtension.isEmpty() && a.newExtension[0] != u'.') {
-                a.newExtension.prepend(u'.');
-            }
-            if (a.newExtension == u".") {
-                a.newExtension.clear();
-            }
-            a.noReplace = w.extNoRepl->isChecked();
-            remember(w.extNew);
-            break;
-        }
-        case ActionType::StringRepl: {
-            auto& a = static_cast<ActionStringRepl&>(*act);
-            a.search = w.srcSearch->currentText();
-            a.replace = w.srcRepl->currentText();
-            a.all = w.srAll->isChecked();
-            a.caseSens = w.srCase->isChecked();
-            a.inclExt = w.srExt->isChecked();
-            a.onlyExt = w.srOnlyExt->isChecked();
-            a.wildcards = w.srWild->isChecked();
-            remember(w.srcSearch);
-            remember(w.srcRepl);
-            break;
-        }
-        case ActionType::MultstrRepl: {
-            auto& a = static_cast<ActionMultstrRepl&>(*act);
-            a.setName = setName_->currentText();
-            a.setChars = tableText();
-            a.includeExt = w.msExt->isChecked();
-            a.caseSens = w.msCase->isChecked();
-            break;
-        }
-        case ActionType::StringInsert: {
-            auto& a = static_cast<ActionStringIns&>(*act);
-            a.newString = w.insStr->currentText();
-            a.pos = w.insPos->value();
-            a.fromBegin = checkedIndex(w.insDir) == 0;
-            a.ext = w.insExt->isChecked();
-            remember(w.insStr);
-            break;
-        }
-        case ActionType::MoveString: {
-            auto& a = static_cast<ActionMoveStr&>(*act);
-            a.fromPos = w.mvFrom->value();
-            a.fromBegin = checkedIndex(w.mvFrom_) == 0;
-            a.count = w.mvCount->value();
-            a.toPos = w.mvTo->value();
-            a.toBegin = checkedIndex(w.mvTo_) == 0;
-            break;
-        }
-        case ActionType::CharDel: {
-            auto& a = static_cast<ActionCharDel&>(*act);
-            a.nbChar = w.delNb->value();
-            a.afterString = checkedIndex(w.delWhere);
-            a.pos = w.delPos->value();
-            a.fromBegin = checkedIndex(w.delDir) == 0;
-            a.str = w.delStr->currentText();
-            a.ext = w.delExt->isChecked();
-            remember(w.delStr);
-            break;
-        }
-        case ActionType::Enum: {
-            auto& a = static_cast<ActionEnum&>(*act);
-            a.mask = w.enumMask->currentText();
-            a.startAt = w.enumStart->value();
-            a.digits = w.enumDigits->value();
-            a.increment = w.enumIncr->value();
-            a.restart = w.enumRestart->isChecked();
-            a.sharePairs = w.enumShare->isChecked();
-            remember(w.enumMask);
-            break;
-        }
-        case ActionType::MP3Tag: {
-            auto& a = static_cast<ActionMP3&>(*act);
-            a.mask = w.mp3Mask->currentText();
-            a.twoDigit = w.mp3Two->isChecked();
-            remember(w.mp3Mask);
-            break;
-        }
-        case ActionType::DateTime: {
-            auto& a = static_cast<ActionDateTime&>(*act);
-            a.mask = w.dtMask->currentText();
-            a.addSuffix = w.dtSuffix->isChecked();
-            a.whichDate = checkedIndex(w.dtWhich) == 0 ? 0 : 1;
-            a.offset = w.dtOffset->value();
-            remember(w.dtMask);
-            break;
-        }
-        case ActionType::Random: {
-            auto& a = static_cast<ActionRandom&>(*act);
-            a.mask = w.rndMask->currentText();
-            a.method = checkedIndex(w.rndMethod);
-            remember(w.rndMask);
-            break;
-        }
-        case ActionType::Case: {
-            auto& a = static_cast<ActionCase&>(*act);
-            a.caseType = checkedIndex(w.caseType);
-            a.afterChars = w.caseAfter->currentText();
-            a.useLocale = w.caseLocale->isChecked();
-            a.includeExt = w.caseIncl->isChecked();
-            a.onlyExt = w.caseOnly->isChecked();
-            remember(w.caseAfter);
-            break;
-        }
-        case ActionType::FromList: {
-            auto& a = static_cast<ActionFromList&>(*act);
-            a.listContents = listEdit_->toPlainText();
-            a.appendExt = w.flAppend->isChecked();
-            a.onlyExt = w.flOnlyExt->isChecked();
-            break;
-        }
-        case ActionType::Regexp: {
-            auto& a = static_cast<ActionRegexp&>(*act);
-            a.expr = w.reExpr->currentText();
-            a.repl = w.reRepl->currentText();
-            remember(w.reExpr);
-            remember(w.reRepl);
-            break;
-        }
-        case ActionType::Exif: {
-            auto& a = static_cast<ActionExif&>(*act);
-            a.mask = w.exifMask->currentText();
-            a.offset = w.exifOffset->value();
-            a.numStart = w.exStart->value();
-            a.numDigits = w.exDigits->value();
-            a.numIncr = w.exIncr->value();
-            a.numRestart = w.exRestart->isChecked();
-            a.numSharePairs = w.exShare->isChecked();
-            remember(w.exifMask);
-            break;
-        }
-        default:
-            return nullptr;
+    for (const Binding& b : binds_[size_t(idx)]) {
+        b.toAction(*act, updateHistory);
     }
     return act;
 }
 
 // Reverse of makeAction(): puts the settings of `act` back into the controls (to edit an action of the batch).
 void ActionPanel::setFromAction(const Action& act) {
-    W& w = *w_;
-    auto radio = [](std::vector<QRadioButton*>& r, int i) {
-        if (i >= 0 && i < int(r.size())) {
-            r[size_t(i)]->setChecked(true);
-        }
-    };
     selectAction(int(act.type()));
-    switch (act.type()) {
-        case ActionType::ChangeExt: {
-            auto& a = static_cast<const ActionChangeExt&>(act);
-            w.extNew->setCurrentText(a.newExtension.startsWith(u'.') ? a.newExtension.mid(1)
-                                                                     : a.newExtension);  // shown without the dot
-            w.extNoRepl->setChecked(a.noReplace);
-            break;
-        }
-        case ActionType::StringRepl: {
-            auto& a = static_cast<const ActionStringRepl&>(act);
-            w.srcSearch->setCurrentText(a.search);
-            w.srcRepl->setCurrentText(a.replace);
-            w.srAll->setChecked(a.all);
-            w.srCase->setChecked(a.caseSens);
-            w.srExt->setChecked(a.inclExt);
-            w.srOnlyExt->setChecked(a.onlyExt);
-            w.srWild->setChecked(a.wildcards);
-            break;
-        }
-        case ActionType::MultstrRepl: {
-            auto& a = static_cast<const ActionMultstrRepl&>(act);
-            setName_->setCurrentText(a.setName);
-            setTableText(a.setChars);
-            w.msExt->setChecked(a.includeExt);
-            w.msCase->setChecked(a.caseSens);
-            break;
-        }
-        case ActionType::StringInsert: {
-            auto& a = static_cast<const ActionStringIns&>(act);
-            w.insStr->setCurrentText(a.newString);
-            w.insPos->setValue(a.pos);
-            radio(w.insDir, a.fromBegin ? 0 : 1);
-            w.insExt->setChecked(a.ext);
-            break;
-        }
-        case ActionType::MoveString: {
-            auto& a = static_cast<const ActionMoveStr&>(act);
-            w.mvFrom->setValue(a.fromPos);
-            radio(w.mvFrom_, a.fromBegin ? 0 : 1);
-            w.mvCount->setValue(a.count);
-            w.mvTo->setValue(a.toPos);
-            radio(w.mvTo_, a.toBegin ? 0 : 1);
-            break;
-        }
-        case ActionType::CharDel: {
-            auto& a = static_cast<const ActionCharDel&>(act);
-            w.delNb->setValue(a.nbChar);
-            radio(w.delWhere, a.afterString);
-            w.delPos->setValue(a.pos);
-            radio(w.delDir, a.fromBegin ? 0 : 1);
-            w.delStr->setCurrentText(a.str);
-            w.delExt->setChecked(a.ext);
-            break;
-        }
-        case ActionType::Enum: {
-            auto& a = static_cast<const ActionEnum&>(act);
-            w.enumMask->setCurrentText(a.mask);
-            w.enumStart->setValue(a.startAt);
-            w.enumDigits->setValue(a.digits);
-            w.enumIncr->setValue(a.increment);
-            w.enumRestart->setChecked(a.restart);
-            w.enumShare->setChecked(a.sharePairs);
-            break;
-        }
-        case ActionType::MP3Tag: {
-            auto& a = static_cast<const ActionMP3&>(act);
-            w.mp3Mask->setCurrentText(a.mask);
-            w.mp3Two->setChecked(a.twoDigit);
-            break;
-        }
-        case ActionType::DateTime: {
-            auto& a = static_cast<const ActionDateTime&>(act);
-            w.dtMask->setCurrentText(a.mask);
-            w.dtSuffix->setChecked(a.addSuffix);
-            radio(w.dtWhich, a.whichDate == 0 ? 0 : 1);
-            w.dtOffset->setValue(a.offset);
-            break;
-        }
-        case ActionType::Random: {
-            auto& a = static_cast<const ActionRandom&>(act);
-            w.rndMask->setCurrentText(a.mask);
-            radio(w.rndMethod, a.method);
-            break;
-        }
-        case ActionType::Case: {
-            auto& a = static_cast<const ActionCase&>(act);
-            radio(w.caseType, a.caseType);
-            w.caseAfter->setCurrentText(a.afterChars);
-            w.caseLocale->setChecked(a.useLocale);
-            w.caseIncl->setChecked(a.includeExt);
-            w.caseOnly->setChecked(a.onlyExt);
-            break;
-        }
-        case ActionType::FromList: {
-            auto& a = static_cast<const ActionFromList&>(act);
-            listEdit_->setPlainText(a.listContents);
-            w.flAppend->setChecked(a.appendExt);
-            w.flOnlyExt->setChecked(a.onlyExt);
-            break;
-        }
-        case ActionType::Regexp: {
-            auto& a = static_cast<const ActionRegexp&>(act);
-            w.reExpr->setCurrentText(a.expr);
-            w.reRepl->setCurrentText(a.repl);
-            break;
-        }
-        case ActionType::Exif: {
-            auto& a = static_cast<const ActionExif&>(act);
-            w.exifMask->setCurrentText(a.mask);
-            w.exifOffset->setValue(a.offset);
-            w.exStart->setValue(a.numStart);
-            w.exDigits->setValue(a.numDigits);
-            w.exIncr->setValue(a.numIncr);
-            w.exRestart->setChecked(a.numRestart);
-            w.exShare->setChecked(a.numSharePairs);
-            break;
-        }
-        default:
-            break;
+    for (const Binding& b : binds_[size_t(act.type())]) {
+        b.fromAction(act);
     }
     emit changed();
 }

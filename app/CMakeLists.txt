@@ -16,7 +16,7 @@ if(MSVC)
 endif()
 
 # Round-trip test of the action panel (load an action into the editor, read it back), without a window.
-# Fails if a field or an action type is added without updating ActionPanel::setFromAction.
+# Fails if a field or an action type is added without a bind() in ActionPanel::buildPages.
 add_executable(test_panel ../tests/test_panel.cpp actionpanel.cpp appsettings.cpp icons.cpp lngtranslator.cpp helpwindow.cpp)
 target_include_directories(test_panel PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(test_panel PRIVATE LNG_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Languages")

@@ -169,6 +169,7 @@ void MainWindow::rebuildUi() {
     }
     saveSettings();
     endEdit();
+    const QByteArray geometry = saveGeometry();  // size and maximized state: the window is shown again at the end
     const bool stayOnTop = aOnTop_->isChecked();
     setUpdatesEnabled(false);
     // the widgets first (their signals reach the actions), then the actions and the menus, which are children of the window
@@ -211,6 +212,7 @@ void MainWindow::rebuildUi() {
     updateUndoState();
     updateSamplePreview();
     setUpdatesEnabled(true);
+    restoreGeometry(geometry);
     show();
 }
 

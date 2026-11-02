@@ -46,7 +46,7 @@ Vous pouvez remplacer un texte par un autre dans les noms de fichiers. Les optio
 - **Sensible à la casse** (cochée par défaut).
 - **Inclure l'extension dans la recherche** : la recherche se fait dans le nom entier, extension comprise. Par défaut seul le nom sans extension est traité.
 - **Appliquer à l'extension plutôt qu'au nom** : seule l'extension (sans son point) est traitée.
-- **Utiliser les jokers** (décochée par défaut) : voir plus bas.
+- **N'importe où dans le nom / Seulement au début / Seulement à la fin** : où le texte cherché doit se trouver. « Seulement au début » avec `IMG_` remplace `IMG_` dans `IMG_001.jpg` mais laisse `mon_IMG_001.jpg` intact. Avec l'un des deux choix ancrés, il y a au plus un remplacement et « Remplacer toutes les occurences » n'a pas d'effet.
 
 Cette opération peut aussi être utilisée pour insérer une chaîne devant ou derrière une autre (si vous ne connaissez pas la position exacte où doit être mise la nouvelle chaîne). Par exemple, si vous voulez insérer "2" après les "test" contenus dans les noms, remplacez "test" par "test2".
 

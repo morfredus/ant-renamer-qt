@@ -2,7 +2,7 @@
 // an action of the plan) and read back (ActionPanel::makeAction) must be identical, for every action type.
 //
 // Every attribute the action saves is changed to a different value before the round trip, so a field added to
-// an action (or a new action type) that setFromAction() does not know about makes this test fail.
+// an action (or a new action type) that has no bind() in ActionPanel::buildPages makes this test fail.
 #include "actionpanel.h"
 #include "lngtranslator.h"
 #include "ren_actions.h"
@@ -128,7 +128,7 @@ int main(int argc, char** argv) {
     const int last = int(ActionType::Exif);
     if (ActionList::create(ActionType(last + 1))->type() != ActionType::Unknown) {
         std::fprintf(stderr,
-                     "FAIL: there is a new action type: add it to ActionPanel::makeAction/setFromAction and to this test\n");
+                     "FAIL: there is a new action type: add its page and bind() calls to ActionPanel::buildPages and to this test\n");
         ++failures;
     }
 

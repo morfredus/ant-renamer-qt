@@ -22,7 +22,7 @@ Authors=Antoine Potten|antrenamer-contact@antp.be|Frédéric Biron (Ant Renamer Qt
     <ActionBatchRemoveSel Caption="Suppr. sél." Hint="Supprimer la sélection|Supprimer les actions sélectionnées du job"/>
     <ActionBatchClear Caption="Vider" Hint="Vider le job|Supprimer toutes les actions du job"/>
     <ActionBatchNoRecent Caption="(aucun fichier)"/>
-    <ActionAddFiles Caption="Fichiers..." Hint="Ajouter fichiers|Ajouter des fichiers à la liste"/>
+    <ActionAddFiles Caption="Ajouter..." Hint="Ajouter fichiers|Ajouter des fichiers à la liste"/>
     <ActionAddFolders Caption="Dossiers..." Hint="Ajouter dossiers|Ajouter des dossiers ou leur contenu à la liste"/>
     <ActionRemoveSelected Caption="Retirer sélec." Hint="Retirer les fichiers sélectionnés|Retirer de la liste les fichiers sélectionnés"/>
     <ActionRemoveAll Caption="Retirer tout" Hint="Retirer tout|Retirer de la liste tous les fichiers"/>
@@ -110,6 +110,9 @@ Authors=Antoine Potten|antrenamer-contact@antp.be|Frédéric Biron (Ant Renamer Qt
     <cbxStrReplExt Caption="Inclure l'extension dans la recherche"/>
     <cbxStrReplOnlyExt Caption="Appliquer à l'extension plutôt qu'au nom"/>
     <cbxStrReplWildcards Caption="Utiliser les jokers (* = n'importe quel texte, ? = n'importe quel caractère)"/>
+    <rbtStrReplAnywhere Caption="N'importe où dans le nom"/>
+    <rbtStrReplBegin Caption="Seulement au début"/>
+    <rbtStrReplEnd Caption="Seulement à la fin"/>
     <lblMultstrSearch Caption="Rechercher :"/>
     <lblMultstrReplBy Caption="Remplacer par :"/>
     <lblMultstrReplSet Caption="Sets prédéfinis :"/>
@@ -241,6 +244,8 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
       <Item Name="stradStringRepl" Value="Remplacer &#34;%s&#34; par &#34;%s&#34;"/>
       <Item Name="stradStringReplAll" Value=", remplacer toutes les occurences"/>
       <Item Name="stradStringReplCase" Value=", sensible à la casse"/>
+      <Item Name="stradStringReplBegin" Value=", seulement au début"/>
+      <Item Name="stradStringReplEnd" Value=", seulement à la fin"/>
       <Item Name="stradStringReplWild" Value=", avec jokers"/>
       <Item Name="stradMultstrRepl" Value="Remplacement de chaînes multiples en utilisant le set &#34;%s&#34;"/>
       <Item Name="stradStringIns" Value="Insérer &#34;%s&#34; à la position %d"/>

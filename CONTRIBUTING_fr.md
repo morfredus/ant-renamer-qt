@@ -34,12 +34,12 @@ Pour comprendre où sont les choses et comment un renommage se déroule, lisez [
 **Ajouter une opération (un 15e type).**
 1. `core/ren_actions.h` : ajouter la valeur à la **fin** de `enum class ActionType` (les numéros sont ceux de l'original et sont les numéros de ligne de la liste à l'écran) et déclarer `class ActionXxx : public Action` avec ses champs, `description`, `makeNewName`, `save`, `load` (et `getTag` / `init` si besoin).
 2. `core/ren_actions.cpp` : les implémenter, ajouter la balise XML au tableau `kNames` et le type à `ActionList::create`.
-3. `app/actionpanel.cpp` : ajouter la page dans `buildPages` (l'ordre des pages est l'index du type), puis la branche dans `makeAction` et dans `setFromAction`.
+3. `app/actionpanel.cpp` : ajouter la page dans `buildPages` (l'ordre des pages est l'index du type), puis un `bind(contrôle, &Action::membre)` par contrôle juste après sa création (`bindFn` quand le contrôle ne correspond pas directement au membre).
 4. Ajouter les textes anglais dans le code et leurs traductions dans les fichiers `.lng` (`app/Languages/`).
 5. Ajouter un cas à `tests/test_core.cpp`. `tests/test_panel.cpp` détecte un `setFromAction` oublié.
 6. Documentation : pages d'aide (`app/help/actions_*.md`), `docs/USER_GUIDE*.md`, `docs/WHATS_NEW*.md`, `CHANGELOG.md`.
 
-**Ajouter un réglage à une opération existante.** Un champ dans la classe (avec sa valeur par défaut), `save` / `load` (un attribut XML ; prendre la valeur par défaut s'il manque pour que les anciens jobs se lisent encore), l'usage dans `makeNewName`, le contrôle dans `buildPages`, `makeAction` **et** `setFromAction`, le texte dans les fichiers `.lng`, un cas dans `test_core.cpp`.
+**Ajouter un réglage à une opération existante.** Un champ dans la classe (avec sa valeur par défaut), `save` / `load` (un attribut XML ; prendre la valeur par défaut s'il manque pour que les anciens jobs se lisent encore), l'usage dans `makeNewName`, le contrôle dans `buildPages` avec son `bind(...)` (un seul appel sert dans les deux sens : panneau vers action et retour), le texte dans les fichiers `.lng`, un cas dans `test_core.cpp`.
 
 **Ajouter une option du programme.** Un champ dans `AppOptions` (`app/appsettings.h`), son nom dans la macro `KEYS` (`app/appsettings.cpp`), le contrôle dans `OptionsDialog` (`app/dialogs.cpp`) ; si le moteur en a besoin, un champ dans `ren::Options` et la recopie dans `applyToCore()`.
 

@@ -67,19 +67,9 @@ AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent) 
     path_->setPlaceholderText(tr("Or type the path of a folder"));
     v->addWidget(path_);
 
-    files_ = new QCheckBox(tr("Add files of selected folders"));
-    folders_ = new QCheckBox(tr("Add selected folders"));
-    recursive_ = new QCheckBox(tr("Apply these two options also to subfolders"));
-    hidden_ = new QCheckBox(tr("Include hidden and system files when adding a folder"));
-    const AppOptions& o = appOptions();
-    files_->setChecked(o.addFiles);
-    folders_->setChecked(o.addFolders);
-    recursive_->setChecked(o.recursive);
-    hidden_->setChecked(o.addHidden);
-    v->addWidget(files_);
-    v->addWidget(folders_);
-    v->addWidget(recursive_);
-    v->addWidget(hidden_);
+    for (auto* c : {boxes_.files, boxes_.folders, boxes_.recursive, boxes_.hidden}) {
+        v->addWidget(c);
+    }
     v->addWidget(standardButtons(this));
 
     const QModelIndex start = model_->index(startFolder);
@@ -102,7 +92,23 @@ QStringList AddFoldersDialog::folders() const {
 }
 
 AddChoice AddFoldersDialog::choice() const {
-    return {files_->isChecked(), folders_->isChecked(), recursive_->isChecked(), hidden_->isChecked()};
+    return boxes_.choice();
+}
+
+AddChoiceBoxes::AddChoiceBoxes()
+    : files(new QCheckBox(QDialog::tr("Add files of selected folders"))),
+      folders(new QCheckBox(QDialog::tr("Add selected folders"))),
+      recursive(new QCheckBox(QDialog::tr("Apply these two options also to subfolders"))),
+      hidden(new QCheckBox(QDialog::tr("Include hidden and system files when adding a folder"))) {
+    const AppOptions& o = appOptions();
+    files->setChecked(o.addFiles);
+    folders->setChecked(o.addFolders);
+    recursive->setChecked(o.recursive);
+    hidden->setChecked(o.addHidden);
+}
+
+AddChoice AddChoiceBoxes::choice() const {
+    return {files->isChecked(), folders->isChecked(), recursive->isChecked(), hidden->isChecked()};
 }
 
 // --- Drag & drop --------------------------------------------------------------------------------------
@@ -111,17 +117,8 @@ DragDropDialog::DragDropDialog(QWidget* parent) : QDialog(parent) {
     setWindowIcon(tbIcon(TbAddFiles));
     auto* v = new QVBoxLayout(this);
     v->addWidget(new QLabel(tr("Options to use to add files that have been dropped:")));
-    files_ = new QCheckBox(tr("Add files of selected folders"));
-    folders_ = new QCheckBox(tr("Add selected folders"));
-    recursive_ = new QCheckBox(tr("Apply these two options also to subfolders"));
-    hidden_ = new QCheckBox(tr("Include hidden and system files when adding a folder"));
-    const AppOptions& o = appOptions();
-    files_->setChecked(o.addFiles);
-    folders_->setChecked(o.addFolders);
-    recursive_->setChecked(o.recursive);
-    hidden_->setChecked(o.addHidden);
     notAgain_ = new QCheckBox(tr("Do not show this window again (keep selected options for next times)"));
-    for (auto* c : {files_, folders_, recursive_, hidden_}) {
+    for (auto* c : {boxes_.files, boxes_.folders, boxes_.recursive, boxes_.hidden}) {
         v->addWidget(c);
     }
     v->addSpacing(8);
@@ -130,7 +127,7 @@ DragDropDialog::DragDropDialog(QWidget* parent) : QDialog(parent) {
 }
 
 AddChoice DragDropDialog::choice() const {
-    return {files_->isChecked(), folders_->isChecked(), recursive_->isChecked(), hidden_->isChecked()};
+    return boxes_.choice();
 }
 bool DragDropDialog::dontAskAgain() const {
     return notAgain_->isChecked();

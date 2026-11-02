@@ -97,6 +97,7 @@ public:
     ActionStringRepl() : Action(ActionType::StringRepl) {}
     QString search = QStringLiteral("old"), replace = QStringLiteral("new");
     bool all = true, caseSens = true, inclExt = false, onlyExt = false, wildcards = false;
+    int where = 0;  // 0 anywhere in the name, 1 only at the beginning, 2 only at the end
     QString description() const override;
     QString makeNewName(const QString&, bool) override;
     void save(QXmlStreamWriter&) const override;
@@ -163,6 +164,20 @@ struct PairGroup {
     }
 };
 
+// State of the %num% counter shared by the Enumeration and EXIF actions: current value, restart in each folder,
+// same value for the files of a pair.
+struct Counter {
+    int cur = 0;
+    QString prevFolder;
+    PairGroup group;
+    void reset(int start) {
+        cur = start;
+        prevFolder.clear();
+        group.clear();
+    }
+    void step(const QString& fn, int start, int incr, bool restart, bool sharePairs);  // before a name is built
+};
+
 class ActionEnum : public Action {
 public:
     ActionEnum() : Action(ActionType::Enum) {}
@@ -177,16 +192,10 @@ public:
 
 protected:
     bool getTag(const QString&, QString&) override;
-    void init() override {
-        curPos_ = startAt;
-        prevFolder_.clear();
-        group_.clear();
-    }
+    void init() override { counter_.reset(startAt); }
 
 private:
-    int curPos_ = 0;
-    QString prevFolder_;
-    PairGroup group_;
+    Counter counter_;
 };
 
 class ActionMP3 : public Action {
@@ -288,17 +297,11 @@ public:
 
 protected:
     bool getTag(const QString&, QString&) override;
-    void init() override {
-        curNum_ = numStart;
-        prevFolder_.clear();
-        group_.clear();
-    }
+    void init() override { counter_.reset(numStart); }
 
 private:
     QMap<QString, QString> tags_;
-    int curNum_ = 0;
-    QString prevFolder_;
-    PairGroup group_;
+    Counter counter_;
 };
 
 class ActionList {
