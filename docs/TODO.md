@@ -15,6 +15,16 @@ Safeguards for files changed outside the program between two sessions:
 
 To decide: after a restart, offer to resume the last session by itself, or only through the Undo button and the history window (the simpler one, preferred).
 
+### P2: one instance at a time (idea, not decided)
+
+Today only the Explorer menu looks for a running window (`--shell` hands the paths to it, `app/main.cpp`); any other launch opens a second window. Two windows write the same files: the undo history (`antrenamer-qt-history.json`: the last one to save erases the passes of the other, and two windows started together get the same session number) and the settings (`.ini`: the last one closed wins). A `-q` run reads and writes the history too, with no lock.
+
+Two ways, to decide:
+- **Simple (preferred)**: when another instance is running, the new one shows an information box ("Ant Renamer Qt is already running: only one instance can be open at a time") and quits. The same lock for the installed and the portable version (nobody uses both on one computer, so no lock per settings folder). `--shell` keeps handing its paths to the running window, before the check. A few lines in `main.cpp`, two texts (EN, FR), the docs. `QLockFile` already drops the lock of a crashed process. To settle: a launch with `-g -x` and no `-q` must not wait for a click in an unattended script (no box, a message on the error output and an exit code, or let it through); `-q` stays out of the rule.
+- **Complete**: the new instance hands its whole command line (paths, job, `-g -x`) to the running window, brings it to the front and quits; the lock is tied to the settings folder (hash of its path). More work: a window busy with a run must refuse or queue the command line.
+
+Not enough on its own (a crash leaves the history written by the last run, which is fine), and `-q` could still overwrite the history of an open window: accepted for now.
+
 ### 3.1 plan (decided 2026-11-02)
 
 Content of 3.1.0-beta.4, to be published in a few days (the work stays Unreleased on `dev/3.1.0`, `main` stays at 3.1.0-beta.3): the undo history kept between runs (done), the silent command line (`-q`) and the modern layout by default. The suffix for duplicate names in the EXIF action moves to 3.2. Then 3.1.0-rc.1 once the beta.4 has run without negative feedback (only fixes during the rc).

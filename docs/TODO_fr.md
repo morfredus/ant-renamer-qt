@@ -15,6 +15,16 @@ Garde-fous pour les fichiers modifiés hors du programme entre deux sessions :
 
 À trancher : après un redémarrage, proposer de reprendre seule la dernière session, ou seulement par le bouton Annuler et la fenêtre d'historique (le plus simple, à privilégier).
 
+### P2 : une seule instance à la fois (idée, pas décidée)
+
+Aujourd'hui seul le menu de l'Explorateur cherche une fenêtre ouverte (`--shell` lui passe les chemins, `app/main.cpp`) ; tout autre lancement ouvre une deuxième fenêtre. Deux fenêtres écrivent les mêmes fichiers : l'historique d'annulation (`antrenamer-qt-history.json` : la dernière qui enregistre efface les passes de l'autre, et deux fenêtres lancées ensemble ont le même numéro de session) et les réglages (`.ini` : la dernière fermée l'emporte). Un lancement `-q` lit et écrit aussi l'historique, sans verrou.
+
+Deux façons, à trancher :
+- **Simple (à privilégier)** : quand une autre instance tourne, la nouvelle affiche une boîte d'information (« Ant Renamer Qt est déjà lancé : une seule instance peut être ouverte à la fois ») et se ferme. Le même verrou pour la version installée et la version portable (personne n'utilise les deux sur un même poste, donc pas de verrou par dossier de réglages). `--shell` continue de passer ses chemins à la fenêtre ouverte, avant la vérification. Quelques lignes dans `main.cpp`, deux textes (EN, FR), la doc. `QLockFile` abandonne déjà le verrou d'un processus planté. À régler : un lancement `-g -x` sans `-q` ne doit pas attendre un clic dans un script sans surveillance (pas de boîte, un message sur la sortie d'erreur et un code de sortie, ou le laisser passer) ; `-q` reste hors de la règle.
+- **Complète** : la nouvelle instance passe toute sa ligne de commande (chemins, job, `-g -x`) à la fenêtre ouverte, la met au premier plan et se ferme ; le verrou est lié au dossier des réglages (hash de son chemin). Plus de travail : une fenêtre occupée par une exécution doit refuser ou mettre la ligne de commande en attente.
+
+Ce n'est pas suffisant seul (un plantage laisse l'historique écrit par le dernier lancement, ce qui convient), et `-q` pourrait encore écraser l'historique d'une fenêtre ouverte : accepté pour l'instant.
+
 ### Plan de la 3.1 (décidé le 02/11/2026)
 
 Contenu de la 3.1.0-beta.4, à publier dans quelques jours (le travail reste en Unreleased sur `dev/3.1.0`, `main` reste à la 3.1.0-beta.3) : l'historique d'annulation conservé entre deux lancements (fait), la ligne de commande silencieuse (`-q`) et l'interface moderne par défaut. Le suffixe pour les noms en double de l'action EXIF passe en 3.2. Ensuite la 3.1.0-rc.1, une fois la beta.4 passée sans retour négatif (seulement des corrections pendant la rc).
