@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Changed
+
+- Actions help (EN, FR): examples for the position choice of the String replacement (beginning, end, anywhere, and a name that does not match), with a reminder to look at the preview with a short search text. To remove them if the *Anywhere in the name* choice is dropped.
+
 ## [3.1.0-beta.3] - 2026-11-02
 
 ### Added
