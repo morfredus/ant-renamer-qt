@@ -8,6 +8,12 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.0-rc.1] - 2026-11-03
+
+### Changed
+
+- Code freeze: 3.1.0-rc.1 is the code of 3.1.0-beta.4 (no change in the program). From now on only fixes until the final 3.1.0; the ideas go to 3.2 (`docs/TODO.md`).
+
 ## [3.1.0-beta.4] - 2026-11-02
 
 ### Added

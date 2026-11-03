@@ -4,7 +4,13 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.1.0-beta.4**.
+Version courante : **3.1.0-rc.1**.
+
+## 3.1.0-rc.1
+
+| Nouveauté | Depuis |
+|---|---|
+| **Première release candidate de la 3.1** : le code est figé, c'est le programme de la bêta 4. Désormais seulement des correctifs, jusqu'à la 3.1.0 finale. | 3.1.0-rc.1 |
 
 ## 3.1.0-beta.4
 
