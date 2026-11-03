@@ -28,6 +28,10 @@ public:
 
 protected:
     bool eventFilter(QObject* o, QEvent* e) override;
+    void focusInEvent(QFocusEvent* e) override;
+
+private:
+    bool selectOnRelease_ = false;
 };
 
 class ActionPanel : public QWidget {

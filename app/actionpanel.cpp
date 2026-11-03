@@ -45,11 +45,20 @@ HistoryCombo::HistoryCombo() {
 }
 
 // The first click in a field selects its whole text (the "old" / "new" samples are never kept); a second click places the cursor.
+// The focus comes before the press, and QComboBox hands the focus-in to its line edit directly (an event filter on the line edit
+// never sees it): focusInEvent remembers that the focus came from the mouse, and the release selects everything, unless the
+// user dragged a selection.
+void HistoryCombo::focusInEvent(QFocusEvent* e) {
+    selectOnRelease_ = e->reason() == Qt::MouseFocusReason;
+    QComboBox::focusInEvent(e);
+}
+
 bool HistoryCombo::eventFilter(QObject* o, QEvent* e) {
-    if (o == lineEdit() && e->type() == QEvent::MouseButtonPress && !lineEdit()->hasFocus()) {
-        lineEdit()->setFocus(Qt::MouseFocusReason);
-        lineEdit()->selectAll();
-        return true;
+    if (o == lineEdit() && e->type() == QEvent::MouseButtonRelease && selectOnRelease_) {
+        selectOnRelease_ = false;
+        if (!lineEdit()->hasSelectedText()) {
+            lineEdit()->selectAll();
+        }
     }
     return QComboBox::eventFilter(o, e);
 }
