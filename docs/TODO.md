@@ -27,7 +27,7 @@ Not enough on its own (a crash leaves the history written by the last run, which
 
 ### 3.1 plan (decided 2026-11-02)
 
-Content of 3.1.0-beta.4, to be published in a few days (the work stays Unreleased on `dev/3.1.0`, `main` stays at 3.1.0-beta.3): the undo history kept between runs (done), the silent command line (`-q`) and the modern layout by default. The suffix for duplicate names in the EXIF action moves to 3.2. Then 3.1.0-rc.1 once the beta.4 has run without negative feedback (only fixes during the rc).
+Content of 3.1.0-beta.4, to be published in a few days (the work stays Unreleased on `dev/3.1.0`, `main` stays at 3.1.0-beta.3): the undo history kept between runs (done), the silent command line (`-q`) and the modern layout by default. The suffix for duplicate names in the EXIF action moves to 3.2. Then 3.1.0-rc.1 once the beta.4 has run without negative feedback (only fixes during the rc). Decided 2026-11-03: the beta.4 becomes the 3.1.0-rc.1, code frozen.
 
 ### Possible versions
 

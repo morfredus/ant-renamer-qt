@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.1.0-rc.1 (03/11/2026)
+  - Gel du code : première release candidate de la 3.1, même programme que la bêta 4 (rien de nouveau). Désormais seulement des correctifs, jusqu'à la 3.1.0 finale.
 - 3.1.0-beta.4 (02/11/2026)
   - L'historique d'annulation est conservé à la fermeture du programme, session par session, avec une vérification de la taille et de la date de chaque fichier avant d'annuler, et un bouton « Effacer l'historique ».
   - Ligne de commande silencieuse : -q exécute un job sans fenêtre ni boîte de dialogue ; le code de sortie dit comment cela s'est passé.

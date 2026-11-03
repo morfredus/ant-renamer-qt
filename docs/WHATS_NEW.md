@@ -4,7 +4,13 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.1.0-beta.4**.
+Current version: **3.1.0-rc.1**.
+
+## 3.1.0-rc.1
+
+| What is new | Since |
+|---|---|
+| **First release candidate of 3.1**: the code is frozen, it is the program of the beta 4. From now on only fixes, until the final 3.1.0. | 3.1.0-rc.1 |
 
 ## 3.1.0-beta.4
 

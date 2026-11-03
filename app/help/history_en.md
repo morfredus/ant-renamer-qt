@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.1.0-rc.1 (03/11/2026)
+  - Code freeze: first release candidate of 3.1, same program as the beta 4 (nothing new). From now on only fixes, until the final 3.1.0.
 - 3.1.0-beta.4 (02/11/2026)
   - The undo history is kept when the program is closed, session by session, with a check of the size and date of each file before undoing, and a "Clear the history" button.
   - Silent command line: -q runs a batch with no window and no dialog; the exit code says how it went.

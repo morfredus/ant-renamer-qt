@@ -27,7 +27,7 @@ Ce n'est pas suffisant seul (un plantage laisse l'historique écrit par le derni
 
 ### Plan de la 3.1 (décidé le 02/11/2026)
 
-Contenu de la 3.1.0-beta.4, à publier dans quelques jours (le travail reste en Unreleased sur `dev/3.1.0`, `main` reste à la 3.1.0-beta.3) : l'historique d'annulation conservé entre deux lancements (fait), la ligne de commande silencieuse (`-q`) et l'interface moderne par défaut. Le suffixe pour les noms en double de l'action EXIF passe en 3.2. Ensuite la 3.1.0-rc.1, une fois la beta.4 passée sans retour négatif (seulement des corrections pendant la rc).
+Contenu de la 3.1.0-beta.4, à publier dans quelques jours (le travail reste en Unreleased sur `dev/3.1.0`, `main` reste à la 3.1.0-beta.3) : l'historique d'annulation conservé entre deux lancements (fait), la ligne de commande silencieuse (`-q`) et l'interface moderne par défaut. Le suffixe pour les noms en double de l'action EXIF passe en 3.2. Ensuite la 3.1.0-rc.1, une fois la beta.4 passée sans retour négatif (seulement des corrections pendant la rc). Décidé le 03/11/2026 : la beta.4 devient la 3.1.0-rc.1, code figé.
 
 ### Versions possibles
 
