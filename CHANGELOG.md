@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Changed
+
+- TODO (EN, FR): 3.2 gets the news of the new version shown under its number in the update notice (release notes or WHATS_NEW lines).
+
 ## [3.1.0-rc.2] - 2026-11-04
 
 ### Fixed
