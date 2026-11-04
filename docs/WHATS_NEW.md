@@ -4,7 +4,13 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.1.0-rc.1**.
+Current version: **3.1.0-rc.2**.
+
+## 3.1.0-rc.2
+
+| What is new | Since |
+|---|---|
+| **Fix**: the first click in a field of the actions selects the whole text (it did not on some fields). | 3.1.0-rc.2 |
 
 ## 3.1.0-rc.1
 

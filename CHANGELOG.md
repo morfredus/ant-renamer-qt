@@ -8,6 +8,16 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.0-rc.2] - 2026-11-04
+
+### Fixed
+
+- The first click in a field of the actions did not select the whole text (tester feedback on 3.1.0-rc.1): Qt gives the focus before the mouse press reaches the line edit, so the test "the field has no focus yet" was never true; and `QComboBox` hands the focus-in to its line edit directly, so an event filter on the line edit never sees it. `HistoryCombo::focusInEvent` now remembers the focus-in by mouse and the release selects everything, unless the user dragged a selection (`app/actionpanel.cpp`; checked with a small program that clicks with `QTest`).
+
+### Changed
+
+- TODO (EN, FR): 3.2 gets an automatic suffix (`_1`, `_2`...) for duplicate names in every action, not only in the EXIF action (forum request: bursts give the same date and time; today a name already taken is refused and logged, nothing is overwritten).
+
 ## [3.1.0-rc.1] - 2026-11-03
 
 ### Changed

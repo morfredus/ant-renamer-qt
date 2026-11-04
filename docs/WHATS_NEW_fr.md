@@ -4,7 +4,13 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.1.0-rc.1**.
+Version courante : **3.1.0-rc.2**.
+
+## 3.1.0-rc.2
+
+| Nouveauté | Depuis |
+|---|---|
+| **Correction** : le premier clic dans un champ des actions sélectionne tout le texte (ce n'était pas le cas sur certains champs). | 3.1.0-rc.2 |
 
 ## 3.1.0-rc.1
 
