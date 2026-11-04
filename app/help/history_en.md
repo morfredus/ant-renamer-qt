@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.1.0-rc.2 (04/11/2026)
+  - Fix: the first click in a field of the actions selects the whole text.
 - 3.1.0-rc.1 (03/11/2026)
   - Code freeze: first release candidate of 3.1, same program as the beta 4 (nothing new). From now on only fixes, until the final 3.1.0.
 - 3.1.0-beta.4 (02/11/2026)

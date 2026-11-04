@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.1.0-rc.2 (04/11/2026)
+  - Correction : le premier clic dans un champ des actions sélectionne tout le texte.
 - 3.1.0-rc.1 (03/11/2026)
   - Gel du code : première release candidate de la 3.1, même programme que la bêta 4 (rien de nouveau). Désormais seulement des correctifs, jusqu'à la 3.1.0 finale.
 - 3.1.0-beta.4 (02/11/2026)
