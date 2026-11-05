@@ -109,6 +109,10 @@ L'assistance pour Ant Renamer Qt se fait sur GitHub : [Issues](https://github.co
 
 Ant Renamer Qt est un logiciel libre et le reste : rien n'est réservé à ceux qui donnent. Si vous souhaitez soutenir le travail sur le portage Qt (et non le programme d'origine, qui est d'Antoine Potten), utilisez le bouton « Sponsor » du dépôt ([GitHub Sponsors](https://github.com/sponsors/morfredus) ou [PayPal](https://www.paypal.com/donate/?hosted_button_id=X4FPQCL7BL2FG)). Pour soutenir le programme d'origine, son auteur a sa propre [page de dons](https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=7LPTSBU87XB34).
 
+## Utilisation de l'IA
+
+L'auteur du portage ne connaît pas Delphi. [Claude](https://claude.ai) (Anthropic) a servi à comprendre le code source Delphi d'origine et à aider à écrire et relire le portage en C++. Chaque version est compilée et testée par l'auteur sur de vraies machines (voir [docs/TESTED_PLATFORMS_fr.md](docs/TESTED_PLATFORMS_fr.md)).
+
 ## Crédits
 
 - Programme d'origine : Antoine Potten, [Ant Renamer](https://www.antp.be/software/renamer/) (Delphi 7, GPL v2 ou ultérieure).
