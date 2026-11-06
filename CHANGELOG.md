@@ -10,6 +10,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Changed
 
+- Chinese (Simplified) translation refined, re-translated and proofread from the English file by 大眼仔~旭, the author of the translation of the original program. 285 keys, same as `English.lng`, no placeholder changed (`app/Languages/Chinese (Simplified).lng`).
 - TODO (EN, FR): 3.2 gets the news of the new version shown under its number in the update notice (release notes or WHATS_NEW lines).
 
 ## [3.1.0-rc.2] - 2026-11-04
