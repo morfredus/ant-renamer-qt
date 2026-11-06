@@ -3,10 +3,10 @@
 Icon=Qk32AAAAAAAAAHYAAAAoAAAAEAAAABAAAAABAAQAAAAAAIAAAAAiCwAAIgsAAAAAAAAAAAAAAAAAAAAAqgAAAP0ABAL8AGVl/wAE/vwA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGZmZmZmZmZmAAAAAAAAAAABERERERERIAEzMzMzIiJAATMzMzMiIkABMzMzMyIiQAEzM1MzIiJAATMzMzMiIkABNTM1MyIiQAFVUzMzIiJAATUzNTMiIkABMzMzMyIiQAEzM1MzIiJAAkREREREREAAAAAAAAAAAGZmZmZmZmZm
 Name=Chinese (Simplified)
 LocalName=简体中文
-Version=2.13
-VersionFormat=2.13
-Comments=Ant Renamer 2.13 简体中文
-Authors=林繁|cnlinfan@gmail.com|大眼仔~旭||无名用户||
+Version=3.0
+VersionFormat=3.0
+Comments=Ant Renamer 3.0 简体中文
+Authors=林繁|cnlinfan@gmail.com|大眼仔~旭|无名用户|
 -->
 <!--
 Note for translators: If you want to complete this translation, simple search for the text <n/> that indicate new lines that should be translated.
@@ -14,59 +14,60 @@ Replace the English text by the correct translation, and once done you can send 
 -->
 <Application>
   <MainForm>
-    <tbTabs Caption="界面"/>
+    <tbTabs Caption="页面"/>
     <tbProgram Caption="程序"/>
     <tbFiles Caption="文件"/>
     <tbMove Caption="移动项目"/>
     <tbActions Caption="操作"/>
     <tbLog Caption="日志"/>
-    <ActionBatchAddAction Caption="添加到批处理" Hint="添加到批处理|将选定的操作及设置添加到批处理列表"/>
-    <ActionBatchOpen Caption="打开..." Hint="打开|打开批处理文件"/>
-    <ActionBatchSaveAs Caption="保存..." Hint="保存|保存批处理文件"/>
-    <ActionBatchRemoveSel Caption="移除选定项" Hint="移除选定项|从批处理中移除选定的操作"/>
-    <ActionBatchClear Caption="清除" Hint="清除|清空批处理列表"/>
-    <ActionBatchNoRecent Caption="(无最近打开的文件)"/>
-    <ActionAddFiles Caption="添加文件..." Hint="添加文件|添加文件到文件列表"/>
-    <ActionAddFolders Caption="添加文件夹..." Hint="添加文件夹|添加文件夹或文件夹内容到列表"/>
-    <ActionRemoveSelected Caption="移除选定项" Hint="移除选定项|从列表中移除选定的文件"/>
-    <ActionRemoveAll Caption="全部移除" Hint="全部移除|清空文件列表"/>
-    <ActionRemoveDead Caption="移除无效文件" Hint="移除无效文件|移除列表中的无效文件"/>
-    <ActionPreview Caption="预览" Hint="更新预览|按当前设置更新预览信息"/>
+    <ActionBatchAddAction Caption="添加到批处理" Hint="添加到批处理|将所选操作及其设置添加到批处理"/>
+    <ActionBatchOpen Caption="打开…" Hint="打开|打开批处理文件"/>
+    <ActionBatchSaveAs Caption="保存…" Hint="保存|将此批处理保存到文件"/>
+    <ActionBatchRemoveSel Caption="移除所选" Hint="移除所选|从批处理中移除所选操作"/>
+    <ActionBatchClear Caption="清空" Hint="清空批处理|移除批处理中的所有操作"/>
+    <ActionBatchNoRecent Caption="（无最近文件）"/>
+    <ActionAddFiles Caption="添加文件…" Hint="添加文件|将文件添加到列表"/>
+    <ActionAddFolders Caption="添加文件夹…" Hint="添加文件夹|将文件夹或文件夹内容添加到列表"/>
+    <ActionRemoveSelected Caption="移除所选" Hint="移除所选|从列表中移除所选文件"/>
+    <ActionRemoveAll Caption="全部移除" Hint="全部移除|从列表中移除所有文件"/>
+    <ActionRemoveDead Caption="移除无效项" Hint="移除无效项|从列表中移除无效文件"/>
+    <ActionPreview Caption="预览" Hint="刷新预览|用当前计划的操作刷新预览列"/>
+    <ActionChangedOnly Caption="仅已更改" Hint="仅已更改|仅显示预览中名称会改变的文件"/>
     <ActionFromListClear Caption="清空" Hint="清空列表|清空列表"/>
-    <ActionFromListOpen Caption="打开..." Hint="打开|从文件加载列表"/>
-    <ActionFromListSave Caption="保存..." Hint="保存|将列表保存到文件"/>
-    <ActionMultistrReplClear Caption="清空表格" Hint="清空字符串替换表格"/>
-    <ActionMultistrReplCopy Caption="复制/导出" Hint="|将整个字符串表以制表符分隔的文本形式复制到剪贴板，以便导入到 Excel 或文本编辑器"/> 
-	<ActionMultistrReplPaste Caption="粘贴/导入" Hint="|将整个字符串表以制表符分隔的文本形式从剪贴板粘贴，以便从 Excel 或文本编辑器导入"/>
-	<ActionMultistrReplSave Caption="保存" Hint="|以上面的名字将当前设置保存为预设项"/>
-    <ActionMultistrReplDelete Caption="删除" Hint="|删除选定的预设项"/>
-    <ActionMoveUp Caption="上移" Hint="上移|向上移动选定项目"/>
-    <ActionMoveDown Caption="下移" Hint="下移|向下移动选定项目"/>
-    <ActionMoveTop Caption="置顶" Hint="置顶|移动选定项目到列表顶部"/>
-    <ActionMoveBottom Caption="置底" Hint="置底|移动选定项目到列表底部"/>
-    <ActionItemsUnsort Caption="取消排序" Hint="|取消自动排序"/>
-    <ActionItemsSelectAll Caption="全选" Hint="全选|选定全部项目"/>
-    <ActionItemsSelectNone Caption="全不选" Hint="全不选|取消所有项目的选择状态"/>
-    <ActionItemsSelectInvert Caption="反向选择" Hint="反向选择|反转项目的选择状态"/>
+    <ActionFromListOpen Caption="打开…" Hint="打开|从文件加载列表"/>
+    <ActionFromListSave Caption="保存…" Hint="保存|将列表保存到文件"/>
+    <ActionMultistrReplClear Caption="清空表格" Hint="|清空字符串表格"/>
+<n/>    <ActionMultistrReplCopy Caption="复制/导出" Hint="|将整个字符串表格以制表符分隔的文本复制到剪贴板，以便导入 Excel 或文本编辑器"/>
+<n/>    <ActionMultistrReplPaste Caption="粘贴/导入" Hint="|从剪贴板以制表符分隔的文本粘贴整个字符串表格，用于从 Excel 或文本编辑器导入"/>
+    <ActionMultistrReplSave Caption="保存" Hint="|以上面填写的名称保存当前集合"/>
+    <ActionMultistrReplDelete Caption="删除" Hint="|删除当前选中的集合名称"/>
+    <ActionMoveUp Caption="上移" Hint="上移|上移所选项目"/>
+    <ActionMoveDown Caption="下移" Hint="下移|下移所选项目"/>
+    <ActionMoveTop Caption="置顶" Hint="移到顶部|将所选项目移到列表顶部"/>
+    <ActionMoveBottom Caption="置底" Hint="移到底部|将所选项目移到列表底部"/>
+    <ActionItemsUnsort Caption="未排序项目" Hint="|取消当前排序顺序"/>
+    <ActionItemsSelectAll Caption="全选" Hint="全选|选择所有项目"/>
+    <ActionItemsSelectNone Caption="全不选" Hint="全不选|取消选择所有项目"/>
+    <ActionItemsSelectInvert Caption="反选" Hint="反选|反转项目的选择"/>
     <ActionLogClear Caption="清空" Hint="清空|清空日志"/>
-    <ActionLogSave Caption="保存..." Hint="保存|将日志保存到文件"/>
+    <ActionLogSave Caption="保存…" Hint="保存|将日志保存到文件"/>
     <ActionLogCopy Caption="复制" Hint="复制|将日志复制到剪贴板"/>
-    <ActionLogFilter Caption="筛选" Hint="筛选|筛选日志内容"/>
-    <ActionLogFilterOk Caption="成功" Hint="显示重命名成功的文件|显示重命名成功的文件"/>
-    <ActionLogFilterError Caption="错误" Hint="显示重命名出错的文件|显示重命名出错的文件"/>
-    <ActionLogFilterNot Caption="未处理" Hint="显示未处理的文件|显示未处理的文件"/>
-    <ActionActionGo Caption="开始" Hint="开始|开始重命名操作"/>
-    <ActionActionStop Caption="停止" Hint="停止|停止重命名操作"/>
-    <ActionOptions Caption="选项..." Hint="选项|更改程序选项"/>
-    <ActionActionUndo Caption="撤销" Hint="撤销|撤销上次的重命名操作"/>
-    <ActionHelpContents Caption="帮助" Hint="帮助主题|打开帮助主题"/>
-    <ActionHelpAbout Caption="关于..." Hint="关于|显示关于对话框"/>
-    <ActionExit Caption="退出" Hint="退出|退出应用程序"/>
-    <ActionAlwaysOnTop Caption="置于顶层" Hint="置于顶层|保持窗口总在最前"/>
-    <ActionTabFiles Caption="文件" Hint="文件|显示文件列表"/>
-    <ActionTabActions Caption="操作" Hint="操作|显示重命名操作"/>
+    <ActionLogFilter Caption="筛选" Hint="筛选|筛选日志条目"/>
+    <ActionLogFilterOk Caption="成功" Hint="显示已重命名文件|显示与成功重命名的文件对应的条目"/>
+    <ActionLogFilterError Caption="错误" Hint="显示错误|显示与错误对应的条目"/>
+    <ActionLogFilterNot Caption="未重命名" Hint="显示已跳过文件|显示与未重命名文件对应的条目"/>
+    <ActionActionGo Caption="开始" Hint="开始|开始重命名过程"/>
+    <ActionActionStop Caption="停止" Hint="停止|停止重命名过程"/>
+    <ActionOptions Caption="选项…" Hint="选项|更改程序选项"/>
+    <ActionActionUndo Caption="撤销" Hint="撤销|撤销上次重命名"/>
+    <ActionHelpContents Caption="帮助" Hint="帮助内容|打开帮助内容"/>
+    <ActionHelpAbout Caption="关于…" Hint="关于|关于本程序"/>
+    <ActionExit Caption="退出" Hint="退出|退出程序"/>
+    <ActionAlwaysOnTop Caption="置顶" Hint="总在最前|使窗口始终保持在最前面"/>
+    <ActionTabFiles Caption="文件" Hint="文件|显示文件"/>
+    <ActionTabActions Caption="操作" Hint="操作|显示操作"/>
     <ActionTabLog Caption="日志" Hint="日志|显示日志"/>
-    <lstFiles Hint="|文件列表 - 在标题上单击右键自定义显示的项目">
+    <lstFiles Hint="|文件列表 - 在列标题上单击鼠标右键可自定义列">
       <Header>
         <Columns>
           <Item Index="0" Text="文件夹"/>
@@ -80,139 +81,145 @@ Replace the English text by the correct translation, and once done you can send 
         </Columns>
       </Header>
     </lstFiles>
-    <grpPreview Caption="       预览选定的文件 "/>
-    <grpBatch Caption="       批处理内容 (操作计划) "/>
-    <lstBatch Hint="|批处理内容 (操作计划)"/>
-    <lblPreviewOld Caption="原文件名:"/>
-    <lblPreviewNew Caption="新文件名:"/>
+    <grpPreview Caption="       所选文件的预览 "/>
+    <grpBatch Caption="       批处理内容（计划的操作） "/>
+    <lstBatch Hint="|批处理内容（计划的操作）"/>
+    <lblPreviewOld Caption="当前名称："/>
+    <lblPreviewNew Caption="新名称示例："/>
     <lstActions Hint="|操作列表">
       <Items>
         <Item Index="0" Value="更改扩展名"/>
-        <Item Index="1" Value="替换字符串"/>
-        <Item Index="2" Value="替换多个字符串"/>
+        <Item Index="1" Value="字符串替换"/>
+        <Item Index="2" Value="多字符串替换"/>
         <Item Index="3" Value="插入字符串"/>
         <Item Index="4" Value="移动字符串"/>
-        <Item Index="5" Value="删除字符串"/>
-        <Item Index="6" Value="枚举"/>
+        <Item Index="5" Value="删除字符"/>
+        <Item Index="6" Value="编号"/>
         <Item Index="7" Value="使用 MP3 标签信息"/>
-        <Item Index="8" Value="使用日期与时间"/>
-        <Item Index="9" Value="随机命名"/>
+        <Item Index="8" Value="使用日期和时间"/>
+        <Item Index="9" Value="随机名称"/>
         <Item Index="10" Value="更改大小写"/>
-        <Item Index="11" Value="从列表读取名称"/>
+        <Item Index="11" Value="从列表取名称"/>
         <Item Index="12" Value="正则表达式"/>
-        <Item Index="13" Value="使用相片 EXIF 信息"/>
+        <Item Index="13" Value="使用 EXIF 信息"/>
       </Items>
     </lstActions>
-    <lblChangeExt Caption="将扩展名更改为:"/>
-    <cbxChangeExtNoRepl Caption="不替换扩展名, 仅添加到当前文件名末尾"/>
-    <lblChangeExtNotes Caption="说明:&lt;br&gt;- 不要在新扩展名中输入点号&lt;br&gt;- 如果需要生成递增的扩展名, 请使用&lt;LINK&gt;枚举&lt;/LINK&gt;操作"/>
-    <lblStrReplSearch Caption="搜索:"/>
-    <lblStrReplBy Caption="替换为:"/>
-    <cbxStrReplAll Caption="全部替换"/>
+    <lblChangeExt Caption="将扩展名替换为："/>
+    <cbxChangeExtNoRepl Caption="不替换扩展名，而是将其追加到当前完整名称"/>
+    <lblChangeExtNotes Caption="说明：&lt;br&gt;- 不要包含点，只需输入新的扩展名&lt;br&gt;- 如需生成递增的扩展名，请使用&lt;LINK&gt;编号&lt;/LINK&gt;操作"/>
+    <lblStrReplSearch Caption="搜索："/>
+    <lblStrReplBy Caption="替换为："/>
+    <cbxStrReplAll Caption="替换所有匹配项"/>
     <cbxStrReplCase Caption="区分大小写"/>
-    <cbxStrReplExt Caption="搜索扩展名"/>
-    <cbxStrReplOnlyExt Caption="仅应用到扩展名"/>
-    <lblMultstrSearch Caption="搜索:"/>
-    <lblMultstrReplBy Caption="替换为:"/>
-    <lblMultstrReplSet Caption="预设项:"/>
-    <cbxMultstrReplExt Caption="搜索扩展名"/>
-    <cbxMultstrReplCase Caption="区分大小写"/>
-    <lblMultstrReplNotes Caption="说明:&lt;BR&gt;- 可以使用 Ctrl+加号 (+) 和 Ctrl+减号 (-) 在当前位置插入或删除一行"/>
-    <lblStrInsStr Caption="需要插入的字符串:"/>
-    <lblStrInsPos Caption="插入位置:"/>
-    <rbtStrInsBegin Caption="相对于开头"/>
-    <rbtStrInsEnd Caption="相对于末尾"/>
-    <cbxStrInsExt Caption="仅应用到扩展名"/>
-    <lblStrInsNotes Caption="说明:&lt;br&gt;- 如果需要在特定字符串前后而不是特定位置插入字符串, 请使用&lt;LINK&gt;替换字符串&lt;/LINK&gt;操作&lt;br&gt;- %name% = 原文件名 (不含扩展名)&lt;BR&gt;- %ext% = 原扩展名 (包含点号)&lt;BR&gt;- %folderN% = 文件夹名, 其中 N 为级别 (1 = 当前, 2 = 父级, 等等)&lt;BR&gt;- %% = 百分号 (%)&lt;BR&gt;参见&lt;LINK&gt;帮助&lt;/LINK&gt;获取详细信息"/>
-    <lblMoveStrFrom Caption="原位置:"/>
-    <rbtMoveStrFromBegin Caption="相对于开头"/>
-    <rbtMoveStrFromEnd Caption="相对于末尾"/>
-    <lblMoveStrCount Caption="需要移动的字符数目:"/>
-    <lblMoveStrTo Caption="新位置:"/>
-    <rbtMoveStrToBegin Caption="相对于开头"/>
-    <rbtMoveStrToEnd Caption="相对于末尾"/>
-    <lblMoveStrNotes Caption="说明:&lt;br&gt;- 如果需要移动位置不固定的特定字符串, 请先使用&lt;LINK&gt;替换字符串&lt;/LINK&gt;操作删除原字符串, 之后使用&lt;LINK&gt;插入字符串&lt;/LINK&gt;操作添加新字符串到特定位置&lt;BR&gt;- 计算 &#34;新位置&#34; 时, 不能包括需要移动的字符串 (就像它们已经被删除了一样)"/>
-    <lblCharDel Caption="需要删除的字符数目:"/>
-    <rbtCharDelPos Caption="位置:"/>
-    <rbtCharDelBegin Caption="相对于开头"/>
-    <rbtCharDelEnd Caption="相对于末尾"/>
-    <rbtCharDelStr Caption="紧接特定字符串:"/>
-    <rbtCharDelStr2 Caption="在特定字符串之前:"/>
-    <cbxCharDelExt Caption="仅应用到扩展名"/>
-    <lblCharDelNotes Caption="说明:&lt;BR&gt;- 如果需要删除特定的字符串, 请使用&lt;LINK&gt;替换字符串&lt;/LINK&gt;操作将特定字符串替换为空值"/>
-    <lblEnumMask Caption="格式:"/>
-    <lblEnumStart Caption="初始值:"/>
-    <lblEnumDigits Caption="位数:"/>
-    <lblEnumIncr Caption="增量:"/>
-    <cbxEnumRestart Caption="切换文件夹后从初始值重新枚举"/>
-    <lblEnumNotes Caption="说明:&lt;BR&gt;- %name% = 原文件名 (不含扩展名)&lt;BR&gt;- %ext% = 原扩展名 (包含点号)&lt;BR&gt;- %num% = 数字&lt;BR&gt;- %folderN% = 文件夹名&lt;BR&gt;- %% = 百分号 (%)&lt;BR&gt;请查阅&lt;LINK&gt;帮助&lt;/LINK&gt;获取详细信息"/>
-    <lblMP3Mask Caption="格式:"/>
-    <cbxMP3TwoDigit Caption="使用两位的音轨序号 (必要时在数字前添加 '0')"/>
-    <cbxMP3Convert Caption="转换非法字符, 如 ? / \ : &lt; &gt; | ?*"/>
-    <lblMP3Notes Caption="说明:&lt;BR&gt;- %author% = 作者&lt;BR&gt;- %title% = 标题&lt;BR&gt;- %album% = 专辑&lt;BR&gt;- %year% = 年份&lt;BR&gt;- %genre% = 流派&lt;BR&gt;- %comm% = 注释&lt;BR&gt;- %track% = 音轨序号 (ID3V1.1)&lt;BR&gt;- %name% = 原文件名 (不含扩展名)&lt;BR&gt;- %ext% = 原扩展名 (包含点号)&lt;BR&gt;- %folderN% = 文件夹名&lt;BR&gt;- %% = 百分号 (%)&lt;BR&gt;- $if(条件,真值,假值)&lt;BR&gt;请查阅&lt;LINK&gt;帮助&lt;/LINK&gt;获取详细信息"/>
-    <lblDTMask Caption="格式:"/>
-    <cbxDTSuffix Caption="当多个文件具有相同的时间时自动添加后缀"/>
-    <lblDTWhich Caption="使用:"/>
+    <cbxStrReplExt Caption="搜索时包含扩展名"/>
+    <cbxStrReplOnlyExt Caption="应用于扩展名而非名称"/>
+    <cbxStrReplWildcards Caption="使用通配符（* = 任意文本，? = 任意字符）"/>
+    <rbtStrReplAnywhere Caption="名称中的任意位置"/>
+    <rbtStrReplBegin Caption="仅在开头"/>
+    <rbtStrReplEnd Caption="仅在结尾"/>
+    <lblMultstrSearch Caption="搜索："/>
+    <lblMultstrReplBy Caption="替换为："/>
+    <lblMultstrReplSet Caption="预定义集合："/>
+    <cbxMultstrReplExt Caption="搜索时包含扩展名"/>
+    <cbxMultstrCase Caption="区分大小写"/>
+    <lblMultstrReplNotes Caption="说明：&lt;BR&gt;- 使用 Ctrl+加号 (+) 和 Ctrl+减号 (-) 在当前行位置插入或删除一行"/>
+    <lblStrInsStr Caption="要插入的字符串："/>
+    <lblStrInsPos Caption="位置："/>
+    <rbtStrInsBegin Caption="从开头"/>
+    <rbtStrInsEnd Caption="从结尾"/>
+    <cbxStrInsExt Caption="应用于扩展名而非名称"/>
+<n/>    <lblStrInsNotes Caption="说明：&lt;br&gt;- 如需在另一个字符串之前或之后插入字符串，请使用&lt;LINK&gt;字符串替换&lt;/LINK&gt;操作&lt;br&gt;- %name% = 原文件名（不含扩展名）&lt;BR&gt;- %ext% = 原扩展名（含点）&lt;BR&gt;- - %folderN% = 文件夹名称，N 为层级（1 = 当前，2 = 上级，依此类推）&lt;BR&gt;- %% = % 字符&lt;BR&gt;详见&lt;LINK&gt;帮助&lt;/LINK&gt;"/>
+    <lblMoveStrFrom Caption="起始位置："/>
+    <rbtMoveStrFromBegin Caption="从开头"/>
+    <rbtMoveStrFromEnd Caption="从结尾"/>
+    <lblMoveStrCount Caption="要移动的字符数："/>
+    <lblMoveStrTo Caption="目标位置："/>
+    <rbtMoveStrToBegin Caption="从开头"/>
+    <rbtMoveStrToEnd Caption="从结尾"/>
+    <lblMoveStrNotes Caption="说明：&lt;br&gt;- 如需移动指定的字符串，但它并非总在同一位置，请先用&lt;link&gt;字符串替换&lt;/link&gt;将其删除，再用&lt;link&gt;插入字符串&lt;/link&gt;将其插入到新位置&lt;BR&gt;- “目标位置”的值不包含被移动的字符（即视为它们已被删除）"/>
+    <lblCharDel Caption="要删除的字符数："/>
+    <rbtCharDelPos Caption="位置："/>
+    <rbtCharDelBegin Caption="从开头"/>
+    <rbtCharDelEnd Caption="从结尾"/>
+    <rbtCharDelStr Caption="字符串之后："/>
+    <rbtCharDelStr2 Caption="字符串之前："/>
+    <cbxCharDelExt Caption="应用于扩展名而非名称"/>
+    <lblCharDelNotes Caption="说明：&lt;BR&gt;- 如需删除指定的字符串，请使用&lt;LINK&gt;字符串替换&lt;/LINK&gt;操作，并将其替换为空字符串"/>
+    <lblEnumMask Caption="掩码："/>
+    <lblEnumStart Caption="起始值："/>
+    <lblEnumDigits Caption="位数："/>
+    <lblEnumIncr Caption="增量："/>
+    <cbxEnumRestart Caption="切换文件夹时返回起始值"/>
+    <cbxEnumSharePairs Caption="文件同名但扩展名不同时使用相同编号（例如 JPG + RAW + XMP）"/>
+    <cbxExifNumSharePairs Caption="文件同名但扩展名不同时使用相同编号（例如 JPG + RAW + XMP）"/>
+<n/>    <lblEnumNotes Caption="说明：&lt;BR&gt;- %name% = 原文件名（不含扩展名）&lt;BR&gt;- %ext% = 原扩展名（含点）&lt;BR&gt;- %num% = 编号&lt;BR&gt;- %folderN% = 文件夹名称，N 为层级（1 = 当前，2 = 上级，依此类推）&lt;BR&gt;- %% = % 字符&lt;BR&gt;详见&lt;LINK&gt;帮助&lt;/LINK&gt;"/>
+    <lblMP3Mask Caption="掩码："/>
+    <cbxMP3TwoDigit Caption="两位数音轨号（如需要则在编号前插入 '0'）"/>
+    <cbxMP3Convert Caption="转换 ? / \ : &lt; &gt; | ? * 等非法字符"/>
+<n/>    <lblMP3Notes Caption="说明：&lt;BR&gt;- %author% = 作者&lt;BR&gt;- %title% = 标题&lt;BR&gt;- %album% = 专辑&lt;BR&gt;- %year% = 年份&lt;BR&gt;- %genre% = 流派&lt;BR&gt;- %comm% = 注释&lt;BR&gt;- %track% = 音轨号（ID3V1.1）&lt;BR&gt;- %name% = 原文件名（不含扩展名）&lt;BR&gt;- %ext% = 原扩展名（含点）&lt;BR&gt;- %folderN% = 文件夹名称，N 为层级（1 = 当前，2 = 上级，依此类推）&lt;BR&gt;- %% = % 字符&lt;BR&gt;- $if(cond,true-value,false-value) 保持不变&lt;BR&gt;详见&lt;LINK&gt;帮助&lt;/LINK&gt;"/>
+    <lblDTMask Caption="掩码："/>
+    <cbxDTSuffix Caption="若存在多个日期/时间相同的文件则添加后缀"/>
+    <lblDTWhich Caption="使用的日期："/>
     <rbtDTWhichCreation Caption="创建日期"/>
-    <rbtDTWhichModif Caption="修改日期"/>
-    <lblDTOffset Caption="偏移:"/>
-    <lblDTOffsetSec Caption="秒"/>
-    <lblDTNotes Caption="说明:"/>
+    <rbtDTWhichModif Caption="最后修改日期"/>
+<n/>    <lblDTOffset Caption="偏移："/>
+<n/>    <lblDTOffsetSec Caption="秒"/>
+    <lblDTNotes Caption="说明："/>
     <lblDTNotes2>
       <Lines>
-        <![CDATA[f	原文件名 (不含扩展名)
-e	原扩展名 (包含点号)
-c	Windows 系统标准格式的日期与时间
-d	日期, 不含前缀 0 (1-31)
-dd	日期, 包含前缀 0 (01-31)
-ddd	星期, 短名称 (Sun-Sat)
-dddd	星期, 长名称 (Sunday-Saturday)
-ddddd	日期, 使用 Windows 系统的短日期格式
-dddddd	日期, 使用 Windows 系统的长日期格式
-m	月份, 不含前缀 0 (1-12)
-mm	月份, 包含前缀 0 (01-12)
-mmm	月份, 短名称 (Jan-Dec)
-mmmm	月份, 长名称 (January-December)
-yy	年份, 两位数字 (00-99)
-yyyy	年份, 四位数字 (0000-9999)
-h	时, 不含前缀 0 (0-23)
-hh	时, 包含前缀 0 (00-23)
-n	分, 不含前缀 0 (0-59)
-nn	分, 包含前缀 0 (00-59)
-s	秒, 不含前缀 0 (0-59)
-ss	秒, 包含前缀 0 (00-59)
-z	毫秒, 不含前缀 0 (0-999)
-zzz	毫秒, 包含前缀 0 (000-999)
-am/pm	使用 12 小时制时添加到 h 或 hh 之前
-a/p	使用 12 小时制时添加到 h 或 hh 之前
-'xx'/"xx"	单引号或双引号中的字符原样输出
+        <![CDATA[f	原文件名（不含扩展名）
+e	原扩展名（含点）
+c	使用 Windows 标准格式的日期和时间
+d	不带前导零的日（1-31）
+dd	带前导零的日（01-31）
+ddd	日，简称（周日至周六）
+dddd	日，全称（星期日至星期六）
+ddddd	使用 Windows 短日期格式的日期
+dddddd	使用 Windows 长日期格式的日期
+m	不带前导零的月（1-12）
+mm	带前导零的月（01-12）
+mmm	月，简称（1月至12月）
+mmmm	月，全称（1月至12月月份全名）
+yy	年，两位数（00-99）
+yyyy	年，四位数（0000-9999）
+h	不带前导零的小时（0-23）
+hh	带前导零的小时（00-23）
+n	不带前导零的分钟（0-59）
+nn	带前导零的分钟（00-59）
+s	不带前导零的秒（0-59）
+ss	带前导零的秒（00-59）
+z	不带前导零的毫秒（0-999）
+zzz	带前导零的毫秒（000-999）
+am/pm	对前面的 h 或 hh 使用 12 小时制
+a/p	对前面的 h 或 hh 使用 12 小时制
+'xx'/“xx”	用单引号或双引号括起的字符保持不变
 
-如果 m 或 mm 紧接在 h 或 hh 之后出现, 则代表 "分", 而不是 "月份"]]>
+若 m 或 mm 紧跟在 h 或 hh 之后，则使用分钟而非月份]]>
       </Lines>
     </lblDTNotes2>
-    <lblRandomMask Caption="格式:"/>
-    <lblRandomMethod Caption="生成方式:"/>
-    <rbtRandomNumber Caption="随机数字 (八位)"/>
-    <rbtRandomTick Caption="Windows 时钟"/>
+    <lblRandomMask Caption="掩码："/>
+    <lblRandomMethod Caption="方法："/>
+    <rbtRandomNumber Caption="随机数字（8 位）"/>
+    <rbtRandomTick Caption="Windows 计时器计数"/>
     <rbtRandomGUID Caption="GUID"/>
-    <lblRandomNotes Caption="说明:&lt;BR&gt;- %name% = 原文件名 (不含扩展名)&lt;BR&gt;- %ext% = 扩展名 (包含点号)&lt;BR&gt;- %random% = 随机字符串&lt;BR&gt;- %% = 百分号 (%)&lt;BR&gt;请查阅&lt;LINK&gt;帮助&lt;/LINK&gt;获取详细信息"/>
-    <rbtCaseWords Caption="以下字符后的第一个字符更改为大写:"/>
-    <rbtCaseFirst Caption="首字符更改为大写"/>
-    <rbtCaseUpper Caption="更改为大写"/>
-    <rbtCaseLower Caption="更改为小写"/>
-    <cbxCaseLocale Caption="使用 Windows 的区域设置来更改带重音的字符"/>
-    <cbxCaseIncludeExt Caption="应用到扩展名"/>
-    <cbxCaseOnlyExt Caption="仅应用到扩展名"/>
-    <cbxFromListExt Caption="追加原扩展名到末尾"/>
-    <cbxFromListOnlyExt Caption="列表项为扩展名"/>
-    <lblFromListNotes Caption="说明:&lt;BR&gt;- 本列表中, 一行为一个文件名, 按顺序使用&lt;BR&gt;- 如果某行为空, 或列表数目不足, 则相应的文件不会被重新命名"/>
-    <lblRegexp Caption="表达式:"/>
-    <lblRegexpRepl Caption="新文件名:"/>
-    <lblRegexpNotes Caption="说明:&lt;BR&gt;- \ 字符可用来取消字符的特殊含义 (如 $ 及其它字符), 在新文件名中使用双反斜杆 (\\) 代表反斜杆 (\) (若需要移动文件到其它文件夹)&lt;BR&gt;- 使用 ^ 字符代表文件名开头, $ 字符代表文件名结尾&lt;BR&gt;- 新文件名必须使用 $1, $2 等符号指定查找字符的来源位置&lt;BR&gt;请查阅&lt;LINK&gt;帮助&lt;/LINK&gt;获取有关正则表达式的详细信息"/>
-    <lblExifMask Caption="格式:"/>
-    <lblExifOffset Caption="偏移:"/>
-    <lblExifOffsetSec Caption="秒"/>
-    <lblExifNotes Caption="说明:&lt;BR&gt;- %name% = 原文件名 (不含扩展名)&lt;BR&gt;- %ext% = 原扩展名 (包含点号)&lt;BR&gt;- %datetimeoriginal% / %datetime% = 相片拍摄时间&lt;BR&gt;- %orientation% = 相片方向&lt;BR&gt;- %flash% = 拍摄时是否使用闪光灯&lt;BR&gt;- %% = 百分号 (%)&lt;BR&gt;请查阅&lt;LINK&gt;帮助&lt;/LINK&gt;获取完整的 EXIF 标签列表"/>
+    <lblRandomNotes Caption="说明：&lt;BR&gt;- %name% = 原文件名（不含扩展名）&lt;BR&gt;- %ext% = 原扩展名（含点）&lt;BR&gt;- %random% = 随机生成的字符串&lt;BR&gt;- %% = % 字符&lt;BR&gt;详见&lt;LINK&gt;帮助&lt;/LINK&gt;"/>
+    <rbtCaseWords Caption="将以下任意字符之后的首字母大写："/>
+    <rbtCaseFirst Caption="将文件名的首字母大写"/>
+    <rbtCaseUpper Caption="大写"/>
+    <rbtCaseLower Caption="小写"/>
+    <cbxCaseLocale Caption="使用 Windows 区域设置转换带重音的字符"/>
+    <cbxCaseIncludeExt Caption="同时应用于扩展名"/>
+    <cbxCaseOnlyExt Caption="应用于扩展名而非名称"/>
+    <cbxFromListExt Caption="追加文件的原始扩展名"/>
+    <cbxFromListOnlyExt Caption="将项目作为扩展名而非名称"/>
+    <lblFromListNotes Caption="说明：&lt;BR&gt;- 此列表的每一行将作为一个文件的名称使用，项目按顺序取用&lt;BR&gt;- 如果行为空或行数不足，相应的文件将不会被重命名"/>
+    <lblRegexp Caption="表达式："/>
+    <lblRegexpRepl Caption="新名称："/>
+    <lblRegexpNotes Caption="说明：&lt;BR&gt;- 可用 \ 字符转义特殊字符（如 $ 等），若要在新名称中表示单个 \，请使用 \\（如果您希望新名称指向其他文件夹）&lt;BR&gt;- 使用 ^ 表示名称开头，用 $ 表示名称结尾&lt;BR&gt;- 新名称必须包含 $1、$2 等，以指定匹配到的字符的放置位置&lt;BR&gt;有关正则表达式的更多信息，请参阅&lt;LINK&gt;帮助&lt;/LINK&gt;"/>
+    <lblExifMask Caption="掩码："/>
+<n/>    <lblExifOffset Caption="偏移："/>
+<n/>    <lblExifOffsetSec Caption="秒"/>
+    <lblExifNotes Caption="说明：&lt;BR&gt;- %name% = 原文件名（不含扩展名）&lt;BR&gt;- %ext% = 原扩展名（含点）&lt;BR&gt;- %datetimeoriginal% 或 %datetime% = 照片的原始日期和时间&lt;BR&gt;- %orientation% = 照片方向&lt;BR&gt;- %flash% = 闪光灯是否开启&lt;BR&gt;- %% = % 字符&lt;BR&gt;详细信息和 EXIF、IPTC、XMP 标签的完整列表请参阅&lt;LINK&gt;帮助&lt;/LINK&gt;"/>
     <lstLog Hint="|日志"/>
     <VarMessages>
       <Item Name="strfltAllFiles" Value="所有文件"/>
@@ -223,77 +230,81 @@ a/p	使用 12 小时制时添加到 h 或 hh 之前
       <Item Name="strmsgStatusAddingFiles" Value="正在添加文件"/>
       <Item Name="strmsgStatusRenaming" Value="正在重命名文件"/>
       <Item Name="strmsgFilesCount" Value="%d 个文件"/>
-      <Item Name="strmsgBusy" Value="应用程序忙: 正在进行重命名操作。"/>
-      <Item Name="strmsgNothingToDo" Value="无操作: 请选择至少一个文件, 并执行至少一项操作。"/>
-      <Item Name="strlogStartRename" Value="开始重命名操作"/>
-      <Item Name="strlogStartPreview" Value="更新预览"/>
-      <Item Name="strlogStartRevert" Value="恢复为原文件名"/>
-      <Item Name="strlogEndRename" Value="结束重命名操作"/>
-      <Item Name="strlogEndPreview" Value="结束预览"/>
-      <Item Name="strlogEndRevert" Value="结束恢复操作"/>
-      <Item Name="strlogStoppedByUser" Value="操作被用户中断"/>
-      <Item Name="stradUnknown" Value="无操作"/>
-      <Item Name="stradInclExt" Value=", 同时应用到扩展名"/>
-      <Item Name="stradOnlyExt" Value=", 仅应用到扩展名"/>
-      <Item Name="stradChangeExt" Value="更改扩展名为 %s"/>
-      <Item Name="stradChangeExtRmv" Value="删除扩展名"/>
-      <Item Name="stradChangeExtNoRepl" Value="追加扩展名 %s"/>
-      <Item Name="stradStringRepl" Value="替换 %s 为 %s"/>
-      <Item Name="stradStringReplAll" Value=", 全部替换"/>
-      <Item Name="stradStringReplCase" Value=", 区分大小写"/>
-      <Item Name="stradMultstrRepl" Value="使用设置项 &#34;%s&#34; 替换多个字符串"/>
-      <Item Name="stradStringIns" Value="插入字符串 %s 到位置 %d"/>
-      <Item Name="stradMoveStr" Value="移动 %d 个字符, 原位置: %d%s, 新位置: %d%s"/>
+      <Item Name="strmsgBusy" Value="应用程序忙：正在执行重命名操作。"/>
+      <Item Name="strmsgNothingToDo" Value="无事可做：请至少选择一个文件和一个要执行的操作。"/>
+      <Item Name="strlogStartRename" Value="重命名过程已开始"/>
+      <Item Name="strlogStartPreview" Value="正在刷新预览"/>
+      <Item Name="strlogStartRevert" Value="恢复为之前的名称"/>
+      <Item Name="strlogEndRename" Value="重命名过程已完成"/>
+      <Item Name="strlogEndPreview" Value="预览过程已完成"/>
+      <Item Name="strlogEndRevert" Value="恢复过程已完成"/>
+      <Item Name="strlogStoppedByUser" Value="操作已被用户停止"/>
+      <Item Name="stradUnknown" Value="不执行任何操作"/>
+      <Item Name="stradInclExt" Value="，同时应用于扩展名"/>
+      <Item Name="stradOnlyExt" Value="，应用于扩展名而非名称"/>
+      <Item Name="stradChangeExt" Value="将扩展名更改为 “%s”"/>
+      <Item Name="stradChangeExtRmv" Value="移除扩展名"/>
+      <Item Name="stradChangeExtNoRepl" Value="追加扩展名 “%s”"/>
+      <Item Name="stradStringRepl" Value="将 “%s” 替换为 “%s”"/>
+      <Item Name="stradStringReplAll" Value="，替换所有匹配项"/>
+      <Item Name="stradStringReplCase" Value="，区分大小写"/>
+      <Item Name="stradStringReplWild" Value="，使用通配符"/>
+      <Item Name="stradStringReplBegin" Value="，仅在开头"/>
+      <Item Name="stradStringReplEnd" Value="，仅在结尾"/>
+      <Item Name="stradMultstrRepl" Value="使用集合 “%s” 替换多个字符串"/>
+      <Item Name="stradStringIns" Value="在位置 %d 插入 “%s”"/>
+      <Item Name="stradMoveStr" Value="从位置 %d%s 移动 %d 个字符到位置 %d%s"/>
       <Item Name="stradCharDel" Value="删除 %d 个字符"/>
-      <Item Name="stradCharDelPos" Value=" 在位置 %d"/>
-      <Item Name="stradCharDelStr" Value=" 在字符串 %s 之后"/>
-      <Item Name="stradCharDelStr2" Value=" 在字符串 %s 之前"/>
-      <Item Name="stradEnum" Value="以 %s 格式创建从 %d 到 %d 增量为 %d 的枚举列表"/>
-      <Item Name="stradMP3" Value="以 %s 格式使用 MP3 标签信息生成文件名"/>
-      <Item Name="stradMP3TwoDigit" Value=", 必要时在音轨序号前添加 '0'"/>
-      <Item Name="stradMP3Convert" Value=", 转换非法字符"/>
-      <Item Name="stradFromBegin" Value=", 相对于开头"/>
-      <Item Name="stradFromEnd" Value=", 相对于末尾"/>
-      <Item Name="stradDateTime" Value="以 %s 格式从文件时间生成文件名"/>
+      <Item Name="stradCharDelPos" Value=" 位于位置 %d"/>
+      <Item Name="stradCharDelStr" Value=" 在字符串 “%s” 之后"/>
+<n/>      <Item Name="stradCharDelStr2" Value=" 在字符串 “%s” 之前"/>
+      <Item Name="stradEnum" Value="使用 “%s” 从 %d 到 %d 按 %d 生成编号"/>
+      <Item Name="stradMP3" Value="根据掩码 “%s” 使用 MP3 标签生成名称"/>
+      <Item Name="stradMP3TwoDigit" Value="，如需要则在音轨号中插入 '0'"/>
+      <Item Name="stradMP3Convert" Value="，转换非法字符"/>
+      <Item Name="stradFromBegin" Value="，从开头"/>
+      <Item Name="stradFromEnd" Value="，从结尾"/>
+      <Item Name="stradDateTime" Value="根据掩码 “%s” 使用文件的日期和时间生成名称"/>
       <Item Name="stradDateTimeCreat" Value=" 使用创建日期"/>
-      <Item Name="stradDateTimeModif" Value=" 使用修改日期"/>
-      <Item Name="stradDateTimeSuffix" Value=", 必要时添加后缀"/>
-      <Item Name="stradDateTimeOffset" Value=" 偏移 %d 秒"/>
-      <Item Name="stradRandom" Value="使用格式 %s 生成随机文件名"/>
-      <Item Name="stradRandomNumbers" Value=", 使用随机数字"/>
-      <Item Name="stradRandomTick" Value=", 使用 Windows 时钟"/>
-      <Item Name="stradRandomGUID" Value=", 使用 GUID"/>
-      <Item Name="stradCase" Value="更改大小写:"/>
-      <Item Name="stradCaseWords" Value=" 以下字符后的第一个字符更改为大写 &#34;%s&#34;"/>
-      <Item Name="stradCaseFirst" Value=" 首字符更改为大写"/>
-      <Item Name="stradCaseUpper" Value=" 更改为大写"/>
-      <Item Name="stradCaseLower" Value=" 更改为小写"/>
-      <Item Name="stradCaseLocale" Value=", 使用 Windows 系统的本地化设置"/>
-      <Item Name="stradFromList" Value="使用指定列表重命名文件"/>
-      <Item Name="stradFromListExt" Value=", 追加原扩展名"/>
-      <Item Name="stradFromListOnlyExt" Value=", 使用列表项作为扩展名"/>
+      <Item Name="stradDateTimeModif" Value=" 使用最后修改日期"/>
+      <Item Name="stradDateTimeSuffix" Value="，如需要则添加后缀"/>
+<n/>      <Item Name="stradDateTimeOffset" Value=" 带 %d 秒偏移"/>
+      <Item Name="stradRandom" Value="使用掩码 “%s” 生成随机名称"/>
+      <Item Name="stradRandomNumbers" Value="，使用数字"/>
+      <Item Name="stradRandomTick" Value="，使用 Windows 计时器计数"/>
+      <Item Name="stradRandomGUID" Value="，使用 GUID"/>
+      <Item Name="stradCase" Value="更改大小写："/>
+      <Item Name="stradCaseWords" Value=" 将 “%s” 中任意字符之后的首字母大写"/>
+      <Item Name="stradCaseFirst" Value=" 将名称的首字母大写"/>
+      <Item Name="stradCaseUpper" Value=" 全部为大写"/>
+      <Item Name="stradCaseLower" Value=" 全部为小写"/>
+      <Item Name="stradCaseLocale" Value="，使用 Windows 区域设置"/>
+      <Item Name="stradFromList" Value="使用指定的列表重命名文件"/>
+      <Item Name="stradFromListExt" Value="，追加原始扩展名"/>
+      <Item Name="stradFromListOnlyExt" Value="，将项目作为扩展名而非名称"/>
       <Item Name="stradRegexp" Value="使用正则表达式重命名文件"/>
-      <Item Name="stradExif" Value="使用 EXIF 信息生成文件名, 格式: &#34;%s&#34;"/>
+      <Item Name="stradExif" Value="根据掩码 “%s” 使用 EXIF 信息生成名称"/>
       <Item Name="straeFromListEmpty" Value="空行"/>
-      <Item Name="straeFromListEnd" Value="列表结束"/>
-      <Item Name="straeExifNoInfo" Value="未找到 EXIF 信息"/>
-      <Item Name="strfsNotRenamed" Value="没有重命名文件 %s : %s"/>
-      <Item Name="strfsRenamed" Value="%s 重命名为 %s"/>
-      <Item Name="strfsReverted" Value="%s 恢复为原文件名 %s"/>
-      <Item Name="strfsRenError" Value="无法重命名 %s 为 %s: %s"/>
-      <Item Name="strfsNoOldName" Value="没有保存文件 %s 的原文件名, 无法恢复"/>
-      <Item Name="strfs404" Value="没有找到原文件"/>
-      <Item Name="strfsAlreadyExist" Value="已经存在同名文件或文件夹"/>
-      <Item Name="strfeIdentical" Value="新文件名与原文件名相同"/>
-      <Item Name="strhintNotAgain" Value="不再显示本提示"/>
-      <Item Name="strhintShowPreview" Value="预览列已经显示。如果要隐藏预览列, 请在文件列表标题点击右键。"/>
+      <Item Name="straeFromListEnd" Value="列表末尾"/>
+<n/>      <Item Name="straeExifNoInfo" Value="未找到 EXIF 信息"/>
+      <Item Name="straeDateTimeNoDate" Value="无法获取文件日期"/>
+      <Item Name="strfsNotRenamed" Value="%s 未被重命名：%s"/>
+      <Item Name="strfsRenamed" Value="%s 已重命名为 %s"/>
+      <Item Name="strfsReverted" Value="%s 已恢复为之前的名称 %s"/>
+      <Item Name="strfsRenError" Value="无法将 %s 重命名为 %s：%s"/>
+      <Item Name="strfsNoOldName" Value="未保存 %s 的旧名称，无法恢复旧名称"/>
+      <Item Name="strfs404" Value="找不到源文件"/>
+      <Item Name="strfsAlreadyExist" Value="已存在同名文件或文件夹"/>
+      <Item Name="strfeIdentical" Value="新名称与旧名称相同"/>
+      <Item Name="strhintNotAgain" Value="不再显示此提示"/>
+      <Item Name="strhintShowPreview" Value="预览列现在可见。若要隐藏它，请在文件列表的列标题上单击鼠标右键。"/>
     </VarMessages>
   </MainForm>
-  <AboutForm Caption="关于 Ant Renamer">
-    <btn1 Caption="更新"/>
+  <AboutForm Caption="关于本程序">
+    <btn1 Caption="历史"/>
     <btn2 Caption="关闭"/>
-    <tshGeneral Caption="关于"/>
-    <tshCredits Caption="感谢"/>
+    <tshGeneral Caption="常规"/>
+    <tshCredits Caption="鸣谢"/>
   </AboutForm>
   <MessageWin>
     <Captions>
@@ -321,57 +332,57 @@ a/p	使用 12 小时制时添加到 h 或 hh 之前
     <btn2 Caption="取消"/>
     <btn3 Caption="确定"/>
     <tshDisplay Caption="显示"/>
-    <tshAdding Caption="文件与文件夹"/>
+    <tshAdding Caption="文件 &#38;&#38; 文件夹"/>
     <tshProcessing Caption="处理"/>
     <tshEvents Caption="事件"/>
     <tshLanguage Caption="语言"/>
     <lbhLists Caption="列表"/>
     <cbxRealtimeUpdate Caption="重命名文件时实时更新"/>
-    <cbxResizeColsFiles Caption="自动调整文件列表列宽"/>
-    <cbxFilesIcons Caption="在文件列表中基于文件扩展名显示图标"/>
+    <cbxResizeColsFiles Caption="自动调整文件列表的列宽"/>
+    <cbxFilesIcons Caption="根据文件扩展名在文件列表中显示图标"/>
     <lbhFonts Caption="字体"/>
-    <cbxForceFont Caption="对需要显示特殊字符的控件强制使用下面的字体:"/>
+    <cbxForceFont Caption="对需要显示特殊字符的控件强制使用以下字体："/>
     <cmbForceFont>
       <Items>
         <Item Index="0" Value="Windows 默认字体"/>
       </Items>
     </cmbForceFont>
-    <lblForceFont Caption="说明: 强烈推荐使用 Noto Sans, DejaVu Sans 或 Arial Unicode MS 字体 (如果已经安装该字体)"/>
-    <lbhDropdown Caption="下拉框"/>
-    <lblDropdownMax Caption="下拉列表中历史记录的最大数目:"/>
-    <cbxDropdownComplete Caption="输入时启用自动完成功能"/>
+<n/>    <lblForceFont Caption="注意：如可用，建议使用 Noto Sans、DejaVu Sans 或 Arial Unicode MS"/>
+    <lbhDropdown Caption="下拉字段"/>
+    <lblDropdownMax Caption="历史记录中保留的值的数量："/>
+    <cbxDropdownComplete Caption="输入时使用历史记录的值自动补全"/>
     <lbhToolbars Caption="工具栏"/>
-    <lblIconSet Caption="图标样式:"/>
-    <lblColorType Caption="颜色样式:"/>
+    <lblIconSet Caption="图标集："/>
+    <lblColorType Caption="颜色类型："/>
     <cmbColorType>
       <Items>
         <Item Index="0" Value="自动"/>
-        <Item Index="1" Value="非活动时以灰度显示"/>
-        <Item Index="2" Value="非活动时以亮色显示 (XP 样式)"/>
-        <Item Index="3" Value="非活动时以暗色显示"/>
-        <Item Index="4" Value="一直以彩色显示"/>
+        <Item Index="1" Value="非活动时灰色"/>
+        <Item Index="2" Value="非活动时浅色混合（XP 风格）"/>
+        <Item Index="3" Value="非活动时深色混合"/>
+        <Item Index="4" Value="始终彩色"/>
       </Items>
     </cmbColorType>
-    <cbxOfficeXP Caption="Office XP 样式"/>
-    <lbhDragdrop Caption="拖曳"/>
-    <cbxDragdropNoAsk Caption="不询问, 直接按如下方式操作:"/>
+    <cbxOfficeXP Caption="Office XP 风格"/>
+    <lbhDragdrop Caption="拖放"/>
+    <cbxDragdropNoAsk Caption="不要询问要做什么，始终使用以下选项："/>
     <DragdropOptions>
-      <cbxFiles Caption="添加选定文件夹中的文件"/>
-      <cbxFolders Caption="添加选定的文件夹"/>
-      <cbxRecursive Caption="递归搜索子文件夹"/>
+      <cbxFiles Caption="添加所选文件夹中的文件"/>
+      <cbxFolders Caption="添加所选文件夹"/>
+      <cbxRecursive Caption="将这两个选项也应用于子文件夹"/>
     </DragdropOptions>
-    <lbhBehaviour Caption="文件列表行为"/>
-    <cbxLaunchFile Caption="双击时打开文件"/>
+    <lbhBehaviour Caption="列表行为"/>
+    <cbxLaunchFile Caption="双击时启动文件"/>
     <lbhRenaming Caption="文件重命名"/>
-    <cbxCopy Caption="保留原文件, 并将原文件复制为新文件"/>
-    <cbxGenerLog Caption="记录日志"/>
-    <cbxDSTRelativeToFile Caption="文件日期相关的夏令时偏移"/>
+    <cbxCopy Caption="复制而非重命名"/>
+    <cbxGenerLog Caption="生成日志"/>
+<n/>    <cbxDSTRelativeToFile Caption="夏令时偏移与文件日期相关"/> <!-- note for translators: DST = daylight saving time -->
     <lbhFoldersRules Caption="文件夹规则"/>
-    <cbxForceDir Caption="如果文件名中出现 &#34;\&#34; 则强制创建文件夹"/>
-    <cbxDetectAbsdir Caption="检测到 &#34;:\&#34; 或 &#34;\\&#34; 则视为绝对路径 (允许将文件移动到任意位置)"/>
-    <cbxFolderExt Caption="将文件夹名称中最后一个 &#34;.&#34; 视作扩展名分隔符(如同文件处理方式)"/>
-    <lbhWhenStarted Caption="重命名开始时"/>
-    <cbxStartSwitch Caption="切换到:"/>
+    <cbxForceDir Caption="强制目录（名称中如出现 “\” 则创建文件夹）"/>
+    <cbxDetectAbsdir Caption="将 “:\” 或 “\\” 识别为绝对路径（允许将文件移动到任意位置）"/>
+    <cbxFolderExt Caption="将文件夹名称中最后一个 “.” 视为扩展名分隔符，与文件相同"/>
+    <lbhWhenStarted Caption="开始重命名时"/>
+    <cbxStartSwitch Caption="切换到："/>
     <cmbStartSwitch>
       <Items>
         <Item Index="0" Value="文件列表"/>
@@ -381,7 +392,7 @@ a/p	使用 12 小时制时添加到 h 或 hh 之前
     </cmbStartSwitch>
     <cbxStartClearLog Caption="清空日志"/>
     <lbhWhenFinished Caption="重命名结束时"/>
-    <cbxFinishSwitch Caption="切换到:"/>
+    <cbxFinishSwitch Caption="切换到："/>
     <cmbFinishSwitch>
       <Items>
         <Item Index="0" Value="文件列表"/>
@@ -391,9 +402,9 @@ a/p	使用 12 小时制时添加到 h 或 hh 之前
     </cmbFinishSwitch>
     <cbxClearFilesList Caption="清空文件列表"/>
     <cbxClearBatchList Caption="清空批处理列表"/>
-    <cbxSaveLog Caption="保存日志到文件:"/>
-    <btnSaveLog Hint="浏览..."/>
-    <cbxSaveLogAppend Caption="添加到文件末尾"/>
+    <cbxSaveLog Caption="将日志保存到文件："/>
+    <btnSaveLog Hint="浏览…"/>
+    <cbxSaveLogAppend Caption="追加到当前文件"/>
     <lbhLanguage Caption="语言"/>
     <LanguageFrame>
       <lstLanguages>
@@ -402,32 +413,139 @@ a/p	使用 12 小时制时添加到 h 或 hh 之前
           <Column Index="1" Caption="本地名称"/>
         </Columns>
       </lstLanguages>
-      <lblVersion Caption="版本:"/>
-      <lblMadeby Caption="作者:"/>
-      <lblComments Caption="注释:"/>
+      <lblVersion Caption="版本："/>
+      <lblMadeby Caption="制作人："/>
+      <lblComments Caption="注释："/>
     </LanguageFrame>
   </OptionsForm>
   <SelectDirectoryForm Caption="选择要添加的文件夹">
     <btn1 Caption="帮助"/>
     <btn2 Caption="取消"/>
     <btn3 Caption="确定"/>
-    <btn4 Caption="网络..."/>
+    <btn4 Caption="网络…"/>
     <Options>
-      <cbxFiles Caption="添加选定文件夹中的文件"/>
-      <cbxFolders Caption="添加选定的文件夹"/>
-      <cbxRecursive Caption="递归搜索子文件夹"/>
+      <cbxFiles Caption="添加所选文件夹中的文件"/>
+      <cbxFolders Caption="添加所选文件夹"/>
+      <cbxRecursive Caption="将这两个选项也应用于子文件夹"/>
     </Options>
   </SelectDirectoryForm>
-  <DragdropOptionsForm Caption="文件拖曳选项">
+  <DragdropOptionsForm Caption="拖放选项">
     <btn1 Caption="帮助"/>
     <btn2 Caption="取消"/>
     <btn3 Caption="确定"/>
-    <lblOptions Caption="如何添加拖曳的文件:"/>
+    <lblOptions Caption="添加拖放的文件时使用的选项："/>
     <Options>
-      <cbxFiles Caption="添加选定文件夹中的文件"/>
-      <cbxFolders Caption="添加选定的文件夹"/>
-      <cbxRecursive Caption="递归搜索子文件夹"/>
+      <cbxFiles Caption="添加所选文件夹中的文件"/>
+      <cbxFolders Caption="添加所选文件夹"/>
+      <cbxRecursive Caption="将这两个选项也应用于子文件夹"/>
     </Options>
-    <cbxNotAgain Caption="不再显示本窗口 (直接以上面的选项进行操作)"/>
+    <cbxNotAgain Caption="不再显示此窗口（下次沿用所选的选项）"/>
   </DragdropOptionsForm>
+  <!-- Texts added by Ant Renamer Qt (not in the original program). Same names in every language file. -->
+  <QtPort>
+    <Item Name="portableModeKeepThe" Value="便携模式：将设置保存在程序文件夹中"/>
+    <Item Name="settingsStorage" Value="设置存储"/>
+    <Item Name="couldNotWriteThe" Value="无法将设置写入程序文件夹。"/>
+    <Item Name="theNewLanguageIs" Value="新语言将在下次启动程序时生效。"/>
+    <Item Name="history" Value="历史"/>
+    <Item Name="naturalSortInFiles" Value="文件列表使用自然排序（2 排在 10 之前）而非字母排序"/>
+    <Item Name="modernInterfaceLayoutUsed" Value="现代界面布局"/>
+    <Item Name="theNewInterfaceIs" Value="新界面将在下次启动程序时生效。"/>
+    <Item Name="modify" Value="修改"/>
+    <Item Name="pagesLayoutModernInterface" Value="页面布局（现代界面）："/>
+    <Item Name="tabs" Value="标签"/>
+    <Item Name="theme" Value="主题："/>
+    <Item Name="followTheSystem" Value="跟随系统"/>
+    <Item Name="light" Value="浅色"/>
+    <Item Name="dark" Value="深色"/>
+    <Item Name="lightDark" Value="浅色 / 深色"/>
+    <Item Name="switchBetweenTheLight" Value="在浅色与深色主题之间切换"/>
+    <Item Name="singleScreenInBands" Value="单屏，分带"/>
+    <Item Name="singleScreenInColumns" Value="单屏，分列"/>
+    <Item Name="validateTheModification" Value="确认修改"/>
+    <Item Name="cancelTheModification" Value="取消修改"/>
+    <Item Name="modificationOfAction" Value="操作 %1 的修改"/>
+    <Item Name="replaceTheSelectedAction" Value="用当前设置替换所选操作（双击某个操作可载入其设置）"/>
+    <Item Name="settingsLoadedChangeThem" Value="设置已载入：修改后请确认修改"/>
+    <Item Name="windowsExplorer" Value="Windows 资源管理器"/>
+    <Item Name="addToAntRenamer" Value="添加到 Ant Renamer Qt"/>
+    <Item Name="addAddToAnt" Value="将“添加到 Ant Renamer Qt”添加到文件和文件夹的上下文菜单"/>
+    <Item Name="onWindowsTheEntry" Value="在 Windows 11 上，该条目位于“显示更多选项”（或 Shift+F10）。"/>
+    <Item Name="couldNotChangeThe" Value="无法更改资源管理器的上下文菜单。"/>
+    <Item Name="秒" Value="秒"/>
+    <Item Name="alsoRenameTheSidecar" Value="同时重命名已重命名图片的附属文件（.xmp、.dop）"/>
+    <Item Name="sidecarFileRenamedTo" Value="附属文件 %1 已重命名为 %2"/>
+    <Item Name="sidecarFileNotRenamed" Value="附属文件 %1 未重命名：%2"/>
+    <Item Name="iptckeywordsXmptitleIptcAnd" Value="%IptcKeywords%、%XmpTitle%… = IPTC 和 XMP 数据（关键字、标题、作者、地点…）"/>
+    <Item Name="position" Value="位置："/>
+    <Item Name="string" Value="字符串："/>
+    <Item Name="license" Value="许可证："/>
+    <Item Name="webSiteAddress" Value="网站地址： "/>
+    <Item Name="eMailAddress" Value="电子邮箱地址： "/>
+    <Item Name="antRenamerQtIs" Value="Ant Renamer Qt 是 Antoine Potten 所开发的 Ant Renamer 的 C++/Qt 移植版，与原程序并行开发。移植版（Windows 和 Linux）：Frédéric Biron。"/>
+    <Item Name="antRenamerQtSupport" Value="Ant Renamer Qt 支持： "/>
+    <Item Name="issuesAndDiscussions" Value="问题与讨论"/>
+    <Item Name="supportByEmail" Value="通过电子邮件获得支持（无需 GitHub 账号）： "/>
+    <Item Name="port" Value="移植："/>
+    <Item Name="cQtPortAnd" Value="C++/Qt 6 移植与 Linux 移植： "/>
+    <Item Name="components" Value="组件："/>
+    <Item Name="translations" Value="翻译："/>
+    <Item Name="thanksTo" Value="感谢："/>
+    <Item Name="andAllThePeople" Value="…以及所有向我提出建议和意见的人"/>
+    <Item Name="thisProgramIsFree" Value="本程序为自由软件；您可以在自由软件基金会发布的 GNU 通用公共许可证（GPL）条款下重新分发和/或修改它，许可证版本为第 2 版或（按您的选择）任何更新的版本。分发本程序是希望它有用，但不提供任何担保；甚至没有适销性或特定用途适用性的默示担保。详情请参阅 &lt;a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html'&gt;GNU 通用公共许可证&lt;/a&gt;。"/>
+    <Item Name="updatesHeader" Value="更新"/>
+    <Item Name="updatesCheckAtStart" Value="启动时检查新版本（每天一次，仅查询 GitHub，不发送其他内容）"/>
+    <Item Name="updatesIncludePre" Value="同时告知测试版和候选发布版（否则只告知正式版本）"/>
+    <Item Name="updatesCheckButton" Value="检查更新"/>
+    <Item Name="updatesTitle" Value="更新检查"/>
+    <Item Name="updatesError" Value="无法检查更新：%1"/>
+    <Item Name="updatesUpToDate" Value="此版本已是最新版本。"/>
+    <Item Name="updatesAvailable" Value="有新版本可用：%1（您当前为 %2）。是否打开下载页面？"/>
+    <Item Name="addHiddenFiles" Value="添加文件夹时包含隐藏文件和系统文件"/>
+    <Item Name="renameHiddenWarning" Value="列表中有 %1 个隐藏文件或系统文件将被重命名。重命名它们可能会破坏程序或系统。是否继续？"/>
+    <Item Name="showHiddenCaption" Value="隐藏文件"/>
+    <Item Name="showHiddenHint" Value="显示列表中的隐藏文件和系统文件；隐藏时不会重命名它们"/>
+    <Item Name="undoHistoryCaption" Value="历史"/>
+    <Item Name="undoHistoryHint" Value="重命名批次：返回到指定的批次"/>
+    <Item Name="undoHistoryTitle" Value="重命名历史"/>
+    <Item Name="undoHistoryInfo" Value="批次按会话分组，最新的在前（关闭程序后仍保留）。在一个会话内，批次从最后一个开始依次撤销：选择某个批次将撤销该批次以及同一会话中在其之后完成的批次。其他会话不受影响。"/>
+    <Item Name="undoHistorySession" Value="%1 的会话"/>
+    <Item Name="undoHistoryRow" Value="#%1  %2  -  %3 个移动  -  %4"/>
+    <Item Name="undoHistoryButton" Value="撤销到此批次"/>
+    <Item Name="undoHistoryConfirm" Value="撤销 %1 个批次？"/>
+    <Item Name="undoNothing" Value="无可撤销内容：历史记录中没有重命名批次。"/>
+    <Item Name="undoHistoryClear" Value="清除历史记录"/>
+    <Item Name="undoHistoryClearConfirm" Value="忘记所有批次？之后将无法再撤销它们。"/>
+    <Item Name="undoChanged" Value="该文件在重命名后被更改"/>
+    <Item Name="undoLogStart" Value="正在撤销最近的重命名批次"/>
+    <Item Name="undoOptHeader" Value="撤销按钮"/>
+    <Item Name="undoOptLabel" Value="撤销按钮："/>
+    <Item Name="undoOptLast" Value="撤销最后一个批次"/>
+    <Item Name="undoOptHistory" Value="打开批次历史"/>
+    <Item Name="openCaption" Value="打开"/>
+    <Item Name="saveLogCaption" Value="保存日志"/>
+    <Item Name="textFilesTxtAll" Value="文本文件 (*.txt);;所有文件 (*.*)"/>
+    <Item Name="textFilesLog" Value="文本文件 (*.log *.txt)"/>
+    <Item Name="versionNumber" Value="版本 %1"/>
+    <Item Name="helpBack" Value="后退"/>
+    <Item Name="helpForward" Value="前进"/>
+    <Item Name="exportPreviewMenu" Value="导出预览…"/>
+    <Item Name="exportPreview" Value="导出预览"/>
+    <Item Name="exportPreviewCsv" Value="CSV 文件，当前名称和新名称 (*.csv)"/>
+    <Item Name="saveLogCsv" Value="CSV 文件 (*.csv)"/>
+    <Item Name="exportPreviewTxt" Value="文本文件，仅新名称 (*.txt)"/>
+    <Item Name="typeFolderPath" Value="或输入文件夹的路径"/>
+    <Item Name="webSiteQt" Value="Ant Renamer Qt 网站： "/>
+    <Item Name="webSiteOriginal" Value="原程序（Antoine Potten）网站： "/>
+    <Item Name="batchFilterXml" Value="Ant Renamer 批处理文件 (*.arb *.xml)"/>
+    <Item Name="batchFilter" Value="Ant Renamer 批处理文件 (*.arb)"/>
+    <Item Name="couldNotRead" Value="无法读取 %1"/>
+    <Item Name="couldNotWriteFile" Value="无法写入 %1"/>
+    <Item Name="invalidRegexp" Value="无效的正则表达式：%1"/>
+    <Item Name="logReverted" Value="已恢复"/>
+    <Item Name="helpNotFound" Value="在以下位置找不到帮助文件：&#10;%1&#10;&#10;是否改为打开程序的网站？"/>
+    <Item Name="newNameInvalidChar" Value="新名称包含非法字符"/>
+    <Item Name="renameSummary" Value="已重命名文件：%1，错误：%2"/>
+    <Item Name="pasteFolder" Value="从剪贴板粘贴"/>
+  </QtPort>
 </Application>
