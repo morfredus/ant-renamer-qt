@@ -44,6 +44,7 @@ These are ideas, not promises: some of them may never be done. If they are, one 
 | **Later** | **Windows 11 modern context menu**, to be decided on demand. |
 
 ### Smaller ideas, no version yet
+- Licence: move the port from GPL v2 or later to GPL v3 (allowed, the original says "version 2 or any later version"). No technical need today, so not before the final 3.1.0; to decide with a real reason (a dependency or contribution under a licence that is not compatible with v2). It touches `LICENSE`, the About box (`app/dialogs.cpp`, `app/help/about_*.md`, the `.lng` files), `README`, `CONTRIBUTING`, `docs/PRESENTATION`, the `.deb` copyright (`scripts/linux/package-deb.sh`), the Flatpak metainfo (`GPL-3.0-or-later`) and the installer licence file.
 
 - Read `.dop` data? Not planned: it is a DxO-only format.
 - XMP properties not mapped yet: the `exif:` attributes of a sidecar (date, GPS), `crs:` (Camera Raw) settings.

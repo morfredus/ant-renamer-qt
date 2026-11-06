@@ -11,6 +11,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 ### Changed
 
 - Chinese (Simplified) translation refined, re-translated and proofread from the English file by 大眼仔~旭, the author of the translation of the original program. 285 keys, same as `English.lng`, no placeholder changed (`app/Languages/Chinese (Simplified).lng`).
+- TODO (EN, FR): idea of moving the licence from GPL v2 or later to GPL v3, not before the final 3.1.0 and only with a real reason. Checked: the licence is stated as GPL v2 or later everywhere (`LICENSE`, About box, help, `README`, `CONTRIBUTING`, `.deb`, Flatpak), nothing says GPL v3.
 - TODO (EN, FR): 3.2 gets the news of the new version shown under its number in the update notice (release notes or WHATS_NEW lines).
 
 ## [3.1.0-rc.2] - 2026-11-04
