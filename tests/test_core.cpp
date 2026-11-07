@@ -374,17 +374,33 @@ int main(int argc, char** argv) {
         CHECK_EQ(csvField(u"a=b"_s), u"\"a=b\""_s);
         CHECK_EQ(csvField(QString()), u"\"\""_s);
     }
-    {  // a huge level must not hang (it used to loop that many times)
+    {  // a huge level must not hang; a deep path keeps every level (Linux allows far more than 260 short folders)
         CHECK_EQ(prev<ActionStringIns>(u"abc.txt"_s,
                                        [](auto& a) {
                                            a.newString = u"%folder999999999%-"_s;
                                            a.pos = 0;
                                        }),
-                 prev<ActionStringIns>(u"abc.txt"_s,
+                 u"-abc.txt"_s);
+        CHECK_EQ(prev<ActionStringIns>(u"abc.txt"_s,
                                        [](auto& a) {
-                                           a.newString = u"%folder260%-"_s;
+                                           a.newString = u"%folder-999999999%-"_s;
                                            a.pos = 0;
-                                       }));
+                                       }),
+                 u"-abc.txt"_s);
+        QString deep;
+        for (int i = 1; i <= 300; ++i) {
+            deep += u"/d"_s + QString::number(i);
+        }
+        ActionStringIns d;
+        d.newString = u"%folder261%"_s;
+        d.pos = 0;
+        CHECK_EQ(d.makeNewName(deep + u"/file.txt"_s, false), u"d40file.txt"_s);  // level 1 is d300, level 261 is d40
+        QString fromRoot = u"d1"_s;  // %folder-N% counts from the root with the native separator
+        for (int i = 2; i <= 300; ++i) {
+            fromRoot += QString(kSep) + u"d"_s + QString::number(i);
+        }
+        d.newString = u"%folder-261%"_s;
+        CHECK_EQ(d.makeNewName(fromRoot + QString(kSep) + u"file.txt"_s, false), u"d261file.txt"_s);  // d1 is -1
     }
     {  // a source that is gone is an error (counted, exit code 1 with -q), not a plain skip
         QTemporaryDir gd;

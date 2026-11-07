@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Changed
+
+- TODO (EN, FR): idea of a message when an added folder holds no file (nothing is shown today, which looks like a failure).
+
 ## [3.1.0-rc.3] - 2026-11-07
 
 ### Fixed
@@ -16,9 +20,9 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
   - A file that cannot be read (gone, access denied, network share down) was taken for a system file on Windows: `GetFileAttributesW` returns all bits set on failure. It was then skipped silently when adding a folder and never renamed (`isHiddenOrSystem`, `app/mainwindow_internal.h`).
   - The CSV of the exported preview and of the log: a name starting with `=`, `+`, `-` or `@` was run as a formula by Excel or LibreOffice, quotes or not. A quote now comes first (`ren::csvField`, `core/ren_files.cpp`).
   - A source file that is gone was logged as "not renamed" and not counted as an error: the summary said 0 errors and `-q` returned 0. It is now an error, like in the undo (`Action::perform`, `core/ren_actions.cpp`).
-  - `%folderN%` with a huge N (for example `%folder999999999%`) looped that many times and froze the program, the sample preview included. N is limited to 260 levels.
+  - `%folderN%` with a huge N (for example `%folder999999999%`) looped that many times and froze the program, the sample preview included. The walk up (or down) the path now stops when the path runs out of folders, whatever N is, so every level of a deep path is still reachable (a first version capped N at 260, which changed the result for deeper Linux paths: reported by a code review).
   - The notes of the Date and time action listed the tags `c`, `ddddd` and `dddddd`, which do not exist (the help says so): their lines are cut from the notes, in every language. The English text is untouched, it is the key of the `.lng` translations.
-  - Tests added in `tests/test_core.cpp` (CSV field, huge level, missing source).
+  - Tests added in `tests/test_core.cpp` (CSV field, huge level, deep path of 300 folders, missing source).
 
 ### Changed
 

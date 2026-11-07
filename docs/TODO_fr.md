@@ -52,7 +52,8 @@ Ce sont des idées, pas des promesses : certaines ne seront peut-être jamais r�
 | **Plus tard** | **Menu contextuel moderne de Windows 11**, à décider à la demande. |
 
 ### Petites idées, sans version
-- Licence : passer le portage de GPL v2 ou ultérieure à GPL v3 (permis, l'original dit « version 2 ou toute version ultérieure »). Aucun besoin technique aujourd'hui, donc pas avant la 3.1.0 finale ; à décider avec une vraie raison (une dépendance ou une contribution sous une licence incompatible avec la v2). Touche `LICENSE`, la boîte À propos (`app/dialogs.cpp`, `app/help/about_*.md`, les fichiers `.lng`), `README`, `CONTRIBUTING`, `docs/PRESENTATION`, le copyright du `.deb` (`scripts/linux/package-deb.sh`), le metainfo Flatpak (`GPL-3.0-or-later`) et le fichier de licence de l'installeur.
+
+- Ajouter un dossier vide (ou sans fichier, avec « Ajouter les fichiers des dossiers sélectionnés » cochée) n'affiche rien et ne dit rien : un court message dans la barre d'état ou le journal (« aucun fichier trouvé dans ... ») montrerait à l'utilisateur que l'ajout a bien eu lieu. Rencontré par l'auteur le 2026-11-07 en testant la rc.3.- Licence : passer le portage de GPL v2 ou ultérieure à GPL v3 (permis, l'original dit « version 2 ou toute version ultérieure »). Aucun besoin technique aujourd'hui, donc pas avant la 3.1.0 finale ; à décider avec une vraie raison (une dépendance ou une contribution sous une licence incompatible avec la v2). Touche `LICENSE`, la boîte À propos (`app/dialogs.cpp`, `app/help/about_*.md`, les fichiers `.lng`), `README`, `CONTRIBUTING`, `docs/PRESENTATION`, le copyright du `.deb` (`scripts/linux/package-deb.sh`), le metainfo Flatpak (`GPL-3.0-or-later`) et le fichier de licence de l'installeur.
 
 - Lire les données `.dop` ? Pas prévu : c'est un format propre à DxO.
 - Propriétés XMP pas encore reprises : les attributs `exif:` d'un fichier associé (date, GPS), les réglages `crs:` (Camera Raw).

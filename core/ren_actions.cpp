@@ -45,8 +45,6 @@ void pasInsert(const QString& what, QString& s, int idx) {
     s.insert(qBound(1, idx, int(s.size()) + 1) - 1, what);
 }
 
-constexpr int kMaxFolderLevel = 260;  // %folderN% / %folder-N%: far more than any path can hold
-
 qint64 tickCount() {
     return QDateTime::currentMSecsSinceEpoch() & 0xFFFFFFFF;
 }
@@ -234,7 +232,6 @@ bool Action::getTag(const QString& tag, QString& value) {
         QString cur = fileName_;
         const QString nStr = tag.mid(6);
         int n = nStr == u"N" ? 1 : nStr.toInt();
-        n = qBound(-kMaxFolderLevel, n, kMaxFolderLevel);  // a path has no more levels; a huge N must not freeze the program
         if (n < 0) {
 #ifdef Q_OS_WIN
             if (cur.startsWith(u"\\\\")) {
@@ -247,13 +244,21 @@ bool Action::getTag(const QString& tag, QString& value) {
 #endif
             for (; n < 0; ++n) {  // Split(cur, sep, value, cur): value = before first separator, cur = rest
                 int p = cur.indexOf(kSep);
-                value = p < 0 ? QString() : cur.left(p);
+                if (p < 0) {  // the path ran out of folders: the value stays empty, whatever N is (a huge N must not loop)
+                    value.clear();
+                    break;
+                }
+                value = cur.left(p);
                 cur = cur.mid(p + 1);
             }
             value.remove(u':');
         } else {
             for (; n > 0; --n) {
-                cur = excludeTrailingBackslash(extractFilePath(cur));
+                const QString parent = excludeTrailingBackslash(extractFilePath(cur));
+                if (parent == cur) {  // the root (or nothing) is reached: going up no further, whatever N is
+                    break;
+                }
+                cur = parent;
             }
             value = extractFileName(cur);
         }
