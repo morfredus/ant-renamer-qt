@@ -4,7 +4,17 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.1.0-rc.2**.
+Current version: **3.1.0-rc.3**.
+
+## 3.1.0-rc.3
+
+| What is new | Since |
+|---|---|
+| **Fix**: a file that cannot be read when added (gone, no access) is no longer taken for a system file and skipped without a word. | 3.1.0-rc.3 |
+| **Fix**: the CSV files (exported preview, log) no longer let a spreadsheet run a file name that starts with `=`, `+`, `-` or `@` as a formula. | 3.1.0-rc.3 |
+| **Fix**: a source file that is gone counts as an error (summary, and exit code 1 with `-q`). | 3.1.0-rc.3 |
+| **Fix**: a huge number in `%folderN%` no longer freezes the program. | 3.1.0-rc.3 |
+| **Fix**: the notes of the Date and time action no longer list the tags `c`, `ddddd` and `dddddd`, which do not exist. | 3.1.0-rc.3 |
 
 ## 3.1.0-rc.2
 

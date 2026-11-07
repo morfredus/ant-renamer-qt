@@ -45,6 +45,8 @@ void pasInsert(const QString& what, QString& s, int idx) {
     s.insert(qBound(1, idx, int(s.size()) + 1) - 1, what);
 }
 
+constexpr int kMaxFolderLevel = 260;  // %folderN% / %folder-N%: far more than any path can hold
+
 qint64 tickCount() {
     return QDateTime::currentMSecsSinceEpoch() & 0xFFFFFFFF;
 }
@@ -232,6 +234,7 @@ bool Action::getTag(const QString& tag, QString& value) {
         QString cur = fileName_;
         const QString nStr = tag.mid(6);
         int n = nStr == u"N" ? 1 : nStr.toInt();
+        n = qBound(-kMaxFolderLevel, n, kMaxFolderLevel);  // a path has no more levels; a huge N must not freeze the program
         if (n < 0) {
 #ifdef Q_OS_WIN
             if (cur.startsWith(u"\\\\")) {
@@ -332,7 +335,8 @@ void Action::perform(FileList& list, Op op, const Progress& progress) {
                 newName = makeNewName(f.filePath(), f.isFolder());
             }
             if (lastError_.status != State::NotRenamed) {
-                f.setError(lastError_.description, State::NotRenamed);
+                // a missing source is an error (counted, exit code 1 with -q); the other reasons (setInfo) only skip the file
+                f.setError(lastError_.description, lastError_.status == State::Error ? State::Error : State::NotRenamed);
                 lastError_ = Error{};
             } else if (op == Op::Rename) {
                 f.rename(newName);

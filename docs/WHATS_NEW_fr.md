@@ -4,7 +4,17 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.1.0-rc.2**.
+Version courante : **3.1.0-rc.3**.
+
+## 3.1.0-rc.3
+
+| Nouveauté | Depuis |
+|---|---|
+| **Correction** : un fichier illisible à l'ajout (disparu, sans accès) n'est plus pris pour un fichier système et ignoré sans rien dire. | 3.1.0-rc.3 |
+| **Correction** : les fichiers CSV (aperçu exporté, journal) ne laissent plus un tableur exécuter comme une formule un nom de fichier qui commence par `=`, `+`, `-` ou `@`. | 3.1.0-rc.3 |
+| **Correction** : un fichier source disparu compte comme une erreur (résumé, et code de sortie 1 avec `-q`). | 3.1.0-rc.3 |
+| **Correction** : un très grand nombre dans `%folderN%` ne bloque plus le programme. | 3.1.0-rc.3 |
+| **Correction** : les notes de l'action Date et heure ne listent plus les tags `c`, `ddddd` et `dddddd`, qui n'existent pas. | 3.1.0-rc.3 |
 
 ## 3.1.0-rc.2
 

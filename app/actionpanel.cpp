@@ -526,6 +526,11 @@ void ActionPanel::buildPages() {
                "am/pm\tUses the 12-hour clock for the preceding h or hh\na/p\tUses the 12-hour clock for the preceding h or hh\n"
                "\"xx\"\tCharacters enclosed in quotes remain unchanged\n"
                "If m or mm immediately follows h or hh, minute rather than month is used"));
+        // The tags c, ddddd and dddddd (date in the Windows format) of the original program do not exist here: their lines
+        // are cut from the translated text (the English text stays as it is, it is the key of the .lng translations).
+        QStringList lines = memo->toPlainText().split(u'\n');
+        lines.removeIf([](const QString& l) { return l.startsWith(u"c\t") || l.startsWith(u"ddddd\t") || l.startsWith(u"dddddd\t"); });
+        memo->setPlainText(lines.join(u'\n'));
         memo->setReadOnly(true);
         p.v->addWidget(memo, 1);
     }

@@ -170,8 +170,8 @@ void MainWindow::onProgress(const Snapshot& s) {
 // Excel and LibreOffice read the accents). Only the lines about files have a row.
 static QByteArray logCsvLine(const QStringList& row) {
     QStringList q;
-    for (QString v : row) {
-        q << u'"' + v.replace(u'"', u"\"\""_s) + u'"';
+    for (const QString& v : row) {
+        q << ren::csvField(v);
     }
     return (q.join(u';') + u"\r\n"_s).toUtf8();
 }

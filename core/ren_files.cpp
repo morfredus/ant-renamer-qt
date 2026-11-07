@@ -478,8 +478,17 @@ void FileList::sort() {
     std::stable_sort(items_.begin(), items_.end(), [](auto& a, auto& b) { return a->position < b->position; });
 }
 
+QString csvField(QString v) {
+    // A name starting with = + - @ (or a tab / CR) would be run as a formula by a spreadsheet, quotes or not: a quote
+    // before it makes it plain text.
+    if (!v.isEmpty() && QStringView(u"=+-@\t\r").contains(v[0])) {
+        v.prepend(u'\'');
+    }
+    return u'"' + v.replace(u'"', u"\"\""_s) + u'"';
+}
+
 QString exportPreview(const std::vector<const File*>& files, bool csv) {
-    auto q = [](QString v) { return u'"' + v.replace(u'"', u"\"\""_s) + u'"'; };
+    auto q = csvField;
     QString out;
     if (csv) {
         out += u"\"Folder\";\"Name\";\"New name\"\r\n"_s;  // CRLF like any CSV (RFC 4180)

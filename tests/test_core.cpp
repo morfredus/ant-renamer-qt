@@ -368,6 +368,33 @@ int main(int argc, char** argv) {
                  u"\"Folder\";\"Name\";\"New name\"\r\n\"/tmp/\";\"a\"\"b.txt\";\"c.txt\"\r\n\"/tmp/\";\"d.txt\";\"d.txt\"\r\n"_s);
         CHECK_EQ(exportPreview(v, false), u"c.txt\nd.txt\n"_s);
     }
+    {  // a spreadsheet must not read a file name as a formula
+        CHECK_EQ(csvField(u"=1+1"_s), u"\"'=1+1\""_s);
+        CHECK_EQ(csvField(u"-1.jpg"_s), u"\"'-1.jpg\""_s);
+        CHECK_EQ(csvField(u"a=b"_s), u"\"a=b\""_s);
+        CHECK_EQ(csvField(QString()), u"\"\""_s);
+    }
+    {  // a huge level must not hang (it used to loop that many times)
+        CHECK_EQ(prev<ActionStringIns>(u"abc.txt"_s,
+                                       [](auto& a) {
+                                           a.newString = u"%folder999999999%-"_s;
+                                           a.pos = 0;
+                                       }),
+                 prev<ActionStringIns>(u"abc.txt"_s,
+                                       [](auto& a) {
+                                           a.newString = u"%folder260%-"_s;
+                                           a.pos = 0;
+                                       }));
+    }
+    {  // a source that is gone is an error (counted, exit code 1 with -q), not a plain skip
+        QTemporaryDir gd;
+        FileList gl;
+        gl.add(gd.path() + u"/gone.txt"_s);
+        ActionList gone;
+        static_cast<ActionCase&>(gone.add(ActionType::Case)).caseType = 2;
+        gone.perform(gl, Op::Rename);
+        CHECK_EQ(gl.at(0).status() == State::Error ? u"error"_s : u"other"_s, u"error"_s);
+    }
     robustnessChecks();
 
     // real files: enum + case-only rename + revert + batch round-trip

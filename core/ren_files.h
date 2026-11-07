@@ -194,6 +194,9 @@ private:
     Journal* journal_ = nullptr;
 };
 
+// One CSV field: between quotes, quotes doubled, and made harmless for a spreadsheet (a leading = + - @ is not a formula).
+QString csvField(QString v);
+
 // Text of the exported preview: csv = "Folder";"Name";"New name" (semicolon, every field quoted), otherwise only the new names,
 // one per line. A file with no preview (or an unchanged one) keeps its current name.
 QString exportPreview(const std::vector<const File*>& files, bool csv);
