@@ -324,7 +324,8 @@ void MainWindow::createActions() {
     connect(aGo_, &QAction::triggered, this, [this] { run(Op::Rename); });
     connect(aStop_, &QAction::triggered, this, [] { stopFlag() = true; });
     connect(aUndo_, &QAction::triggered, this, [this] {
-        if (appOptions().undoButton == 1) {
+        // Safeguard: after a restart the last pass may be old; the button then opens the history, whatever the option.
+        if (appOptions().undoButton == 1 || !journal_.hasCurrentSession()) {
             showHistory();
         } else {
             run(Op::Undo, 1);  // F12 follows the choice made in the options

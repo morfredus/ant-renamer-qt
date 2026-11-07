@@ -72,6 +72,9 @@ public:
         open_ = false;
     }
     bool recording() const { return open_; }
+    bool hasCurrentSession() const {  // a pass made since this start of the program
+        return !passes_.empty() && passes_.back().session == session_;
+    }
     size_t size() const { return passes_.size(); }
     const std::deque<Pass>& passes() const { return passes_; }  // oldest first
 

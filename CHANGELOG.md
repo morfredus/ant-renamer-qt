@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Fixed
+
+- Undo (button / F12) after a restart of the program no longer undoes the last pass of a previous session blindly: it opens the history instead, whatever the "undo button" option. Once a pass is made in the current session, the button follows the option again.
+
 ### Changed
 
 - TODO (EN, FR): idea of a message when an added folder holds no file (nothing is shown today, which looks like a failure).
