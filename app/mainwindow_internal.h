@@ -75,8 +75,9 @@ inline bool isHiddenOrSystem(const QFileInfo& fi) {
         return true;
     }
 #ifdef Q_OS_WIN
-    return GetFileAttributesW(reinterpret_cast<LPCWSTR>(QDir::toNativeSeparators(fi.absoluteFilePath()).utf16())) &
-           FILE_ATTRIBUTE_SYSTEM;
+    // A failure (file gone, access denied) gives INVALID_FILE_ATTRIBUTES, all bits set: it is not a system file.
+    const DWORD attr = GetFileAttributesW(reinterpret_cast<LPCWSTR>(QDir::toNativeSeparators(fi.absoluteFilePath()).utf16()));
+    return attr != INVALID_FILE_ATTRIBUTES && (attr & FILE_ATTRIBUTE_SYSTEM) != 0;
 #else
     return false;
 #endif

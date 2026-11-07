@@ -2,6 +2,12 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.1.0-rc.3 (07/11/2026)
+  - Fix: a file that cannot be read when added is no longer taken for a system file and skipped.
+  - Fix: CSV files (exported preview, log) no longer let a spreadsheet run a file name starting with =, +, - or @ as a formula.
+  - Fix: a source file that is gone counts as an error (summary, exit code 1 with -q).
+  - Fix: a huge number in %folderN% no longer freezes the program.
+  - Fix: the notes of the Date and time action no longer list the tags c, ddddd and dddddd, which do not exist.
 - 3.1.0-rc.2 (04/11/2026)
   - Fix: the first click in a field of the actions selects the whole text.
 - 3.1.0-rc.1 (03/11/2026)

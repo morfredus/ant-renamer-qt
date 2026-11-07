@@ -4,6 +4,14 @@
 
 French version: [TODO_fr.md](TODO_fr.md).
 
+### P0: code quality, right after the final 3.1.0 (the code is frozen for it)
+
+From a technical review checked against the code (2026-11-06). Nothing to touch before the 3.1.0 release:
+- **CI badge** at the top of `README.md` / `README_fr.md` (the Build workflow already exists, only the badge is missing).
+- **clang-tidy** (and/or `-Werror`) so that "no compiler warnings" is enforced by the CI, not only checked by hand: a `.clang-tidy` file, a CMake preset, a CI step. Today only `-Wall -Wextra -Wshadow`.
+- Optional, low value: `std::span` for `exportPreview`, `qScopeGuard` for `LocalFree` in `lastSysError()`, naming rule (`readability-identifier-naming`) once clang-tidy is in place.
+- Checked and not to do: `File*` in `FileList` (addresses are stable, the vector holds `unique_ptr`; the risk is only a pointer kept after `remove()`), `moveFile(..., QString& err)` (3 callers, all test the result).
+
 ### P1: undo after a restart (done, see the CHANGELOG, Unreleased)
 
 Asked by a forum user (afraid of wrecking an archive after a typing error or a change of mind). Today the undo history lives in memory (`ren::Journal`, `core/ren_files.h`) and is lost when the program is closed. The idea: write it to disk (JSON in the data folder) at the end of each pass, reload it at startup, and keep the history window across sessions (about 50 passes). The undo stays linear, from the last pass backwards, and the existing checks stay (file still there, old name free; stop at the first failure and keep the rest of the pass). Estimated cost: 100 to 150 lines of code plus tests, translations (EN, FR, HR, TA), docs. Low technical risk.

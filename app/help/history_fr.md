@@ -2,6 +2,12 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.1.0-rc.3 (07/11/2026)
+  - Correction : un fichier illisible à l'ajout n'est plus pris pour un fichier système et ignoré.
+  - Correction : les fichiers CSV (aperçu exporté, journal) ne laissent plus un tableur exécuter comme une formule un nom de fichier qui commence par =, +, - ou @.
+  - Correction : un fichier source disparu compte comme une erreur (résumé, code de sortie 1 avec -q).
+  - Correction : un très grand nombre dans %folderN% ne bloque plus le programme.
+  - Correction : les notes de l'action Date et heure ne listent plus les tags c, ddddd et dddddd, qui n'existent pas.
 - 3.1.0-rc.2 (04/11/2026)
   - Correction : le premier clic dans un champ des actions sélectionne tout le texte.
 - 3.1.0-rc.1 (03/11/2026)

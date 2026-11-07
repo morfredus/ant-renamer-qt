@@ -4,6 +4,14 @@
 
 English version: [TODO.md](TODO.md).
 
+### P0 : qualité du code, juste après la 3.1.0 finale (le code est figé pour elle)
+
+Issu d'une revue technique vérifiée dans le code (06/11/2026). Rien à toucher avant la sortie de la 3.1.0 :
+- **Badge CI** en tête de `README.md` / `README_fr.md` (le workflow Build existe déjà, seul le badge manque).
+- **clang-tidy** (et/ou `-Werror`) pour que « aucun avertissement du compilateur » soit imposé par la CI et pas seulement vérifié à la main : un fichier `.clang-tidy`, un preset CMake, une étape de CI. Aujourd'hui seulement `-Wall -Wextra -Wshadow`.
+- Facultatif, peu utile : `std::span` pour `exportPreview`, `qScopeGuard` pour `LocalFree` dans `lastSysError()`, règle de nommage (`readability-identifier-naming`) une fois clang-tidy en place.
+- Vérifié et à ne pas faire : `File*` dans `FileList` (les adresses sont stables, le vecteur contient des `unique_ptr` ; le seul risque est un pointeur gardé après `remove()`), `moveFile(..., QString& err)` (3 appelants, tous testent le résultat).
+
 ### P1 : annuler après un redémarrage (fait, voir le CHANGELOG, Unreleased)
 
 Demandé par un utilisateur du forum (qui craint d'abîmer ses archives après une faute de frappe ou un changement d'avis). Aujourd'hui l'historique d'annulation est gardé en mémoire (`ren::Journal`, `core/ren_files.h`) et il est perdu à la fermeture du programme. L'idée : l'écrire sur disque (JSON dans le dossier de données) à la fin de chaque passe, le recharger au démarrage, et garder la fenêtre d'historique d'une session à l'autre (une cinquantaine de passes). L'annulation reste linéaire, de la dernière passe vers la première, et les contrôles actuels restent (fichier toujours là, ancien nom libre ; arrêt au premier échec, le reste de la passe est conservé). Coût estimé : 100 à 150 lignes de code, plus les tests, les traductions (EN, FR, HR, TA) et la documentation. Risque technique faible.
