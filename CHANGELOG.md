@@ -10,6 +10,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Fixed
 
+- AppImage (AppImage catalog, pull request 11253, test failed): the file is now named `AntRenamerQt-<version>-x86_64.AppImage` (no `linux`, which the catalog refuses), and a new `appimage` job of `build.yml` builds it on Ubuntu 22.04 (glibc 2.35, Qt 6.5), because the AppImage published up to now was built on a system with glibc 2.38 and did not start on older distributions. The next release must use the AppImage built by this job, not one built on Ubuntu 24.04.
 - Undo (button / F12) after a restart of the program no longer undoes the last pass of a previous session blindly: it opens the history instead, whatever the "undo button" option. Once a pass is made in the current session, the button follows the option again.
 
 ### Changed
