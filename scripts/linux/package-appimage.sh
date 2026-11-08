@@ -2,7 +2,7 @@
 #
 # Ant Renamer Qt - builds a self-contained AppImage (x86_64).
 #
-# Produces dist/AntRenamerQt-<version>-linux-x86_64.AppImage: a single portable file that bundles Qt.
+# Produces dist/AntRenamerQt-<version>-x86_64.AppImage: a single portable file that bundles Qt.
 # The user makes it executable and runs it, with no build and no Qt installation.
 #
 # Requirements: the program built (cmake --preset linux && cmake --build --preset linux) and, on the first
@@ -115,7 +115,7 @@ echo "Building the AppImage (Qt bundled)..."
 RESULT="$(ls -t "$WORK"/*.AppImage 2>/dev/null | head -n1)"
 [ -n "$RESULT" ] || die "AppImage not produced."
 install -d "$ROOT/dist"
-FINAL="$ROOT/dist/AntRenamerQt-${VERSION}-linux-${ARCH}.AppImage"
+FINAL="$ROOT/dist/AntRenamerQt-${VERSION}-${ARCH}.AppImage"
 cp -f "$RESULT" "$FINAL"
 chmod +x "$FINAL"
 echo "OK - $FINAL ($(du -h "$FINAL" | cut -f1))"
