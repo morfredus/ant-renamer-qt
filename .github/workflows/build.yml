@@ -41,6 +41,29 @@ jobs:
           name: linux-deb
           path: dist/*.deb
 
+  appimage:
+    # Built on the oldest Ubuntu LTS runner: an AppImage uses the glibc of the machine that runs it, so it must not be
+    # built on a newer system (the AppImage catalog tests on Ubuntu 22.04). Qt 6.5 comes from install-qt-action because
+    # the Qt 6.2 of Ubuntu 22.04 is older than the 6.4 the project needs.
+    name: Linux (AppImage, glibc 2.35)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - name: Dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build g++-12 libgl1-mesa-dev libxkbcommon-x11-0 libxcb-cursor0 libfuse2
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.5.3
+      - name: Build
+        run: cmake --preset linux -DCMAKE_CXX_COMPILER=g++-12 && cmake --build --preset linux
+      - name: AppImage
+        run: scripts/linux/package-appimage.sh
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linux-appimage
+          path: dist/*.AppImage
+
   windows:
     name: Windows (build + packages)
     runs-on: windows-2022
