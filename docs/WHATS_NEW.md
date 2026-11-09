@@ -4,7 +4,15 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.1.0-rc.3**.
+Current version: **3.1.0**.
+
+## 3.1.0
+
+| What is new | Since |
+|---|---|
+| **Final version of 3.1**: same program as the release candidates, with one fix. | 3.1.0 |
+| **Fix**: Undo (button / F12) after a restart of the program no longer undoes the last pass of a previous session blindly: it opens the history first. | 3.1.0 |
+| **Linux AppImage**: built on Ubuntu 22.04 (glibc 2.35) so that it starts on older distributions; the file is now named `AntRenamerQt-<version>-x86_64.AppImage`. | 3.1.0 |
 
 ## 3.1.0-rc.3
 

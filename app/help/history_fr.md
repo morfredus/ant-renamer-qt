@@ -2,6 +2,9 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.1.0 (09/11/2026)
+  - Correction : l'annulation (bouton / F12) après un redémarrage n'annule plus à l'aveugle la dernière passe d'une session précédente : elle ouvre d'abord l'historique.
+  - Version finale de la 3.1, même programme que les release candidates à cette correction près. AppImage Linux reconstruit sous Ubuntu 22.04 (glibc 2.35) pour démarrer sur les distributions plus anciennes ; son nom de fichier ne contient plus « linux ».
 - 3.1.0-rc.3 (07/11/2026)
   - Correction : un fichier illisible à l'ajout n'est plus pris pour un fichier système et ignoré.
   - Correction : les fichiers CSV (aperçu exporté, journal) ne laissent plus un tableur exécuter comme une formule un nom de fichier qui commence par =, +, - ou @.

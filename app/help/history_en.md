@@ -2,6 +2,9 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.1.0 (09/11/2026)
+  - Fix: Undo (button / F12) after a restart no longer undoes the last pass of a previous session blindly: it opens the history first.
+  - Final version of 3.1, same program as the release candidates apart from this fix. Linux AppImage rebuilt on Ubuntu 22.04 (glibc 2.35) so that it starts on older distributions; its file name no longer contains "linux".
 - 3.1.0-rc.3 (07/11/2026)
   - Fix: a file that cannot be read when added is no longer taken for a system file and skipped.
   - Fix: CSV files (exported preview, log) no longer let a spreadsheet run a file name starting with =, +, - or @ as a formula.
