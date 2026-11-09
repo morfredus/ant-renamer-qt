@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Fixed
+
+- Flatpak: the AppStream file (`packaging/flatpak/*.metainfo.xml`) lists the release 3.1.0, which the Flathub publication script requires in the tag.
+
 ## [3.1.0] - 2026-11-09
 
 Final version of 3.1: the code of 3.1.0-rc.3 with the changes below.
