@@ -1,6 +1,10 @@
 # Ant Renamer Qt
 
-![version](https://img.shields.io/badge/version-3.1.0--rc.3-blue)
+[![Build](https://img.shields.io/github/actions/workflow/status/morfredus/ant-renamer-qt/build.yml?branch=main&label=build)](https://github.com/morfredus/ant-renamer-qt/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/morfredus/ant-renamer-qt?include_prereleases&label=release)](https://github.com/morfredus/ant-renamer-qt/releases)
+[![License](https://img.shields.io/badge/license-GPL--2.0--or--later-blue)](https://github.com/morfredus/ant-renamer-qt/blob/main/LICENSE)
+![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Linux-lightgrey)
+![Qt 6](https://img.shields.io/badge/Qt-6-41cd52)
 
 C++/Qt 6 port of [Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (originally Delphi 7,
 GPL v2 or later). Batch file renaming: replace, insert, move, delete, enumerate, change case, regular

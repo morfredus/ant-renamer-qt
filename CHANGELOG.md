@@ -15,6 +15,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Changed
 
+- READMEs (EN, FR): badges for the build state, the latest release (dynamic, pre-releases included, so the version no longer has to be edited by hand), the licence, the platforms and Qt 6.
 - TODO (EN, FR): idea of a message when an added folder holds no file (nothing is shown today, which looks like a failure).
 
 ## [3.1.0-rc.3] - 2026-11-07

@@ -7,7 +7,6 @@ English version: [TODO.md](TODO.md).
 ### P0 : qualité du code, juste après la 3.1.0 finale (le code est figé pour elle)
 
 Issu d'une revue technique vérifiée dans le code (06/11/2026). Rien à toucher avant la sortie de la 3.1.0 :
-- **Badge CI** en tête de `README.md` / `README_fr.md` (le workflow Build existe déjà, seul le badge manque).
 - **clang-tidy** (et/ou `-Werror`) pour que « aucun avertissement du compilateur » soit imposé par la CI et pas seulement vérifié à la main : un fichier `.clang-tidy`, un preset CMake, une étape de CI. Aujourd'hui seulement `-Wall -Wextra -Wshadow`.
 - Facultatif, peu utile : `std::span` pour `exportPreview`, `qScopeGuard` pour `LocalFree` dans `lastSysError()`, règle de nommage (`readability-identifier-naming`) une fois clang-tidy en place.
 - Vérifié et à ne pas faire : `File*` dans `FileList` (les adresses sont stables, le vecteur contient des `unique_ptr` ; le seul risque est un pointeur gardé après `remove()`), `moveFile(..., QString& err)` (3 appelants, tous testent le résultat).
