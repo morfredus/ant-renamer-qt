@@ -4,7 +4,15 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.1.0-rc.3**.
+Version courante : **3.1.0**.
+
+## 3.1.0
+
+| Nouveauté | Depuis |
+|---|---|
+| **Version finale de la 3.1** : même programme que les release candidates, avec une correction. | 3.1.0 |
+| **Correction** : l'annulation (bouton / F12) après un redémarrage du programme n'annule plus à l'aveugle la dernière passe d'une session précédente : elle ouvre d'abord l'historique. | 3.1.0 |
+| **AppImage Linux** : construit sous Ubuntu 22.04 (glibc 2.35) pour démarrer sur les distributions plus anciennes ; le fichier s'appelle maintenant `AntRenamerQt-<version>-x86_64.AppImage`. | 3.1.0 |
 
 ## 3.1.0-rc.3
 

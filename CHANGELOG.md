@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.0] - 2026-11-09
+
+Final version of 3.1: the code of 3.1.0-rc.3 with the changes below.
+
 ### Fixed
 
 - AppImage (AppImage catalog, pull request 11253, test failed): the file is now named `AntRenamerQt-<version>-x86_64.AppImage` (no `linux`, which the catalog refuses), and a new `appimage` job of `build.yml` builds it on Ubuntu 22.04 (glibc 2.35, Qt 6.5), because the AppImage published up to now was built on a system with glibc 2.38 and did not start on older distributions. The next release must use the AppImage built by this job, not one built on Ubuntu 24.04.
