@@ -8,6 +8,18 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Removed
+
+- Date and time action: the box "Add suffix if more than one file with the same date/time" is gone. It added a long number taken from the clock to a name already on the disk, and did nothing for the files of a burst. The automatic numbering below replaces it; the old setting of a saved batch is ignored.
+
+### Added
+
+- Date and time action and EXIF action: files that get exactly the same new name (a burst shot in the same second) are now numbered `_01`, `_02`... before the extension, the first one included; a lone photo keeps its name. The numbering follows the order of the shooting (EXIF date and sub-seconds, else the file date, then the original name in natural order), not the order of the list. A name already used on the disk, or by another file of the batch, is skipped; a picture and its RAW get the same numbers; the number has more digits above 99 files. Same result in the preview and in the real renaming. New option "Number files given the same name by Date and time or EXIF" (Processing, on by default); off, a file whose name is taken is refused as before. The EXIF tag `SubSecTimeOriginal` can also be used in a mask.
+
+### Changed
+
+- Screenshots (`docs/screenshots`, English and French, 22 each) remade with the 3.1.0 interface (string replacement position choice, history buttons, new About text and version), and a script that remakes them: `scripts/windows/make-screenshots.sh` (`--only about` for the version screenshots).
+
 ### Fixed
 
 - Flatpak: the AppStream file (`packaging/flatpak/*.metainfo.xml`) lists the release 3.1.0, which the Flathub publication script requires in the tag.

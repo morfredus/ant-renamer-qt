@@ -156,7 +156,7 @@ bool DragDropDialog::dontAskAgain() const {
 // --- Options ---------------------------------------------------------------------------------------------
 struct OptionsDialog::Ui {
     QCheckBox *realtime, *resizeCols, *icons, *forceFont, *autoComplete, *dragNoAsk, *launch, *addHidden, *naturalSort, *newUi,
-        *forceDir, *detectAbs, *copy, *genLog, *folderExt, *sidecar, *dst, *portable, *shellMenu;
+        *forceDir, *detectAbs, *copy, *genLog, *folderExt, *sidecar, *numDup, *dst, *portable, *shellMenu;
     QCheckBox *dropFiles, *dropFolders, *dropRecursive;
     QComboBox* pageLayout = nullptr;
     QComboBox* undoButton = nullptr;
@@ -317,6 +317,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(std::make_u
         ui_->genLog = box(l, tr("Generate log"), o.genLog);
         ui_->dst = box(l, tr("DST offset related to file date"), o.dstRelativeToFile);
         ui_->sidecar = box(l, tr("Also rename the sidecar files (.xmp, .dop) of a renamed picture"), o.renameSidecar);
+        ui_->numDup = box(l, tr("Number files given the same name by Date and time or EXIF (_01, _02...)"), o.numberDuplicates);
         header(l, tr("Folder rules"));
         ui_->forceDir = box(l, tr("Force directories (allows to create folders if \"\\\" are found in names)"), o.forceDir);
         ui_->detectAbs =
@@ -458,6 +459,7 @@ void OptionsDialog::accept() {
     o.genLog = ui_->genLog->isChecked();
     o.dstRelativeToFile = ui_->dst->isChecked();
     o.renameSidecar = ui_->sidecar->isChecked();
+    o.numberDuplicates = ui_->numDup->isChecked();
     o.folderExt = ui_->folderExt->isChecked();
     o.startSwitch = ui_->startSwitch->isChecked() ? ui_->startTab->currentIndex() : -1;
     o.startClearLog = ui_->startClearLog->isChecked();

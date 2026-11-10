@@ -30,6 +30,7 @@ struct Options {
     bool skipHidden = true;         // files flagged `hidden` (hidden or system file) are left alone by every operation
     bool dstRelativeToFile = true;  // file times use the DST rule of the date itself (else today's offset)
     bool renameSidecar = true;      // a renamed picture takes its sidecars (IMG.xmp, IMG.CR2.xmp, IMG.dop...) along
+    bool numberDuplicates = true;   // Date and time / EXIF: files given the same name are numbered _01, _02... (see numberDuplicates())
 };
 // Text of the core in the language of the program (context "Ren"), for the messages of the log.
 QString tr(const char* s);

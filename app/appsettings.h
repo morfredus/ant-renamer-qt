@@ -42,6 +42,7 @@ struct AppOptions {
     // Processing
     bool forceDir = true, detectAbsDir = true, folderExt = false, copy = false, genLog = true;
     bool renameSidecar = true;  // a renamed picture takes its sidecars (.xmp, .dop) along
+    bool numberDuplicates = true;  // Date and time / EXIF: same new name for several files -> _01, _02...
     bool dstRelativeToFile = true;
     // Events: tab index (0 files, 1 actions, 2 log) or -1 for "do nothing"
     int startSwitch = -1, finishSwitch = -1;

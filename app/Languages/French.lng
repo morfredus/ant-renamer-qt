@@ -470,6 +470,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="couldNotChangeThe" Value="Impossible de modifier le menu contextuel de l'Explorateur."/>
     <Item Name="seconds" Value="secondes"/>
     <Item Name="alsoRenameTheSidecar" Value="Renommer aussi les fichiers associés (.xmp, .dop) d'une image renommée"/>
+    <Item Name="numberFilesGivenThe" Value="Numéroter les fichiers qui reçoivent le même nom par Date et heure ou EXIF (_01, _02...)"/>
     <Item Name="sidecarFileRenamedTo" Value="fichier associé %1 renommé en %2"/>
     <Item Name="sidecarFileNotRenamed" Value="fichier associé %1 non renommé : %2"/>
     <Item Name="iptckeywordsXmptitleIptcAnd" Value="%IptcKeywords%, %XmpTitle%... = données IPTC et XMP (mots-clés, titre, auteur, lieu...)"/>

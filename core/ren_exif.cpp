@@ -30,6 +30,7 @@ const QHash<int, QString>& tagNames() {
         {0x9000, "ExifVersion"},
         {0x9003, "DateTimeOriginal"},
         {0x9004, "DateTimeDigitized"},
+        {0x9291, "SubSecTimeOriginal"},
         {0x9201, "ShutterSpeedValue"},
         {0x9202, "ApertureValue"},
         {0x9204, "ExposureBiasValue"},

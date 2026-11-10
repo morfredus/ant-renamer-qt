@@ -474,6 +474,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="couldNotChangeThe" Value="Could not change the Explorer context menu."/>
     <Item Name="seconds" Value="seconds"/>
     <Item Name="alsoRenameTheSidecar" Value="Also rename the sidecar files (.xmp, .dop) of a renamed picture"/>
+    <Item Name="numberFilesGivenThe" Value="Number files given the same name by Date and time or EXIF (_01, _02...)"/>
     <Item Name="sidecarFileRenamedTo" Value="sidecar file %1 renamed to %2"/>
     <Item Name="sidecarFileNotRenamed" Value="sidecar file %1 not renamed: %2"/>
     <Item Name="iptckeywordsXmptitleIptcAnd" Value="%IptcKeywords%, %XmpTitle%... = IPTC and XMP data (keywords, title, author, place...)"/>
