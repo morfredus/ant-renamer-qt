@@ -10,6 +10,7 @@ inline void mk(const QString& dir, const QString& name, const QDateTime& t) {
     QFile f(dir + name);
     if (f.open(QIODevice::WriteOnly)) {
         f.write(name.toUtf8());
+        f.flush();  // on Linux the buffered write would otherwise change the date set below
         f.setFileTime(t, QFileDevice::FileModificationTime);
     }
 }

@@ -24,6 +24,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Fixed
 
+- Tests: the numbering test (`tests/duplicates_check.h`) failed on Linux because the file date it set was overwritten when the file was closed; the data is now flushed before the date is set. No change to the program.
 - Flatpak: the AppStream file (`packaging/flatpak/*.metainfo.xml`) lists the release 3.1.0, which the Flathub publication script requires in the tag.
 
 ## [3.1.0] - 2026-11-09
