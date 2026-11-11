@@ -16,6 +16,8 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 - Date and time action and EXIF action: files that get exactly the same new name (a burst shot in the same second) are now numbered `_01`, `_02`... before the extension, the first one included; a lone photo keeps its name. The numbering follows the order of the shooting (EXIF date and sub-seconds, else the file date, then the original name in natural order), not the order of the list. A name already used on the disk, or by another file of the batch, is skipped; a picture and its RAW get the same numbers; the number has more digits above 99 files. Same result in the preview and in the real renaming. New option "Number files given the same name by Date and time or EXIF" (Processing, on by default); off, a file whose name is taken is refused as before. The EXIF tag `SubSecTimeOriginal` can also be used in a mask.
 
+- AppImage: update information embedded (`gh-releases-zsync`) so AppImageUpdate and similar tools can update it, as the AppImage catalog test recommends. The build also produces `AntRenamerQt-<version>-x86_64.AppImage.zsync`, which must be published in the release next to the AppImage (the `appimage` job of `build.yml` uploads both and installs `zsync`).
+
 ### Changed
 
 - Screenshots (`docs/screenshots`, English and French, 22 each) remade with the 3.1.0 interface (string replacement position choice, history buttons, new About text and version), and a script that remakes them: `scripts/windows/make-screenshots.sh` (`--only about` for the version screenshots).
