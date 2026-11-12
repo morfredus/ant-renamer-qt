@@ -34,6 +34,8 @@ Pre-release of 3.1.1: the fixes and additions made since 3.1.0.
 
 ### Changed
 
+- `docs/TESTED_PLATFORMS.md` (EN, FR): what was tested on 3.1.1-beta.1 (Windows 11, Ubuntu 24.04 under WSL2, Raspberry Pi 4 arm64).
+
 - TODO (EN, FR): brought up to date after the 3.1.0 release (P0 unblocked, undo after a restart marked released, 3.1 state replaces the old beta plan, broken bullet fixed).
 - Screenshots (`docs/screenshots`, English and French, 22 each) remade with the 3.1.0 interface (string replacement position choice, history buttons, new About text and version), and a script that remakes them: `scripts/windows/make-screenshots.sh` (`--only about` for the version screenshots).
 
