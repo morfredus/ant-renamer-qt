@@ -132,7 +132,7 @@ void ActionPanel::bind(const Wd& control, T A::*member) {
 }
 
 template <class A, class To, class From>
-void ActionPanel::bindFn(To to, From from) {
+void ActionPanel::bindFn(const To& to, const From& from) {
     binds_[size_t(A().type())].push_back(
         {[to](Action& a, bool history) { to(static_cast<A&>(a), history); }, [from](const Action& a) { from(static_cast<const A&>(a)); }});
 }

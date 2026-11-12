@@ -17,6 +17,11 @@ set(CMAKE_AUTOMOC ON)
 # Compiler warnings are on for the whole project: the code must build without any.
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     add_compile_options(-Wall -Wextra -Wshadow)
+    # The CI sets this so that a warning fails the build (-DANTREN_WERROR=ON); off by default for people with a newer compiler.
+    option(ANTREN_WERROR "Treat compiler warnings as errors" OFF)
+    if(ANTREN_WERROR)
+        add_compile_options(-Werror)
+    endif()
 endif()
 
 find_package(Qt6 REQUIRED COMPONENTS Core)

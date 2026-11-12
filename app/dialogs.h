@@ -14,6 +14,10 @@ struct AddChoice {
     bool any() const { return files || folders; }
 };
 
+// The version shown to the user. A pre-release (3.1.1-beta.1) also shows the commit it was built from, so that a tester
+// knows which build runs; the real version (update check, user agent) stays QApplication::applicationVersion().
+QString displayVersion();
+
 // Remembers the "what to add" choice in the options (the check boxes below start from it). Not saved to disk.
 void rememberAddChoice(const AddChoice& c);
 

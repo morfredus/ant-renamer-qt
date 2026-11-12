@@ -33,6 +33,16 @@
 
 using namespace Qt::StringLiterals;
 
+QString displayVersion() {
+    QString v = QApplication::applicationVersion();
+#ifdef AR_BUILD_ID
+    if (v.contains(u'-')) {
+        return v + u" ("_s + QStringLiteral(AR_BUILD_ID) + u')';
+    }
+#endif
+    return v;
+}
+
 namespace {
 
 QDialogButtonBox* standardButtons(QDialog* d) {
@@ -490,7 +500,7 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
     auto* img = new QLabel;
     img->setPixmap(QPixmap(u":/antrenamer-qt.png"_s).scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     auto* title = new QLabel(u"<span style='font-size:18pt;font-weight:bold'>Ant Renamer Qt</span><br>"_s +
-                             tr("Version %1").arg(QApplication::applicationVersion()));
+                             tr("Version %1").arg(displayVersion()));
     head->addWidget(img);
     head->addWidget(title, 1);
     v->addLayout(head);

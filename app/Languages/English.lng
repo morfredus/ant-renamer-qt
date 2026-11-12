@@ -477,6 +477,8 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="numberFilesGivenThe" Value="Number files given the same name by Date and time or EXIF (_01, _02...)"/>
     <Item Name="sidecarFileRenamedTo" Value="sidecar file %1 renamed to %2"/>
     <Item Name="sidecarFileNotRenamed" Value="sidecar file %1 not renamed: %2"/>
+    <Item Name="noFileFoundIn" Value="No file found in %1"/>
+    <Item Name="alreadyRunning" Value="Ant Renamer Qt is already running: only one instance can be open at a time."/>
     <Item Name="iptckeywordsXmptitleIptcAnd" Value="%IptcKeywords%, %XmpTitle%... = IPTC and XMP data (keywords, title, author, place...)"/>
     <Item Name="position" Value="Position:"/>
     <Item Name="string" Value="String:"/>

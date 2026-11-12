@@ -77,7 +77,7 @@ std::optional<Release> newerRelease(const QByteArray& json, const QString& curre
     }
     const bool useCandidates = includePrereleases || isPre(current);
     std::optional<Release> best;
-    for (const QJsonValue& v : doc.array()) {
+    for (const auto& v : doc.array()) {
         const QJsonObject o = v.toObject();
         if (o.value(u"draft"_s).toBool()) {
             continue;

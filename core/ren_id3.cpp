@@ -246,7 +246,7 @@ QString v2Genre(const QString& t) {  // "(17)", "17", "(17)Rock", "Rock"
         if (e > 0) {
             bool ok = false;
             const int g = s.mid(1, e - 1).toInt(&ok);
-            const QString rest = s.mid(e + 1).trimmed();
+            QString rest = s.mid(e + 1).trimmed();
             if (!rest.isEmpty()) {
                 return rest;
             }

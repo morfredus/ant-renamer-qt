@@ -1,6 +1,6 @@
 # Ant Renamer Qt : guide des fonctions
 
-*Toutes les fonctions d'Ant Renamer Qt 3.1.0, avec le mode d'emploi.*
+*Toutes les fonctions d'Ant Renamer Qt 3.1.1-beta.1, avec le mode d'emploi.*
 English version : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détails complets, page par page, avec captures d'écran : l'aide intégrée (F1). Différences entre Windows et Linux : §13.
 
 ## 1. Principe général
@@ -148,7 +148,7 @@ Bon à savoir : un tag absent donne un texte vide ; les valeurs multiples sont j
 | `-b fichier.arb` | charge un job |
 | `-g` | démarre le traitement une fois fichiers et job chargés |
 | `-x` | quitte à la fin du traitement |
-| `-q` | mode silencieux pour les scripts : ni fenêtre ni boîte de dialogue, comme `-g -x`. Code de sortie : 0 tout est fait, 1 au moins un fichier a échoué, 2 rien n'a été fait (aucun fichier, aucun batch, fichier batch illisible, fichiers cachés dans la liste) |
+| `-q` | mode silencieux pour les scripts : ni fenêtre ni boîte de dialogue, comme `-g -x`. Code de sortie : 0 tout est fait, 1 au moins un fichier a échoué, 2 rien n'a été fait (aucun fichier, aucun batch, fichier batch illisible, fichiers cachés dans la liste). Sans `-q`, un lancement avec `-g` ou `-x` alors qu'une autre fenêtre est ouverte rend 3 (une seule fenêtre à la fois) |
 | `-af` / `-aF` / `-afr` | ajoute les fichiers / dossiers / contenu récursif des dossiers qui suivent (jokers `*` `?` acceptés) |
 | `--shell chemin` | ajoute le chemin à la fenêtre déjà ouverte (utilisé par le menu de l'Explorateur) |
 | `--install-shell` / `--remove-shell` | ajoute / retire l'entrée du menu de l'Explorateur (Windows), puis quitte |

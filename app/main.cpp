@@ -13,9 +13,12 @@
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QLockFile>
+#include <QMessageBox>
 #include <QTabWidget>
 #include <QThread>
 #include <QTimer>
+
+#include <cstdio>
 
 namespace {
 
@@ -77,6 +80,19 @@ int main(int argc, char** argv) {
     if (args.contains(QStringLiteral("--install-shell")) || args.contains(QStringLiteral("--remove-shell"))) {
         const bool on = args.contains(QStringLiteral("--install-shell"));
         return setShellMenu(on, QCoreApplication::translate("Ren", "Add to Ant Renamer Qt")) ? 0 : 1;
+    }
+
+    // One window at a time: two of them would overwrite each other's undo history and settings. `--shell` and `-q`
+    // are out of the rule. An unattended run (-g or -x) must not wait for a click: message on stderr, exit code 3.
+    if (!silent && !primary && !args.contains(QStringLiteral("--shell"))) {
+        const QString msg = QCoreApplication::translate(
+            "Ren", "Ant Renamer Qt is already running: only one instance can be open at a time.");
+        if (args.contains(QStringLiteral("-g")) || args.contains(QStringLiteral("-x"))) {
+            fprintf(stderr, "%s\n", qPrintable(msg));
+            return 3;
+        }
+        QMessageBox::information(nullptr, QStringLiteral("Ant Renamer Qt"), msg);
+        return 0;
     }
 
     MainWindow w;

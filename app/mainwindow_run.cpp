@@ -490,7 +490,9 @@ void MainWindow::processCommandLine(const QStringList& args) {
             }
         }
     }
+    const QString message = statusLabel_->text();  // e.g. "No file found in ...": setStatus() would wipe it
     setStatus();
+    statusLabel_->setText(message);
     updateSamplePreview();
     if (go && files_.size() > 0) {
         exitAfterRun_ = exit;

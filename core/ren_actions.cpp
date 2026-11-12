@@ -57,14 +57,13 @@ qint64 tickCount() {
 QString validateFileName(QString s) {
     s.remove(QChar(0));
     for (QChar& c : s) {
-        if (c.unicode() < 0x20 || c.unicode() == 0x7F) {
+        if (c.unicode() < 0x20 || c.unicode() == 0x7F || c == u'\\' || c == u':' || c == u'/' || c == u'*' || c == u'<' ||
+            c == u'>' || c == u'|') {
             c = u'-';
         } else if (c == u'"') {
             c = u'\'';
         } else if (c == u'?') {
             c = u'.';
-        } else if (c == u'\\' || c == u':' || c == u'/' || c == u'*' || c == u'<' || c == u'>' || c == u'|') {
-            c = u'-';
         }
     }
     return s;
@@ -1020,6 +1019,8 @@ QString ActionRandom::description() const {
         case 2:
             r += tr(", using GUIDs");
             break;
+        default:
+            break;
     }
     return r;
 }
@@ -1072,6 +1073,8 @@ QString ActionCase::description() const {
         case 3:
             r += tr(" all in lowercase");
             break;
+        default:
+            break;
     }
     if (useLocale) {
         r += tr(", using Windows' locale settings");
@@ -1114,6 +1117,8 @@ QString ActionCase::makeNewName(const QString& fn, bool isFolder) {
             break;
         case 3:
             r = mapCase(r, false, useLocale);
+            break;
+        default:
             break;
     }
     if (!plainFolder()) {
@@ -1198,7 +1203,7 @@ QString ActionRegexp::description() const {
 }
 QString ActionRegexp::makeNewName(const QString& fn, bool isFolder) {
     Action::makeNewName(fn, isFolder);
-    const QString name = extractFileName(fn);
+    QString name = extractFileName(fn);
     if (expr.isEmpty()) {
         return name;  // an empty expression matches everywhere: nothing to do
     }

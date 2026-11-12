@@ -473,6 +473,8 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="numberFilesGivenThe" Value="Numéroter les fichiers qui reçoivent le même nom par Date et heure ou EXIF (_01, _02...)"/>
     <Item Name="sidecarFileRenamedTo" Value="fichier associé %1 renommé en %2"/>
     <Item Name="sidecarFileNotRenamed" Value="fichier associé %1 non renommé : %2"/>
+    <Item Name="noFileFoundIn" Value="Aucun fichier trouvé dans %1"/>
+    <Item Name="alreadyRunning" Value="Ant Renamer Qt est déjà lancé : une seule instance peut être ouverte à la fois."/>
     <Item Name="iptckeywordsXmptitleIptcAnd" Value="%IptcKeywords%, %XmpTitle%... = données IPTC et XMP (mots-clés, titre, auteur, lieu...)"/>
     <Item Name="position" Value="Position :"/>
     <Item Name="string" Value="Chaîne :"/>

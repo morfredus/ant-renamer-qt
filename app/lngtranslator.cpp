@@ -49,7 +49,7 @@ QString decodeLng(QByteArray bytes, const QString& fileName = {}) {
         const QString name = m.captured(1);
         if (name.compare(u"utf-8", Qt::CaseInsensitive) == 0) {
             QStringDecoder utf8(QStringDecoder::Utf8);
-            const QString out = utf8(bytes);
+            QString out = utf8(bytes);
             if (!utf8.hasError()) {
                 return out;
             }
@@ -123,7 +123,7 @@ QString normalize(QString s) {
 }
 
 // Turns the Delphi placeholders of a translated string into %1, %2, ... in order.
-QString toQtPlaceholders(QString s) {
+QString toQtPlaceholders(const QString& s) {
     static const QRegularExpression re(u"%(?:\\d+:)?[sd]"_s);
     int n = 0;
     QString out;
@@ -193,7 +193,7 @@ QList<LangInfo> availableLanguages(const QString& dir) {
 }
 
 QString defaultLanguage() {
-    const QString saved = appSettings().value(u"language"_s).toString();
+    QString saved = appSettings().value(u"language"_s).toString();
     if (!saved.isEmpty() && saved != u"?") {
         return saved;
     }
@@ -236,7 +236,7 @@ bool LngTranslator::loadLanguage(const QString& dir, const QString& language) {
         if (t == tr.constEnd() || it.value().isEmpty() || t.value().isEmpty()) {
             continue;
         }
-        const QString key = it.key();
+        const QString& key = it.key();
         // Pieces of text are glued by the code (" at position %1", " using creation date"): the English text decides
         // whether the translation starts or ends with spaces, whatever the translator typed.
         auto edge = [](const QString& s, bool leading) {

@@ -2,6 +2,11 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.1.1-beta.1 (12/11/2026)
+  - New: Date and time and EXIF actions number the files given the same name (_01, _02...) in the order of the shooting; new option "Number files given the same name" (Processing); EXIF tag SubSecTimeOriginal. The old "Add suffix" box of Date and time is removed.
+  - New: only one window at a time. A second launch shows an information box and quits (with -g or -x: a message on stderr and the exit code 3).
+  - New: adding a folder that holds no file says so in a message box.
+  - Linux AppImage: update information embedded (.zsync file published with it). Screenshots of the help remade.
 - 3.1.0 (09/11/2026)
   - Fix: Undo (button / F12) after a restart no longer undoes the last pass of a previous session blindly: it opens the history first.
   - Final version of 3.1, same program as the release candidates apart from this fix. Linux AppImage rebuilt on Ubuntu 22.04 (glibc 2.35) so that it starts on older distributions; its file name no longer contains "linux".
