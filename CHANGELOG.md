@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Changed
+
+- TODO (EN, FR) rewritten as a roadmap: no more P0/P1/P2, the versions to come in order of importance (3.1.1 final, 3.2 to 3.7), a maintenance track (new Qt versions, sidecars, EXIF and RAW formats, photo software, packaging, translations), ideas to evaluate and ideas set aside, with the reason.
+
 ## [3.1.1-beta.1] - 2026-11-12
 
 Pre-release of 3.1.1: the fixes and additions made since 3.1.0.
@@ -37,10 +41,14 @@ Pre-release of 3.1.1: the fixes and additions made since 3.1.0.
 - `docs/TESTED_PLATFORMS.md` (EN, FR): what was tested on 3.1.1-beta.1 (Windows 11, Ubuntu 24.04 under WSL2, Raspberry Pi 4 arm64).
 
 - TODO (EN, FR): brought up to date after the 3.1.0 release (P0 unblocked, undo after a restart marked released, 3.1 state replaces the old beta plan, broken bullet fixed).
+- Translations: three new keys in `English.lng` and `French.lng` (`numberFilesGivenThe`, `noFileFoundIn`, `alreadyRunning`); the other languages (Croatian, Tamil, Chinese...) show the English text until they are translated. Help pages (`actions`, `history`, `options`, in EN, FR, HR, TA) describe the numbering of files given the same name and the single window.
+- Documents (EN, FR): USER_GUIDE (Date and time and EXIF actions, `-q` exit code 3, "Name already used" table), USER_RECIPES, WHATS_NEW and a release note for 3.1.1-beta.1 (`docs/release-notes/3.1.1-beta.1.md`); BUILDING, CONTRIBUTING and ARCHITECTURE (CI with `-Werror` and clang-tidy, how to run clang-tidy, the AppImage `.zsync` file, the single-instance lock).
+- Checks before the release (see `docs/TESTED_PLATFORMS.md`): build with `-Werror` and clang-tidy 18 (as the CI) on Ubuntu 24.04 under WSL2, with the analyzer false alarm `NewDelete` on Qt code switched off in `.clang-tidy`; build, unit tests and panel tests on Windows 11 (MinGW) and on the Raspberry Pi 4 (arm64, Debian 13). Tried by hand: second launch, empty folder, numbering of a burst.
 - Screenshots (`docs/screenshots`, English and French, 22 each) remade with the 3.1.0 interface (string replacement position choice, history buttons, new About text and version), and a script that remakes them: `scripts/windows/make-screenshots.sh` (`--only about` for the version screenshots).
 
 ### Fixed
 
+- Adding a folder with no file: the message "No file found in <folder>" was wiped from the status bar by the status refresh that follows an addition; the text is now put back after the refresh (`app/mainwindow_run.cpp`). The log keeps it anyway.
 - Tests: the numbering test (`tests/duplicates_check.h`) failed on Linux because the file date it set was overwritten when the file was closed; the data is now flushed before the date is set. No change to the program.
 - Flatpak: the AppStream file (`packaging/flatpak/*.metainfo.xml`) lists the release 3.1.0, which the Flathub publication script requires in the tag.
 
