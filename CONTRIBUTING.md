@@ -23,7 +23,7 @@ To understand where things are and how a renaming runs, read [docs/ARCHITECTURE.
 
 1. Fork the repository and create a branch from `main`.
 2. Keep the change focused: one subject per pull request.
-3. Format the C++ files with `clang-format -i` (the rules are in `.clang-format`: 4 spaces, braces on every `if`/`else`/loop, 130 columns; `.editorconfig` covers the other files). Comments are in English everywhere (code, CMake, scripts, workflow), no `TODO`/`FIXME`/`HACK` marker in the code, and the build must stay free of warnings (`-Wall -Wextra -Wshadow` are on). For the rest, follow the surrounding code (naming, comment density, idioms).
+3. Format the C++ files with `clang-format -i` (the rules are in `.clang-format`: 4 spaces, braces on every `if`/`else`/loop, 130 columns; `.editorconfig` covers the other files). Comments are in English everywhere (code, CMake, scripts, workflow), no `TODO`/`FIXME`/`HACK` marker in the code, and the build must stay free of warnings (`-Wall -Wextra -Wshadow` are on, and `clang-tidy` runs in the CI: see [docs/BUILDING.md](docs/BUILDING.md)). For the rest, follow the surrounding code (naming, comment density, idioms).
 4. Add or update a test when the engine changes (`tests/test_core.cpp`): a new case that fails without your fix is the best proof that it works.
 5. Run the tests (`ctest`) before you open the pull request; the GitHub workflow builds on Linux and Windows and runs them too.
 6. Add a line under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md) (Added, Changed or Fixed). Version numbers are given by the maintainer when a release is made: do not change `VERSION`.

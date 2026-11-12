@@ -105,7 +105,7 @@ MainWindow::MainWindow() {
 // Everything the user sees, from the options as they are now. The files, the batch, the journal and the log belong to the
 // window and are not touched, so this can run again (see rebuildUi()).
 void MainWindow::buildUi() {
-    setWindowTitle(tr_("Ant Renamer Qt %1").arg(QApplication::applicationVersion()));
+    setWindowTitle(tr_("Ant Renamer Qt %1").arg(displayVersion()));
     resize(730, 500);
 
     newUi_ = appOptions().newUi;
@@ -396,7 +396,7 @@ void MainWindow::createActions() {
         for (const QString& p : dlg.folders()) {
             n << native(p);
         }
-        addFiles(n, &c);
+        addFiles(n, &c, true);
     });
     connect(aRemoveSel_, &QAction::triggered, this, [this] { removeSelectedFiles(); });
     connect(aRemoveAll_, &QAction::triggered, this, [this] { removeAllFiles(); });

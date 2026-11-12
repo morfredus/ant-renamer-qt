@@ -100,6 +100,6 @@ private:
     template <class A, class Wd, class T>
     void bind(const Wd& control, T A::*member);
     template <class A, class To, class From>
-    void bindFn(To to, From from);  // when the control does not map straight onto the member
+    void bindFn(const To& to, const From& from);  // when the control does not map straight onto the member
     std::vector<std::vector<Binding>> binds_;  // by ren::ActionType
 };

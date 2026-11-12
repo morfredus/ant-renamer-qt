@@ -30,6 +30,7 @@ const QHash<int, QString>& tagNames() {
         {0x9000, "ExifVersion"},
         {0x9003, "DateTimeOriginal"},
         {0x9004, "DateTimeDigitized"},
+        {0x9291, "SubSecTimeOriginal"},
         {0x9201, "ShutterSpeedValue"},
         {0x9202, "ApertureValue"},
         {0x9204, "ExposureBiasValue"},
@@ -375,14 +376,14 @@ bool readExif(const QString& path, QMap<QString, QString>& tags) {
         if (!QFileInfo::exists(s) || !sf.open(QIODevice::ReadOnly)) {
             continue;
         }
-        const QByteArray x = sf.read(1024 * 1024);
+        const QByteArray x = sf.read(1024LL * 1024);
         const int xs = x.indexOf("<x:xmpmeta");
         if (xs >= 0) {
             readXmp(x.mid(xs), tags);
         }
     }
     Reader r;
-    r.d = f.read(512 * 1024);  // metadata lives in the first segments
+    r.d = f.read(512LL * 1024);  // metadata lives in the first segments
     if (r.d.size() < 12) {
         return false;
     }

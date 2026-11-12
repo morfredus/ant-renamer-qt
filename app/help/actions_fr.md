@@ -198,7 +198,23 @@ Vous pouvez choisir d'utiliser soit la date/heure de création, soit la date/heu
 
 « Décalage » décale la date, en secondes (négatif pour reculer dans le temps). C'est utile, par exemple, pour corriger l'horloge d'un appareil photo réglée sur le mauvais fuseau horaire : 3600 = une heure.
 
-Comme plusieurs fichiers peuvent avoir la même date (ou heure), l'option « Ajouter un suffixe si plus d'un fichier a la même date/heure » ajoute un long nombre à un nom qui existe déjà.
+### Photos de même nom : les rafales sont numérotées automatiquement {#duplicates}
+
+Plusieurs photos prises dans la même seconde reçoivent le même nom. Pour l'opération **Date et heure** et pour les [Infos EXIF](#exif), Ant Renamer Qt les numérote tout seul : il n'y a rien à cocher et aucun réglage à chercher.
+
+- Une photo seule dans sa seconde garde son nom : `2026-11-10_14-03-21.jpg`.
+- Quand plusieurs fichiers recevraient exactement le même nom, **tous** sont numérotés à partir de `_01`, juste avant l'extension : `2026-11-10_14-03-22_01.jpg`, `2026-11-10_14-03-22_02.jpg`... Le premier est numéroté lui aussi, pour que la série se lise dans l'ordre.
+- Les numéros suivent l'**ordre de prise de vue**, pas l'ordre de la liste des fichiers. Ant Renamer Qt regarde la date et l'heure EXIF, avec les sous-secondes quand l'appareil les écrit (le tag `SubSecTimeOriginal`, qu'un masque peut aussi utiliser), sinon la date du fichier, puis le nom d'origine en ordre naturel (`IMG_2` avant `IMG_10`). Trier la liste autrement, ou ajouter les fichiers dans un autre ordre, ne change rien : les mêmes fichiers reçoivent toujours les mêmes numéros.
+- Rien n'est jamais écrasé. Un nom déjà pris par un fichier du disque, ou par un autre fichier du même lot, est sauté : le prochain numéro libre est utilisé.
+- Relancer le même lot sur des fichiers déjà renommés ne change rien.
+- Un fichier RAW qui suit son image (voir l'option des fichiers associés dans les [Options](options_fr.md)) reçoit le même numéro que l'image.
+- Au-delà de 99 fichiers dans la même seconde, les numéros ont trois chiffres (`_001`, `_002`...), pour que les noms gardent leur ordre.
+- L'aperçu montre les numéros avant tout renommage, et le renommage réel donne exactement les mêmes noms. Comme pour tout renommage, l'historique peut remettre chaque nom d'origine.
+- Le numéro est toujours ajouté à la fin du nom, avant l'extension, quel que soit le masque.
+
+Si vous préférez placer le numéro vous-même, ou numéroter les fichiers des autres opérations, utilisez un compteur : `%num%` dans l'opération EXIF, ou l'opération [Énumération](#enum).
+
+On peut désactiver ce comportement dans les Options, page « Traitement » : **Numéroter les fichiers qui reçoivent le même nom par Date et heure ou EXIF (_01, _02...)**. Sans lui, seul le premier fichier d'une rafale reçoit le nom ; les autres sont refusés et le journal indique « Un fichier ou un dossier existe déjà sous ce nom ». Ils gardent leur nom et rien n'est perdu.
 
 ## Noms aléatoires {#random}
 
@@ -252,6 +268,8 @@ Consultez la page ["Formatage de chaînes"](format_fr.md) pour plus d'informatio
 « Décalage » décale tous les tags de date, en secondes (3600 = une heure), comme dans l'opération [Date et heure](#datetime).
 
 Le tag `%num%` est un compteur, comme dans l'opération [Énumération](#enum) (mêmes options, y compris « Retour à la valeur de démarrage... » et « Même numéro pour les fichiers de même nom... », pratique pour donner le même numéro à un JPEG et à son fichier RAW).
+
+Deux photos prises dans la même seconde ne se gênent pas : elles sont numérotées `_01`, `_02`... dans l'ordre de prise de vue (voir [Photos de même nom](#duplicates), dans l'opération Date et heure).
 
 Un fichier qui ne contient aucune information EXIF, IPTC ou XMP n'est pas renommé : le journal indique « Pas d'info EXIF trouvée ».
 

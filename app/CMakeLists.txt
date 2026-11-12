@@ -11,6 +11,22 @@ endif()
 add_executable(antrenamer-qt WIN32 ${SRC})
 target_link_libraries(antrenamer-qt PRIVATE rencore Qt6::Widgets Qt6::Network)
 target_compile_definitions(antrenamer-qt PRIVATE AR_APP_VERSION="${AR_VERSION}")
+# Commit of the build, shown next to a pre-release version (window title, About box). Read when CMake runs; a commit
+# rewrites .git/logs/HEAD, which makes CMake run again. No git, no commit shown.
+find_package(Git QUIET)
+if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/.git/logs/HEAD")
+    execute_process(COMMAND "${GIT_EXECUTABLE}" rev-parse --short HEAD WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+                    OUTPUT_VARIABLE AR_BUILD_ID OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+    execute_process(COMMAND "${GIT_EXECUTABLE}" status --porcelain --untracked-files=no WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+                    OUTPUT_VARIABLE AR_BUILD_DIRTY OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+    if(AR_BUILD_ID)
+        if(AR_BUILD_DIRTY)
+            string(APPEND AR_BUILD_ID "+")  # built from modified files
+        endif()
+        target_compile_definitions(antrenamer-qt PRIVATE AR_BUILD_ID="${AR_BUILD_ID}")
+    endif()
+endif()
 if(MSVC)
     target_compile_options(antrenamer-qt PRIVATE /utf-8)
 endif()

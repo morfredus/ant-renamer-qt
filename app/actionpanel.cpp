@@ -132,7 +132,7 @@ void ActionPanel::bind(const Wd& control, T A::*member) {
 }
 
 template <class A, class To, class From>
-void ActionPanel::bindFn(To to, From from) {
+void ActionPanel::bindFn(const To& to, const From& from) {
     binds_[size_t(A().type())].push_back(
         {[to](Action& a, bool history) { to(static_cast<A&>(a), history); }, [from](const Action& a) { from(static_cast<const A&>(a)); }});
 }
@@ -505,9 +505,7 @@ void ActionPanel::buildPages() {
         p.v->addWidget(new QLabel(tr("Date to use:")));
         const auto dtWhich = radios(p, u"Which"_s, {tr("Creation"), tr("Last modification")}, 1);
         auto* dtOffset = spin(p, u"Offset"_s, tr("Offset:"), 0, -999999999, 999999999, tr("seconds"));
-        auto* dtSuffix = check(p, u"Suffix"_s, tr("Add suffix if more than one file with the same date/time"), false);
         bind(dtMask, &ActionDateTime::mask);
-        bind(dtSuffix, &ActionDateTime::addSuffix);
         bind(dtWhich, &ActionDateTime::whichDate);
         bind(dtOffset, &ActionDateTime::offset);
         p.v->addWidget(new QLabel(tr("Notes:")));

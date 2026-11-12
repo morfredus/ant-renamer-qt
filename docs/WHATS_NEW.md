@@ -4,7 +4,16 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.1.0**.
+Current version: **3.1.1-beta.1**.
+
+## 3.1.1-beta.1
+
+| What is new | Since |
+|---|---|
+| **Date and time and EXIF actions number files given the same name** (`_01`, `_02`... in the order of the shooting, a burst shot in the same second no longer fails); option *Number files given the same name* (Processing). The old *Add suffix* box of Date and time is gone. | 3.1.1-beta.1 |
+| **One window at a time**: a second launch shows an information box and quits; with `-g` or `-x` it prints a message and returns the exit code 3. | 3.1.1-beta.1 |
+| **Adding a folder with no file** says so in a message box, the status bar and the log. | 3.1.1-beta.1 |
+| **Linux AppImage**: update information embedded, so AppImageUpdate can update it. | 3.1.1-beta.1 |
 
 ## 3.1.0
 

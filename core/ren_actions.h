@@ -68,6 +68,8 @@ protected:
     virtual bool getTag(const QString& tag, QString& value);
     virtual void init() {}
     virtual void finish() {}
+    // True for the actions that name a file after a date: the files given the same name are numbered (numberDuplicates).
+    virtual bool numbersDuplicates() const { return false; }
 
     bool plainFolder() const { return isFolder_ && !options().folderExt; }  // folder without extension
     QString sourcePath() const { return curFile_ ? curFile_->filePath() : fileName_; }
@@ -219,9 +221,9 @@ class ActionDateTime : public Action {
 public:
     ActionDateTime() : Action(ActionType::DateTime) {}
     QString mask = QStringLiteral("yyyy'-'mm'-'dde");  // Delphi FormatDateTime; f = name, e = extension
-    bool addSuffix = false;
     int whichDate = 1;  // 0 = creation, 1 = modification
     int offset = 0;     // seconds
+    bool numbersDuplicates() const override { return true; }
     QString description() const override;
     QString makeNewName(const QString&, bool) override;
     void save(QXmlStreamWriter&) const override;
@@ -284,6 +286,7 @@ public:
 class ActionExif : public Action {
 public:
     ActionExif() : Action(ActionType::Exif) {}
+    bool numbersDuplicates() const override { return true; }
     QString mask;
     int offset = 0;  // seconds, applied to date-time tags
     // %num% counter, same meaning as in the Enumeration action
@@ -303,6 +306,16 @@ private:
     QMap<QString, QString> tags_;
     Counter counter_;
 };
+
+// A file about to be renamed: its folder (with the trailing separator), its new name and its current full path.
+struct DupItem {
+    QString folder, name, source;
+};
+// Files that got exactly the same new name (case and extension apart) are numbered _01, _02... before the extension,
+// the first one included. The order is the one of the shooting: EXIF date and sub-seconds (else the file date), then
+// the original name in natural order, whatever the order of `items`. A name already used by another file of the disk
+// or of the batch is skipped. A picture and its RAW (same base name, different extensions) get the same numbers.
+void numberDuplicates(std::vector<DupItem>& items);
 
 class ActionList {
 public:

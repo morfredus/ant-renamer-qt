@@ -8,8 +8,40 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.1-beta.1] - 2026-11-12
+
+Pre-release of 3.1.1: the fixes and additions made since 3.1.0.
+
+### Removed
+
+- Date and time action: the box "Add suffix if more than one file with the same date/time" is gone. It added a long number taken from the clock to a name already on the disk, and did nothing for the files of a burst. The automatic numbering below replaces it; the old setting of a saved batch is ignored.
+
+### Added
+
+- One window at a time: a second launch (no `--shell`, no `-q`) shows an information box and quits, so two windows no longer overwrite each other's undo history and settings. Started with `-g` or `-x` (unattended), it prints the message on stderr and returns the exit code 3 instead of waiting for a click. Same lock for the installed and the portable version.
+
+- Adding a folder that brings no file now says "No file found in <folder>": a message box (Add folders button, drag and drop), the status bar and the log (also from the command line and the Explorer menu, without the box so that a script is never blocked). Nothing was shown before, which looked like a failure.
+
+- A pre-release shows the commit it was built from next to its version, in the window title and the About box (`3.1.1-beta.1 (9ec048d)`, a `+` when the files were modified), so that a tester knows which build runs. A final version shows the number only. The real version (update check) is unchanged. Read by CMake from git when it configures; no git, no commit shown.
+
+- clang-tidy: a `.clang-tidy` file (bugprone, performance and a few other checks; the noisy ones are left out and explained in the file) and a CI step that fails on any finding. About thirty findings fixed: values taken by copy instead of by reference, `const` that prevented a move, a repeated branch in `validateFileName`, `switch` without `default`, `int` products widened to 64 bits (`1024LL * 1024`).
+
+- Build: option `ANTREN_WERROR` (`-DANTREN_WERROR=ON`) makes a compiler warning fail the build; the Linux job of the CI uses it.
+
+- Date and time action and EXIF action: files that get exactly the same new name (a burst shot in the same second) are now numbered `_01`, `_02`... before the extension, the first one included; a lone photo keeps its name. The numbering follows the order of the shooting (EXIF date and sub-seconds, else the file date, then the original name in natural order), not the order of the list. A name already used on the disk, or by another file of the batch, is skipped; a picture and its RAW get the same numbers; the number has more digits above 99 files. Same result in the preview and in the real renaming. New option "Number files given the same name by Date and time or EXIF" (Processing, on by default); off, a file whose name is taken is refused as before. The EXIF tag `SubSecTimeOriginal` can also be used in a mask.
+
+- AppImage: update information embedded (`gh-releases-zsync`) so AppImageUpdate and similar tools can update it, as the AppImage catalog test recommends. The build also produces `AntRenamerQt-<version>-x86_64.AppImage.zsync`, which must be published in the release next to the AppImage (the `appimage` job of `build.yml` uploads both and installs `zsync`).
+
+### Changed
+
+- `docs/TESTED_PLATFORMS.md` (EN, FR): what was tested on 3.1.1-beta.1 (Windows 11, Ubuntu 24.04 under WSL2, Raspberry Pi 4 arm64).
+
+- TODO (EN, FR): brought up to date after the 3.1.0 release (P0 unblocked, undo after a restart marked released, 3.1 state replaces the old beta plan, broken bullet fixed).
+- Screenshots (`docs/screenshots`, English and French, 22 each) remade with the 3.1.0 interface (string replacement position choice, history buttons, new About text and version), and a script that remakes them: `scripts/windows/make-screenshots.sh` (`--only about` for the version screenshots).
+
 ### Fixed
 
+- Tests: the numbering test (`tests/duplicates_check.h`) failed on Linux because the file date it set was overwritten when the file was closed; the data is now flushed before the date is set. No change to the program.
 - Flatpak: the AppStream file (`packaging/flatpak/*.metainfo.xml`) lists the release 3.1.0, which the Flathub publication script requires in the tag.
 
 ## [3.1.0] - 2026-11-09

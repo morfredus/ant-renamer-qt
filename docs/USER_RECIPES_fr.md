@@ -96,13 +96,15 @@ Triez par nom pour que `IMG_1234.JPG` et `IMG_1234.CR2` se suivent, puis cochez 
 *Infos EXIF* : Masque `%DateTimeOriginal%%ext%`. `IMG_4521.jpg` → `2024-05-17 14-30-05.jpg` (les `:` interdits deviennent `-`). Autre forme avec des tags : `%Make% %Model% - %DateTimeOriginal%%ext%`. Un tag absent du fichier donne un texte vide.
 
 ### 3.2 Éviter les doublons de date (rafales)
-*Infos EXIF* : Masque `%DateTimeOriginal%_%num%%ext%` ; le compteur `%num%` a les mêmes réglages que l'énumération (chiffres, retour à la valeur de départ par dossier). Pour que JPEG et RAW partagent le numéro, cocher l'option correspondante (§2.4).
+Rien à régler : avec *Date et heure* ou *Infos EXIF*, les fichiers qui reçoivent exactement le même nom sont numérotés `_01`, `_02`... avant l'extension, dans l'ordre de prise de vue (date et sous-secondes EXIF, puis nom d'origine). Une photo seule dans sa seconde garde son nom. Exemple, masque `%DateTimeOriginal%%ext%` : quatre photos de 14:03:22 deviennent `2024-05-17 14-03-22_01.jpg` ... `_04.jpg`, celle de 14:03:21 reste `2024-05-17 14-03-21.jpg`. L'aperçu montre les numéros ; rien n'est jamais écrasé. Détails : [Photos de même nom](../app/help/actions_fr.md#duplicates).
+
+Pour choisir vous-même la place et la forme du numéro : masque `%DateTimeOriginal%_%num%%ext%` ; le compteur `%num%` a les mêmes réglages que l'énumération (chiffres, retour à la valeur de départ par dossier). Pour que JPEG et RAW partagent le numéro, cocher l'option correspondante (§2.4).
 
 ### 3.3 Corriger l'heure d'un appareil mal réglé
 *Infos EXIF* ou *Date et heure*, réglage **Décalage** en secondes, tous les tags date de la forme `aaaa:MM:jj HH:mm:ss` sont décalés. Exemple : appareil resté à l'heure d'hiver, décalage `3600` (+1 heure) ; négatif pour reculer. `-86400` retire un jour.
 
 ### 3.4 Nommer d'après la date du fichier (pas d'EXIF)
-*Date et heure* : masque `yyyy'-'mm'-'dd'_'fe` → `2026-10-15_IMG_1.jpg` (`f` = nom d'origine, `e` = extension). Tout texte fixe va entre guillemets ou apostrophes. Date et heure : `yyyymmdd'_'hhnnss'_'fe` → `20261015_223515_IMG_1.jpg`. Pour l'heure sur 12 h, ajouter `am/pm` (ou `a/p`) au masque : `hh'-'nn am/pm`, 22:35 → `10-35 pm`. Choisir **Création** ou **Dernière modification** (beaucoup de systèmes de fichiers Linux ne conservent pas la date de création : la date de modification est alors utilisée). Cocher **Ajouter un suffixe si plusieurs fichiers ont la même date** pour éviter les noms identiques. `nn` est toujours les minutes ; `mm` est les minutes s'il suit `hh` ou précède `ss`, sinon le mois.
+*Date et heure* : masque `yyyy'-'mm'-'dd'_'fe` → `2026-10-15_IMG_1.jpg` (`f` = nom d'origine, `e` = extension). Tout texte fixe va entre guillemets ou apostrophes. Date et heure : `yyyymmdd'_'hhnnss'_'fe` → `20261015_223515_IMG_1.jpg`. Pour l'heure sur 12 h, ajouter `am/pm` (ou `a/p`) au masque : `hh'-'nn am/pm`, 22:35 → `10-35 pm`. Choisir **Création** ou **Dernière modification** (beaucoup de systèmes de fichiers Linux ne conservent pas la date de création : la date de modification est alors utilisée). Les fichiers qui reçoivent des noms identiques (rafales) sont numérotés `_01`, `_02`... automatiquement, rien à cocher. `nn` est toujours les minutes ; `mm` est les minutes s'il suit `hh` ou précède `ss`, sinon le mois.
 
 ### 3.5 Nommer d'après le titre ou les mots-clés (IPTC / XMP)
 *Infos EXIF*, masque avec `$if` pour prendre le premier tag existant et éviter un séparateur en trop :
@@ -186,7 +188,7 @@ Chaque opération du job lancé par Démarrer est une *passe*. **Annuler** (F12)
 |---|---|
 | Aperçu vide dans la liste | F5 n'a pas été utilisé : l'aperçu n'est pas automatique. |
 | Les numéros ne suivent pas l'ordre voulu | La liste n'est pas triée comme prévu : trier ou réordonner avant de démarrer. |
-| « Nom déjà utilisé » (rouge) | Deux fichiers donnent le même nouveau nom : ajouter un compteur (`%num%`) ou le suffixe de l'opération Date et heure. |
+| « Nom déjà utilisé » (rouge) | Deux fichiers donnent le même nouveau nom : avec Date et heure ou EXIF la numérotation est automatique (`_01`, `_02`...) sauf si l'option est décochée dans Options > Traitement ; avec les autres opérations, ajouter un compteur (`%num%`). |
 | Un fichier n'est pas renommé (bleu) | Nouveau nom identique à l'ancien, tag manquant (MP3, EXIF) ou fichier absent : lire le message du journal. |
 | Un séparateur de dossier (`/`) fait échouer le renommage | Le dossier cible n'existe pas : cochez Forcer les dossiers. |
 | Les accents sont mal gérés en majuscules | Garder cochée l'option de langue de l'opération Changement de casse. |

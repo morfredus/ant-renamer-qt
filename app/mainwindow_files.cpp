@@ -153,20 +153,25 @@ void MainWindow::addFolderContents(const QString& dir, const AddChoice& c) {
 }
 
 // Port of TMainForm.AddFiles: with no choice, every path is added as is; otherwise folders are expanded.
-void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice) {
+void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, bool popup) {
     if (worker_) {
         return;  // the list belongs to the worker thread during a run
     }
     setStatus(0, tr_("Adding files"));
     QApplication::setOverrideCursor(Qt::WaitCursor);
     fileView_->setUpdatesEnabled(false);
+    QString emptyDir;  // first folder that brought nothing: without a word, an empty folder looks like a failure
     for (const QString& p : paths) {
         const QFileInfo fi(p);
         if (choice && fi.isDir()) {
+            const size_t before = files_.size();
             if (choice->folders) {
                 addFile(native(p));
             }
             addFolderContents(p, *choice);
+            if (files_.size() == before && emptyDir.isEmpty()) {
+                emptyDir = fi.fileName().isEmpty() ? native(p) : fi.fileName();
+            }
         } else if (!choice || (choice->files && fi.isFile())) {
             addFile(native(p));
         }
@@ -174,6 +179,14 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice) {
     fileView_->setUpdatesEnabled(true);
     QApplication::restoreOverrideCursor();
     setStatus();
+    if (!emptyDir.isEmpty()) {
+        const QString msg = tr_("No file found in %1").arg(emptyDir);
+        setStatus(-1, msg);
+        addLog(msg, State::Info);  // the status text goes away at the next action; the log keeps it
+        if (popup) {
+            QMessageBox::information(this, QStringLiteral("Ant Renamer Qt"), msg);
+        }
+    }
     updateSamplePreview();
 }
 
@@ -219,7 +232,7 @@ void MainWindow::importDropped(const QStringList& paths) {
         appOptions().dragNoAsk = dlg.dontAskAgain();
         appOptions().save();
     }
-    addFiles(paths, &c);
+    addFiles(paths, &c, true);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent* e) {
@@ -391,6 +404,8 @@ void MainWindow::moveItems(int mode) {
             for (auto* it : sel) {
                 t->addTopLevelItem(t->takeTopLevelItem(t->indexOfTopLevelItem(it)));
             }
+            break;
+        default:
             break;
     }
     for (auto* it : sel) {

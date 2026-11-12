@@ -96,13 +96,15 @@ Sort by name so `IMG_1234.JPG` and `IMG_1234.CR2` follow each other, then tick *
 *EXIF info*: Mask `%DateTimeOriginal%%ext%`. `IMG_4521.jpg` → `2024-05-17 14-30-05.jpg` (forbidden `:` become `-`). Another form with tags: `%Make% %Model% - %DateTimeOriginal%%ext%`. A tag missing from the file gives an empty text.
 
 ### 3.2 Avoid date duplicates (bursts)
-*EXIF info*: Mask `%DateTimeOriginal%_%num%%ext%`; the `%num%` counter has the same settings as Enumeration (digits, restart per folder). For JPEG and RAW to share the number, tick the matching option (§2.4).
+Nothing to set: with *Date and time* or *EXIF info*, files that get exactly the same name are numbered `_01`, `_02`... before the extension, in the order of the shooting (EXIF date and sub-seconds, then the original name). A photo alone in its second keeps its name. Example, mask `%DateTimeOriginal%%ext%`: four photos of 14:03:22 become `2024-05-17 14-03-22_01.jpg` ... `_04.jpg`, the one of 14:03:21 stays `2024-05-17 14-03-21.jpg`. The preview shows the numbers; nothing is ever overwritten. Details: [Photos with the same name](../app/help/actions_en.md#duplicates).
+
+To choose the place and the form of the number yourself: mask `%DateTimeOriginal%_%num%%ext%`; the `%num%` counter has the same settings as Enumeration (digits, restart per folder). For JPEG and RAW to share the number, tick the matching option (§2.4).
 
 ### 3.3 Fix the clock of a badly set camera
 *EXIF info* or *Date and time*, **Offset** setting in seconds; every date tag of the form `yyyy:MM:dd HH:mm:ss` is shifted. Example: camera left on winter time, offset `3600` (+1 hour); negative to go back. `-86400` removes a day.
 
 ### 3.4 Name by file date (no EXIF)
-*Date and time*: mask `yyyy'-'mm'-'dd'_'fe` → `2026-10-15_IMG_1.jpg` (`f` = original name, `e` = extension). Any fixed text goes in quotes or apostrophes. Date and time: `yyyymmdd'_'hhnnss'_'fe` → `20261015_223515_IMG_1.jpg`. For a 12-hour clock add `am/pm` (or `a/p`) to the mask: `hh'-'nn am/pm`, 22:35 → `10-35 pm`. Pick **Creation** or **Last modification** (many Linux file systems do not store the creation date: the modification date is used then). Tick **Add suffix if more than one file with the same date/time** to avoid identical names. `nn` is always minutes; `mm` is minutes when it follows `hh` or precedes `ss`, otherwise the month.
+*Date and time*: mask `yyyy'-'mm'-'dd'_'fe` → `2026-10-15_IMG_1.jpg` (`f` = original name, `e` = extension). Any fixed text goes in quotes or apostrophes. Date and time: `yyyymmdd'_'hhnnss'_'fe` → `20261015_223515_IMG_1.jpg`. For a 12-hour clock add `am/pm` (or `a/p`) to the mask: `hh'-'nn am/pm`, 22:35 → `10-35 pm`. Pick **Creation** or **Last modification** (many Linux file systems do not store the creation date: the modification date is used then). Files that get identical names (bursts) are numbered `_01`, `_02`... by themselves, nothing to tick. `nn` is always minutes; `mm` is minutes when it follows `hh` or precedes `ss`, otherwise the month.
 
 ### 3.5 Name by title or keywords (IPTC / XMP)
 *EXIF info*, mask with `$if` to take the first existing tag and avoid a stray separator:
@@ -186,7 +188,7 @@ Every action of the batch run by Go is a *pass*. **Undo** (F12) restores the nam
 |---|---|
 | Empty preview in the list | F5 was not used: the preview is not automatic. |
 | Numbers do not follow the wanted order | The list is not sorted as expected: sort or reorder before starting. |
-| "Name already used" (red) | Two files give the same new name: add a counter (`%num%`) or the Date and time suffix option. |
+| "Name already used" (red) | Two files give the same new name: with Date and time or EXIF this is numbered automatically (`_01`, `_02`...) unless the option is off in Options > Processing; with the other operations, add a counter (`%num%`). |
 | A file is not renamed (blue) | New name identical to the old one, missing tag (MP3, EXIF) or missing file: read the log message. |
 | A folder separator (`/`) makes the rename fail | The target folder does not exist: tick Force folders. |
 | Accents are wrong in capitals | Keep the locale option of the Change case action ticked. |

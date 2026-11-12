@@ -103,6 +103,12 @@ export VERSION
 if command -v qmake6 >/dev/null 2>&1; then export QMAKE="$(command -v qmake6)"
 elif command -v qmake >/dev/null 2>&1; then export QMAKE="$(command -v qmake)"; fi
 
+# Update information (AppImageUpdate): embedded in the AppImage, plus a .zsync file to publish next to it in the
+# release. Needs zsyncmake (apt: zsync). The output name is forced so the .zsync matches the final file name.
+export LDAI_UPDATE_INFORMATION="gh-releases-zsync|morfredus|ant-renamer-qt|latest|AntRenamerQt-*-${ARCH}.AppImage.zsync"
+export LDAI_OUTPUT="AntRenamerQt-${VERSION}-${ARCH}.AppImage"
+command -v zsyncmake >/dev/null 2>&1 || echo "WARNING: zsyncmake not found, no .zsync file will be produced."
+
 echo "Building the AppImage (Qt bundled)..."
 ( cd "$WORK" && "$LINUXDEPLOY" \
     --appdir "$APPDIR" \
@@ -118,4 +124,5 @@ install -d "$ROOT/dist"
 FINAL="$ROOT/dist/AntRenamerQt-${VERSION}-${ARCH}.AppImage"
 cp -f "$RESULT" "$FINAL"
 chmod +x "$FINAL"
+[ -f "$WORK/$LDAI_OUTPUT.zsync" ] && cp -f "$WORK/$LDAI_OUTPUT.zsync" "$FINAL.zsync"
 echo "OK - $FINAL ($(du -h "$FINAL" | cut -f1))"

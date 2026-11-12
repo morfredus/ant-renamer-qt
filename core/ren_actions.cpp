@@ -4,10 +4,13 @@
 #include "ren_format.h"
 #include "ren_path.h"
 
+#include <QCollator>
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QHash>
+#include <QSet>
 #include <QRandomGenerator>
 #include <QRegularExpression>
 #include <QSaveFile>
@@ -54,29 +57,16 @@ qint64 tickCount() {
 QString validateFileName(QString s) {
     s.remove(QChar(0));
     for (QChar& c : s) {
-        if (c.unicode() < 0x20 || c.unicode() == 0x7F) {
+        if (c.unicode() < 0x20 || c.unicode() == 0x7F || c == u'\\' || c == u':' || c == u'/' || c == u'*' || c == u'<' ||
+            c == u'>' || c == u'|') {
             c = u'-';
         } else if (c == u'"') {
             c = u'\'';
         } else if (c == u'?') {
             c = u'.';
-        } else if (c == u'\\' || c == u':' || c == u'/' || c == u'*' || c == u'<' || c == u'>' || c == u'|') {
-            c = u'-';
         }
     }
     return s;
-}
-
-QString uniqueFileName(const QString& path) {
-    if (!QFileInfo::exists(path)) {
-        return path;
-    }
-    QString r;
-    do {
-        QThread::msleep(QRandomGenerator::global()->bounded(1, 25));
-        r = changeFileExt(path, QString()) + QString::number(tickCount()) + extractFileExt(path);
-    } while (QFileInfo::exists(r));
-    return r;
 }
 
 int countFolderContents(const QString& folder, bool countFolders, bool countFiles, bool recursive) {
@@ -311,10 +301,135 @@ static bool isListedSidecar(FileList& list, const File& f) {
     return listedPicture(list, f, k) != nullptr;
 }
 
+// Time of the shot in ms: EXIF date + sub-seconds, else the modification date of the file.
+static qint64 shotMs(const QString& path) {
+    QMap<QString, QString> t;
+    if (readExif(path, t)) {
+        QString v = t.value(u"DateTimeOriginal"_s);
+        if (v.isEmpty()) {
+            v = t.value(u"DateTime"_s);
+        }
+        const QDateTime d = QDateTime::fromString(v, u"yyyy:MM:dd HH:mm:ss"_s);
+        if (d.isValid()) {
+            return d.toMSecsSinceEpoch() + t.value(u"SubSecTimeOriginal"_s).leftJustified(3, u'0').left(3).toInt();
+        }
+    }
+    return QFileInfo(path).lastModified().toMSecsSinceEpoch();
+}
+
+void numberDuplicates(std::vector<DupItem>& items) {
+    auto lc = [](const QString& s) { return QDir::fromNativeSeparators(s).toLower(); };
+    QSet<QString> sources;  // current names of the batch: a number is never given to a name another file still has
+    QHash<QString, QList<int>> groups;
+    for (int i = 0; i < int(items.size()); ++i) {
+        sources.insert(lc(items[i].source));
+        if (!items[i].name.isEmpty()) {
+            groups[lc(items[i].folder + changeFileExt(items[i].name, QString()))].append(i);
+        }
+    }
+    auto busy = [&](const DupItem& it, const QString& name) {  // used by another file of the disk or of the batch
+        const QString k = lc(it.folder + name);
+        return k != lc(it.source) && (sources.contains(k) || QFileInfo::exists(it.folder + name));
+    };
+    QSet<QString> taken;  // final names (lower case) of the files that are not numbered
+    QStringList numbered;
+    QStringList keys = groups.keys();
+    keys.sort();  // same result whatever the order of the hash
+    for (const QString& key : std::as_const(keys)) {
+        const QList<int>& g = groups[key];
+        QSet<QString> exts;
+        bool need = false;
+        for (int i : g) {
+            const QString e = lc(extractFileExt(items[i].name));
+            need = need || exts.contains(e) || busy(items[i], items[i].name);
+            exts.insert(e);
+        }
+        if (need) {
+            numbered << key;
+        } else {
+            for (int i : g) {
+                taken.insert(lc(items[i].folder + items[i].name));
+            }
+        }
+    }
+    QCollator col;
+    col.setNumericMode(true);
+    col.setCaseSensitivity(Qt::CaseInsensitive);
+    for (const QString& key : std::as_const(numbered)) {
+        QHash<QString, QList<int>> byExt;
+        for (int i : groups[key]) {
+            byExt[lc(extractFileExt(items[i].name))].append(i);
+        }
+        QStringList exts = byExt.keys();
+        exts.sort();
+        for (const QString& e : std::as_const(exts)) {
+            QList<int>& l = byExt[e];
+            QHash<int, qint64> when;
+            for (int i : l) {
+                when[i] = shotMs(items[i].source);
+            }
+            std::stable_sort(l.begin(), l.end(), [&](int a, int b) {
+                if (when[a] != when[b]) {
+                    return when[a] < when[b];
+                }
+                const int c = col.compare(extractFileName(items[a].source), extractFileName(items[b].source));
+                return c != 0 ? c < 0 : items[a].source < items[b].source;
+            });
+            const int width = qMax(2, int(QString::number(l.size()).size()));
+            int n = 1;
+            for (int i : l) {
+                DupItem& it = items[i];
+                const QString base = changeFileExt(it.name, QString()), ext = extractFileExt(it.name);
+                QString cand;
+                // ponytail: the numbers skip busy names per extension, so a picture and its RAW can differ if a name is busy
+                do {
+                    cand = base + u'_' + QString::number(n++).rightJustified(width, u'0') + ext;
+                } while (taken.contains(lc(it.folder + cand)) || busy(it, cand));
+                taken.insert(lc(it.folder + cand));
+                it.name = cand;
+            }
+        }
+    }
+}
+
 void Action::perform(FileList& list, Op op, const Progress& progress) {
     lastError_ = Error{};
     if (op != Op::Revert) {
         init();
+    }
+    const bool dedup = op != Op::Revert && numbersDuplicates() && options().numberDuplicates;
+    // A rename takes the files one by one, so the names of the whole action are worked out first: the files of a burst
+    // would otherwise all get the same name and the later ones would be refused.
+    struct Pre {
+        QString name;
+        Error err;
+        bool done = false;
+    };
+    std::vector<Pre> pre;
+    if (dedup && op == Op::Rename) {
+        pre.resize(list.size());
+        std::vector<DupItem> items;
+        std::vector<size_t> at;
+        for (size_t i = 0; i < list.size() && !stopFlag(); ++i) {
+            File& f = list.at(i);
+            if ((options().skipHidden && f.hidden) || isListedSidecar(list, f) || !f.exists()) {
+                continue;
+            }
+            curFile_ = &f;
+            lastError_ = Error{};
+            pre[i].name = makeNewName(f.filePath(), f.isFolder());
+            pre[i].err = lastError_;
+            pre[i].done = true;
+            lastError_ = Error{};
+            if (!f.isFolder() && !pre[i].name.isEmpty() && pre[i].err.status == State::NotRenamed) {
+                items.push_back({f.fileFolder(), pre[i].name, f.filePath()});
+                at.push_back(i);
+            }
+        }
+        numberDuplicates(items);
+        for (size_t k = 0; k < items.size(); ++k) {
+            pre[at[k]].name = items[k].name;
+        }
     }
     for (size_t i = 0; i < list.size(); ++i) {
         if (stopFlag()) {
@@ -337,7 +452,12 @@ void Action::perform(FileList& list, Op op, const Progress& progress) {
                 lastError_.description = tr("%1 was not renamed : %2").arg(f.filePath(), tr("Source file not found"));
                 lastError_.status = State::Error;
             } else if (op == Op::Rename) {
-                newName = makeNewName(f.filePath(), f.isFolder());
+                if (!pre.empty() && pre[i].done) {
+                    newName = pre[i].name;
+                    lastError_ = pre[i].err;
+                } else {
+                    newName = makeNewName(f.filePath(), f.isFolder());
+                }
             }
             if (lastError_.status != State::NotRenamed) {
                 // a missing source is an error (counted, exit code 1 with -q); the other reasons (setInfo) only skip the file
@@ -358,6 +478,27 @@ void Action::perform(FileList& list, Op op, const Progress& progress) {
         }
         if (progress) {
             progress(f, position, int(i));
+        }
+    }
+    if (op == Op::Preview && dedup) {
+        std::vector<DupItem> items;
+        std::vector<size_t> at;
+        for (size_t i = 0; i < list.size(); ++i) {
+            File& f = list.at(i);
+            if (!f.isFolder() && !f.preview.isEmpty() && !(options().skipHidden && f.hidden) && !isListedSidecar(list, f)) {
+                items.push_back({f.fileFolder(), f.preview, f.filePath()});
+                at.push_back(i);
+            }
+        }
+        numberDuplicates(items);
+        for (size_t k = 0; k < items.size(); ++k) {
+            File& f = list.at(at[k]);
+            if (f.preview != items[k].name) {
+                f.preview = items[k].name;
+                if (progress) {
+                    progress(f, position, int(at[k]));
+                }
+            }
         }
     }
     if (op == Op::Preview) {  // a sidecar shows the new name of its picture (its own metadata would not do for a RAW)
@@ -819,9 +960,6 @@ QString ActionDateTime::description() const {
     } else if (whichDate == 1) {
         r += tr(" using last modification date");
     }
-    if (addSuffix) {
-        r += tr(", add a suffix if required");
-    }
     if (offset != 0) {
         r += tr(" with %1 s offset").arg(offset);
     }
@@ -856,19 +994,14 @@ QString ActionDateTime::makeNewName(const QString& fn, bool isFolder) {
             fmt += c;
         }
     }
-    QString r = formatDateTime(fmt, date);
-    if (addSuffix) {
-        r = extractFileName(uniqueFileName(extractFilePath(fn) + r));
-    }
-    return r;
+    return formatDateTime(fmt, date);
 }
 void ActionDateTime::save(QXmlStreamWriter& w) const {
-    begin(w, "DateTime", {{"Mask", mask}, {"AddSuffix", addSuffix}, {"WhichDate", whichDate}, {"Offset", offset}});
+    begin(w, "DateTime", {{"Mask", mask}, {"WhichDate", whichDate}, {"Offset", offset}});
     w.writeEndElement();
 }
 void ActionDateTime::load(const XmlElem& e) {
     mask = e.str("Mask", "yyyy'-'mm'-'dde");
-    addSuffix = e.flag("AddSuffix", false);
     whichDate = qBound(0, e.num("WhichDate", 1), 1);
     offset = qBound(-999999999, e.num("Offset", 0), 999999999);
 }
@@ -885,6 +1018,8 @@ QString ActionRandom::description() const {
             break;
         case 2:
             r += tr(", using GUIDs");
+            break;
+        default:
             break;
     }
     return r;
@@ -938,6 +1073,8 @@ QString ActionCase::description() const {
         case 3:
             r += tr(" all in lowercase");
             break;
+        default:
+            break;
     }
     if (useLocale) {
         r += tr(", using Windows' locale settings");
@@ -980,6 +1117,8 @@ QString ActionCase::makeNewName(const QString& fn, bool isFolder) {
             break;
         case 3:
             r = mapCase(r, false, useLocale);
+            break;
+        default:
             break;
     }
     if (!plainFolder()) {
@@ -1064,7 +1203,7 @@ QString ActionRegexp::description() const {
 }
 QString ActionRegexp::makeNewName(const QString& fn, bool isFolder) {
     Action::makeNewName(fn, isFolder);
-    const QString name = extractFileName(fn);
+    QString name = extractFileName(fn);
     if (expr.isEmpty()) {
         return name;  // an empty expression matches everywhere: nothing to do
     }

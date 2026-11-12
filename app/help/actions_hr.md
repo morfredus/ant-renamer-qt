@@ -198,7 +198,23 @@ You can choose to use either creation date/time or last modification date/time. 
 
 "Offset" shifts the date, in seconds (negative to go back in time). It is useful, for example, to correct the clock of a camera that was set to the wrong time zone: 3600 = one hour.
 
-Since multiple files can have the same date (or time), the option "Add suffix if more than one file with the same date/time" adds a long number to a name that already exists.
+### Photos with the same name: bursts, numbered automatically {#duplicates}
+
+Several photos shot in the same second get the same name. For the **Date and time** operation and for [EXIF info](#exif), Ant Renamer Qt numbers them by itself: there is nothing to tick and no setting to find.
+
+- A photo that is alone in its second keeps its name: `2026-11-10_14-03-21.jpg`.
+- When several files would get exactly the same name, **all of them** are numbered from `_01`, just before the extension: `2026-11-10_14-03-22_01.jpg`, `2026-11-10_14-03-22_02.jpg`... The first one is numbered too, so that the series reads in order.
+- The numbers follow the **order of the shooting**, not the order of the Files list. Ant Renamer Qt looks at the EXIF date and time, with the sub-seconds when the camera writes them (the `SubSecTimeOriginal` tag, which a mask can also use), otherwise at the date of the file, and then at the original name in natural order (`IMG_2` before `IMG_10`). Sorting the list another way, or adding the files in another order, changes nothing: the same files always get the same numbers.
+- Nothing is ever overwritten. A name already used by a file on the disk, or by another file of the same batch, is skipped: the next free number is taken.
+- Running the same batch again on files already renamed changes nothing.
+- A RAW file that follows its picture (see the sidecar option in [Options](options_en.md)) gets the same number as the picture.
+- Above 99 files in the same second the numbers have three digits (`_001`, `_002`...), so that the names keep their order.
+- The preview shows the numbers before anything is renamed, and the real renaming gives exactly the same names. As for any renaming, the history can put every original name back.
+- The number is always added at the end of the name, before the extension, whatever the mask.
+
+If you prefer to place the number yourself, or to number the files of the other operations, use a counter: `%num%` in the EXIF operation, or the [Enumeration](#enum) operation.
+
+You can turn this off in Options, page "Processing": **Number files given the same name by Date and time or EXIF (_01, _02...)**. Without it, only the first file of a burst gets the name; the others are refused and the log says "A file or a folder with this name already exists". They keep their name and nothing is lost.
 
 ## Random names {#random}
 
@@ -252,6 +268,8 @@ See ["Formatting"](format_hr.md) page for more information, including the `$if` 
 "Offset" shifts all the date tags, in seconds (3600 = one hour), like in the [date & time](#datetime) action.
 
 The `%num%` tag is a counter, like in the [Enumeration](#enum) action (same options, including "Go back to start value..." and "Same number for files with the same name...", handy to give a JPEG and its RAW file the same number).
+
+Two photos shot in the same second do not get in each other's way: they are numbered `_01`, `_02`... in the order of the shooting (see [Photos with the same name](#duplicates), in the Date and time operation).
 
 A file that contains no EXIF, IPTC or XMP information is not renamed: the log says "No EXIF info found" ("Pas d'info EXIF trouvée" in French).
 

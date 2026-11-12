@@ -21,9 +21,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Dependencies
-        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build g++ qt6-base-dev libgl1-mesa-dev
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build g++ qt6-base-dev libgl1-mesa-dev clang-tidy
       - name: Build
-        run: cmake --preset linux && cmake --build --preset linux
+        run: cmake --preset linux -DANTREN_WERROR=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && cmake --build --preset linux
+      - name: clang-tidy (rules in .clang-tidy)
+        run: clang-tidy -p build --quiet --warnings-as-errors='*' core/*.cpp app/*.cpp
       - name: Tests
         run: ctest --test-dir build --output-on-failure
         env:
@@ -51,7 +53,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Dependencies
-        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build g++-12 libgl1-mesa-dev libxkbcommon-x11-0 libxcb-cursor0 libfuse2
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build g++-12 libgl1-mesa-dev libxkbcommon-x11-0 libxcb-cursor0 libfuse2 zsync
       - uses: jurplel/install-qt-action@v4
         with:
           version: 6.5.3
@@ -62,7 +64,9 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: linux-appimage
-          path: dist/*.AppImage
+          path: |
+            dist/*.AppImage
+            dist/*.AppImage.zsync
 
   windows:
     name: Windows (build + packages)

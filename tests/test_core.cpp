@@ -48,6 +48,7 @@ template <class A, class Fn> static QString prev(const QString& name, Fn setup, 
 }
 
 #include "robust_check.h"
+#include "duplicates_check.h"
 
 int main(int argc, char** argv) {
     QCoreApplication app(argc, argv);
@@ -638,6 +639,8 @@ int main(int argc, char** argv) {
     CHECK_EQ(again.at(0).description(), mixed.at(0).description());
     CHECK_EQ(again.at(1).description(), mixed.at(1).description());
     CHECK_EQ(static_cast<ActionFromList&>(again.at(1)).listContents, u"one\ntwo"_s);
+
+    duplicatesCheck();
 
     std::printf(failures ? "%d FAILURE(S)\n" : "all core checks passed\n", failures);
     return failures ? 1 : 0;

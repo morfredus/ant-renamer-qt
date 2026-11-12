@@ -123,7 +123,9 @@ private:
     void setStatus(int percent, const QString& text);
 
     // files
-    void addFiles(const QStringList& paths, const AddChoice* choice);
+    // popup: tell the user in a message box when a folder brings no file (only where somebody is there to click: the Add
+    // folders button and the drop, never the command line).
+    void addFiles(const QStringList& paths, const AddChoice* choice, bool popup = false);
     void exportPreview();
     void addFolderContents(const QString& dir, const AddChoice& c);
     void addFile(const QString& path);

@@ -73,7 +73,7 @@ bool setPortable(bool on) {
 
 // --- options ----------------------------------------------------------------------------------------------
 // clang-format off
-#define KEYS(X)     X(realtime) X(resizeCols) X(fileIcons) X(forceFont) X(fontName) X(fontSize) X(iconSet) X(historyMax)     X(autoComplete) X(dragNoAsk) X(launchFile) X(addHidden) X(naturalSort) X(undoButton) X(newUi)     X(pageLayout) X(theme) X(checkUpdates) X(checkPrereleases) X(lastUpdateCheck) X(addFiles) X(addFolders)     X(recursive) X(forceDir) X(detectAbsDir) X(folderExt) X(renameSidecar) X(copy) X(genLog)     X(dstRelativeToFile) X(startSwitch) X(finishSwitch) X(startClearLog) X(finishClearFiles)     X(finishClearBatch) X(saveLog) X(saveLogAppend) X(saveLogFile)
+#define KEYS(X)     X(realtime) X(resizeCols) X(fileIcons) X(forceFont) X(fontName) X(fontSize) X(iconSet) X(historyMax)     X(autoComplete) X(dragNoAsk) X(launchFile) X(addHidden) X(naturalSort) X(undoButton) X(newUi)     X(pageLayout) X(theme) X(checkUpdates) X(checkPrereleases) X(lastUpdateCheck) X(addFiles) X(addFolders)     X(recursive) X(forceDir) X(detectAbsDir) X(folderExt) X(renameSidecar) X(numberDuplicates) X(copy) X(genLog)     X(dstRelativeToFile) X(startSwitch) X(finishSwitch) X(startClearLog) X(finishClearFiles)     X(finishClearBatch) X(saveLog) X(saveLogAppend) X(saveLogFile)
 // clang-format on
 
 void AppOptions::load() {
@@ -121,6 +121,7 @@ void AppOptions::applyToCore() const {
     o.detectAbsDir = detectAbsDir;
     o.folderExt = folderExt;
     o.renameSidecar = renameSidecar;
+    o.numberDuplicates = numberDuplicates;
     o.copy = copy;
     o.dstRelativeToFile = dstRelativeToFile;
 }

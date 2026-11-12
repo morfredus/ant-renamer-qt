@@ -4,7 +4,16 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.1.0**.
+Version courante : **3.1.1-beta.1**.
+
+## 3.1.1-beta.1
+
+| Nouveauté | Depuis |
+|---|---|
+| **Les actions Date et heure et EXIF numérotent les fichiers qui reçoivent le même nom** (`_01`, `_02`... dans l'ordre de prise de vue, une rafale prise dans la même seconde ne pose plus de problème) ; option *Numéroter les fichiers qui reçoivent le même nom* (Traitement). L'ancienne case *Ajouter un suffixe* de Date et heure disparaît. | 3.1.1-beta.1 |
+| **Une seule fenêtre à la fois** : un deuxième lancement affiche une boîte d'information et quitte ; avec `-g` ou `-x` il écrit un message et rend le code de sortie 3. | 3.1.1-beta.1 |
+| **Ajouter un dossier sans fichier** le signale dans une boîte de message, la barre d'état et le journal. | 3.1.1-beta.1 |
+| **AppImage Linux** : informations de mise à jour intégrées, AppImageUpdate peut donc le mettre à jour. | 3.1.1-beta.1 |
 
 ## 3.1.0
 

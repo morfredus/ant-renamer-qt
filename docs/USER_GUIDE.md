@@ -1,6 +1,6 @@
 # Ant Renamer Qt: function guide
 
-*Every function of Ant Renamer Qt 3.1.0 with instructions.*
+*Every function of Ant Renamer Qt 3.1.1-beta.1 with instructions.*
 French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use cases): [USER_RECIPES.md](USER_RECIPES.md). Full details, page by page, with screenshots: the built-in help (F1). Differences between Windows and Linux: §13.
 
 ## 1. General principle
@@ -84,7 +84,7 @@ Pick the action in the list, set its parameters (the *Notes* area under the para
 | 6 | **Characters deletion** | Erase N characters | Three modes: from a position (from the start or the end), after a given string, or before a given string. Nothing is deleted if the string is not found. Option: apply to the extension. |
 | 7 | **Enumeration** | Number the files | Mask containing `%num%` (e.g. `File %num%%ext%`; tags `%name%`, `%ext%`, `%folderN%`). Settings: *Start at*, *Digits* (leading zeros), *Increment by* (start and increment may be negative). Options: *Go back to start value* in each new folder (list sorted by folder), *Same number for files with the same name* (IMG_1234.JPG + IMG_1234.CR2: they must follow each other, sort by name). |
 | 8 | **MP3 tags** | Name from the ID3 tags (v1, v1.1, v2.2, v2.3, v2.4) | Mask with `%author%`, `%title%`, `%album%`, `%year%`, `%genre%`, `%comm%`, `%track%`, `%name%`, `%ext%`, `%folderN%`. E.g. `%author% - %title%%ext%`. v2 values win, v1 fills the gaps. Characters forbidden in a file name are always replaced in the values (`"` → `'`, `?` → `.`, `\ / : * < > \|` → `-`). Option: two-digit track number. `$if` available (§6). A file without ID3 tags is not renamed (blue line in the log). |
-| 9 | **Date and time** | Name from the file date | Mask in letters: `yyyy` `yy`, `mm` `mmm` `mmmm` (month), `dd` `ddd` `dddd`, `hh` `nn` (minutes) `ss`, `zzz` (milliseconds), `am/pm` `a/p` `ampm` (12-hour clock), `f` (original name), `e` (extension). Any fixed text goes in quotes. E.g. `yyyy'-'mm'-'dd hh'-'nn'-'sse`. The names of days and months are in the language of the system. Choice of creation or modification date (the creation date is missing on many Linux file systems: the modification date is then used). **Offset** in seconds. Option to add a suffix to duplicates. The `c`, `ddddd` and `dddddd` tags of the original program do not exist. |
+| 9 | **Date and time** | Name from the file date | Mask in letters: `yyyy` `yy`, `mm` `mmm` `mmmm` (month), `dd` `ddd` `dddd`, `hh` `nn` (minutes) `ss`, `zzz` (milliseconds), `am/pm` `a/p` `ampm` (12-hour clock), `f` (original name), `e` (extension). Any fixed text goes in quotes. E.g. `yyyy'-'mm'-'dd hh'-'nn'-'sse`. The names of days and months are in the language of the system. Choice of creation or modification date (the creation date is missing on many Linux file systems: the modification date is then used). **Offset** in seconds. Files that get the same name (bursts) are numbered `_01`, `_02`... automatically, in the order of the shooting. The `c`, `ddddd` and `dddddd` tags of the original program do not exist. |
 | 10 | **Random names** | Generate a name with a random part | Mask with `%random%` (+ `%name%`, `%ext%`, `%folderN%`). Type: random number (8 digits), "Windows tick count" (a counter of milliseconds, so sequential) or GUID (`{...}`, unique). |
 | 11 | **Change case** | Upper / lower case | Four choices: upper the first letter following given characters (space, hyphen, dot... to type in; the rest goes lower), upper the first letter of the name, all upper, all lower. Keep "use locale" on to convert accents (é → É). Options: also apply to the extension, or only to the extension (by default the extension is left alone). On Linux "a.txt" and "A.txt" are two different names. |
 | 12 | **Names from a list** | Apply a list of names | One line per file, in list order (typed, or loaded/saved with *Open...* / *Save...*; *Clear* empties it). Options: add the original extension; use the list as extensions. A file without a matching line, or with an empty line, is not renamed. |
@@ -148,7 +148,7 @@ Good to know: a missing tag gives an empty text; multiple values are joined with
 | `-b file.arb` | loads a batch |
 | `-g` | starts the processing once files and batch are loaded |
 | `-x` | exits when the processing is done |
-| `-q` | silent mode for scripts: no window, no dialog, same as `-g -x`. Exit code: 0 all done, 1 at least one file failed, 2 nothing done (no file, no batch, unreadable batch file, hidden files in the list) |
+| `-q` | silent mode for scripts: no window, no dialog, same as `-g -x`. Exit code: 0 all done, 1 at least one file failed, 2 nothing done (no file, no batch, unreadable batch file, hidden files in the list). Without `-q`, a launch with `-g` or `-x` while another window is open returns 3 (only one window at a time) |
 | `-af` / `-aF` / `-afr` | adds the following files / folders / recursive content of folders (wildcards `*` `?` accepted) |
 | `--shell path` | adds the path to the window that is already open (used by the Explorer menu) |
 | `--install-shell` / `--remove-shell` | adds / removes the Explorer menu entry (Windows), then exits |
