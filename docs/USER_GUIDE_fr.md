@@ -153,6 +153,8 @@ Bon à savoir : un tag absent donne un texte vide ; les valeurs multiples sont j
 | `--shell chemin` | ajoute le chemin à la fenêtre déjà ouverte (utilisé par le menu de l'Explorateur) |
 | `--install-shell` / `--remove-shell` | ajoute / retire l'entrée du menu de l'Explorateur (Windows), puis quitte |
 
+Une seule fenêtre peut être ouverte à la fois : un deuxième lancement affiche un message et quitte, sauf s'il ne reçoit que des chemins (un fichier déposé sur le programme ou son raccourci, « Ouvrir avec »), qui sont alors ajoutés à la fenêtre ouverte, comme avec `--shell`.
+
 Exemples : `antrenamer-qt.exe -b d:\test.arb -af c:\data\*.* -g -x` (Windows), `antrenamer-qt -b ~/test.arb -af "/data/*" -g -x` (Linux, mettre les jokers entre guillemets pour que le shell ne les développe pas).
 Sans `-a`, comportement de la 2.07 : un nom finissant par `.arb` est un job, un dossier est ajouté récursivement.
 

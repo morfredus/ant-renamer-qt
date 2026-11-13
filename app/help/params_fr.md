@@ -9,6 +9,7 @@ Voici la liste des paramètres supportés :
 - `-x` : Quitte le programme après le traitement
 - `-q` : Mode silencieux, pour les scripts : ni fenêtre ni boîte de dialogue, le traitement démarre et le programme quitte à la fin (comme `-g -x`, sans la fenêtre). Le code de sortie dit comment ça s'est passé : 0 tout est fait, 1 au moins un fichier n'a pas été renommé à cause d'une erreur, 2 rien n'a été fait (aucun fichier, aucun batch, fichier batch illisible, ou fichiers cachés dans la liste). Le fichier journal des options est toujours écrit
 - `--shell Chemin` : (menu contextuel de l'Explorateur) ajoute le chemin à la fenêtre déjà ouverte, ou ouvre le programme s'il n'est pas lancé
+- Une seule fenêtre à la fois : un deuxième lancement affiche un message et quitte. Les chemins donnés seuls (un fichier déposé sur le programme ou son raccourci, « Ouvrir avec ») sont ajoutés à la fenêtre déjà ouverte. Avec `-g` ou `-x`, le message part sur la sortie d'erreur et le code de sortie est 3.
 - `--install-shell` / `--remove-shell` : ajoute / retire l'entrée du menu contextuel de l'Explorateur, puis quitte
 - `-a` : Change le mode d'ajout de fichiers, sur base des lettres suivant le paramètre "-a" :
   - `f` : Ajouter les fichiers dont les noms/dossiers qui suivent

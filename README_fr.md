@@ -115,7 +115,7 @@ Ant Renamer Qt est un logiciel libre et le reste : rien n'est réservé à ceux 
 
 ## Utilisation de l'IA
 
-L'auteur du portage ne connaît pas Delphi. [Claude](https://claude.ai) (Anthropic) a servi à comprendre le code source Delphi d'origine et à aider à écrire et relire le portage en C++. Chaque version est compilée et testée par l'auteur sur de vraies machines (voir [docs/TESTED_PLATFORMS_fr.md](docs/TESTED_PLATFORMS_fr.md)).
+L'auteur du portage ne connaît pas Delphi. [Claude](https://claude.ai) (Anthropic) a servi à comprendre le code source Delphi d'origine. Chaque version est compilée et testée par l'auteur sur de vraies machines (voir [docs/TESTED_PLATFORMS_fr.md](docs/TESTED_PLATFORMS_fr.md)).
 
 ## Crédits
 

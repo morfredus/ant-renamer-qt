@@ -9,6 +9,7 @@
 - `-x` : மறுபெயரிடல் செயல்முறைக்குப் பிறகு நிரலை விட்டு வெளியேறுகிறது
 - `-q` : Silent mode, for scripts: no window and no dialog, the renaming starts and the program quits at the end (like `-g -x`, without the window). The exit code tells how it went: 0 everything done, 1 at least one file was not renamed because of an error, 2 nothing done (no file, no batch, batch file unreadable, or hidden files in the list). The log file of the options is still written
 - `--shell Path` : (Explorer context menu) adds the path to the window that is already open, or starts the program if it is not running
+- Only one window at a time: a second launch shows a message and quits. Paths given alone (a file dropped on the program or its shortcut, "Open with") are added to the window that is already open. With `-g` or `-x`, the message goes to the error output and the exit code is 3.
 - `--install-shell` / `--remove-shell` : adds / removes the Explorer context menu entry, then quits
 - `-a` : "-a" அளவுருவைப் பின்பற்றும் எழுத்துக்களின் அடிப்படையில் கோப்பு சேர் பயன்முறையை மாற்றவும்:
   - `f` : பின்வரும் கோப்பு பெயர்கள் / பாதைகளிலிருந்து கோப்புகளைச் சேர்க்கவும்

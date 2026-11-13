@@ -6,6 +6,12 @@ the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
 Current version: **3.1.1-beta.1**.
 
+## Upcoming
+
+| What is new | Since |
+|---|---|
+| **A file dropped on the program or its shortcut** (or "Open with") while a window is open is added to that window, instead of the "already running" message. | (upcoming) |
+
 ## 3.1.1-beta.1
 
 | What is new | Since |
@@ -13,6 +19,7 @@ Current version: **3.1.1-beta.1**.
 | **Date and time and EXIF actions number files given the same name** (`_01`, `_02`... in the order of the shooting, a burst shot in the same second no longer fails); option *Number files given the same name* (Processing). The old *Add suffix* box of Date and time is gone. | 3.1.1-beta.1 |
 | **One window at a time**: a second launch shows an information box and quits; with `-g` or `-x` it prints a message and returns the exit code 3. | 3.1.1-beta.1 |
 | **Adding a folder with no file** says so in a message box, the status bar and the log. | 3.1.1-beta.1 |
+| **A pre-release shows its build**: the commit it was built from, next to the version (window title, About box), so that a tester knows which build runs. | 3.1.1-beta.1 |
 | **Linux AppImage**: update information embedded, so AppImageUpdate can update it. | 3.1.1-beta.1 |
 
 ## 3.1.0
