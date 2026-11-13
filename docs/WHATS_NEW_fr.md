@@ -4,13 +4,15 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.1.1-beta.1**.
+Version courante : **3.1.1**.
 
-## À venir
+## 3.1.1
 
 | Nouveauté | Depuis |
 |---|---|
-| **Un fichier déposé sur le programme ou son raccourci** (ou « Ouvrir avec ») alors qu'une fenêtre est ouverte est ajouté à cette fenêtre, au lieu du message « déjà lancé ». | *(à venir)* |
+| **Version finale de la 3.1.1** : le code de la 3.1.1-beta.1 avec les deux changements ci-dessous. | 3.1.1 |
+| **Informations de version sous Windows** : le programme et l'installeur portent le nom du produit et la version (Propriétés du fichier, onglet Détails). | 3.1.1 |
+| **Un fichier déposé sur le programme ou son raccourci** (ou « Ouvrir avec ») alors qu'une fenêtre est ouverte est ajouté à cette fenêtre, au lieu du message « déjà lancé ». | 3.1.1 |
 
 ## 3.1.1-beta.1
 

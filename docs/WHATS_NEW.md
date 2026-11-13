@@ -4,13 +4,15 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.1.1-beta.1**.
+Current version: **3.1.1**.
 
-## Upcoming
+## 3.1.1
 
 | What is new | Since |
 |---|---|
-| **A file dropped on the program or its shortcut** (or "Open with") while a window is open is added to that window, instead of the "already running" message. | (upcoming) |
+| **Final version of 3.1.1**: the code of 3.1.1-beta.1 with the two changes below. | 3.1.1 |
+| **Windows version information**: the program and the installer carry the product name and the version (file Properties, Details tab). | 3.1.1 |
+| **A file dropped on the program or its shortcut** (or "Open with") while a window is open is added to that window, instead of the "already running" message. | 3.1.1 |
 
 ## 3.1.1-beta.1
 

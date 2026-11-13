@@ -2,6 +2,10 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.1.1 (13/11/2026)
+  - Version finale de la 3.1.1 : le code de la 3.1.1-beta.1 avec les changements ci-dessous.
+  - Nouveau : un fichier déposé sur le programme ou son raccourci (ou « Ouvrir avec ») alors qu'une fenêtre est ouverte est ajouté à cette fenêtre, au lieu du message « déjà lancé ».
+  - Windows : le programme et l'installeur portent des informations de version (nom du produit et version, dans les propriétés du fichier).
 - 3.1.1-beta.1 (12/11/2026)
   - Nouveau : les actions Date et heure et EXIF numérotent les fichiers qui reçoivent le même nom (_01, _02...) dans l'ordre de prise de vue ; nouvelle option « Numéroter les fichiers qui reçoivent le même nom » (Traitement) ; tag EXIF SubSecTimeOriginal. L'ancienne case « Ajouter un suffixe » de Date et heure disparaît.
   - Nouveau : une seule fenêtre à la fois. Un deuxième lancement affiche une boîte d'information et quitte (avec -g ou -x : un message sur la sortie d'erreur et le code de sortie 3).
