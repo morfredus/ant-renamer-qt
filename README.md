@@ -31,6 +31,8 @@ gpg --verify AntRenamerQt-X.Y.Z-linux-amd64.deb.asc AntRenamerQt-X.Y.Z-linux-amd
 
 The Windows files are not signed yet (checksums are in `SHA256SUMS.txt`).
 
+**Code signing policy.** [docs/CODE_SIGNING_POLICY.md](docs/CODE_SIGNING_POLICY.md) describes how the Windows files will be signed, by whom, and what the program does with your data. Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
 The project is **self-contained**: Qt 6 and a C++20 compiler are the only requirements.
 
 ## Build
