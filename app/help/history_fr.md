@@ -6,6 +6,7 @@ Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé
   - Nouveau : les actions Date et heure et EXIF numérotent les fichiers qui reçoivent le même nom (_01, _02...) dans l'ordre de prise de vue ; nouvelle option « Numéroter les fichiers qui reçoivent le même nom » (Traitement) ; tag EXIF SubSecTimeOriginal. L'ancienne case « Ajouter un suffixe » de Date et heure disparaît.
   - Nouveau : une seule fenêtre à la fois. Un deuxième lancement affiche une boîte d'information et quitte (avec -g ou -x : un message sur la sortie d'erreur et le code de sortie 3).
   - Nouveau : ajouter un dossier sans fichier le signale dans une boîte de message.
+  - Nouveau : une préversion affiche le commit dont elle est issue à côté de sa version (titre de la fenêtre, boîte À propos).
   - AppImage Linux : informations de mise à jour intégrées (fichier .zsync publié avec). Captures d'écran de l'aide refaites.
 - 3.1.0 (09/11/2026)
   - Correction : l'annulation (bouton / F12) après un redémarrage n'annule plus à l'aveugle la dernière passe d'une session précédente : elle ouvre d'abord l'historique.

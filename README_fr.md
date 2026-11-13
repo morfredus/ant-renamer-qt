@@ -31,6 +31,8 @@ gpg --verify AntRenamerQt-X.Y.Z-linux-amd64.deb.asc AntRenamerQt-X.Y.Z-linux-amd
 
 Les fichiers Windows ne sont pas encore signés (les sommes de contrôle sont dans `SHA256SUMS.txt`).
 
+**Politique de signature.** [docs/CODE_SIGNING_POLICY_fr.md](docs/CODE_SIGNING_POLICY_fr.md) décrit comment les fichiers Windows seront signés, par qui, et ce que le programme fait de vos données. Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
 Le projet est **autonome** : Qt 6 et un compilateur C++20 suffisent.
 
 ## Compilation
@@ -115,7 +117,7 @@ Ant Renamer Qt est un logiciel libre et le reste : rien n'est réservé à ceux 
 
 ## Utilisation de l'IA
 
-L'auteur du portage ne connaît pas Delphi. [Claude](https://claude.ai) (Anthropic) a servi à comprendre le code source Delphi d'origine et à aider à écrire et relire le portage en C++. Chaque version est compilée et testée par l'auteur sur de vraies machines (voir [docs/TESTED_PLATFORMS_fr.md](docs/TESTED_PLATFORMS_fr.md)).
+L'auteur du portage ne connaît pas Delphi. [Claude](https://claude.ai) (Anthropic) a servi à comprendre le code source Delphi d'origine. Chaque version est compilée et testée par l'auteur sur de vraies machines (voir [docs/TESTED_PLATFORMS_fr.md](docs/TESTED_PLATFORMS_fr.md)).
 
 ## Crédits
 

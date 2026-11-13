@@ -147,6 +147,8 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
   qu'Excel et LibreOffice ouvrent avec les accents corrects.
 - **Vérification facultative d'une nouvelle version** (désactivée par défaut, une fois par jour, versions finales seulement
   sauf demande contraire).
+- **Numérotation des fichiers qui reçoivent le même nom** par les actions Date et heure et EXIF (`_01`, `_02`... dans l'ordre de prise de vue) : une rafale prise dans la même seconde est renommée au lieu d'être refusée.
+- **Une seule fenêtre à la fois** : un deuxième lancement affiche un message et quitte (les chemins donnés seuls sont ajoutés à la fenêtre ouverte).
 - **Ligne de commande silencieuse** `-q` : ni fenêtre ni boîte de dialogue, pour les scripts ; le code de sortie dit
   comment ça s'est passé.
 - **Système de build** : presets CMake pour Windows (MinGW), Linux x86_64, Linux ARM64 et compilation croisée

@@ -153,6 +153,8 @@ Good to know: a missing tag gives an empty text; multiple values are joined with
 | `--shell path` | adds the path to the window that is already open (used by the Explorer menu) |
 | `--install-shell` / `--remove-shell` | adds / removes the Explorer menu entry (Windows), then exits |
 
+Only one window can be open at a time: a second launch shows a message and quits, except when it is given only paths (a file dropped on the program or its shortcut, "Open with"), which are then added to the open window, like `--shell`.
+
 Examples: `antrenamer-qt.exe -b d:\test.arb -af c:\data\*.* -g -x` (Windows), `antrenamer-qt -b ~/test.arb -af "/data/*" -g -x` (Linux, quote the wildcards so that the shell does not expand them).
 Without `-a`, 2.07 behaviour: a name ending in `.arb` is a batch, a folder is added recursively.
 

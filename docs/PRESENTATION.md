@@ -142,6 +142,8 @@ These are the places where the port does not do exactly what version 2.13 does. 
 - **Export of the preview** (CSV or text) from the context menu of the files list, and a log saved as a CSV that Excel and
   LibreOffice open with the accents right.
 - **Optional check for a new version** (off by default, once a day, final versions only unless asked otherwise).
+- **Numbering of files given the same name** by the Date and time and EXIF actions (`_01`, `_02`... in the order of the shooting), so that a burst shot in the same second is renamed instead of refused.
+- **One window at a time**: a second launch shows a message and quits (paths given alone are added to the open window).
 - **Silent command line** `-q`: no window and no dialog, for scripts; the exit code tells how it went.
 - **Build system**: CMake presets for Windows (MinGW), Linux x86_64, Linux ARM64 and ARM64 cross
   compilation; Qt and MinGW DLLs are deployed automatically next to the executable on Windows.
