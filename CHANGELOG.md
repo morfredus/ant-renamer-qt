@@ -14,6 +14,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Changed
 
+- Code signing policy (`docs/CODE_SIGNING_POLICY.md`, `_fr`): who signs, how a file gets signed, roles, privacy. Prepared for an application to SignPath Foundation (free certificate for open source); nothing is signed yet.
 - Documents (EN, FR): the command-line help page (`app/help/params_*.md`), USER_GUIDE and PRESENTATION describe the one-window rule; WHATS_NEW and the history pages list the build commit shown for pre-releases, which the 3.1.1-beta.1 notes had left out.
 
 - TODO (EN, FR) rewritten as a roadmap: no more P0/P1/P2, the versions to come in order of importance (3.1.1 final, 3.2 to 3.7), a maintenance track (new Qt versions, sidecars, EXIF and RAW formats, photo software, packaging, translations), ideas to evaluate and ideas set aside, with the reason.
