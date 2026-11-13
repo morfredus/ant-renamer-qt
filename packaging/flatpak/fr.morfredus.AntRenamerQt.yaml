@@ -35,5 +35,5 @@ modules:
     sources:
       - type: git
         url: https://github.com/morfredus/ant-renamer-qt.git
-        tag: v3.0.1
-        commit: 0000000000000000000000000000000000000000  # git rev-parse v3.0.1, once the tag exists
+        tag: v3.1.1
+        commit: ec41f4c36b64664dfda95f45034e6bfda59aeda9  # git ls-remote https://github.com/morfredus/ant-renamer-qt.git refs/tags/v3.1.1 (production repository)
