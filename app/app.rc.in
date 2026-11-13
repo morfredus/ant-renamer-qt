@@ -1,0 +1,36 @@
+#include <winuser.h>
+#include <winver.h>
+
+IDI_ICON1 ICON "@CMAKE_CURRENT_SOURCE_DIR@/renamer.ico"
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "@CMAKE_CURRENT_SOURCE_DIR@/app.manifest"
+
+// Version information shown in the file Properties and read by code signing: the product name and the product
+// version are the same in every build of a release. app.rc is generated from this file by CMake (VERSION file).
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION @AR_RC_VERSION@
+ PRODUCTVERSION @AR_RC_VERSION@
+ FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+ FILEFLAGS @AR_RC_FLAGS@
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "morfredus"
+            VALUE "FileDescription", "Ant Renamer Qt, batch file renamer"
+            VALUE "FileVersion", "@AR_VERSION@"
+            VALUE "InternalName", "antrenamer-qt"
+            VALUE "LegalCopyright", "Copyright (C) 2000-2026 Antoine Potten, Frederic Biron. GPL v2 or later."
+            VALUE "OriginalFilename", "antrenamer-qt.exe"
+            VALUE "ProductName", "Ant Renamer Qt"
+            VALUE "ProductVersion", "@AR_VERSION@"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END

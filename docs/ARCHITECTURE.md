@@ -32,7 +32,7 @@ LICENSE           GNU General Public License
 |---|---|
 | `*.cpp`, `*.h` | Yes |
 | `resources.qrc`: `renamer.ico`, the three toolbar bitmap sets (the fourth, "Modern", is drawn in code), `antrenamer-qt.png` (icon of the About box), `default.xml` | Embedded in the executable by Qt's `rcc` |
-| `app.rc`, `app.manifest` (icon, long paths, UTF-8, per-monitor DPI) | Windows only, compiled with `windres` |
+| `app.rc.in`, `app.manifest` (icon, long paths, UTF-8, per-monitor DPI, version information) | Windows only; CMake generates `app.rc` from `app.rc.in` with the version of the `VERSION` file, compiled with `windres` |
 | `Languages/`, `help/` | Not compiled: copied next to the executable (and installed by the packages) |
 | `antrenamer-qt.svg`, `antrenamer-qt.png` (256 px) | Not compiled: master of the icon and its PNG (the PNG and `renamer.ico` are made from the SVG) |
 | `icons/hicolor/` | Not compiled: the SVG and the PNG sizes 16, 24, 32, 48, 64, 128 and 256 in the layout of the freedesktop icon theme, installed by the `.deb` package in `/usr/share/icons/hicolor` (made from the SVG with `rsvg-convert -w <size> -h <size>`) |

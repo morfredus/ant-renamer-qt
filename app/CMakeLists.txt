@@ -4,8 +4,17 @@ set(CMAKE_AUTORCC ON)
 set(SRC main.cpp mainwindow.cpp mainwindow_files.cpp mainwindow_batch.cpp mainwindow_run.cpp devaids.cpp actionpanel.cpp appsettings.cpp dialogs.cpp icons.cpp lngtranslator.cpp helpwindow.cpp shellmenu.cpp theme.cpp updatecheck.cpp resources.qrc)
 if(WIN32)
     enable_language(RC)
-    list(APPEND SRC app.rc)   # icon + manifest (long paths, UTF-8, per-monitor DPI)
-    set_source_files_properties(app.rc PROPERTIES OBJECT_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/renamer.ico;${CMAKE_CURRENT_SOURCE_DIR}/app.manifest")  # the .rc does not #include them: without this, changing the icon would not rebuild the exe
+    # app.rc: icon, manifest (long paths, UTF-8, per-monitor DPI) and version information, generated from app.rc.in so that
+    # the version comes from the VERSION file (name "3.1.1-beta.1", number 3,1,1,0, "pre-release" flag when there is a suffix).
+    string(REPLACE "." "," AR_RC_VERSION "${AR_VERSION_NUM}.0")
+    if(AR_VERSION MATCHES "-")
+        set(AR_RC_FLAGS "VS_FF_PRERELEASE")
+    else()
+        set(AR_RC_FLAGS "0")
+    endif()
+    configure_file(app.rc.in "${CMAKE_CURRENT_BINARY_DIR}/app.rc" @ONLY)
+    list(APPEND SRC "${CMAKE_CURRENT_BINARY_DIR}/app.rc")
+    set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/app.rc" PROPERTIES OBJECT_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/renamer.ico;${CMAKE_CURRENT_SOURCE_DIR}/app.manifest")  # the .rc does not #include them: without this, changing the icon would not rebuild the exe
 endif()
 
 add_executable(antrenamer-qt WIN32 ${SRC})

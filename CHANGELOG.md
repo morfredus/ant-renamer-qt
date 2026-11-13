@@ -14,6 +14,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Changed
 
+- Windows: version information in the program (`antrenamer-qt.exe` Properties, Details tab) and in the installer: product name "Ant Renamer Qt", product and file version taken from the `VERSION` file (`3.1.1-beta.1`, number 3.1.1.0, "pre-release" flag when there is a suffix), file description, copyright. Needed by code signing (the SignPath Foundation requires a fixed product name and the same version in every file of a release). `app/app.rc` becomes `app/app.rc.in`, which CMake fills in. Icon and manifest unchanged.
 - READMEs (EN, FR): a "Code signing policy" paragraph with the SignPath attribution line, required on the project home page by the SignPath Foundation application.
 - Code signing policy (`docs/CODE_SIGNING_POLICY.md`, `_fr`): who signs, how a file gets signed, roles, privacy. Prepared for an application to SignPath Foundation (free certificate for open source); nothing is signed yet.
 - Documents (EN, FR): the command-line help page (`app/help/params_*.md`), USER_GUIDE and PRESENTATION describe the one-window rule; WHATS_NEW and the history pages list the build commit shown for pre-releases, which the 3.1.1-beta.1 notes had left out.

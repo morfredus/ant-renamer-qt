@@ -32,7 +32,7 @@ LICENSE           Licence publique générale GNU
 |---|---|
 | `*.cpp`, `*.h` | Oui |
 | `resources.qrc` : `renamer.ico`, les trois jeux de bitmaps de la barre d'outils (le quatrième, « Modern », est dessiné dans le code), `antrenamer-qt.png` (icône de la boîte À propos), `default.xml` | Embarqués dans l'exécutable par `rcc` de Qt |
-| `app.rc`, `app.manifest` (icône, chemins longs, UTF-8, DPI par écran) | Windows seulement, compilés avec `windres` |
+| `app.rc.in`, `app.manifest` (icône, chemins longs, UTF-8, DPI par écran, informations de version) | Windows seulement ; CMake génère `app.rc` depuis `app.rc.in` avec la version du fichier `VERSION`, compilé avec `windres` |
 | `Languages/`, `help/` | Non compilés : copiés à côté de l'exécutable (et installés par les paquets) |
 | `antrenamer-qt.svg`, `antrenamer-qt.png` (256 px) | Non compilés : original de l'icône et son PNG (le PNG et `renamer.ico` sont tirés du SVG) |
 | `icons/hicolor/` | Non compilé : le SVG et les PNG de 16, 24, 32, 48, 64, 128 et 256 px dans l'arborescence du thème d'icônes freedesktop, installés par le paquet `.deb` dans `/usr/share/icons/hicolor` (tirés du SVG avec `rsvg-convert -w <taille> -h <taille>`) |
