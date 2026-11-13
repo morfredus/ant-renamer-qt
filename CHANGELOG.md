@@ -8,13 +8,18 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.1] - 2026-11-13
+
+Final version of 3.1.1: the code of 3.1.1-beta.1 with the changes below.
+
 ### Added
 
 - One window at a time, second part: a launch given only paths (a file dropped on the program or its shortcut, "Open with", the Linux `Exec=antrenamer-qt %F`) adds them to the window that is already open, like `--shell`, instead of showing the "already running" message and losing the files (`app/main.cpp`). Any other second launch is unchanged: message, then exit (code 3 with `-g` or `-x`).
 
 ### Changed
 
-- Windows: version information in the program (`antrenamer-qt.exe` Properties, Details tab) and in the installer: product name "Ant Renamer Qt", product and file version taken from the `VERSION` file (`3.1.1-beta.1`, number 3.1.1.0, "pre-release" flag when there is a suffix), file description, copyright. Needed by code signing (the SignPath Foundation requires a fixed product name and the same version in every file of a release). `app/app.rc` becomes `app/app.rc.in`, which CMake fills in. Icon and manifest unchanged.
+- Release files for 3.1.1: VERSION, history pages (EN, FR, HR, TA), WHATS_NEW, USER_GUIDE and ARCHITECTURE, release notes (`docs/release-notes/3.1.1.md`), the release in the Flatpak AppStream file, and `docs/TESTED_PLATFORMS.md` (EN, FR: all the changes tried by hand on Windows 11, Linux Mint and a Raspberry Pi 4).
+- Windows: version information in the program (`antrenamer-qt.exe` Properties, Details tab) and in the installer: product name "Ant Renamer Qt", product and file version taken from the `VERSION` file (for example `3.1.1`, number 3.1.1.0, "pre-release" flag when there is a suffix), file description, copyright. Needed by code signing (the SignPath Foundation requires a fixed product name and the same version in every file of a release). `app/app.rc` becomes `app/app.rc.in`, which CMake fills in. Icon and manifest unchanged.
 - READMEs (EN, FR): a "Code signing policy" paragraph with the SignPath attribution line, required on the project home page by the SignPath Foundation application.
 - Code signing policy (`docs/CODE_SIGNING_POLICY.md`, `_fr`): who signs, how a file gets signed, roles, privacy. Prepared for an application to SignPath Foundation (free certificate for open source); nothing is signed yet.
 - Documents (EN, FR): the command-line help page (`app/help/params_*.md`), USER_GUIDE and PRESENTATION describe the one-window rule; WHATS_NEW and the history pages list the build commit shown for pre-releases, which the 3.1.1-beta.1 notes had left out.

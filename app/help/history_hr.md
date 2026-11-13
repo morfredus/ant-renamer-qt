@@ -2,6 +2,10 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.1.1 (13/11/2026)
+  - Final version of 3.1.1: the code of 3.1.1-beta.1 with the changes below.
+  - New: a file dropped on the program or its shortcut (or "Open with") while a window is open is added to that window, instead of the "already running" message.
+  - Windows: the program and the installer carry version information (product name and version, in the file Properties).
 - 3.1.1-beta.1 (12/11/2026)
   - New: Date and time and EXIF actions number the files given the same name (_01, _02...) in the order of the shooting; new option "Number files given the same name" (Processing); EXIF tag SubSecTimeOriginal. The old "Add suffix" box of Date and time is removed.
   - New: only one window at a time. A second launch shows an information box and quits (with -g or -x: a message on stderr and the exit code 3).
