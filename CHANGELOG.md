@@ -14,6 +14,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Changed
 
+- `docs/TRANSLATING.md` (EN, FR): the note for translators of the original Ant Renamer says where to send the file and that the `<QtPort>` texts (about a hundred) are the ones missing; example file version `3.1`.
 - Flatpak manifest (`packaging/flatpak/fr.morfredus.AntRenamerQt.yaml`): source on the tag `v3.1.1` of the production repository and its commit (it still pointed to `v3.0.1` with a placeholder hash), ready for the first Flathub submission.
 
 ## [3.1.1] - 2026-11-13

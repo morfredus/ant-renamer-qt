@@ -22,7 +22,7 @@ Ant Renamer Qt does not use Qt `.ts` files. It reads the language files of the o
    |---|---|
    | `Name` | Name of the language in English |
    | `LocalName` | Name of the language in itself (`Français`, `Deutsch`...), shown in the list |
-   | `Version` / `VersionFormat` | Version of the file, e.g. `3.0` (`VersionFormat` stays as in the model) |
+   | `Version` / `VersionFormat` | Version of the file, e.g. `3.1` (`VersionFormat` stays as in the model) |
    | `Comments` | Free text; `|` starts a new line |
    | `Authors` | Name(s) of the translator(s); `|` separates several values |
    | `Icon` | Optional 16 x 16 BMP flag in base64: leave the model's or delete the line |
@@ -63,7 +63,7 @@ Edit the text of the key in the existing `app/Languages/<Language>.lng`, keeping
 
 On GitHub, [github.com/morfredus/ant-renamer-qt](https://github.com/morfredus/ant-renamer-qt): open a *pull request* with the new or modified `.lng` file (and the credit lines), or, if you are not used to it, an *issue* with the file attached. Say which version of the program you tested with. A line in `CHANGELOG.md` (section *Unreleased*) and in `docs/WHATS_NEW.md` / `WHATS_NEW_fr.md` mentions the new language.
 
-The translators of the original Ant Renamer can send their file as it is: the format is the same, only the texts added by Ant Renamer Qt will be missing (they stay in English).
+The translators of the original Ant Renamer can send their file as it is, like any other (see above): the format is the same. The texts added by Ant Renamer Qt (the `<QtPort>` section of `English.lng`, about a hundred) will be missing and stay in English until the translator adds them.
 
 ## 8. The help
 
