@@ -8,6 +8,14 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Removed
+
+- Code signing policy pages (`docs/CODE_SIGNING_POLICY.md`, `_fr`) and the SignPath paragraph of the READMEs: the SignPath Foundation declined the application on 2026-11-13 (not enough public visibility yet), so the attribution line and the policy no longer apply. The READMEs and the 3.1.1 release notes now say that the Windows files are not digitally signed. The version information added to the program and the installer stays.
+
+### Changed
+
+- Flatpak manifest (`packaging/flatpak/fr.morfredus.AntRenamerQt.yaml`): source on the tag `v3.1.1` of the production repository and its commit (it still pointed to `v3.0.1` with a placeholder hash), ready for the first Flathub submission.
+
 ## [3.1.1] - 2026-11-13
 
 Final version of 3.1.1: the code of 3.1.1-beta.1 with the changes below.

@@ -90,6 +90,7 @@ No version yet; each waits for a real need.
 - **A second instance hands its command line to the running window** (paths, job, `-g -x`), brings it to the front and quits, instead of the information box. Needs a window busy with a run to refuse or queue the command line, and a lock tied to the settings folder. The simple way (box and quit) is in place and enough so far.
 - **A batch file** (`.cmd`/`.sh`) written for a later renaming (undoing after the program is closed is done: the history is kept).
 - **`-q` and the history**: a `-q` run can still overwrite the history of an open window. Accepted for now; revisit if someone loses a pass.
+- **Code signing of the Windows files** (wanted by some download sites such as Softonic, and it avoids the SmartScreen warning). The SignPath Foundation declined the application on 2026-11-13: not enough public visibility yet (stars, forks, contributors, external articles and discussions). Reapply when the project is better known. The paid options (a SignPath subscription, about 500 USD a year; a certificate such as Certum's open source one, from about 50 EUR a year) are not worth it for a free project for now. The program and the installer already carry version information, which any signing needs.
 - **Windows 11 modern context menu**, on demand.
 - **Optional code quality** (low value): `std::span` for `exportPreview`, `qScopeGuard` for `LocalFree` in `lastSysError()`, naming rule (`readability-identifier-naming`) now that clang-tidy is in place.
 

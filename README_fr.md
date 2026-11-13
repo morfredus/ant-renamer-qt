@@ -29,9 +29,7 @@ gpg --import antrenamer-qt-public.asc
 gpg --verify AntRenamerQt-X.Y.Z-linux-amd64.deb.asc AntRenamerQt-X.Y.Z-linux-amd64.deb
 ```
 
-Les fichiers Windows ne sont pas encore signés (les sommes de contrôle sont dans `SHA256SUMS.txt`).
-
-**Politique de signature.** [docs/CODE_SIGNING_POLICY_fr.md](docs/CODE_SIGNING_POLICY_fr.md) décrit comment les fichiers Windows seront signés, par qui, et ce que le programme fait de vos données. Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+Les fichiers Windows ne sont pas signés numériquement : Windows peut afficher un avertissement (SmartScreen) au premier lancement de l'installeur. Les sommes de contrôle sont dans `SHA256SUMS.txt`.
 
 Le projet est **autonome** : Qt 6 et un compilateur C++20 suffisent.
 
