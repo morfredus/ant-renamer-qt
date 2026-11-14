@@ -2,6 +2,9 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.1.2-beta.4 (14/11/2026)
+  - Correction : Flatpak sans accès à tout le disque : les fichiers déposés depuis le gestionnaire de fichiers sont de nouveau ajoutés (portail de documents) ; Ajouter des dossiers ouvre le sélecteur de dossier du système (boutons Ajouter un dossier... / Retirer la sélection). L'arbre reste sous Windows et sous Linux hors Flatpak.
+  - Correction : le premier démarrage après une installation Windows affiche la disposition moderne même quand l'installeur a écrit ses choix de recherche de mise à jour.
 - 3.1.1 (13/11/2026)
   - Version finale de la 3.1.1 : le code de la 3.1.1-beta.1 avec les changements ci-dessous.
   - Nouveau : un fichier déposé sur le programme ou son raccourci (ou « Ouvrir avec ») alors qu'une fenêtre est ouverte est ajouté à cette fenêtre, au lieu du message « déjà lancé ».

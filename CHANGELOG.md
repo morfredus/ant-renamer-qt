@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.2-beta.4] - 2026-11-14
+
+Pre-release of 3.1.2: the fixes and the Flatpak work made since 3.1.1.
+
 ### Removed
 
 - Code signing policy pages (`docs/CODE_SIGNING_POLICY.md`, `_fr`) and the SignPath paragraph of the READMEs: the SignPath Foundation declined the application on 2026-11-13 (not enough public visibility yet), so the attribution line and the policy no longer apply. The READMEs and the 3.1.1 release notes now say that the Windows files are not digitally signed. The version information added to the program and the installer stays.

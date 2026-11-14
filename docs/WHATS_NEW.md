@@ -4,13 +4,14 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.1.1**.
+Current version: **3.1.2-beta.4**.
 
-## 3.1.2 (to come)
+## 3.1.2-beta.4
 
 | What is new | Since |
 |---|---|
-| **Flatpak: files dropped from the file manager are added** even though the Flatpak has no access to the whole disk (document portal). | 3.1.2-beta.3 |
+| **Flatpak: files dropped from the file manager are added** even though the Flatpak has no access to the whole disk (document portal). | 3.1.2-beta.4 |
+| **First start after a Windows installation** shows the modern layout even when the installer wrote its update-check choices. | 3.1.2-beta.4 |
 | **Flatpak: Add folders** opens the system folder picker and lists the chosen folders (*Add folder...*, *Remove selected* buttons). The tree stays on Windows and on Linux outside Flatpak. | 3.1.2-beta.4 |
 
 ## 3.1.1

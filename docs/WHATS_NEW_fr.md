@@ -4,13 +4,14 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.1.1**.
+Version courante : **3.1.2-beta.4**.
 
-## 3.1.2 (à venir)
+## 3.1.2-beta.4
 
 | Nouveauté | Depuis |
 |---|---|
-| **Flatpak : les fichiers déposés depuis le gestionnaire de fichiers sont ajoutés**, bien que le Flatpak n'ait pas accès à tout le disque (portail de documents). | 3.1.2-beta.3 |
+| **Flatpak : les fichiers déposés depuis le gestionnaire de fichiers sont ajoutés**, bien que le Flatpak n'ait pas accès à tout le disque (portail de documents). | 3.1.2-beta.4 |
+| **Premier démarrage après une installation Windows** : la disposition moderne s'affiche même quand l'installeur a écrit ses choix de recherche de mise à jour. | 3.1.2-beta.4 |
 | **Flatpak : Ajouter des dossiers** ouvre le sélecteur de dossier du système et liste les dossiers choisis (boutons *Ajouter un dossier...*, *Retirer la sélection*). L'arbre reste sous Windows et sous Linux hors Flatpak. | 3.1.2-beta.4 |
 
 ## 3.1.1
