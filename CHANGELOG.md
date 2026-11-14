@@ -10,6 +10,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Changed
 
+- Windows toolchain: MSYS2 `UCRT64` instead of the deprecated `MINGW64` (CI `msystem`, packages `mingw-w64-ucrt-x86_64-*`, `deploy-mingw.sh`, `vscode-mingw.ps1`, BUILDING and README). On trial in the branch `test/ucrt64`: the CI warning is gone and the installer built by the CI was installed and tried on Windows 10 22H2; the portable zip and a pre-release remain to be tried before a final version. `vscode-mingw.ps1` now resets a `build-mingw` folder configured with another MSYS2 environment (an old MINGW64 build folder is not reused with UCRT64).
 - Comments cleaned up in the code, scripts, CI and Flatpak files (history of the Delphi port, restated code and long narration removed, the rest shortened, all in English); local Flatpak manifest aligned with the main one; a few wordy phrases removed from the docs (README, PRESENTATION, TESTED_PLATFORMS); unused `#include` lines removed from the `.cpp` files.
 
 ### Added

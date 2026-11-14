@@ -54,7 +54,7 @@ Linux packages (on Linux or in WSL): `scripts/linux/package-deb.sh` builds `dist
 On aarch64 use the `linux-arm64` preset; from x86_64, `linux-arm64-cross` builds the arm64 package with an arm64 sysroot
 (`ARM64_SYSROOT`), then `package-deb.sh --build build-arm64-cross`.
 
-Windows prerequisites: MSYS2 with `mingw-w64-x86_64-{gcc,cmake,ninja,qt6-base,qt6-tools}`.
+Windows prerequisites: MSYS2 with `mingw-w64-ucrt-x86_64-{gcc,cmake,ninja,qt6-base,qt6-tools}`.
 
 ## Layout
 
