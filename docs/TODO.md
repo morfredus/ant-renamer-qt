@@ -19,7 +19,7 @@ These are ideas, not promises: some may never be done. The rules:
 Only what the beta shows. Before it goes out:
 - Not tried yet: the installer, the `.deb` and AppImage packages, an upgrade over 3.1.0, Linux Mint, the second Raspberry Pi. clang-tidy on the Pi.
 - Publish the `.zsync` file next to the AppImage in the release (otherwise AppImageUpdate cannot update it).
-- Flathub: publication (the MetaInfo lists 3.1.0; add 3.1.1 at release).
+- Flathub: the first submission (flathub/flathub#11169) was refused on 2026-11-14, the project being too recent; the staff invites to submit again in about a month (around 2026-12-14). Remarks on the manifest: use `desktop-file-edit` instead of `sed` for the icon line, and install with CMake rules instead of loose `install` and `cp` commands (see Ideas to evaluate). Flathub's generative AI policy applies to the manifest and to the submission text: they are written by hand.
 - Announcement on the forum.
 - Screenshots: remake if the interface changed.
 
@@ -91,6 +91,7 @@ No version yet; each waits for a real need.
 - **A batch file** (`.cmd`/`.sh`) written for a later renaming (undoing after the program is closed is done: the history is kept).
 - **`-q` and the history**: a `-q` run can still overwrite the history of an open window. Accepted for now; revisit if someone loses a pass.
 - **Code signing of the Windows files** (wanted by some download sites such as Softonic, and it avoids the SmartScreen warning). The SignPath Foundation declined the application on 2026-11-13: not enough public visibility yet (stars, forks, contributors, external articles and discussions). Reapply when the project is better known. The paid options (a SignPath subscription, about 500 USD a year; a certificate such as Certum's open source one, from about 50 EUR a year) are not worth it for a free project for now. The program and the installer already carry version information, which any signing needs.
+- **CMake `install()` rules** (program, `Languages` and `help` folders, `.desktop` file, MetaInfo, icons) so that one `cmake --install` serves every Linux package. Today the paths are written three times, in the `.deb` and AppImage scripts and in the Flatpak manifest. Asked by the Flathub reviewers; useful in itself, and to be done before submitting again.
 - **Windows 11 modern context menu**, on demand.
 - **Optional code quality** (low value): `std::span` for `exportPreview`, `qScopeGuard` for `LocalFree` in `lastSysError()`, naming rule (`readability-identifier-naming`) now that clang-tidy is in place.
 

@@ -19,7 +19,7 @@ Ce sont des idées, pas des promesses : certaines ne seront peut-être jamais fa
 Seulement ce que la bêta montre. Avant la sortie :
 - Pas encore essayés : l'installeur, les paquets `.deb` et AppImage, une mise à jour par-dessus la 3.1.0, Linux Mint, le deuxième Raspberry Pi. clang-tidy sur le Pi.
 - Publier le fichier `.zsync` à côté de l'AppImage dans la release (sinon AppImageUpdate ne peut pas la mettre à jour).
-- Flathub : publication (le MetaInfo liste la 3.1.0 ; ajouter la 3.1.1 à la sortie).
+- Flathub : la première demande (flathub/flathub#11169) a été refusée le 14/11/2026, le projet étant trop récent ; l'équipe invite à la redéposer dans un mois environ (vers le 14/12/2026). Remarques sur le manifeste : utiliser `desktop-file-edit` plutôt que `sed` pour la ligne de l'icône, et installer avec des règles CMake plutôt que des commandes `install` et `cp` en vrac (voir les idées à évaluer). La politique de Flathub sur l'IA générative s'applique au manifeste et au texte de la demande : ils sont écrits à la main.
 - Annonce sur le forum.
 - Captures d'écran : à refaire si l'interface a changé.
 
@@ -91,6 +91,7 @@ Pas de version pour l'instant ; chacune attend un vrai besoin.
 - **Un fichier de commandes** (`.cmd`/`.sh`) écrit pour un renommage ultérieur (annuler après la fermeture du programme est fait : l'historique est conservé).
 - **`-q` et l'historique** : un lancement `-q` peut encore écraser l'historique d'une fenêtre ouverte. Accepté pour l'instant ; à revoir si quelqu'un perd une passe.
 - **Signature de code des fichiers Windows** (voulue par certains sites de téléchargement comme Softonic, et elle évite l'avertissement SmartScreen). La SignPath Foundation a refusé la candidature le 13/11/2026 : pas encore assez de visibilité publique (étoiles, forks, contributeurs, articles et discussions externes). À redemander quand le projet sera mieux connu. Les voies payantes (un abonnement SignPath, environ 500 USD par an ; un certificat comme celui de Certum pour l'open source, à partir d'environ 50 EUR par an) ne valent pas le coût pour un logiciel libre pour l'instant. Le programme et l'installeur portent déjà des informations de version, dont toute signature a besoin.
+- **Règles `install()` de CMake** (programme, dossiers `Languages` et `help`, fichier `.desktop`, MetaInfo, icônes) pour qu'un seul `cmake --install` serve tous les paquets Linux. Aujourd'hui, les chemins sont écrits trois fois, dans les scripts `.deb` et AppImage et dans le manifeste Flatpak. Demandé par les relecteurs de Flathub ; utile en soi, et à faire avant de redéposer.
 - **Menu contextuel moderne de Windows 11**, sur demande.
 - **Qualité du code, facultatif** (peu utile) : `std::span` pour `exportPreview`, `qScopeGuard` pour `LocalFree` dans `lastSysError()`, règle de nommage (`readability-identifier-naming`) maintenant que clang-tidy est en place.
 

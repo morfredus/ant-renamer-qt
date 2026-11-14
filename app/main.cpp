@@ -53,6 +53,9 @@ int main(int argc, char** argv) {
     QApplication app(argc, argv);
     app.setApplicationName(QStringLiteral("Ant Renamer Qt"));
     app.setOrganizationName(QStringLiteral("AntRenamerQt"));
+    // Wayland (GNOME): the dock finds the icon by matching this id with a .desktop file. Inside a Flatpak that file is named
+    // after the app id (FLATPAK_ID); elsewhere it is antrenamer-qt.desktop. Ignored on Windows.
+    app.setDesktopFileName(qEnvironmentVariable("FLATPAK_ID", QStringLiteral("antrenamer-qt")));
     app.setApplicationVersion(QStringLiteral(AR_APP_VERSION));
     app.setWindowIcon(QIcon(QStringLiteral(":/renamer.ico")));
 

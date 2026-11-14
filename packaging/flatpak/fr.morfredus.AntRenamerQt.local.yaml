@@ -13,8 +13,6 @@ finish-args:
   - --socket=wayland
   - --socket=fallback-x11
   - --device=dri
-  # A renamer works on the files of the user: it needs them all (no network: the update check is off under Flatpak).
-  - --filesystem=host
 
 modules:
   - name: antrenamer-qt

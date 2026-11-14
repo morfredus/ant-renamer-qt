@@ -81,7 +81,12 @@ void AppOptions::load() {
     // First start (no settings file, or an empty one made by hand for the portable mode): the modern layout, single screen
     // in bands. Written now, so that it stays the choice once other settings exist. Anyone who already has settings keeps
     // what they have, the classic layout when they never chose (the member defaults).
-    if (s.allKeys().isEmpty()) {
+    // The installer writes the two new-version check keys when those boxes are ticked: that is not "settings", the
+    // first start still gets the modern layout (it showed the classic one on a fresh installation otherwise).
+    QStringList keys = s.allKeys();
+    keys.removeAll(u"options/checkUpdates"_s);
+    keys.removeAll(u"options/checkPrereleases"_s);
+    if (keys.isEmpty()) {
         newUi = true;
         pageLayout = 1;
         s.setValue(QStringLiteral("options/newUi"), newUi);
