@@ -2,6 +2,9 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.1.2-beta.5 (14/11/2026)
+  - Nouveau : la fenêtre de nouvelle version montre ce qui change (le texte de la release) avant de proposer le téléchargement.
+  - Les fichiers Windows sont construits avec MSYS2 UCRT64 au lieu de MINGW64, obsolète (runtime UCRT de Windows).
 - 3.1.2-beta.4 (14/11/2026)
   - Correction : Flatpak sans accès à tout le disque : les fichiers déposés depuis le gestionnaire de fichiers sont de nouveau ajoutés (portail de documents) ; Ajouter des dossiers ouvre le sélecteur de dossier du système (boutons Ajouter un dossier... / Retirer la sélection). L'arbre reste sous Windows et sous Linux hors Flatpak.
   - Correction : le premier démarrage après une installation Windows affiche la disposition moderne même quand l'installeur a écrit ses choix de recherche de mise à jour.

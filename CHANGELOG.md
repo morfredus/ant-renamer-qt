@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.2-beta.5] - 2026-11-14
+
+Pre-release of 3.1.2: the new-version window, the UCRT64 toolchain and the clean-up since 3.1.2-beta.4.
+
 ### Changed
 
 - Windows toolchain: MSYS2 `UCRT64` instead of the deprecated `MINGW64` (CI `msystem`, packages `mingw-w64-ucrt-x86_64-*`, `deploy-mingw.sh`, `vscode-mingw.ps1`, BUILDING and README). On trial in the branch `test/ucrt64`: the CI warning is gone and the installer built by the CI was installed and tried on Windows 10 22H2; the portable zip and a pre-release remain to be tried before a final version. `vscode-mingw.ps1` now resets a `build-mingw` folder configured with another MSYS2 environment (an old MINGW64 build folder is not reused with UCRT64).
