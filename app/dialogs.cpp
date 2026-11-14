@@ -21,7 +21,6 @@
 #include <QFontComboBox>
 #include <QFormLayout>
 #include <QHBoxLayout>
-#include <QHeaderView>
 #include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
@@ -58,7 +57,7 @@ QDialogButtonBox* standardButtons(QDialog* d) {
 }  // namespace
 
 
-// --- Add folders ------------------------------------------------------------------------------------
+// --- Add folders ---
 AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent)
     : QDialog(parent), portal_(QFile::exists(u"/.flatpak-info"_s)) {
     setWindowTitle(tr("Select folders to add"));
@@ -138,7 +137,7 @@ AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent)
 
         if (folder.isEmpty()) {
             if (folders_.isEmpty()) {
-                reject();  // opened on the picker: cancelling it with nothing chosen leaves no empty dialog
+                reject();
             }
             return;
         }
@@ -171,7 +170,7 @@ AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent)
 
     v->addWidget(standardButtons(this));
 
-    // The list starts empty (no tree: in a Flatpak only the portal picker sees the host), so open the picker at once.
+    // Flatpak: no tree, the list starts empty, so open the portal picker at once.
     QTimer::singleShot(0, add, &QPushButton::click);
 }
 
@@ -218,7 +217,7 @@ AddChoice AddChoiceBoxes::choice() const {
     return {files->isChecked(), folders->isChecked(), recursive->isChecked(), hidden->isChecked()};
 }
 
-// --- Drag & drop --------------------------------------------------------------------------------------
+// --- Drag & drop ---
 DragDropDialog::DragDropDialog(QWidget* parent) : QDialog(parent) {
     setWindowTitle(tr("Drag & Drop Options"));
     setWindowIcon(tbIcon(TbAddFiles));
@@ -240,7 +239,7 @@ bool DragDropDialog::dontAskAgain() const {
     return notAgain_->isChecked();
 }
 
-// --- Options ---------------------------------------------------------------------------------------------
+// --- Options ---
 struct OptionsDialog::Ui {
     QCheckBox *realtime, *resizeCols, *icons, *forceFont, *autoComplete, *dragNoAsk, *launch, *addHidden, *naturalSort, *newUi,
         *forceDir, *detectAbs, *copy, *genLog, *folderExt, *sidecar, *numDup, *dst, *portable, *shellMenu;
@@ -507,7 +506,7 @@ OptionsDialog::OptionsDialog(QWidget* parent) : QDialog(parent), ui_(std::make_u
 OptionsDialog::~OptionsDialog() = default;
 
 void OptionsDialog::accept() {
-    // storage first, so everything below is written where it will be read from next time
+    // storage first: the rest is written where it will be read from next time
     if (ui_->portable->isChecked() != isPortable() && !setPortable(ui_->portable->isChecked())) {
         QMessageBox::warning(this, windowTitle(), tr("Could not write the settings in the program folder."));
     }
@@ -566,7 +565,7 @@ void OptionsDialog::accept() {
     QDialog::accept();
 }
 
-// --- About ---------------------------------------------------------------------------------------------------
+// --- About ---
 AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
     setWindowTitle(tr("About this program"));
     setWindowIcon(tbIcon(TbAbout));
@@ -621,7 +620,7 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
             tr("Components:") + u"</b><br>Qt (<a href='https://www.qt.io'>www.qt.io</a>)"_s),
         tr("Credits"));
 
-    // version history of the original program, in the language of the interface when available
+    // history of the original program, in the interface language when available
     const QString code = helpLanguageCode();
     auto* hist = new QTextBrowser;
     hist->setOpenExternalLinks(true);
@@ -636,10 +635,10 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
         upd->setEnabled(false);
         auto* c = new UpdateChecker(this);
         connect(c, &UpdateChecker::finished, this,
-                [this, upd, c](bool ok, const QString& version, const QString& url, const QString& error) {
+                [this, upd, c](bool ok, const QString& version, const QString& url, const QString& notes, const QString& error) {
                     c->deleteLater();
                     upd->setEnabled(true);
-                    reportUpdate(this, ok, version, url, error, true);
+                    reportUpdate(this, ok, version, url, notes, error, true);
                 });
         c->check(appOptions().checkPrereleases);
     });

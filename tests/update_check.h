@@ -13,7 +13,7 @@ static void updateChecks() {
     CHECK_EQ(sign(compareVersions(u"3.0.0-rc.1"_s, u"3.0.0-rc.1.1"_s)), u"<"_s);
 
     const QByteArray list = R"([
-      {"tag_name":"v3.0.0-rc.16","html_url":"https://github.com/o/r/releases/tag/v3.0.0-rc.16","prerelease":true,"draft":false},
+      {"tag_name":"v3.0.0-rc.16","html_url":"https://github.com/o/r/releases/tag/v3.0.0-rc.16","prerelease":true,"draft":false,"body":"What changes"},
       {"tag_name":"v3.0.0-rc.15","html_url":"https://github.com/o/r/releases/tag/v3.0.0-rc.15","prerelease":true,"draft":false},
       {"tag_name":"v3.0.0-rc.99","html_url":"https://github.com/o/r/releases/tag/v3.0.0-rc.99","prerelease":true,"draft":true},
       {"tag_name":"v2.13.0","html_url":"https://github.com/o/r/releases/tag/v2.13.0","prerelease":false,"draft":false}])";
@@ -21,6 +21,7 @@ static void updateChecks() {
         const auto r = ren::newerRelease(list, current);
         return r ? r->version : u"none"_s;
     };
+    CHECK_EQ(ren::newerRelease(list, u"3.0.0-rc.15"_s)->notes, u"What changes"_s);  // the text of the release is kept
     CHECK_EQ(pick(u"3.0.0-rc.15"_s), u"3.0.0-rc.16"_s);  // a candidate user is told about the next candidate
     CHECK_EQ(pick(u"3.0.0-rc.16"_s), u"none"_s);         // up to date (the draft rc.99 is ignored)
     CHECK_EQ(pick(u"2.13.0"_s), u"none"_s);              // a final version is not told about candidates

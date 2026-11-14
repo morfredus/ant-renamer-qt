@@ -552,5 +552,6 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="pasteFolder" Value="Paste from clipboard"/>
     <Item Name="addFolderButton" Value="Add folder..."/>
     <Item Name="removeSelectedButton" Value="Remove selected"/>
+    <Item Name="whatChanges" Value="What changes:"/>
   </QtPort>
 </Application>

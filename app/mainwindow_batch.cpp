@@ -2,7 +2,7 @@
 
 // MainWindow: the batch of actions (add, edit, remove, open and save).
 
-// --- batch -------------------------------------------------------------------------------------------------------
+// --- batch ---
 void MainWindow::addBatchItem(Action* a) {
     auto* item = new QTreeWidgetItem;
     item->setData(0, IdRole, a->id());

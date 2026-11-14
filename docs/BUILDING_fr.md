@@ -12,14 +12,14 @@ Rien d'autre : aucune bibliothèque tierce.
 
 | Plateforme | Installation |
 |---|---|
-| Windows | [MSYS2](https://www.msys2.org/), puis dans un shell MSYS2 MINGW64 : `pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-ninja mingw-w64-x86_64-qt6-base mingw-w64-x86_64-qt6-tools` |
+| Windows | [MSYS2](https://www.msys2.org/), puis dans un shell MSYS2 UCRT64 : `pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-ninja mingw-w64-ucrt-x86_64-qt6-base mingw-w64-ucrt-x86_64-qt6-tools` |
 | Debian / Ubuntu | `sudo apt install cmake ninja-build g++ qt6-base-dev libgl1-mesa-dev` |
 
 ## Organisation de la compilation
 
 - Le **moteur** (`core/`) est une bibliothèque statique, `rencore`, qui ne dépend que de QtCore.
 - L'**application** (`app/`) est l'exécutable `antrenamer-qt` (Qt Widgets et Network). Il utilise `rencore`.
-- Les avertissements du compilateur (`-Wall -Wextra -Wshadow`) sont activés pour GCC et Clang ; le code compile sans aucun. La CI compile avec `-DANTREN_WERROR=ON` (un avertissement fait échouer la compilation) et lance clang-tidy (`.clang-tidy`). Pour le lancer vous-même : configurez avec `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`, puis `clang-tidy -p <dossier de compilation> core/*.cpp app/*.cpp` (sous Windows : `pacman -S mingw-w64-x86_64-clang-tools-extra` dans MSYS2).
+- Les avertissements du compilateur (`-Wall -Wextra -Wshadow`) sont activés pour GCC et Clang ; le code compile sans aucun. La CI compile avec `-DANTREN_WERROR=ON` (un avertissement fait échouer la compilation) et lance clang-tidy (`.clang-tidy`). Pour le lancer vous-même : configurez avec `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`, puis `clang-tidy -p <dossier de compilation> core/*.cpp app/*.cpp` (sous Windows : `pacman -S mingw-w64-ucrt-x86_64-clang-tools-extra` dans MSYS2).
 - Deux programmes de test : `test_core` (moteur seul) et `test_panel` (l'éditeur d'actions, sans fenêtre).
 - La version vient du fichier `VERSION` à la racine, source unique : CMake la lit et la passe au programme.
 - `CMakePresets.json` contient les réglages par plateforme : une compilation, c'est toujours `cmake --preset <nom>` puis `cmake --build --preset <nom>`.
@@ -46,7 +46,7 @@ ctest --test-dir build --output-on-failure
 ```
 
 ```bash
-# Windows, dans un shell MSYS2 MINGW64
+# Windows, dans un shell MSYS2 UCRT64
 cmake --preset mingw && cmake --build --preset mingw
 ctest --test-dir build-mingw --output-on-failure
 ```

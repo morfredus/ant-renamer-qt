@@ -6,12 +6,8 @@
 class QNetworkAccessManager;
 class QWidget;
 
-// The program must never depend on this: the request is asynchronous (the interface keeps running), stops by itself after
-// 10 seconds, and a failure at start-up is silent and tried again at the next start. If GitHub cannot be reached, the
-// program works exactly as without the check.
-//
-// Asks GitHub for the list of published releases and tells whether a newer one exists. Read only: nothing about the
-// user or the files is sent (an ordinary HTTPS request with the program name and version as user agent).
+// Asks GitHub for the published releases and tells whether a newer one exists. Asynchronous, times out after 10 s, silent
+// on failure at start-up (retried next start). Sends nothing about the user or files: a plain HTTPS request.
 class UpdateChecker : public QObject {
     Q_OBJECT
 public:
@@ -19,20 +15,20 @@ public:
     void check(bool includePrereleases = false);  // true: also announce beta and rc
 signals:
     // ok = the answer was read; version empty = nothing newer. error is set when ok is false.
-    void finished(bool ok, const QString& version, const QString& url, const QString& error);
+    void finished(bool ok, const QString& version, const QString& url, const QString& notes, const QString& error);
 
 private:
     QNetworkAccessManager* net_;
 };
 
-// Tells the user what the check found. `manual`: also say "up to date" and report errors (a check that nobody asked for
-// only speaks when there is something new). Offers to open the page of the new release.
-void reportUpdate(QWidget* parent, bool ok, const QString& version, const QString& url, const QString& error, bool manual);
+// Tells the user what the check found, with the release text. `manual`: also report "up to date" and errors.
+void reportUpdate(QWidget* parent, bool ok, const QString& version, const QString& url, const QString& notes, const QString& error,
+                  bool manual);
 
-// Under Flatpak the store updates the program: the check is neither run nor offered (its message would mislead).
+// Flatpak: the store updates the program, so the check is neither run nor offered.
 inline bool runsInFlatpak() {
     return QFile::exists(QStringLiteral("/.flatpak-info"));
 }
 
-// Address of the project page for the releases (also the repository the check reads).
+// Repository the check reads.
 inline const char* kReleasesRepo = "morfredus/ant-renamer-qt";

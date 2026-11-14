@@ -71,7 +71,7 @@ Not a version: a set of checks, made on a schedule and on events, that keeps the
 | What | When | What is checked |
 |---|---|---|
 | **New Qt version** (6.x minor, new LTS) | at each release of Qt, and before raising or dropping the minimum Qt | Build and tests on Windows (MSYS2), Ubuntu, the Raspberry Pi; look at the deprecation warnings; high-DPI, dark theme and the Windows 11 style; the minimum Qt of the AppImage (built on Ubuntu 22.04, Qt 6.5) and the Flathub runtime. |
-| **Toolchain and CI** | every quarter | MSYS2: the CI warns about MINGW64 and the move to UCRT64 is to be tested in the sandbox; GitHub runner images (an old Ubuntu image is removed one day); clang-tidy version; the compiler warnings of a new GCC/Clang. |
+| **Toolchain and CI** | every quarter | MSYS2: the CI and the scripts use UCRT64 (MINGW64 is deprecated), on trial in the branch `test/ucrt64`; GitHub runner images (an old Ubuntu image is removed one day); clang-tidy version; the compiler warnings of a new GCC/Clang. |
 | **Linux distributions** | each new Ubuntu LTS or Debian stable | `.deb` install and start, AppImage start (glibc), Flatpak; the packages the `.deb` depends on. |
 | **Sidecars** | each major version of the photo software, and on a user report | See below. The rule: a sidecar must follow its photo when it is renamed, and a sidecar the program does not know is left alone, never corrupted. |
 | **EXIF and metadata** | every six months, and for each new camera a user reports | New or changed tags (Exif 3.0, UTF-8 strings), new RAW formats and maker notes, sub-second fields, time zones (`OffsetTime`). One test file per format in the tests. |

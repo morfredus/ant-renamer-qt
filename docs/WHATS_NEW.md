@@ -4,7 +4,14 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.1.2-beta.4**.
+Current version: **3.1.2-beta.5**.
+
+## 3.1.2-beta.5
+
+| What is new | Since |
+|---|---|
+| **The new-version window shows what changes** (the release notes) before you decide to open the download page. | 3.1.2-beta.5 |
+| **Windows files built with MSYS2 UCRT64** (the deprecated MINGW64 is left): the program uses the Windows UCRT runtime, present on Windows 10 and 11. | 3.1.2-beta.5 |
 
 ## 3.1.2-beta.4
 

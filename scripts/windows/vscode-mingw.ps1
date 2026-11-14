@@ -57,13 +57,17 @@ function Reset-StaleBuildDir {
     $homeLine = Select-String -Path $cachePath -Pattern "^CMAKE_HOME_DIRECTORY:INTERNAL=(.*)$" | Select-Object -First 1
     if (-not $homeLine) { return }
     $cachedSource = $homeLine.Matches[0].Groups[1].Value
-    if ((Normalize-PathText $cachedSource) -eq (Normalize-PathText $SourceDir)) { return }
+    # A build folder configured with another MSYS2 environment (mingw64, ucrt64...) must not be reused: it mixes runtimes.
+    $toolLine = Select-String -Path $cachePath -Pattern "^(CMAKE_CXX_COMPILER|Qt6_DIR):.*/(mingw64|ucrt64|clang64)/" | Select-Object -First 1
+    $sameSource = (Normalize-PathText $cachedSource) -eq (Normalize-PathText $SourceDir)
+    $sameTools = (-not $toolLine) -or ($toolLine.Matches[0].Groups[2].Value -eq $env:MSYSTEM.ToLowerInvariant())
+    if ($sameSource -and $sameTools) { return }
     $resolvedBuild = (Resolve-Path $BuildDir).Path
     $resolvedSource = (Resolve-Path $SourceDir).Path
     if (-not ((Normalize-PathText $resolvedBuild).StartsWith((Normalize-PathText $resolvedSource) + "/"))) {
         throw "Refusing to delete a build folder outside the project: $resolvedBuild"
     }
-    Write-Host "The CMake cache points to '$cachedSource'. Resetting '$resolvedBuild'."
+    Write-Host "The CMake cache does not match this source folder or this MSYS2 environment ($cachedSource). Resetting '$resolvedBuild'."
     Remove-Item -LiteralPath $resolvedBuild -Recurse -Force
 }
 
@@ -71,12 +75,12 @@ $bash = Find-MsysBash
 # This script lives in scripts/windows/: the project root is two levels up.
 $root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 $buildDir = Join-Path $root "build-mingw"
+$env:MSYSTEM = if ($env:MSYSTEM) { $env:MSYSTEM } else { "UCRT64" }
 Reset-StaleBuildDir -BuildDir $buildDir -SourceDir $root
 
 $rootMsys = Convert-ToMsysPath $root
 $quotedRoot = Quote-Bash $rootMsys
 
-$env:MSYSTEM = if ($env:MSYSTEM) { $env:MSYSTEM } else { "MINGW64" }
 $env:CHERE_INVOKING = "1"
 $env:MSYS2_PATH_TYPE = "inherit"
 

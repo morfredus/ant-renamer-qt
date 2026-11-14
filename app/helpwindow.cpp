@@ -2,8 +2,8 @@
 
 #include "appsettings.h"
 #include "lngtranslator.h"
-
 #include <QAbstractTextDocumentLayout>
+
 #include <QApplication>
 #include <QDesktopServices>
 #include <QDir>

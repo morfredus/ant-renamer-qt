@@ -1,7 +1,6 @@
 #pragma once
-// Minimal EXIF reader (JPEG APP1 / bare TIFF): IFD0 + Exif IFD, common tags only.
-// Replaces dEXIF; values are formatted simply (ASCII as-is, rationals as decimals,
-// ExposureTime as "1/250"), which is close to but not identical with dEXIF's decoding.
+// Minimal EXIF reader (JPEG APP1 / bare TIFF): IFD0 + Exif IFD, common tags only. Values are formatted simply (ASCII as-is,
+// rationals as decimals, ExposureTime as "1/250").
 #include <QMap>
 #include <QString>
 #include <QStringList>

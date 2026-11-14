@@ -8,6 +8,19 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.1.2-beta.5] - 2026-11-14
+
+Pre-release of 3.1.2: the new-version window, the UCRT64 toolchain and the clean-up since 3.1.2-beta.4.
+
+### Changed
+
+- Windows toolchain: MSYS2 `UCRT64` instead of the deprecated `MINGW64` (CI `msystem`, packages `mingw-w64-ucrt-x86_64-*`, `deploy-mingw.sh`, `vscode-mingw.ps1`, BUILDING and README). On trial in the branch `test/ucrt64`: the CI warning is gone and the installer built by the CI was installed and tried on Windows 10 22H2; the portable zip and a pre-release remain to be tried before a final version. `vscode-mingw.ps1` now resets a `build-mingw` folder configured with another MSYS2 environment (an old MINGW64 build folder is not reused with UCRT64).
+- Comments cleaned up in the code, scripts, CI and Flatpak files (history of the Delphi port, restated code and long narration removed, the rest shortened, all in English); local Flatpak manifest aligned with the main one; a few wordy phrases removed from the docs (README, PRESENTATION, TESTED_PLATFORMS); unused `#include` lines removed from the `.cpp` files.
+
+### Added
+
+- New-version window: it shows the release text ("What changes", the half in the interface language, without the list of downloads) before asking whether to open the download page, so that the user sees what changes first. `ren::Release` carries the `body` of the GitHub release (`core/ren_update.*`); `reportUpdate()` (`app/updatecheck.cpp`) draws the window. Text added to `English.lng` and `French.lng`. The release text must therefore keep its English half, then `---`, then its French half (as `docs/release-notes/*.md` already do).
+
 ## [3.1.2-beta.4] - 2026-11-14
 
 Pre-release of 3.1.2: the fixes and the Flatpak work made since 3.1.1.
@@ -18,7 +31,7 @@ Pre-release of 3.1.2: the fixes and the Flatpak work made since 3.1.1.
 
 ### Fixed
 
-- Flatpak without `--filesystem=host` (requested by the Flathub reviewer): files dropped from the file manager were not added any more, the host paths of the drop being invisible in the sandbox. The drop now also reads the portal formats (`application/vnd.portal.filetransfer`, `application/vnd.portal.files`) and exchanges the key for readable paths through the document portal (D-Bus `FileTransfer.RetrieveFiles`, `droppedPaths()` in `app/mainwindow_internal.h`). Linked with Qt6::DBus on Linux only; elsewhere the URLs are used as before. Tried on Fedora (3.1.2-beta.3).
+- Flatpak without `--filesystem=host` (requested by the Flathub reviewer): files dropped from the file manager were not added any more, the host paths of the drop being invisible in the sandbox. The drop now also reads the portal formats (`application/vnd.portal.filetransfer`, `application/vnd.portal.files`) and exchanges the key for readable paths through the document portal (D-Bus `FileTransfer.RetrieveFiles`, `droppedPaths()` in `app/mainwindow_internal.h`). Linked with Qt6::DBus on Linux only; elsewhere the URLs are used as before. Tried on Fedora with the Flatpak built from the 3.1.2-beta.4 sources: drag and drop, renaming and history.
 - "Select folders to add": in a Flatpak (`/.flatpak-info` present) the file system tree shows nothing of the host, so the dialog opens the portal folder picker at once and lists the chosen folders. On Windows and on Linux outside Flatpak the tree is back, as before 3.1.2-beta.2 (`app/dialogs.cpp`).
 - Linux (GNOME, Wayland): the dock showed a generic icon. The program now declares its desktop file id (`antrenamer-qt`, or the Flatpak app id from `FLATPAK_ID`), which the desktop uses to find the icon (`app/main.cpp`). Not shown to be needed yet: the Flatpak built from the sources on Fedora (GNOME) displayed the right icon, but its build without this change was not compared. An AppImage that is not integrated into the system (no `.desktop` file installed) keeps the generic icon, as for any AppImage.
 - First start after a Windows installation showed the classic layout instead of the modern one when a box of the "New-version check" group had been ticked in the installer: it writes `checkUpdates` / `checkPrereleases` in `antrenamer-qt.ini`, and the program took the file for existing settings. These two keys no longer count (`AppOptions::load()` in `app/appsettings.cpp`).

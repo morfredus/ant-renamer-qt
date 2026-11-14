@@ -8,7 +8,6 @@
 #include <QPalette>
 #include <QPixmap>
 #include <QPolygonF>
-#include <QtMath>
 
 namespace {
 
@@ -43,9 +42,8 @@ const Strip& strip(int set) {
     return cache[set];
 }
 
-// --- the "Modern" set: line icons on a 24 x 24 grid ------------------------------------------------------------------
-// Drawn at the size asked for, so they stay sharp on any screen scaling, follow the colours of the theme (light or dark)
-// and fade when disabled. A few icons carry a coloured badge (green +, red x) or a coloured body (Go, Stop).
+// --- the "Modern" set: line icons on a 24 x 24 grid ---
+// Drawn at the requested size, in theme colours, faded when disabled. A few carry a coloured badge or body (Go, Stop).
 void drawVectorIcon(QPainter& p, int index, QIcon::Mode mode) {
     const QPalette pal = QGuiApplication::palette();
     const bool off = mode == QIcon::Disabled;

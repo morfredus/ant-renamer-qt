@@ -1,6 +1,5 @@
 #pragma once
-// Reuses the original program's language files (Languages\*.lng) instead of Qt .ts files:
-// every string of the UI is looked up by its English text, which is matched against
+// Uses the original program's Languages\*.lng files instead of Qt .ts: each UI string is looked up by its English text in
 // English.lng and answered with the same entry of the chosen language file.
 #include <QHash>
 #include <QList>

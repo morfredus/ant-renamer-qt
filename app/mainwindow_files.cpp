@@ -2,7 +2,7 @@
 
 // MainWindow: the files list (add, remove, sort, move, drop) and the preview of one file.
 
-// --- files ------------------------------------------------------------------------------------------------------
+// --- files ---
 Action* MainWindow::actionOf(QTreeWidgetItem* item) {
     return item ? batch_.byId(item->data(0, IdRole).toULongLong()) : nullptr;
 }
@@ -152,7 +152,7 @@ void MainWindow::addFolderContents(const QString& dir, const AddChoice& c) {
     }
 }
 
-// Port of TMainForm.AddFiles: with no choice, every path is added as is; otherwise folders are expanded.
+// With no choice every path is added as is; otherwise folders are expanded.
 void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, bool popup) {
     if (worker_) {
         return;  // the list belongs to the worker thread during a run
@@ -350,7 +350,7 @@ void MainWindow::unsortFiles() {
     fileView_->header()->setSortIndicatorShown(false);
 }
 
-// --- list helpers -----------------------------------------------------------------------------------------------
+// --- list helpers ---
 // mode: 0 up, 1 down, 2 top, 3 bottom. Works on the files list and on the batch list.
 void MainWindow::moveItems(int mode) {
     QTreeWidget* t = currentList();
@@ -415,7 +415,7 @@ void MainWindow::moveItems(int mode) {
     }
 }
 
-// --- sample preview (one file, current action) ---------------------------------------------------------------------
+// --- sample preview (one file, current action) ---
 void MainWindow::updateSamplePreview() {
     if (!isVisible() || worker_ || !previewGroup_->isChecked()) {
         return;

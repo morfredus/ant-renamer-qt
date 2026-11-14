@@ -28,7 +28,7 @@ namespace ren {
 
 namespace {
 
-// --- Pascal string semantics (1-based, forgiving about out-of-range) -------------------
+// --- Pascal string semantics (1-based, forgiving about out-of-range) ---
 QString pasCopy(const QString& s, int idx, int count = INT_MAX) {
     if (idx < 1) {
         idx = 1;
@@ -157,7 +157,6 @@ QString expandTemplate(const QString& t, const QRegularExpressionMatch& m) {
     return out;
 }
 
-// Attribute helper for save().
 struct A {
     const char* key;
     QString val;
@@ -187,7 +186,7 @@ QStringList splitLines(const QString& s) {
 
 }  // namespace
 
-// --- XmlElem ----------------------------------------------------------------------------
+// --- XmlElem ---
 int XmlElem::num(const QString& k, int def) const {
     bool ok = false;
     int v = attrs.value(k).toInt(&ok);
@@ -201,7 +200,7 @@ bool XmlElem::flag(const QString& k, bool def) const {
     return v == u"true" || v == u"1" || v == u"-1" || v == u"yes";
 }
 
-// --- Action (base) ------------------------------------------------------------------------
+// --- Action (base) ---
 QString Action::description() const {
     return tr("Do nothing");
 }
@@ -522,7 +521,7 @@ void Action::perform(FileList& list, Op op, const Progress& progress) {
     finish();
 }
 
-// --- ChangeExt ----------------------------------------------------------------------------
+// --- ChangeExt ---
 QString ActionChangeExt::description() const {
     if (noReplace) {
         return newExtension.isEmpty() ? tr("Do nothing") : tr("Append extension \"%1\"").arg(newExtension);
@@ -546,7 +545,7 @@ void ActionChangeExt::load(const XmlElem& e) {
     noReplace = e.flag("NoReplace", false);
 }
 
-// --- StringRepl ---------------------------------------------------------------------------
+// --- StringRepl ---
 QString ActionStringRepl::description() const {
     QString r = tr("Replace \"%1\" by \"%2\"").arg(search, replace);
     if (all) {
@@ -659,7 +658,7 @@ void ActionStringRepl::load(const XmlElem& e) {
     where = qBound(0, e.num("Where", 0), 2);
 }
 
-// --- MultstrRepl --------------------------------------------------------------------------
+// --- MultstrRepl ---
 QString ActionMultstrRepl::description() const {
     QString r = tr("Replace multiple strings using set \"%1\"").arg(setName);
     if (includeExt) {
@@ -703,7 +702,7 @@ void ActionMultstrRepl::load(const XmlElem& e) {
     setChars = e.childText.value("SetChars");
 }
 
-// --- StringIns ----------------------------------------------------------------------------
+// --- StringIns ---
 QString ActionStringIns::description() const {
     QString r = tr("Insert \"%1\" at position %2").arg(newString).arg(pos);
     r += fromBegin ? tr(", from begin") : tr(", from end");
@@ -741,7 +740,7 @@ void ActionStringIns::load(const XmlElem& e) {
     ext = e.flag("Ext", false);
 }
 
-// --- MoveStr ------------------------------------------------------------------------------
+// --- MoveStr ---
 QString ActionMoveStr::description() const {
     return tr("Move %1 characters from position %2%3, to position %4%5")
         .arg(count)
@@ -773,7 +772,7 @@ void ActionMoveStr::load(const XmlElem& e) {
     toBegin = e.flag("ToBegin", true);
 }
 
-// --- CharDel ------------------------------------------------------------------------------
+// --- CharDel ---
 QString ActionCharDel::description() const {
     QString r = tr("Delete %1 characters").arg(nbChar);
     switch (afterString) {
@@ -842,7 +841,7 @@ void ActionCharDel::load(const XmlElem& e) {
     ext = e.flag("Ext", false);
 }
 
-// --- Enum ---------------------------------------------------------------------------------
+// --- Enum ---
 bool PairGroup::continues(const QString& fn) {
     const QFileInfo fi(fn);
     const QString k = (fi.absolutePath() + u'/' + fi.completeBaseName()).toLower();
@@ -904,7 +903,7 @@ void ActionEnum::load(const XmlElem& e) {
     sharePairs = e.flag("SharePairs", false);
 }
 
-// --- MP3 ----------------------------------------------------------------------------------
+// --- MP3 ---
 QString ActionMP3::description() const {
     QString r = tr("Generate names with MP3 tags, based on the mask \"%1\"").arg(mask);
     if (twoDigit) {
@@ -952,7 +951,7 @@ void ActionMP3::load(const XmlElem& e) {
     twoDigit = e.flag("TwoDigit", false);
 }
 
-// --- DateTime -----------------------------------------------------------------------------
+// --- DateTime ---
 QString ActionDateTime::description() const {
     QString r = tr("Generate names from files' date and time, based on the mask \"%1\"").arg(mask);
     if (whichDate == 0) {
@@ -1006,7 +1005,7 @@ void ActionDateTime::load(const XmlElem& e) {
     offset = qBound(-999999999, e.num("Offset", 0), 999999999);
 }
 
-// --- Random -------------------------------------------------------------------------------
+// --- Random ---
 QString ActionRandom::description() const {
     QString r = tr("Generate random names using mask \"%1\"").arg(mask);
     switch (method) {
@@ -1057,7 +1056,7 @@ void ActionRandom::load(const XmlElem& e) {
     method = qBound(0, e.num("Method", 0), 2);
 }
 
-// --- Case ---------------------------------------------------------------------------------
+// --- Case ---
 QString ActionCase::description() const {
     QString r = tr("Change case:");
     switch (caseType) {
@@ -1148,7 +1147,7 @@ void ActionCase::load(const XmlElem& e) {
     onlyExt = e.flag("OnlyExt", false);
 }
 
-// --- FromList -----------------------------------------------------------------------------
+// --- FromList ---
 QString ActionFromList::description() const {
     QString r = tr("Rename files using specified list");
     if (appendExt) {
@@ -1197,7 +1196,7 @@ void ActionFromList::load(const XmlElem& e) {
     listContents = e.childText.value("listContents");
 }
 
-// --- Regexp -------------------------------------------------------------------------------
+// --- Regexp ---
 QString ActionRegexp::description() const {
     return tr("Rename files using a regular expression");
 }
@@ -1232,7 +1231,7 @@ void ActionRegexp::load(const XmlElem& e) {
     repl = e.str("Repl", QString());
 }
 
-// --- Exif ---------------------------------------------------------------------------------
+// --- Exif ---
 QString ActionExif::description() const {
     QString r = tr("Generate names with EXIF info, based on the mask \"%1\"").arg(mask);
     if (offset != 0) {
@@ -1305,7 +1304,7 @@ void ActionExif::load(const XmlElem& e) {
     numSharePairs = e.flag("SharePairs", false);
 }
 
-// --- ActionList ---------------------------------------------------------------------------
+// --- ActionList ---
 namespace {
 struct Named {
     const char* tag;

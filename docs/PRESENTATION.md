@@ -9,7 +9,7 @@ Ant Renamer 2 is a Delphi 7 program, last released as 2.13 (December 2024). The 
 (Frédéric Biron, morfredus) wanted to keep using it on recent Windows and to have a version that can be built
 with today's free tools. I ported it to C++ with Qt 6. The port is released under the same licence as
 the original sources (GPL v2 or later) and reuses several of the original files unchanged. This document lists
-what was done, what was kept, what was changed and why, so that anyone can judge the work.
+what was done, kept and changed, and why.
 
 The port was written from the sources published by Antoine
 Potten (`antrenamer2_sources.zip`).

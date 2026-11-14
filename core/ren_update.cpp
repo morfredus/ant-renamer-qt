@@ -95,7 +95,7 @@ std::optional<Release> newerRelease(const QByteArray& json, const QString& curre
             continue;
         }
         if (!best || compareVersions(tag, best->version) > 0) {
-            best = Release{tag, url};
+            best = Release{tag, url, o.value(u"body"_s).toString()};
         }
     }
     return best;

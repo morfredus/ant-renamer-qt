@@ -2,6 +2,9 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.1.2-beta.5 (14/11/2026)
+  - New: the new-version window shows what changes (the release text) before offering the download.
+  - Windows files are built with MSYS2 UCRT64 instead of the deprecated MINGW64 (Windows UCRT runtime).
 - 3.1.2-beta.4 (14/11/2026)
   - Fix: Flatpak without access to the whole disk: files dropped from the file manager are added again (document portal); Add folders opens the system folder picker (Add folder... / Remove selected buttons). The tree stays on Windows and on Linux outside Flatpak.
   - Fix: first start after a Windows installation shows the modern layout even when the installer wrote its update-check choices.

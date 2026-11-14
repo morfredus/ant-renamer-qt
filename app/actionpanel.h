@@ -1,6 +1,6 @@
 #pragma once
-// The "Actions" page of the original: list of action types on the left, the settings of the
-// selected type on the right. It holds ONE action being configured; "Add to batch" snapshots it.
+// The "Actions" page: action types on the left, settings of the selected type on the right. It holds one action being
+// configured; "Add to batch" snapshots it.
 #include "ren_actions.h"
 
 #include <QComboBox>

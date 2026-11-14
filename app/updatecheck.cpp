@@ -2,7 +2,15 @@
 
 #include "ren_update.h"
 
+#include "lngtranslator.h"
+
 #include <QCoreApplication>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QRegularExpression>
+#include <QTextBrowser>
+#include <QVBoxLayout>
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
@@ -12,7 +20,18 @@
 
 using namespace Qt::StringLiterals;
 
-void reportUpdate(QWidget* parent, bool ok, const QString& version, const QString& url, const QString& error, bool manual) {
+// Release text is English, "---", French: keeps the half in the interface language, cut before the downloads list.
+static QString releaseNotesText(QString body) {
+    body.replace(u"\r\n"_s, u"\n"_s);
+    const QStringList halves = body.split(u"\n---"_s);
+    const QString t = (halves.size() > 1 && helpLanguageCode() == u"fr"_s ? halves[1] : halves[0]).trimmed();
+    static const QRegularExpression downloads(uR"(\n###\s+(Downloads|Téléchargements)\b)"_s);
+    const auto m = downloads.match(t);
+    return m.hasMatch() ? t.left(m.capturedStart()).trimmed() : t;
+}
+
+void reportUpdate(QWidget* parent, bool ok, const QString& version, const QString& url, const QString& notes, const QString& error,
+                  bool manual) {
     auto tr = [](const char* s) { return QCoreApplication::translate("UpdateCheck", s); };
     const QString title = tr("Update check");
     if (!ok) {
@@ -23,10 +42,28 @@ void reportUpdate(QWidget* parent, bool ok, const QString& version, const QStrin
         if (manual) {
             QMessageBox::information(parent, title, tr("This version is up to date."));
         }
-    } else if (QMessageBox::question(parent, title,
-                                     tr("A new version is available: %1 (you have %2). Open the download page?")
-                                         .arg(version, QCoreApplication::applicationVersion())) == QMessageBox::Yes) {
-        QDesktopServices::openUrl(QUrl(url));
+    } else {
+        QDialog dlg(parent);
+        dlg.setWindowTitle(title);
+        dlg.resize(560, 460);
+        auto* v = new QVBoxLayout(&dlg);
+        v->addWidget(new QLabel(tr("A new version is available: %1 (you have %2). Open the download page?")
+                                    .arg(version, QCoreApplication::applicationVersion())));
+        const QString text = releaseNotesText(notes);
+        if (!text.isEmpty()) {
+            v->addWidget(new QLabel(tr("What changes:")));
+            auto* box = new QTextBrowser;
+            box->setOpenExternalLinks(true);
+            box->setMarkdown(text);
+            v->addWidget(box, 1);
+        }
+        auto* bb = new QDialogButtonBox(QDialogButtonBox::Yes | QDialogButtonBox::No);
+        QObject::connect(bb, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+        QObject::connect(bb, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
+        v->addWidget(bb);
+        if (dlg.exec() == QDialog::Accepted) {
+            QDesktopServices::openUrl(QUrl(url));
+        }
     }
 }
 
@@ -42,10 +79,10 @@ void UpdateChecker::check(bool includePrereleases) {
     connect(reply, &QNetworkReply::finished, this, [this, reply, includePrereleases] {
         reply->deleteLater();
         if (reply->error() != QNetworkReply::NoError) {
-            emit finished(false, {}, {}, reply->errorString());
+            emit finished(false, {}, {}, {}, reply->errorString());
             return;
         }
         const auto r = ren::newerRelease(reply->readAll(), QCoreApplication::applicationVersion(), includePrereleases);
-        emit finished(true, r ? r->version : QString(), r ? r->url : QString(), {});
+        emit finished(true, r ? r->version : QString(), r ? r->url : QString(), r ? r->notes : QString(), {});
     });
 }

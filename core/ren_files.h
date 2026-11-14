@@ -1,5 +1,5 @@
 #pragma once
-// Port of Files.pas: one entry of the list to rename, plus the list itself.
+// One entry of the list to rename, plus the list itself.
 #include <QByteArray>
 #include <QDateTime>
 #include <QString>
@@ -21,7 +21,7 @@ struct Error {
     State status = State::NotRenamed;
 };
 
-// Replaces the Delphi GlobalSettings / GlobalStop globals.
+// Global processing options.
 struct Options {
     bool forceDir = false;          // create missing target folders
     bool detectAbsDir = false;      // a new name with a drive/UNC prefix is an absolute path

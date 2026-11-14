@@ -32,7 +32,7 @@ struct Snapshot {
 };
 Q_DECLARE_METATYPE(Snapshot)
 
-// A flat list that can be reordered by drag and drop; optionally accepts files dropped from Explorer.
+// Flat list reordered by drag and drop; optionally accepts files dropped from the file manager.
 class ItemTree : public QTreeWidget {
     Q_OBJECT
 public:
@@ -50,7 +50,7 @@ private:
     bool acceptUrls_;
 };
 
-// Runs the batch off the GUI thread, as the original TRenThread did.
+// Runs the batch off the GUI thread.
 class RenWorker : public QThread {
     Q_OBJECT
 public:

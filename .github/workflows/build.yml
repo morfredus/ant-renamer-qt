@@ -1,6 +1,5 @@
-# Automatic build on GitHub: checked at every push, pull request and tag (Linux + Windows). The Windows files are artifacts
-# of the run (a check, and the basis of a future signature); releases are published separately by the maintainer, so that
-# SHA256SUMS matches the published files. Same code as the local scripts: package-win.ps1 and the CMake presets.
+# CI: build and test on every push, pull request and tag (Linux + Windows). Windows files are run artifacts only; releases
+# are published separately so that SHA256SUMS matches the published files. Same code as package-win.ps1 and the CMake presets.
 name: Build
 
 on:
@@ -44,9 +43,8 @@ jobs:
           path: dist/*.deb
 
   appimage:
-    # Built on the oldest Ubuntu LTS runner: an AppImage uses the glibc of the machine that runs it, so it must not be
-    # built on a newer system (the AppImage catalog tests on Ubuntu 22.04). Qt 6.5 comes from install-qt-action because
-    # the Qt 6.2 of Ubuntu 22.04 is older than the 6.4 the project needs.
+    # Oldest Ubuntu LTS runner: an AppImage uses the glibc of the machine that runs it. Qt 6.5 comes from install-qt-action
+    # because Ubuntu 22.04 ships Qt 6.2 and the project needs 6.4.
     name: Linux (AppImage, glibc 2.35)
     runs-on: ubuntu-22.04
     timeout-minutes: 30
@@ -78,14 +76,14 @@ jobs:
         id: msys2
         uses: msys2/setup-msys2@v2
         with:
-          msystem: MINGW64
+          msystem: UCRT64
           update: false
           install: >-
-            mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-ninja
-            mingw-w64-x86_64-qt6-base
-            mingw-w64-x86_64-qt6-tools
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-cmake
+            mingw-w64-ucrt-x86_64-ninja
+            mingw-w64-ucrt-x86_64-qt6-base
+            mingw-w64-ucrt-x86_64-qt6-tools
       - name: Inno Setup
         shell: pwsh
         run: |
@@ -97,8 +95,7 @@ jobs:
         env:
           MSYS2_ROOT: ${{ steps.msys2.outputs.msys2-location }}
         run: powershell -ExecutionPolicy Bypass -File scripts\windows\package-win.ps1
-      # Engine only: the interface test (panel) opens Qt windows and hangs on the Windows runner (no "offscreen" plugin
-      # deployed next to the program, so Qt waits for a dialog box). It runs on Linux.
+      # Engine only: the panel test opens Qt windows and hangs on the Windows runner (no "offscreen" plugin). It runs on Linux.
       - name: Tests (engine)
         shell: msys2 {0}
         timeout-minutes: 5

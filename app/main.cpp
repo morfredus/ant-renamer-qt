@@ -9,14 +9,11 @@
 #include <QDir>
 #include <QElapsedTimer>
 #include <QIcon>
-#include <QListWidget>
 #include <QLocalServer>
 #include <QLocalSocket>
 #include <QLockFile>
 #include <QMessageBox>
-#include <QTabWidget>
 #include <QThread>
-#include <QTimer>
 
 #include <algorithm>
 #include <cstdio>
@@ -27,8 +24,8 @@ QString serverName() {
     return QStringLiteral("AntRenamerQt-shell-") + qEnvironmentVariable("USERNAME", QStringLiteral("user"));
 }
 
-// Hands paths to the instance that owns the lock. Explorer starts one process per selected item, all at
-// once, so the first one may still be starting up: keep trying for a while.
+// Hands paths to the instance that owns the lock. Explorer starts one process per selected item, so the first may still
+// be starting: retry for a while.
 bool forwardToRunningInstance(const QStringList& paths, int timeoutMs) {
     QElapsedTimer t;
     t.start();
@@ -53,8 +50,7 @@ int main(int argc, char** argv) {
     QApplication app(argc, argv);
     app.setApplicationName(QStringLiteral("Ant Renamer Qt"));
     app.setOrganizationName(QStringLiteral("AntRenamerQt"));
-    // Wayland (GNOME): the dock finds the icon by matching this id with a .desktop file. Inside a Flatpak that file is named
-    // after the app id (FLATPAK_ID); elsewhere it is antrenamer-qt.desktop. Ignored on Windows.
+    // Wayland: the dock matches this id with a .desktop file (FLATPAK_ID in a Flatpak, else antrenamer-qt).
     app.setDesktopFileName(qEnvironmentVariable("FLATPAK_ID", QStringLiteral("antrenamer-qt")));
     app.setApplicationVersion(QStringLiteral(AR_APP_VERSION));
     app.setWindowIcon(QIcon(QStringLiteral(":/renamer.ico")));
@@ -70,11 +66,11 @@ int main(int argc, char** argv) {
         }
     }
 
-    QFont base = app.font();  // the original uses 8 pt controls
+    QFont base = app.font();
     base.setPointSize(8);
     app.setFont(base);
 
-    auto* lng = new LngTranslator;  // original .lng files; English when none matches
+    auto* lng = new LngTranslator;
     if (lng->loadLanguage(languageDir(), defaultLanguage())) {
         app.installTranslator(lng);
         setLngTranslator(lng);

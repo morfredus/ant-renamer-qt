@@ -1,5 +1,5 @@
 #pragma once
-// Port of Actions.pas. Settings are plain public fields so a UI can bind to them directly.
+// Actions. Settings are plain public fields so a UI can bind to them directly.
 #include "ren_files.h"
 #include "ren_id3.h"
 
