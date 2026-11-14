@@ -48,6 +48,10 @@
 #include <QUrl>
 #include <QVBoxLayout>
 
+#ifdef AR_HAVE_DBUS
+#include <QDBusConnection>
+#include <QDBusMessage>
+#endif
 #include <algorithm>
 using namespace ren;
 using namespace Qt::StringLiterals;
@@ -89,6 +93,44 @@ inline constexpr int IdRole =
 
 inline QString native(const QString& p) {
     return QDir::toNativeSeparators(p);
+}
+
+// Portal formats offered by file managers on a drag: in a Flatpak without --filesystem the host paths of text/uri-list are
+// invisible, the key must be exchanged for sandbox-readable paths through the document portal (FileTransfer).
+inline bool hasDroppablePaths(const QMimeData* m) {
+    return m->hasUrls() || m->hasFormat(u"application/vnd.portal.filetransfer"_s) || m->hasFormat(u"application/vnd.portal.files"_s);
+}
+
+inline QStringList droppedPaths(const QMimeData* m) {
+    QStringList paths;
+#ifdef AR_HAVE_DBUS
+    for (const QString& fmt : {u"application/vnd.portal.filetransfer"_s, u"application/vnd.portal.files"_s}) {
+        if (!m->hasFormat(fmt)) {
+            continue;
+        }
+        const QString key = QString::fromUtf8(m->data(fmt)).remove(QChar(0)).trimmed();
+        QDBusMessage call = QDBusMessage::createMethodCall(u"org.freedesktop.portal.Documents"_s,
+                                                           u"/org/freedesktop/portal/documents"_s,
+                                                           u"org.freedesktop.portal.FileTransfer"_s, u"RetrieveFiles"_s);
+        call << key << QVariantMap();
+        const QDBusMessage reply = QDBusConnection::sessionBus().call(call, QDBus::Block, 5000);
+        if (reply.type() == QDBusMessage::ReplyMessage && !reply.arguments().isEmpty()) {
+            paths = reply.arguments().at(0).toStringList();
+        }
+        if (!paths.isEmpty()) {
+            for (QString& p : paths) {
+                p = QDir::toNativeSeparators(p);
+            }
+            return paths;
+        }
+    }
+#endif
+    for (const QUrl& u : m->urls()) {
+        if (u.isLocalFile()) {
+            paths << QDir::toNativeSeparators(u.toLocalFile());
+        }
+    }
+    return paths;
 }
 
 inline QString tr_(const char* s) {

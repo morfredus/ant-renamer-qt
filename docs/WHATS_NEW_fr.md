@@ -6,6 +6,13 @@ conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.
 
 Version courante : **3.1.1**.
 
+## 3.1.2 (à venir)
+
+| Nouveauté | Depuis |
+|---|---|
+| **Flatpak : les fichiers déposés depuis le gestionnaire de fichiers sont ajoutés**, bien que le Flatpak n'ait pas accès à tout le disque (portail de documents). | 3.1.2-beta.3 |
+| **Flatpak : Ajouter des dossiers** ouvre le sélecteur de dossier du système et liste les dossiers choisis (boutons *Ajouter un dossier...*, *Retirer la sélection*). L'arbre reste sous Windows et sous Linux hors Flatpak. | 3.1.2-beta.4 |
+
 ## 3.1.1
 
 | Nouveauté | Depuis |
