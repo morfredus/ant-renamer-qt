@@ -1,8 +1,6 @@
 #pragma once
-// Program options (the Options dialog), persisted in an INI file. Defaults are the Delphi ones.
-//
-// Storage: portable when "antrenamer-qt.ini" sits next to the program (everything stays in that folder),
-// otherwise in the user's profile (%APPDATA%\AntRenamerQt\Ant Renamer Qt\antrenamer-qt.ini).
+// Program options (Options dialog), persisted in an INI file: portable when "antrenamer-qt.ini" sits next to the program,
+// otherwise in the user profile.
 #include "icons.h"
 
 #include <QSettings>
@@ -10,7 +8,7 @@
 
 QSettings appSettings();
 bool isPortable();
-// File of the undo history: in the same folder as the settings (program folder when portable, user profile otherwise).
+// Undo history file, next to the settings.
 QString historyFile();
 // Moves the settings between the program folder and the user profile. False if the target is not writable.
 bool setPortable(bool on);
@@ -58,8 +56,7 @@ struct AppOptions {
 
 AppOptions& appOptions();
 
-// Name chosen in a "Save log" dialog: .csv or .log is added when the user typed none of .csv, .log, .txt (.log and .txt are the
-// same text format), according to the filter selected in the dialog.
+// Name from a "Save log" dialog: .csv or .log is added unless the user typed .csv, .log or .txt, following the selected filter.
 inline QString withLogExtension(QString path, bool csvFilter) {
     const QString ext = path.section(u'.', -1).toLower();
     if (ext != u"csv" && ext != u"log" && ext != u"txt") {

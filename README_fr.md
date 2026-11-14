@@ -31,7 +31,7 @@ gpg --verify AntRenamerQt-X.Y.Z-linux-amd64.deb.asc AntRenamerQt-X.Y.Z-linux-amd
 
 Les fichiers Windows ne sont pas signés numériquement : Windows peut afficher un avertissement (SmartScreen) au premier lancement de l'installeur. Les sommes de contrôle sont dans `SHA256SUMS.txt`.
 
-Le projet est **autonome** : Qt 6 et un compilateur C++20 suffisent.
+Pour compiler : Qt 6 et un compilateur C++20, rien d'autre.
 
 ## Compilation
 
@@ -85,7 +85,7 @@ Recettes pas à pas pour les cas courants et complexes (nettoyer des noms, numé
 ## Développement
 
 Compilation, tests et paquets : [docs/BUILDING_fr.md](docs/BUILDING_fr.md) ([en](docs/BUILDING.md)).
-Systèmes sur lesquels le programme a réellement été testé : [docs/TESTED_PLATFORMS_fr.md](docs/TESTED_PLATFORMS_fr.md) ([en](docs/TESTED_PLATFORMS.md)).
+Systèmes sur lesquels le programme a été testé : [docs/TESTED_PLATFORMS_fr.md](docs/TESTED_PLATFORMS_fr.md) ([en](docs/TESTED_PLATFORMS.md)).
 Organisation du code et déroulé d'un renommage : [docs/ARCHITECTURE_fr.md](docs/ARCHITECTURE_fr.md) ([en](docs/ARCHITECTURE.md)).
 Contribuer : [CONTRIBUTING_fr.md](CONTRIBUTING_fr.md) ([en](CONTRIBUTING.md)). Code de conduite : [CODE_OF_CONDUCT_fr.md](CODE_OF_CONDUCT_fr.md) ([en](CODE_OF_CONDUCT.md)). Signaler un problème de sécurité : [SECURITY_fr.md](SECURITY_fr.md) ([en](SECURITY.md)).
 Traduire l'interface (les fichiers `.lng`) : [docs/TRANSLATING_fr.md](docs/TRANSLATING_fr.md) ([en](docs/TRANSLATING.md)).

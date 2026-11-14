@@ -9,7 +9,7 @@ Ant Renamer 2 est un programme Delphi 7, dont la dernière version est la 2.13 (
 L'auteur du portage (Frédéric Biron, morfredus) voulait continuer à l'utiliser sur les Windows récents et disposer d'une version qui se
 compile avec les outils libres actuels. Il l'a donc porté en C++ avec Qt 6. Le portage est publié sous la même
 licence que les sources d'origine (GPL v2 ou ultérieure) et réutilise plusieurs des fichiers d'origine tels quels. Ce
-document liste ce qui a été fait, conservé, modifié et pourquoi, pour que chacun puisse juger le travail.
+document liste ce qui a été fait, conservé et modifié, et pourquoi.
 
 Le portage a été réalisé à partir des sources
 publiées par Antoine Potten (`antrenamer2_sources.zip`).

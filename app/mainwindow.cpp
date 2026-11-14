@@ -1,6 +1,6 @@
 #include "mainwindow_internal.h"
 
-// --- ItemTree ------------------------------------------------------------------------------------
+// --- ItemTree ---
 ItemTree::ItemTree(bool acceptUrls) : acceptUrls_(acceptUrls) {
     setRootIsDecorated(false);
     setUniformRowHeights(true);
@@ -39,7 +39,7 @@ void ItemTree::dropEvent(QDropEvent* e) {
     emit reordered();
 }
 
-// --- RenWorker ----------------------------------------------------------------------------------------
+// --- RenWorker ---
 void RenWorker::run() {
     try {
         if (op_ == Op::Undo) {
@@ -61,7 +61,7 @@ void RenWorker::run() {
     }
 }
 
-// --- construction -------------------------------------------------------------------------------------
+// --- construction ---
 QAction* MainWindow::makeAction(const QString& text, const QString& hint, int icon, const QKeySequence& key) {
     auto* a = new QAction(tbIcon(icon), text, this);
     a->setToolTip(hint);
@@ -97,8 +97,8 @@ MainWindow::MainWindow() {
     aHistory_->setEnabled(journal_.size() > 0);
 }
 
-// Everything the user sees, from the options as they are now. The files, the batch, the journal and the log belong to the
-// window and are not touched, so this can run again (see rebuildUi()).
+// Builds everything the user sees from the current options. Files, batch, journal and log are not touched, so it can run again
+// (rebuildUi()).
 void MainWindow::buildUi() {
     setWindowTitle(tr_("Ant Renamer Qt %1").arg(displayVersion()));
     resize(730, 500);
@@ -122,8 +122,7 @@ void MainWindow::buildUi() {
         buildSingleScreen();
     }
     createStatusBar();
-    // Flat toolbar buttons with hover / pressed / checked feedback, like the original TBX toolbars.
-    // rgba() so it works on light and dark themes.
+    // rgba() so the hover / pressed / checked feedback works on light and dark themes.
     if (newUi_) {
         setStyleSheet(uR"(
         QToolBar { spacing: 2px; padding: 4px 6px; border: 0; border-bottom: 1px solid palette(mid); }
@@ -162,8 +161,8 @@ void MainWindow::buildUi() {
     showTab(0);
 }
 
-// The language or the interface changed in the Options: save what the window remembers, throw the interface away and build
-// it again (the texts are looked up when the widgets are made). The work in progress is kept.
+// Language or interface changed: texts are looked up when widgets are made, so the interface is rebuilt. The work in progress
+// is kept.
 void MainWindow::rebuildUi() {
     if (worker_) {
         return;
@@ -434,9 +433,8 @@ void MainWindow::createActions() {
     connect(aUnsort_, &QAction::triggered, this, [this] { unsortFiles(); });
 }
 
-// Toolbars. Every toolbar is described once, as a list of items; the classic layout puts the bars on the window, the
-// modern layout puts one main bar on the window and each page bar inside its page. The buttons themselves are the
-// shared QActions of createActions() (like the Delphi TActions), so a new button is added here once for both layouts.
+// Toolbars are described once, as lists of items, for both layouts: classic puts the bars on the window, modern puts one
+// main bar on the window and a bar inside each page. Buttons are the shared QActions of createActions().
 void MainWindow::createToolbars() {
     enum Kind { Act, ActText, Sep, Spacer, RecentMenu, FilterMenu };
     struct Item {
@@ -583,14 +581,14 @@ void MainWindow::createPages() {
     fileView_->header()->setContextMenuPolicy(Qt::CustomContextMenu);
     fileView_->header()->setSectionsClickable(true);
     fileView_->header()->setSectionsMovable(true);
-    fileView_->header()->setStretchLastSection(true);  // the header bar fills the whole width, like the original
+    fileView_->header()->setStretchLastSection(true);
     const int widths[ColCount] = {200, 400, 400, 60, 200, 70, 130, 130};
     for (int c = 0; c < ColCount; ++c) {
         fileView_->setColumnWidth(c, widths[c]);
     }
     for (int c : {ColFullPath, ColExt, ColPreview, ColSize, ColCreated, ColModified}) {
         if (!(newUi_ && c == ColPreview)) {
-            fileView_->setColumnHidden(c, true);  // modern layout: new name visible
+            fileView_->setColumnHidden(c, true);
         }
     }
     if (newUi_) {  // current name, new name, folder
@@ -760,7 +758,7 @@ void MainWindow::createStatusBar() {
     statusBar()->addWidget(statusLabel_, 1);
 }
 
-// --- settings -------------------------------------------------------------------------------------------
+// --- settings ---
 void MainWindow::loadSettings() {
     QSettings s = appSettings();
     // the modern layout keeps its own geometry, columns and splitter (the old ones do not fit it)
@@ -902,7 +900,7 @@ void MainWindow::closeEvent(QCloseEvent* e) {
     e->accept();
 }
 
-// --- navigation / status -----------------------------------------------------------------------------------
+// --- navigation / status ---
 void MainWindow::showTab(int tab) {
     currentTab_ = tab;
     if (singleScreen_) {  // everything is on screen: just make sure that pane is not hidden
@@ -918,13 +916,13 @@ void MainWindow::showTab(int tab) {
     }
     tbActions_->setVisible(tab == 1);
     tbLog_->setVisible(tab == 2);
-    tbFiles_->setVisible(true);  // the original keeps the files toolbar on every page
+    tbFiles_->setVisible(true);
     tbMove_->setVisible((tab == 1 && batchGroup_->isChecked()) || tab == 0);
 }
 
-// --- modern layout: single screen ---------------------------------------------------------------------------------
-// The pages built by createPages()/createToolbars() are three widgets (bar + content). Instead of a stack of tabs they go
-// into splitters: bands (Files / Actions / Log stacked) or columns (Files on the left, Actions over Log on the right).
+// --- modern layout: single screen ---
+// The three pages (bar + content) go into splitters instead of tabs: bands (stacked) or columns (Files left, Actions over Log
+// right).
 void MainWindow::buildSingleScreen() {
     for (QWidget*& p : panes_) {
         p = stack_->widget(0);

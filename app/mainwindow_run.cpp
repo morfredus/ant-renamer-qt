@@ -2,7 +2,7 @@
 
 // MainWindow: running the batch (worker thread, progress, undo), the log and the command line.
 
-// --- running ---------------------------------------------------------------------------------------------------------
+// --- running ---
 // Hidden or system files are rarely meant to be renamed: ask first. False when the user backs out.
 bool MainWindow::confirmHiddenFiles() {
     int hidden = 0;
@@ -166,8 +166,7 @@ void MainWindow::onProgress(const Snapshot& s) {
     }
 }
 
-// CSV of the log: Folder, Original name, New name, Reason (semicolon and quotes like the preview export, UTF-8 with a BOM:
-// Excel and LibreOffice read the accents). Only the lines about files have a row.
+// CSV of the log: Folder, Original name, New name, Reason (like the preview export, UTF-8 with BOM). Only file lines have a row.
 static QByteArray logCsvLine(const QStringList& row) {
     QStringList q;
     for (const QString& v : row) {
@@ -252,8 +251,8 @@ void MainWindow::onFinished() {
     }
 }
 
-// From the event loop, so that it also works before exec() has started. closeEvent() is not used: the window was never
-// shown, its geometry must not overwrite the saved one.
+// Posted from the event loop so it works before exec() has started. closeEvent() is avoided: the window was never shown
+// and must not overwrite the saved geometry.
 void MainWindow::quitSilently(int code) {
     if (quitting_) {  // the first reason is the one that counts
         return;
@@ -262,8 +261,8 @@ void MainWindow::quitSilently(int code) {
     QTimer::singleShot(0, qApp, [code] { QCoreApplication::exit(code); });
 }
 
-// While a run is in progress the lists, the batch and the options belong to the worker thread. The handlers also test
-// worker_; disabling the actions makes it visible (and keeps their shortcuts from firing).
+// During a run the lists, the batch and the options belong to the worker thread. Handlers also test worker_; disabling
+// the actions makes that visible and stops their shortcuts.
 void MainWindow::setBusy(bool busy) {
     for (QAction* a :
          {aOptions_, aAddFiles_, aAddFolders_, aRemoveSel_, aRemoveAll_, aRemoveDead_, aPreview_, aChangedOnly_, aShowHidden_,
@@ -279,7 +278,7 @@ void MainWindow::updateUndoState() {
     setBusy(worker_ != nullptr);
 }
 
-// The history is written after every run, so it survives a crash or a closed program. A failure is not worth a dialog.
+// The history is written after every run, so it survives a crash. A failure is silent.
 void MainWindow::saveHistory() {
     const QString path = historyFile();
     if (journal_.size() == 0) {
@@ -360,7 +359,7 @@ void MainWindow::showHistory() {
     run(Op::Undo, count, session);
 }
 
-// --- log ------------------------------------------------------------------------------------------------------------------
+// --- log ---
 void MainWindow::addLog(const QString& text, State st, const QStringList& row) {
     if (text.isEmpty()) {
         return;
@@ -434,7 +433,7 @@ void MainWindow::logAction(int which) {
     }
 }
 
-// --- command line (same switches as the original) ---------------------------------------------------------------------------
+// --- command line ---
 // -b file.arb  load a batch      -g  start renaming      -x  exit when finished
 // -q           silent: no window, no dialog; same as -g -x, the exit code tells how it went
 // -a[fFr]      what the following paths add: f = files, F = folders, r = recursive; wildcards allowed
@@ -465,7 +464,7 @@ void MainWindow::processCommandLine(const QStringList& args) {
             const QString p = QDir(start).absoluteFilePath(a);
             if (a.endsWith(u".arb", Qt::CaseInsensitive)) {
                 openBatchFile(p);
-            } else if (QFileInfo(p).isDir()) {  // v2.07 compatibility
+            } else if (QFileInfo(p).isDir()) {
                 const AddChoice legacy{true, false, true};
                 addFiles({p}, &legacy);
             }

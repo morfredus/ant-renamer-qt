@@ -22,7 +22,7 @@ set(CMAKE_AUTOMOC ON)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     add_compile_options(-Wall -Wextra -Wshadow)
-    # The CI sets this so that a warning fails the build (-DANTREN_WERROR=ON); off by default for people with a newer compiler.
+    # -DANTREN_WERROR=ON makes a warning fail the build (CI); off by default for newer compilers.
     option(ANTREN_WERROR "Treat compiler warnings as errors" OFF)
     if(ANTREN_WERROR)
         add_compile_options(-Werror)

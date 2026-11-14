@@ -20,8 +20,7 @@
 
 using namespace Qt::StringLiterals;
 
-// The release text holds the English notes, then "---", then the French ones: keeps the half of the interface language
-// and stops before the list of downloads (the page opened by "Yes" has it).
+// Release text is English, "---", French: keeps the half in the interface language, cut before the downloads list.
 static QString releaseNotesText(QString body) {
     body.replace(u"\r\n"_s, u"\n"_s);
     const QStringList halves = body.split(u"\n---"_s);

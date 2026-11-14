@@ -31,7 +31,7 @@ gpg --verify AntRenamerQt-X.Y.Z-linux-amd64.deb.asc AntRenamerQt-X.Y.Z-linux-amd
 
 The Windows files are not digitally signed: Windows may show a warning (SmartScreen) the first time you run the installer. The checksums are in `SHA256SUMS.txt`.
 
-The project is **self-contained**: Qt 6 and a C++20 compiler are the only requirements.
+Build requirements: Qt 6 and a C++20 compiler, nothing else.
 
 ## Build
 
@@ -85,7 +85,7 @@ Step-by-step recipes for common and complex cases (cleaning names, numbering, ph
 ## Development
 
 Building, testing and packaging: [docs/BUILDING.md](docs/BUILDING.md) ([fr](docs/BUILDING_fr.md)).
-Systems the program has really been tested on: [docs/TESTED_PLATFORMS.md](docs/TESTED_PLATFORMS.md) ([fr](docs/TESTED_PLATFORMS_fr.md)).
+Systems the program has been tested on: [docs/TESTED_PLATFORMS.md](docs/TESTED_PLATFORMS.md) ([fr](docs/TESTED_PLATFORMS_fr.md)).
 How the code is organised and how a renaming runs: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) ([fr](docs/ARCHITECTURE_fr.md)).
 Contributing: [CONTRIBUTING.md](CONTRIBUTING.md) ([fr](CONTRIBUTING_fr.md)). Code of conduct: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) ([fr](CODE_OF_CONDUCT_fr.md)). Reporting a security problem: [SECURITY.md](SECURITY.md) ([fr](SECURITY_fr.md)).
 Translating the interface (the `.lng` files): [docs/TRANSLATING.md](docs/TRANSLATING.md) ([fr](docs/TRANSLATING_fr.md)).

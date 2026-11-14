@@ -5,16 +5,13 @@
 
 #include <QApplication>
 #include <QCoreApplication>
-#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QHash>
 #include <QLocale>
 #include <QRegularExpression>
-#include <QSettings>
 #include <QStringDecoder>
-#include <QUrl>
 #include <QXmlStreamReader>
 
 #include <cstdio>

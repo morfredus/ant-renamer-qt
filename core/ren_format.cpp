@@ -1,4 +1,4 @@
-// Port of functions_strformat.pas (AdvancedFormat) + a Delphi-compatible FormatDateTime.
+// AdvancedFormat plus a Delphi-compatible FormatDateTime.
 #include "ren_format.h"
 
 #include <QLocale>

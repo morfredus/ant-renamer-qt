@@ -10,15 +10,12 @@
 #include <QCompleter>
 #include <QFile>
 #include <QFileDialog>
-#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QHeaderView>
-#include <QInputDialog>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
-#include <QMessageBox>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QRadioButton>
@@ -29,14 +26,13 @@
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QTableWidget>
-#include <QTextStream>
 #include <QVBoxLayout>
 #include <QXmlStreamReader>
 
 using namespace ren;
 using namespace Qt::StringLiterals;
 
-// --- HistoryCombo -----------------------------------------------------------------------------
+// --- HistoryCombo ---
 HistoryCombo::HistoryCombo() {
     setEditable(true);
     setInsertPolicy(QComboBox::NoInsert);
@@ -44,10 +40,9 @@ HistoryCombo::HistoryCombo() {
     lineEdit()->installEventFilter(this);
 }
 
-// The first click in a field selects its whole text (the "old" / "new" samples are never kept); a second click places the cursor.
-// The focus comes before the press, and QComboBox hands the focus-in to its line edit directly (an event filter on the line edit
-// never sees it): focusInEvent remembers that the focus came from the mouse, and the release selects everything, unless the
-// user dragged a selection.
+// First click selects the whole text, a second places the cursor. QComboBox hands focus-in to its line edit directly (an
+// event filter there never sees it): focusInEvent remembers a mouse focus and the release selects all, unless a selection was
+// dragged.
 void HistoryCombo::focusInEvent(QFocusEvent* e) {
     selectOnRelease_ = e->reason() == Qt::MouseFocusReason;
     QComboBox::focusInEvent(e);
@@ -79,7 +74,7 @@ void HistoryCombo::remember() {
     }
 }
 
-// --- control <-> action member -------------------------------------------------------------------
+// --- control <-> action member ---
 namespace {
 using Radios = std::vector<QRadioButton*>;
 
@@ -188,7 +183,7 @@ void ActionPanel::selectAction(int i) {
     list_->setCurrentRow(i);
 }
 
-// --- page building helpers -----------------------------------------------------------------------
+// --- page building helpers ---
 ActionPanel::Page ActionPanel::newPage(const QString& name) {
     auto* w = new QWidget;
     auto* v = new QVBoxLayout(w);
@@ -307,7 +302,7 @@ std::vector<QRadioButton*> ActionPanel::radios(Page& p, const QString& key, cons
 
 void ActionPanel::notes(Page& p, const QString& control, const QString& english) {
     QString html = lngTranslator() ? lngTranslator()->control(control, english) : english;
-    if (control == u"lblExifNotes") {  // %num% is new in this version: reuse the word the Enumeration note uses
+    if (control == u"lblExifNotes") {
         QString number = u"Number"_s;
         if (lngTranslator()) {
             static const QRegularExpression re(u"%num% = ([^<]*)"_s);
@@ -349,7 +344,7 @@ void ActionPanel::notes(Page& p, const QString& control, const QString& english)
     p.v->addWidget(l);
 }
 
-// --- the 14 pages --------------------------------------------------------------------------------
+// --- the 14 pages ---
 void ActionPanel::buildPages() {
     newPage(QStringLiteral("empty"));
     const QString tagNotes = tr("- %name% = Original file name (without extension)<BR>"
@@ -607,7 +602,7 @@ void ActionPanel::buildPages() {
     }
 }
 
-// --- multiple string replacement ----------------------------------------------------------------------
+// --- multiple string replacement ---
 void ActionPanel::buildMultstr(Page& p) {
     auto* top = new QHBoxLayout;
     top->addWidget(new QLabel(tr("Predefined sets:")));
@@ -633,7 +628,7 @@ void ActionPanel::buildMultstr(Page& p) {
         }
         emit changed();
     });
-    // Ctrl+Plus / Ctrl+Minus insert / delete a line, as in the original
+    // Ctrl+Plus / Ctrl+Minus insert / delete a line
     table_->installEventFilter(this);
 
     auto* btns = new QHBoxLayout;
@@ -746,7 +741,7 @@ void ActionPanel::setTableText(const QString& text) {
     }
 }
 
-// --- take names from list ---------------------------------------------------------------------------
+// --- take names from list ---
 void ActionPanel::buildFromList(Page& p) {
     listEdit_ = new QPlainTextEdit;
     p.v->addWidget(listEdit_, 1);
@@ -787,7 +782,7 @@ void ActionPanel::buildFromList(Page& p) {
                        [this](const QVariant& v) { listEdit_->setPlainText(v.toString()); }});
 }
 
-// --- building the action ----------------------------------------------------------------------------
+// --- building the action ---
 std::unique_ptr<Action> ActionPanel::makeAction(bool updateHistory) {
     const int idx = currentIndex();
     if (idx < 0) {
@@ -809,7 +804,7 @@ void ActionPanel::setFromAction(const Action& act) {
     emit changed();
 }
 
-// --- persistence -----------------------------------------------------------------------------------
+// --- persistence ---
 void ActionPanel::loadState() {
     QSettings s = appSettings();
     for (const Field& f : fields_) {

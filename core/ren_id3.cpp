@@ -1,4 +1,4 @@
-// ID3 reader (port of ExtractID3.pas, extended): ID3v2.2/2.3/2.4 at the start of the file, ID3v1/1.1 at the end.
+// ID3 reader: ID3v2.2/2.3/2.4 at the start of the file, ID3v1/1.1 at the end.
 // v2 values win; v1 fills what v2 does not have.
 #include "ren_id3.h"
 

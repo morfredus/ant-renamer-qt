@@ -1,7 +1,6 @@
 #pragma once
-// Delphi-style path helpers. On Windows '\\', '/' and ':' all delimit, so behaviour matches the original
-// WideExtractFileName & co. whatever separator a caller uses. Elsewhere only '/' delimits: a backslash or a colon is an
-// ordinary character of a Linux file name.
+// Delphi-style path helpers. On Windows '\\', '/' and ':' all delimit; elsewhere only '/' does (a backslash or colon is an
+// ordinary character of a Linux file name).
 #include <QString>
 
 namespace ren {

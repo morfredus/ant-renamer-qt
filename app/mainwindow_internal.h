@@ -1,5 +1,5 @@
 #pragma once
-// Helpers shared by the mainwindow*.cpp files: MainWindow is split by topic (construction, files, batch, run).
+// Helpers shared by the mainwindow*.cpp files (MainWindow is split by topic: construction, files, batch, run).
 #include "appsettings.h"
 #include "icons.h"
 #include "lngtranslator.h"
@@ -95,8 +95,7 @@ inline QString native(const QString& p) {
     return QDir::toNativeSeparators(p);
 }
 
-// Portal formats offered by file managers on a drag: in a Flatpak without --filesystem the host paths of text/uri-list are
-// invisible, the key must be exchanged for sandbox-readable paths through the document portal (FileTransfer).
+// Flatpak: host paths of text/uri-list are invisible in the sandbox, so the portal key is exchanged for readable paths.
 inline bool hasDroppablePaths(const QMimeData* m) {
     return m->hasUrls() || m->hasFormat(u"application/vnd.portal.filetransfer"_s) || m->hasFormat(u"application/vnd.portal.files"_s);
 }
@@ -137,7 +136,7 @@ inline QString tr_(const char* s) {
     return QCoreApplication::translate("Ren", s);
 }
 
-// Sorts like the original: text case-insensitively, size and dates numerically.
+// Text sorts case-insensitively, size and dates numerically.
 class FileItem : public QTreeWidgetItem {
 public:
     using QTreeWidgetItem::QTreeWidgetItem;
@@ -160,7 +159,7 @@ public:
     }
 };
 
-inline QColor folderColor(const QPalette& p) {  // window colour darkened by 8 per channel, like the original
+inline QColor folderColor(const QPalette& p) {  // window colour darkened by 8 per channel
     const QColor base = p.color(QPalette::Base);
     return QColor(qMax(0, base.red() - 8), qMax(0, base.green() - 8), qMax(0, base.blue() - 8));
 }

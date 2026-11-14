@@ -15,21 +15,21 @@ struct AddChoice {
     bool any() const { return files || folders; }
 };
 
-// The version shown to the user. A pre-release (3.1.1-beta.1) also shows the commit it was built from, so that a tester
-// knows which build runs; the real version (update check, user agent) stays QApplication::applicationVersion().
+// Version shown to the user; a pre-release also shows its build commit. The real version stays
+// QApplication::applicationVersion().
 QString displayVersion();
 
-// Remembers the "what to add" choice in the options (the check boxes below start from it). Not saved to disk.
+// Remembers the "what to add" choice in the options (not saved to disk).
 void rememberAddChoice(const AddChoice& c);
 
-// The four "what to add" check boxes shared by the Add folders and Drag & drop dialogs, preset from the options.
+// The "what to add" check boxes shared by the Add folders and Drag & drop dialogs.
 struct AddChoiceBoxes {
     AddChoiceBoxes();
     AddChoice choice() const;
     QCheckBox *files, *folders, *recursive, *hidden;
 };
 
-// "Add folders": pick one or more folders and what to take from them (fSelectDirectory.pas).
+// "Add folders": pick folders and what to take from them.
 class AddFoldersDialog : public QDialog {
 public:
     AddFoldersDialog(const QString& startFolder, QWidget* parent);
@@ -37,7 +37,7 @@ public:
     AddChoice choice() const;
 
 private:
-    bool portal_;  // Flatpak: no view of the host file system, folders come one by one from the portal picker
+    bool portal_;  // Flatpak: folders come one by one from the portal picker
     QListWidget* view_ = nullptr;  // portal mode: the chosen folders
     QStringList folders_;
     QTreeView* tree_ = nullptr;  // normal mode: the file system tree
@@ -46,7 +46,7 @@ private:
     AddChoiceBoxes boxes_;
 };
 
-// Shown when files are dropped on the list (fDragdropOptions.pas).
+// Shown when files are dropped on the list.
 class DragDropDialog : public QDialog {
 public:
     explicit DragDropDialog(QWidget* parent);
