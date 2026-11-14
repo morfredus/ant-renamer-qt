@@ -27,6 +27,8 @@ A fourth option ("Include hidden and system files when adding a folder") also ad
 
 Under the tree, a field ("Or type the path of a folder") lets you type or paste the path of a folder (the *Paste from clipboard* button next to it pastes the path copied in the Windows Explorer, even between quotes): it is added together with the folders selected in the tree, if it exists.
 
+**In a Flatpak** (which has no view of the whole disk) the window shows no tree: it opens the system folder picker at once and lists the folders you chose. *Add folder...* picks another one, *Remove selected* takes the selected folders off the list, and the path field is not there.
+
 To add the files of a folder located on the network, the [drag & drop](#dragdrop) or the [command line](#cmdline) may be easier than this window.
 
 ## Drag & drop files {#dragdrop}

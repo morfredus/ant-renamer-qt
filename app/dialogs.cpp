@@ -13,8 +13,11 @@
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QFileDialog>
+#include <QListWidget>
+#include <QFile>
 #include <QFileInfo>
 #include <QFileSystemModel>
+#include <QTreeView>
 #include <QFontComboBox>
 #include <QFormLayout>
 #include <QHBoxLayout>
@@ -27,7 +30,7 @@
 #include <QSpinBox>
 #include <QTabWidget>
 #include <QTextBrowser>
-#include <QTreeView>
+#include <QTimer>
 #include <QTreeWidget>
 #include <QVBoxLayout>
 
@@ -54,56 +57,130 @@ QDialogButtonBox* standardButtons(QDialog* d) {
 
 }  // namespace
 
+
 // --- Add folders ------------------------------------------------------------------------------------
-AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent) : QDialog(parent) {
+AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent)
+    : QDialog(parent), portal_(QFile::exists(u"/.flatpak-info"_s)) {
     setWindowTitle(tr("Select folders to add"));
     setWindowIcon(tbIcon(TbAddFolder));
     resize(450, 520);
+
     auto* v = new QVBoxLayout(this);
 
-    model_ = new QFileSystemModel(this);
-    model_->setFilter(QDir::Dirs | QDir::Drives | QDir::NoDotAndDotDot);
-    model_->setRootPath(QString());
-    view_ = new QTreeView;
-    view_->setModel(model_);
-    view_->setRootIndex(model_->index(QString()));
-    for (int c = 1; c < model_->columnCount(); ++c) {
-        view_->hideColumn(c);
+    if (!portal_) {
+        model_ = new QFileSystemModel(this);
+        model_->setFilter(QDir::Dirs | QDir::Drives | QDir::NoDotAndDotDot);
+        model_->setRootPath(QString());
+        tree_ = new QTreeView;
+        tree_->setModel(model_);
+        tree_->setRootIndex(model_->index(QString()));
+        for (int c = 1; c < model_->columnCount(); ++c) {
+            tree_->hideColumn(c);
+        }
+        tree_->setHeaderHidden(true);
+        tree_->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        v->addWidget(tree_, 1);
+
+        path_ = new QLineEdit;
+        path_->setPlaceholderText(tr("Or type the path of a folder"));
+        auto* pathRow = new QHBoxLayout;
+        pathRow->addWidget(path_, 1);
+        auto* paste = new QPushButton(tr("Paste from clipboard"));
+        connect(paste, &QPushButton::clicked, this, [this] {  // Explorer's "Copy as path" puts the path between quotes
+            QString t = QApplication::clipboard()->text().trimmed();
+            if (t.size() > 1 && t.startsWith(u'"') && t.endsWith(u'"')) {
+                t = t.mid(1, t.size() - 2);
+            }
+            path_->setText(t);
+        });
+        pathRow->addWidget(paste);
+        v->addLayout(pathRow);
+
+        for (auto* c : {boxes_.files, boxes_.folders, boxes_.recursive, boxes_.hidden}) {
+            v->addWidget(c);
+        }
+        v->addWidget(standardButtons(this));
+
+        const QModelIndex start = model_->index(startFolder);
+        if (start.isValid()) {
+            tree_->setCurrentIndex(start);
+            tree_->scrollTo(start);
+        }
+        return;
     }
-    view_->setHeaderHidden(true);
+
+    view_ = new QListWidget;
     view_->setSelectionMode(QAbstractItemView::ExtendedSelection);
     v->addWidget(view_, 1);
 
-    path_ = new QLineEdit;
-    path_->setPlaceholderText(tr("Or type the path of a folder"));
-    auto* pathRow = new QHBoxLayout;
-    pathRow->addWidget(path_, 1);
-    auto* paste = new QPushButton(tr("Paste from clipboard"));
-    connect(paste, &QPushButton::clicked, this, [this] {  // Explorer's "Copy as path" puts the path between quotes
-        QString t = QApplication::clipboard()->text().trimmed();
-        if (t.size() > 1 && t.startsWith(u'"') && t.endsWith(u'"')) {
-            t = t.mid(1, t.size() - 2);
+    auto* buttons = new QHBoxLayout;
+    auto* add = new QPushButton(tr("Add folder..."));
+    auto* remove = new QPushButton(tr("Remove selected"));
+
+    buttons->addWidget(add);
+    buttons->addWidget(remove);
+    buttons->addStretch();
+    v->addLayout(buttons);
+
+    connect(add, &QPushButton::clicked, this, [this, startFolder] {
+        QString start = folders_.isEmpty() ? startFolder : folders_.last();
+
+        if (!QFileInfo(start).isDir()) {
+            start = QDir::homePath();
         }
-        path_->setText(t);
+
+        const QString folder = QFileDialog::getExistingDirectory(
+            this,
+            tr("Select folder"),
+            start,
+            QFileDialog::ShowDirsOnly
+        );
+
+        if (folder.isEmpty()) {
+            if (folders_.isEmpty()) {
+                reject();  // opened on the picker: cancelling it with nothing chosen leaves no empty dialog
+            }
+            return;
+        }
+
+        const QString path = QDir::cleanPath(folder);
+
+        if (folders_.contains(path)) {
+            return;
+        }
+
+        folders_ << path;
+
+        auto* item = new QListWidgetItem(QDir::toNativeSeparators(path));
+        item->setData(Qt::UserRole, path);
+        view_->addItem(item);
     });
-    pathRow->addWidget(paste);
-    v->addLayout(pathRow);
+
+    connect(remove, &QPushButton::clicked, this, [this] {
+        const auto selected = view_->selectedItems();
+
+        for (QListWidgetItem* item : selected) {
+            folders_.removeOne(item->data(Qt::UserRole).toString());
+            delete view_->takeItem(view_->row(item));
+        }
+    });
 
     for (auto* c : {boxes_.files, boxes_.folders, boxes_.recursive, boxes_.hidden}) {
         v->addWidget(c);
     }
+
     v->addWidget(standardButtons(this));
 
-    const QModelIndex start = model_->index(startFolder);
-    if (start.isValid()) {
-        view_->setCurrentIndex(start);
-        view_->scrollTo(start);
-    }
+    // The list starts empty (no tree: in a Flatpak only the portal picker sees the host), so open the picker at once.
+    QTimer::singleShot(0, add, &QPushButton::click);
 }
 
 QStringList AddFoldersDialog::folders() const {
+    if (portal_) {
+        return folders_;
+    }
     QStringList l;
-    for (const QModelIndex& i : view_->selectionModel()->selectedRows(0)) {
+    for (const QModelIndex& i : tree_->selectionModel()->selectedRows(0)) {
         l << model_->filePath(i);
     }
     const QString typed = QDir::cleanPath(path_->text().trimmed());

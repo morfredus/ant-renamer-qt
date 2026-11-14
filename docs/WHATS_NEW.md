@@ -6,6 +6,13 @@ the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
 Current version: **3.1.1**.
 
+## 3.1.2 (to come)
+
+| What is new | Since |
+|---|---|
+| **Flatpak: files dropped from the file manager are added** even though the Flatpak has no access to the whole disk (document portal). | 3.1.2-beta.3 |
+| **Flatpak: Add folders** opens the system folder picker and lists the chosen folders (*Add folder...*, *Remove selected* buttons). The tree stays on Windows and on Linux outside Flatpak. | 3.1.2-beta.4 |
+
 ## 3.1.1
 
 | What is new | Since |

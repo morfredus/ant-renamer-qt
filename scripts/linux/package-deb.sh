@@ -91,9 +91,7 @@ ICONS_SRC="$ROOT/app/icons/hicolor"   # the SVG and the PNG sizes 16 to 256, in 
 [ -f "$ICONS_SRC/scalable/apps/$CMD.svg" ] || die "icons not found in $ICONS_SRC"
 for d in Languages help; do [ -d "$APP_DIR/$d" ] || die "folder $d missing from $APP_DIR (the build copies it after linking)."; done
 
-# Dependencies of a native binary: only the libraries it asks for DIRECTLY (NEEDED), resolved with
-# ldconfig then converted to packages with dpkg -S (readlink -f: on a "usr-merged" system, dpkg -S only
-# knows the real path /usr/lib/...). Transitive dependencies come from the packages themselves.
+# Dependencies of a native binary: only the libraries it asks for DIRECTLY (NEEDED), resolved in the system with ldconfig.
 detect_depends() {
     local soname path
     objdump -p "$BINARY" 2>/dev/null | awk '$1=="NEEDED"{print $2}' | sort -u | while read -r soname; do
@@ -103,8 +101,7 @@ detect_depends() {
     done | sort -u | sed 's/:[a-z0-9]*$//' | paste -sd, - | sed 's/,/, /g'
 }
 
-# Dependencies of a cross-built binary: NEEDED sonames (objdump of the target) resolved in the sysroot, then
-# converted to packages with the dpkg database OF THE SYSROOT (dpkg --admindir).
+# Dependencies of a cross-compiled binary: only the libraries it asks for DIRECTLY (NEEDED), resolved in the sysroot with
 cross_depends() {
     local sysroot="$1" soname path
     command -v aarch64-linux-gnu-objdump >/dev/null 2>&1 || die "target objdump missing: install binutils-aarch64-linux-gnu."
@@ -124,10 +121,9 @@ elif [ "$CROSS_ARM64" = "1" ]; then
     [ -n "$DEPENDS" ] || die "cross dependencies empty (sysroot without a dpkg database?)."
 else
     DEPENDS="$(detect_depends || true)"
-    [ -n "$DEPENDS" ] || DEPENDS="libc6, libqt6core6, libqt6gui6, libqt6widgets6, libqt6network6"
+    [ -n "$DEPENDS" ] || DEPENDS="libc6, libqt6core6, libqt6gui6, libqt6widgets6, libqt6network6, libqt6dbus6"
 fi
-# Ubuntu 24.04 calls libqt6gui6t64 what Debian 13 calls libqt6gui6 (and the other way round for some packages):
-# every "xxxt64" dependency becomes "xxxt64 | xxx" so that it installs on both.
+# Ubuntu 24.04 has a libqt6gui6t64 package, but the binary asks for libQt6Gui.so.6t64 (the soname has the t64 suffix). The package is not found by apt, so we declare both.
 DEPENDS="$(printf '%s' "$DEPENDS" | sed -E 's/([A-Za-z0-9.+-]+)t64\b/\1t64 | \1/g')"
 # The xcb plugin (loaded with dlopen) needs libxcb-cursor0 since Qt 6.5.
 case ", $DEPENDS," in
@@ -140,20 +136,19 @@ esac
 STAGE_ROOT="$(mktemp -d)"
 trap 'rm -rf "$STAGE_ROOT"' EXIT
 PKGDIR="$STAGE_ROOT/${CMD}_${DEB_VERSION}_${ARCH}"
-install -Dm755 "$BINARY" "$PKGDIR/usr/bin/$CMD"
+CMAKE_BUILD_DIR="$BUILD_DIR"
+
+# --build peut désigner le dossier build ou son sous-dossier app.
+if [ ! -f "$CMAKE_BUILD_DIR/CMakeCache.txt" ]; then
+    CMAKE_BUILD_DIR="$(dirname "$APP_DIR")"
+fi
+
+[ -f "$CMAKE_BUILD_DIR/CMakeCache.txt" ] \
+    || die "CMake build directory not found: $CMAKE_BUILD_DIR"
 
 # Language files and help of the original: the program looks for them in ../share/antrenamer-qt next to the binary.
-install -d "$PKGDIR/usr/share/antrenamer-qt"
-cp -r "$APP_DIR/Languages" "$APP_DIR/help" "$PKGDIR/usr/share/antrenamer-qt/"
-find "$PKGDIR/usr/share/antrenamer-qt" -type d -exec chmod 755 {} + -o -type f -exec chmod 644 {} +
-
-install -d "$PKGDIR/usr/share/applications"
-sed 's/\r$//' "$SCRIPT_DIR/antrenamer-qt.desktop" > "$PKGDIR/usr/share/applications/$CMD.desktop"
-chmod 644 "$PKGDIR/usr/share/applications/$CMD.desktop"
-
-install -d "$PKGDIR/usr/share/icons"
-cp -r "$ICONS_SRC" "$PKGDIR/usr/share/icons/"
-find "$PKGDIR/usr/share/icons" -type d -exec chmod 755 {} + -o -type f -exec chmod 644 {} +
+# Install application files through CMake.
+DESTDIR="$PKGDIR" cmake --install "$CMAKE_BUILD_DIR" --prefix /usr
 
 install -d "$PKGDIR/usr/share/doc/$CMD"
 cat > "$PKGDIR/usr/share/doc/$CMD/copyright" <<EOF

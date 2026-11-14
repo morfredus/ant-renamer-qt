@@ -236,18 +236,12 @@ void MainWindow::importDropped(const QStringList& paths) {
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent* e) {
-    if (e->mimeData()->hasUrls()) {
+    if (hasDroppablePaths(e->mimeData())) {
         e->acceptProposedAction();
     }
 }
 void MainWindow::dropEvent(QDropEvent* e) {
-    QStringList paths;
-    for (const QUrl& u : e->mimeData()->urls()) {
-        if (u.isLocalFile()) {
-            paths << native(u.toLocalFile());
-        }
-    }
-    filesDropped(paths);
+    filesDropped(droppedPaths(e->mimeData()));
 }
 
 void MainWindow::renumberFiles() {

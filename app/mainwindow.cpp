@@ -12,30 +12,25 @@ ItemTree::ItemTree(bool acceptUrls) : acceptUrls_(acceptUrls) {
 }
 
 void ItemTree::dragEnterEvent(QDragEnterEvent* e) {
-    if (acceptUrls_ && e->mimeData()->hasUrls()) {
+    if (acceptUrls_ && hasDroppablePaths(e->mimeData())) {
         e->acceptProposedAction();
     } else {
         QTreeWidget::dragEnterEvent(e);
     }
 }
 void ItemTree::dragMoveEvent(QDragMoveEvent* e) {
-    if (acceptUrls_ && e->mimeData()->hasUrls()) {
+    if (acceptUrls_ && hasDroppablePaths(e->mimeData())) {
         e->acceptProposedAction();
     } else {
         QTreeWidget::dragMoveEvent(e);
     }
 }
 void ItemTree::dropEvent(QDropEvent* e) {
-    if (e->mimeData()->hasUrls()) {
+    if (hasDroppablePaths(e->mimeData())) {
         if (!acceptUrls_) {
             return;
         }
-        QStringList paths;
-        for (const QUrl& u : e->mimeData()->urls()) {
-            if (u.isLocalFile()) {
-                paths << native(u.toLocalFile());
-            }
-        }
+        const QStringList paths = droppedPaths(e->mimeData());
         e->acceptProposedAction();
         emit urlsDropped(paths);
         return;

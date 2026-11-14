@@ -36,29 +36,31 @@ if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
         target_compile_definitions(antrenamer-qt PRIVATE AR_BUILD_ID="${AR_BUILD_ID}")
     endif()
 endif()
+# Linux: file drops in a Flatpak (no --filesystem) go through the document portal, over D-Bus.
+if(UNIX AND NOT APPLE)
+    find_package(Qt6 QUIET COMPONENTS DBus)
+    if(Qt6DBus_FOUND)
+        target_link_libraries(antrenamer-qt PRIVATE Qt6::DBus)
+        target_compile_definitions(antrenamer-qt PRIVATE AR_HAVE_DBUS)
+    endif()
+endif()
 if(MSVC)
     target_compile_options(antrenamer-qt PRIVATE /utf-8)
 endif()
 
-# Round-trip test of the action panel (load an action into the editor, read it back), without a window.
-# Fails if a field or an action type is added without a bind() in ActionPanel::buildPages.
 add_executable(test_panel ../tests/test_panel.cpp actionpanel.cpp appsettings.cpp icons.cpp lngtranslator.cpp helpwindow.cpp)
 target_include_directories(test_panel PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_definitions(test_panel PRIVATE LNG_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Languages")
 target_link_libraries(test_panel PRIVATE rencore Qt6::Widgets Qt6::Network)
 add_test(NAME panel COMMAND test_panel)
 
-# Language files and help, read at run time from <exe>/Languages and <exe>/help.
-# A target of its own, run at every build (a POST_BUILD command only runs after a link, so a change to the help alone
-# was not copied). The help folder is emptied first, so a deleted file does not stay.
 add_custom_target(antrenamer-data ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Languages $<TARGET_FILE_DIR:antrenamer-qt>/Languages
     COMMAND ${CMAKE_COMMAND} -E remove_directory $<TARGET_FILE_DIR:antrenamer-qt>/help
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/help $<TARGET_FILE_DIR:antrenamer-qt>/help
     COMMENT "Copying the language files and the help next to the executable")
 
-# --- Windows deployment: Qt DLLs (windeployqt) + MinGW DLLs (script) -------
-# The exe can then be started outside the MSYS2 shell (double-click).
+# Windows deployment
 if(WIN32)
     find_program(WINDEPLOYQT_EXE windeployqt
         HINTS "${Qt6_DIR}/../../../bin" "$ENV{QT_ROOT}/bin")
@@ -99,4 +101,59 @@ if(WIN32)
             message(WARNING "MSYS2 Bash not found; non-Qt MinGW DLL collection is skipped")
         endif()
     endif()
+endif()
+# Linux
+if(UNIX AND NOT APPLE)
+
+    # Main executable
+    install(TARGETS antrenamer-qt
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+
+    # Language files and help
+    install(DIRECTORY Languages help
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/antrenamer-qt
+    )
+
+    # Desktop entry
+    configure_file(
+        "${CMAKE_SOURCE_DIR}/scripts/linux/antrenamer-qt.desktop.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/${ANTRENAMER_DESKTOP_ID}.desktop"
+        @ONLY
+    )
+
+    install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/${ANTRENAMER_DESKTOP_ID}.desktop"
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
+    )
+
+    # AppStream metadata
+    set(ANTRENAMER_METAINFO_FILE
+        "${CMAKE_CURRENT_BINARY_DIR}/fr.morfredus.AntRenamerQt.metainfo.xml"
+    )
+
+    configure_file(
+        "${CMAKE_SOURCE_DIR}/packaging/flatpak/fr.morfredus.AntRenamerQt.metainfo.xml.in"
+        "${ANTRENAMER_METAINFO_FILE}"
+        @ONLY
+    )
+
+    install(
+        FILES "${ANTRENAMER_METAINFO_FILE}"
+        DESTINATION "${CMAKE_INSTALL_DATADIR}/metainfo"
+    )
+
+    # Application icons
+    install(FILES
+        "${CMAKE_CURRENT_SOURCE_DIR}/icons/hicolor/scalable/apps/antrenamer-qt.svg"
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
+        RENAME "${ANTRENAMER_DESKTOP_ID}.svg"
+    )
+
+    install(FILES
+        "${CMAKE_CURRENT_SOURCE_DIR}/antrenamer-qt.png"
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/256x256/apps
+        RENAME "${ANTRENAMER_DESKTOP_ID}.png"
+    )
+
 endif()

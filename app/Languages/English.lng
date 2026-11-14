@@ -550,5 +550,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="newNameInvalidChar" Value="the new name contains an invalid character"/>
     <Item Name="renameSummary" Value="Files renamed: %1, errors: %2"/>
     <Item Name="pasteFolder" Value="Paste from clipboard"/>
+    <Item Name="addFolderButton" Value="Add folder..."/>
+    <Item Name="removeSelectedButton" Value="Remove selected"/>
   </QtPort>
 </Application>

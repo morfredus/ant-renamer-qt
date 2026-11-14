@@ -7,6 +7,7 @@
 class QCheckBox;
 class QFileSystemModel;
 class QLineEdit;
+class QListWidget;
 class QTreeView;
 
 struct AddChoice {
@@ -36,9 +37,12 @@ public:
     AddChoice choice() const;
 
 private:
-    QTreeView* view_;
-    QFileSystemModel* model_;
-    QLineEdit* path_;
+    bool portal_;  // Flatpak: no view of the host file system, folders come one by one from the portal picker
+    QListWidget* view_ = nullptr;  // portal mode: the chosen folders
+    QStringList folders_;
+    QTreeView* tree_ = nullptr;  // normal mode: the file system tree
+    QFileSystemModel* model_ = nullptr;
+    QLineEdit* path_ = nullptr;
     AddChoiceBoxes boxes_;
 };
 

@@ -12,8 +12,17 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 - Code signing policy pages (`docs/CODE_SIGNING_POLICY.md`, `_fr`) and the SignPath paragraph of the READMEs: the SignPath Foundation declined the application on 2026-11-13 (not enough public visibility yet), so the attribution line and the policy no longer apply. The READMEs and the 3.1.1 release notes now say that the Windows files are not digitally signed. The version information added to the program and the installer stays.
 
+### Fixed
+
+- Flatpak without `--filesystem=host` (requested by the Flathub reviewer): files dropped from the file manager were not added any more, the host paths of the drop being invisible in the sandbox. The drop now also reads the portal formats (`application/vnd.portal.filetransfer`, `application/vnd.portal.files`) and exchanges the key for readable paths through the document portal (D-Bus `FileTransfer.RetrieveFiles`, `droppedPaths()` in `app/mainwindow_internal.h`). Linked with Qt6::DBus on Linux only; elsewhere the URLs are used as before. Tried on Fedora (3.1.2-beta.3).
+- "Select folders to add": in a Flatpak (`/.flatpak-info` present) the file system tree shows nothing of the host, so the dialog opens the portal folder picker at once and lists the chosen folders. On Windows and on Linux outside Flatpak the tree is back, as before 3.1.2-beta.2 (`app/dialogs.cpp`).
+- Linux (GNOME, Wayland): the dock showed a generic icon. The program now declares its desktop file id (`antrenamer-qt`, or the Flatpak app id from `FLATPAK_ID`), which the desktop uses to find the icon (`app/main.cpp`). Not shown to be needed yet: the Flatpak built from the sources on Fedora (GNOME) displayed the right icon, but its build without this change was not compared. An AppImage that is not integrated into the system (no `.desktop` file installed) keeps the generic icon, as for any AppImage.
+- First start after a Windows installation showed the classic layout instead of the modern one when a box of the "New-version check" group had been ticked in the installer: it writes `checkUpdates` / `checkPrereleases` in `antrenamer-qt.ini`, and the program took the file for existing settings. These two keys no longer count (`AppOptions::load()` in `app/appsettings.cpp`).
+
 ### Changed
 
+- Texts of the new Add folders buttons ("Add folder...", "Remove selected") added to `English.lng` and `French.lng` (`<QtPort>`; the other languages show them in English until translated). Help page "Adding files & folders" (EN, FR; HR and TA as English copies) explains the Flatpak window; WHATS_NEW (EN, FR) and TESTED_PLATFORMS (EN, FR) updated.
+- `docs/TESTED_PLATFORMS.md` (EN, FR): Fedora Workstation 45 added (3.1.1 AppImage, Flatpak built from the 3.1.2 sources) and Windows 10 22H2 (3.1.1, installer: installation, start, renaming); the Flatpak of the Flathub test build (3.1.1) installed and run on Fedora (x86_64) and on the Raspberry Pi 4 (arm64).
 - `docs/TRANSLATING.md` (EN, FR): the note for translators of the original Ant Renamer says where to send the file and that the `<QtPort>` texts (about a hundred) are the ones missing; example file version `3.1`.
 - Flatpak manifest (`packaging/flatpak/fr.morfredus.AntRenamerQt.yaml`): source on the tag `v3.1.1` of the production repository and its commit (it still pointed to `v3.0.1` with a placeholder hash), ready for the first Flathub submission.
 
