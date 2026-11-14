@@ -548,5 +548,6 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="pasteFolder" Value="Coller depuis le presse-papiers"/>
     <Item Name="addFolderButton" Value="Ajouter un dossier..."/>
     <Item Name="removeSelectedButton" Value="Retirer la s&#233;lection"/>
+    <Item Name="whatChanges" Value="Ce qui change :"/>
   </QtPort>
 </Application>

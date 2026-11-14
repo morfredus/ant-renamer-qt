@@ -6,6 +6,12 @@ conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.
 
 Version courante : **3.1.2-beta.4**.
 
+## Prochaine version
+
+| Nouveauté | Depuis |
+|---|---|
+| **La fenêtre de nouvelle version montre ce qui change** (les notes de version) avant de décider d'ouvrir la page de téléchargement. | *(à venir)* |
+
 ## 3.1.2-beta.4
 
 | Nouveauté | Depuis |

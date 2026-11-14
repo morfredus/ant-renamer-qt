@@ -6,6 +6,12 @@ the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
 Current version: **3.1.2-beta.4**.
 
+## Next version
+
+| What is new | Since |
+|---|---|
+| **The new-version window shows what changes** (the release notes) before you decide to open the download page. | *(to come)* |
+
 ## 3.1.2-beta.4
 
 | What is new | Since |

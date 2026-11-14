@@ -19,15 +19,16 @@ public:
     void check(bool includePrereleases = false);  // true: also announce beta and rc
 signals:
     // ok = the answer was read; version empty = nothing newer. error is set when ok is false.
-    void finished(bool ok, const QString& version, const QString& url, const QString& error);
+    void finished(bool ok, const QString& version, const QString& url, const QString& notes, const QString& error);
 
 private:
     QNetworkAccessManager* net_;
 };
 
 // Tells the user what the check found. `manual`: also say "up to date" and report errors (a check that nobody asked for
-// only speaks when there is something new). Offers to open the page of the new release.
-void reportUpdate(QWidget* parent, bool ok, const QString& version, const QString& url, const QString& error, bool manual);
+// only speaks when there is something new). Shows what changes (the text of the release) and offers to open the page of the new release.
+void reportUpdate(QWidget* parent, bool ok, const QString& version, const QString& url, const QString& notes, const QString& error,
+                  bool manual);
 
 // Under Flatpak the store updates the program: the check is neither run nor offered (its message would mislead).
 inline bool runsInFlatpak() {

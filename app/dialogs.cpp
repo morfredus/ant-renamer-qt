@@ -636,10 +636,10 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
         upd->setEnabled(false);
         auto* c = new UpdateChecker(this);
         connect(c, &UpdateChecker::finished, this,
-                [this, upd, c](bool ok, const QString& version, const QString& url, const QString& error) {
+                [this, upd, c](bool ok, const QString& version, const QString& url, const QString& notes, const QString& error) {
                     c->deleteLater();
                     upd->setEnabled(true);
-                    reportUpdate(this, ok, version, url, error, true);
+                    reportUpdate(this, ok, version, url, notes, error, true);
                 });
         c->check(appOptions().checkPrereleases);
     });

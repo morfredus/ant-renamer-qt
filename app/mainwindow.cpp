@@ -815,14 +815,14 @@ void MainWindow::startUpdateCheck() {
     }
     updater_ = new UpdateChecker(this);
     connect(updater_, &UpdateChecker::finished, this,
-            [this, today](bool ok, const QString& version, const QString& url, const QString& error) {
+            [this, today](bool ok, const QString& version, const QString& url, const QString& notes, const QString& error) {
                 updater_->deleteLater();
                 updater_ = nullptr;
                 if (ok) {
                     appOptions().lastUpdateCheck = today;  // a failure is tried again at the next start
                     appOptions().save();
                 }
-                reportUpdate(this, ok, version, url, error, false);
+                reportUpdate(this, ok, version, url, notes, error, false);
             });
     updater_->check(o.checkPrereleases);
 }

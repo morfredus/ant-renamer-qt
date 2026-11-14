@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Added
+
+- New-version window: it shows the release text ("What changes", the half in the interface language, without the list of downloads) before asking whether to open the download page, so that the user sees what changes first. `ren::Release` carries the `body` of the GitHub release (`core/ren_update.*`); `reportUpdate()` (`app/updatecheck.cpp`) draws the window. Text added to `English.lng` and `French.lng`. The release text must therefore keep its English half, then `---`, then its French half (as `docs/release-notes/*.md` already do).
+
 ## [3.1.2-beta.4] - 2026-11-14
 
 Pre-release of 3.1.2: the fixes and the Flatpak work made since 3.1.1.
