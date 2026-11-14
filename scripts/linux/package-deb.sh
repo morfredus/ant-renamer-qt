@@ -123,7 +123,7 @@ else
     DEPENDS="$(detect_depends || true)"
     [ -n "$DEPENDS" ] || DEPENDS="libc6, libqt6core6, libqt6gui6, libqt6widgets6, libqt6network6, libqt6dbus6"
 fi
-# Ubuntu 24.04 has a libqt6gui6t64 package, but the binary asks for libQt6Gui.so.6t64 (the soname has the t64 suffix). The package is not found by apt, so we declare both.
+# Ubuntu 24.04 names the package libqt6gui6t64 but the binary asks for libQt6Gui.so.6t64: declare both.
 DEPENDS="$(printf '%s' "$DEPENDS" | sed -E 's/([A-Za-z0-9.+-]+)t64\b/\1t64 | \1/g')"
 # The xcb plugin (loaded with dlopen) needs libxcb-cursor0 since Qt 6.5.
 case ", $DEPENDS," in
@@ -138,7 +138,7 @@ trap 'rm -rf "$STAGE_ROOT"' EXIT
 PKGDIR="$STAGE_ROOT/${CMD}_${DEB_VERSION}_${ARCH}"
 CMAKE_BUILD_DIR="$BUILD_DIR"
 
-# --build peut désigner le dossier build ou son sous-dossier app.
+# --build may be the build folder or its app/ subfolder.
 if [ ! -f "$CMAKE_BUILD_DIR/CMakeCache.txt" ]; then
     CMAKE_BUILD_DIR="$(dirname "$APP_DIR")"
 fi
