@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.2.0-beta.2 (15/11/2026)
+  - Fix: build error of the EPUB reader reported by the static analysis of the Linux build. No change for the user.
 - 3.2.0-beta.1 (15/11/2026)
   - New: "Use EPUB info" action, on its own page: name e-books from their metadata (author, title, year, publisher, language, ISBN, series and number in the series), with an option for a two-digit series number.
 - 3.1.2-beta.5 (14/11/2026)

@@ -8,6 +8,14 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.2.0-beta.2] - 2026-11-15
+
+Pre-release of 3.2.0: fixes the build error of 3.2.0-beta.1 reported by the Linux CI job (static analysis).
+
+### Fixed
+
+- `core/ren_epub.cpp`: `kMaxEntry` is computed in `qsizetype` (clang-tidy `bugprone-implicit-widening-of-multiplication-result`, which failed the Linux CI job of 3.2.0-beta.1).
+
 ## [3.2.0-beta.1] - 2026-11-15
 
 Pre-release of 3.2.0: the EPUB action, and the Flatpak and documentation changes since 3.1.2-beta.5.

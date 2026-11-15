@@ -4,7 +4,13 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.2.0-beta.1**.
+Version courante : **3.2.0-beta.2**.
+
+## 3.2.0-beta.2
+
+| Nouveauté | Depuis |
+|---|---|
+| **Correction de compilation dans le lecteur EPUB** : l'analyse statique du build Linux refusait une ligne de la 3.2.0-beta.1. Le fonctionnement du programme ne change pas. | 3.2.0-beta.2 |
 
 ## 3.2.0-beta.1
 

@@ -4,7 +4,13 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.2.0-beta.1**.
+Current version: **3.2.0-beta.2**.
+
+## 3.2.0-beta.2
+
+| What is new | Since |
+|---|---|
+| **Build fix in the EPUB reader**: the static analysis of the Linux build rejected one line of 3.2.0-beta.1. No change in how the program works. | 3.2.0-beta.2 |
 
 ## 3.2.0-beta.1
 

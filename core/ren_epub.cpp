@@ -254,7 +254,7 @@ quint32 u32(const QByteArray& d, qsizetype p) {
     return u16(d, p) | (u16(d, p + 2) << 16);
 }
 
-constexpr qsizetype kMaxEntry = 4 * 1024 * 1024;  // container.xml and OPF files are small: a bigger one is not what we want
+constexpr qsizetype kMaxEntry = qsizetype(4) * 1024 * 1024;  // container.xml and OPF files are small: a bigger one is not what we want
 
 bool zipEntry(QFile& f, const QString& name, QByteArray& out) {
     const qint64 size = f.size();
