@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Fixed
+
+- Help not found: the "Open the program's web site instead?" box opened the web site of the original program (`antp.be`); it now opens the web site of Ant Renamer Qt, `morfredus.fr/ant-renamer-qt/` for the French help and `morfredus.fr/ant-renamer-qt-en/` otherwise (`app/helpwindow.cpp`).
+
 ### Changed
 
 - Help: two new pages, "MP3 tags" (`mp3_tags_*.md`) and "EPUB tags" (`epub_tags_*.md`), next to the page of the EXIF, IPTC and XMP tags: the tags, where each value comes from, good to know, examples of masks. Linked from the table of contents, the `actions` and `format` pages, and the "Help" link under the parameters of the MP3 and EPUB actions (`app/actionpanel.cpp`). EN and FR written, HR and TA carry the English text until translated.

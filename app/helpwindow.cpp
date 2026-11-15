@@ -213,7 +213,9 @@ void showHelp(const QString& topic, QWidget* parent) {
                 .arg(QDir::toNativeSeparators(dir)),
             QMessageBox::Yes | QMessageBox::No);
         if (b == QMessageBox::Yes) {
-            QDesktopServices::openUrl(QUrl(u"https://www.antp.be/software/renamer/"_s));
+            // the web site of the port (not the one of the original program): French page for the French help, English otherwise
+            QDesktopServices::openUrl(
+                QUrl(lang == u"fr" ? u"https://morfredus.fr/ant-renamer-qt/"_s : u"https://morfredus.fr/ant-renamer-qt-en/"_s));
         }
         return;
     }
