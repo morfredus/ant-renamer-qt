@@ -1,6 +1,6 @@
 # Formatage de chaînes
 
-Pour certaines opérations, vous pouvez utiliser des tags spéciaux qui sont délimités par des caractères "%". Ils sont disponibles dans les opérations qui utilisent un masque : [Insertion de chaîne](actions_fr.md#stringinsert), [Énumération](actions_fr.md#enum), [Infos des tags mp3](actions_fr.md#mp3), [Noms aléatoires](actions_fr.md#random) et [Infos EXIF](actions_fr.md#exif). (L'opération [Date et heure](actions_fr.md#datetime) a son propre système de lettres.)
+Pour certaines opérations, vous pouvez utiliser des tags spéciaux qui sont délimités par des caractères "%". Ils sont disponibles dans les opérations qui utilisent un masque : [Insertion de chaîne](actions_fr.md#stringinsert), [Énumération](actions_fr.md#enum), [Infos des tags mp3](actions_fr.md#mp3), [Noms aléatoires](actions_fr.md#random) [Infos EXIF](actions_fr.md#exif) et [Infos EPUB](actions_fr.md#epub). (L'opération [Date et heure](actions_fr.md#datetime) a son propre système de lettres.)
 
 Étant donné que le "%" est utilisé comme caractère spécial, pour obtenir un simple "%" dans le nom de fichier vous devez entrer "%%".
 
@@ -19,9 +19,10 @@ Par exemple, l'opération d'[Infos des tags mp3](actions_fr.md#mp3) supporte des
 | `%%` | Un caractère "%" | toutes |
 | `%num%` | Le compteur | Énumération, EXIF |
 | `%author%`, `%title%`, `%album%`, `%year%`, `%genre%`, `%comm%`, `%track%` | Tags ID3 | mp3 |
+| `%author%`, `%title%`, `%year%`, `%publisher%`, `%lang%`, `%isbn%`, `%series%`, `%seriesnum%` | Métadonnées EPUB | EPUB |
 | `%random%` | La partie aléatoire | Noms aléatoires |
 | `%DateTimeOriginal%`, `%Make%`, `%IptcKeywords%`, `%XmpTitle%`... | Données EXIF, IPTC et XMP, voir [la liste](metadata_tags_fr.md) | EXIF |
-| `$if(...)` | Texte conditionnel, voir [plus bas](#if) | mp3, EXIF |
+| `$if(...)` | Texte conditionnel, voir [plus bas](#if) | mp3, EXIF, EPUB |
 
 Les tags doivent être écrits exactement comme dans le tableau (en minuscules : `%name%`, pas `%Name%`) ; seuls les tags EXIF, IPTC et XMP sont reconnus quelle que soit leur casse. Un tag inconnu (par exemple à cause d'une faute de frappe) est laissé tel quel dans le nom, caractères "%" compris : c'est ainsi que vous le remarquez dans l'aperçu.
 
@@ -82,7 +83,7 @@ Lors du renommage de dossiers, `%count%` et quelques tags dérivés sont disponi
 
 ## La fonction $if {#if}
 
-Pour les opérations [Infos des tags mp3](actions_fr.md#mp3) et [Infos EXIF](actions_fr.md#exif), il y a aussi un tag spécial : $if. Il permet de faire du formatage conditionnel. Par exemple, quand un champ est vide vous pouvez ne pas vouloir afficher le " - " qui le suit. Ou mettre une valeur spéciale.
+Pour les opérations [Infos des tags mp3](actions_fr.md#mp3), [Infos EXIF](actions_fr.md#exif) et [Infos EPUB](actions_fr.md#epub), il y a aussi un tag spécial : $if. Il permet de faire du formatage conditionnel. Par exemple, quand un champ est vide vous pouvez ne pas vouloir afficher le " - " qui le suit. Ou mettre une valeur spéciale.
 
 La syntaxe est la suivante : $if(condition,valeur-si-vrai,valeur-si-faux). Si "condition" n'est pas une chaîne vide, valeur-si-vrai sera utilisée. Dans l'autre cas, valeur-si-faux sera utilisée. Comme vous pouvez avoir besoin d'utiliser des virgules et des parenthèses dans la fonction $if, vous pouvez mettre les valeurs entre guillemets ("...") pour éviter qu'elles ne soient analysées. Mais faites attention : ils empêchent aussi l'analyse du %tag%. Pour obtenir un guillemet lui-même, tapez-le deux fois (""). Un "$" qui n'est pas suivi de "if(" est conservé comme caractère ; "$$" donne un "$".
 

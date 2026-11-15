@@ -18,6 +18,7 @@ Cette page affiche les opérations qui peuvent être effectuées sur les fichier
 - [Noms à partir d'une liste](#fromlist)
 - [Expressions rationnelles](#regexp)
 - [Infos EXIF](#exif)
+- [Infos EPUB](#epub)
 
 Cette page possède également des fonctionnalités pour gérer des jobs. En plus de la barre d'outils Fichiers qui est toujours visible, une barre d'outils pour gérer ces jobs est affichée. Pour plus d'informations à propos des jobs, consultez [cette page](batch_fr.md).
 
@@ -274,3 +275,26 @@ Deux photos prises dans la même seconde ne se gênent pas : elles sont numérot
 Un fichier qui ne contient aucune information EXIF, IPTC ou XMP n'est pas renommé : le journal indique « Pas d'info EXIF trouvée ».
 
 Le fichier XMP associé d'une image (`IMG.xmp` ou `IMG.CR2.xmp`) est lu avec l'image et l'emporte sur le XMP intégré, ce qui rend disponibles les mots-clés et la note d'un fichier RAW. Quand l'image est renommée, ses fichiers associés (`.xmp`, `.dop`, `.pp3`... et, pour un JPEG, son fichier RAW) sont renommés avec elle : voir l'option dans les [Options](options_fr.md), page *Traitement*.
+
+## Infos EPUB {#epub}
+
+Pour les livres numériques au format EPUB. Comme dans l'opération [mp3](#mp3), vous entrez un masque, et les tags sont lus dans les métadonnées stockées dans le fichier EPUB (un EPUB est une archive ZIP dont le fichier OPF contient le titre, les auteurs, la date...). Voir la page ["Formatage"](format_fr.md) pour plus d'informations, y compris la fonction `$if`.
+
+- `%author%` : Auteur(s). Plusieurs auteurs sont reliés par " & " ; les créateurs ayant un autre rôle (illustrateur, traducteur...) sont ignorés
+- `%title%` : Titre
+- `%year%` : Année de publication (les quatre premiers chiffres de la date)
+- `%publisher%` : Éditeur
+- `%lang%` : Code de langue (`fr`, `en`...)
+- `%isbn%` : ISBN (vide si le fichier n'en donne pas)
+- `%series%` : Nom de la série (information Calibre ou EPUB 3)
+- `%seriesnum%` : Numéro dans la série (Calibre écrit « 1.0 » : il est affiché « 1 »)
+
+Les tags `%name%`, `%ext%`, `%folderN%` et `%%` sont aussi disponibles. Les caractères interdits dans un nom de fichier sont remplacés dans les valeurs, comme pour les tags mp3.
+
+L'option « Numéro de série sur deux chiffres » ajoute un zéro devant un numéro d'un seul chiffre (« 1 » devient « 01 »), pour que les tomes d'une série soient triés dans le bon ordre.
+
+Un masque typique est `%author% - %title%%ext%`. Beaucoup de livres n'ont pas de numéro de série, ce qui laisserait un tiret orphelin avec `%author% - %title% - %seriesnum%%ext%`. Utilisez `$if` pour n'ajouter le tiret que si le numéro existe : `%author% - %title%$if(%seriesnum%, - %seriesnum%,)%ext%`.
+
+La qualité des noms dépend des métadonnées du fichier : les livres téléchargés sur Internet ont parfois un titre qui contient la série, l'édition (« French Edition ») ou le sous-titre, et une série vide ou erronée. Servez-vous de l'aperçu avant de renommer.
+
+Un fichier qui n'est pas un EPUB valide (ou sans métadonnées) n'est pas renommé : le journal l'indique (ligne bleue).

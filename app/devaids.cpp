@@ -13,7 +13,7 @@
 
 namespace {
 
-constexpr int kActionTypes = int(ren::ActionType::Exif) + 1;  // entries of the list on the Actions page
+constexpr int kActionTypes = int(ren::ActionType::Epub) + 1;  // entries of the list on the Actions page
 
 }  // namespace
 

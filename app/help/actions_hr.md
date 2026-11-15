@@ -18,6 +18,7 @@ This page displays the actions that can be applied to the files. Choose an actio
 - [Take names from list](#fromlist)
 - [Regular expression](#regexp)
 - [Use EXIF info](#exif)
+- [Use EPUB info](#epub)
 
 This page has also commands to manage batch files. In addition to the Files toolbar which is always visible, a toolbar to manage these batch files is displayed. For more information about batches, see [this page](batch_hr.md).
 
@@ -274,3 +275,26 @@ Two photos shot in the same second do not get in each other's way: they are numb
 A file that contains no EXIF, IPTC or XMP information is not renamed: the log says "No EXIF info found" ("Pas d'info EXIF trouvée" in French).
 
 The XMP sidecar file of a picture (`IMG.xmp` or `IMG.CR2.xmp`) is read with the picture and wins over the XMP embedded in it, which is how the keywords and the rating of a RAW file become available. When the picture is renamed, its sidecar files (`.xmp`, `.dop`, `.pp3`... and, for a JPEG, its RAW file) are renamed with it: see the option in [Options](options_hr.md), *Processing*.
+
+## Use EPUB info {#epub}
+
+For e-books in the EPUB format. As in the [mp3](#mp3) action you enter a mask, and the tags are read from the metadata stored inside the EPUB file (an EPUB is a ZIP archive whose OPF file holds the title, the authors, the date...). See the ["Formatting"](format_hr.md) page for more information, including the `$if` function.
+
+- `%author%` : Author(s). Several authors are joined with " & "; creators with another role (illustrator, translator...) are ignored
+- `%title%` : Title
+- `%year%` : Year of publication (the first four digits of the date)
+- `%publisher%` : Publisher
+- `%lang%` : Language code (`fr`, `en`...)
+- `%isbn%` : ISBN (empty if the file does not give one)
+- `%series%` : Name of the series (Calibre or EPUB 3 information)
+- `%seriesnum%` : Number in the series (Calibre writes "1.0": it is shown as "1")
+
+`%name%`, `%ext%`, `%folderN%` and `%%` tags are also available. Characters forbidden in a file name are replaced in the values, as for the mp3 tags.
+
+The option "Two-digit series number" adds a zero in front of a one-digit number ("1" becomes "01"), so that the volumes of a series sort in the right order.
+
+A typical mask is `%author% - %title%%ext%`. Many e-books have no series number, which would leave a dangling hyphen in `%author% - %title% - %seriesnum%%ext%`. Use `$if` to add the hyphen only when the number exists: `%author% - %title%$if(%seriesnum%, - %seriesnum%,)%ext%`.
+
+The quality of the names depends on the metadata of the file: e-books downloaded from the Internet sometimes have a title that includes the series, the edition ("French Edition") or the subtitle, and an empty or wrong series. Use the preview before renaming.
+
+A file that is not a valid EPUB (or has no metadata) is not renamed: the log says so (blue line).

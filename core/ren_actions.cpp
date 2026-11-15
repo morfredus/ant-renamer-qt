@@ -1304,6 +1304,58 @@ void ActionExif::load(const XmlElem& e) {
     numSharePairs = e.flag("SharePairs", false);
 }
 
+// --- EPUB ---
+QString ActionEpub::description() const {
+    QString r = tr("Generate names with EPUB metadata, based on the mask \"%1\"").arg(mask);
+    if (twoDigit) {
+        r += tr(", insert '0' in series number if required");
+    }
+    return r;
+}
+bool ActionEpub::getTag(const QString& tag, QString& v) {
+    bool ok = true;
+    if (tag == u"author") {
+        v = epub_.author;
+    } else if (tag == u"title") {
+        v = epub_.title;
+    } else if (tag == u"year") {
+        v = epub_.year;
+    } else if (tag == u"publisher") {
+        v = epub_.publisher;
+    } else if (tag == u"lang") {
+        v = epub_.language;
+    } else if (tag == u"isbn") {
+        v = epub_.isbn;
+    } else if (tag == u"series") {
+        v = epub_.series;
+    } else if (tag == u"seriesnum") {
+        bool isNum = false;
+        const double d = epub_.seriesIndex.toDouble(&isNum);  // Calibre writes "1.0"
+        v = !isNum ? epub_.seriesIndex : d == int(d) ? padNum(int(d), twoDigit ? 2 : 1) : epub_.seriesIndex;
+    } else {
+        ok = Action::getTag(tag, v);
+    }
+    v = validateFileName(v);
+    return ok;
+}
+QString ActionEpub::makeNewName(const QString& fn, bool isFolder) {
+    Action::makeNewName(fn, isFolder);
+    QString err;
+    if (!readEpub(sourcePath(), epub_, &err)) {
+        setInfo(err);
+        return {};
+    }
+    return advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
+}
+void ActionEpub::save(QXmlStreamWriter& w) const {
+    begin(w, "Epub", {{"Mask", mask}, {"TwoDigit", twoDigit}});
+    w.writeEndElement();
+}
+void ActionEpub::load(const XmlElem& e) {
+    mask = e.str("Mask", "%author% - %title%%ext%");
+    twoDigit = e.flag("TwoDigit", false);
+}
+
 // --- ActionList ---
 namespace {
 struct Named {
@@ -1315,7 +1367,7 @@ const Named kNames[] = {
     {"StrIns", ActionType::StringInsert}, {"MoveStr", ActionType::MoveString}, {"CharDel", ActionType::CharDel},
     {"Enum", ActionType::Enum},           {"MP3", ActionType::MP3Tag},         {"DateTime", ActionType::DateTime},
     {"Random", ActionType::Random},       {"ChangeCase", ActionType::Case},    {"FromList", ActionType::FromList},
-    {"Regexp", ActionType::Regexp},       {"Exif", ActionType::Exif},
+    {"Regexp", ActionType::Regexp},       {"Exif", ActionType::Exif},           {"Epub", ActionType::Epub},
 };
 }  // namespace
 
@@ -1349,6 +1401,8 @@ std::unique_ptr<Action> ActionList::create(ActionType t) {
             return std::make_unique<ActionRegexp>();
         case ActionType::Exif:
             return std::make_unique<ActionExif>();
+        case ActionType::Epub:
+            return std::make_unique<ActionEpub>();
         default:
             return std::make_unique<Action>();
     }

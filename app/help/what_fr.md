@@ -11,6 +11,7 @@ Il supporte l'unicode, ce qui signifie que vous pouvez renommer des fichiers qui
 Il lit les informations stockées à l'intérieur de certains fichiers pour construire les nouveaux noms :
 
 - les tags ID3 des fichiers MP3 (ID3v1, ID3v1.1 et ID3v2.2, 2.3 et 2.4) ;
+- les métadonnées des livres EPUB (titre, auteur, année, série...) ;
 - les données EXIF, IPTC et XMP des images (JPEG, et fichiers basés sur TIFF comme la plupart des fichiers RAW ; XMP aussi depuis les PNG, WebP... et depuis les fichiers `.xmp`) ;
 - la date et l'heure des fichiers.
 
@@ -24,9 +25,9 @@ Comme je l'ai dit, il ne modifiera pas le contenu des fichiers.
 
 Il ne va pas non plus modifier la date et l'heure des fichiers.
 
-Il ne modifie pas les tags ID3 contenus dans les MP3 ni les infos EXIF des JPEG ; il va seulement lire ces infos pour construire un nouveau nom de fichier.
+Il ne modifie pas les tags ID3 contenus dans les MP3, les infos EXIF des JPEG ni les métadonnées des EPUB ; il va seulement lire ces infos pour construire un nouveau nom de fichier.
 
-Il ne lit aucune info de fichiers autres que les MP3 et les images décrits plus haut.
+Il ne lit aucune info de fichiers autres que les MP3, les EPUB et les images décrits plus haut.
 
 Il ne peut pas être entièrement contrôlé depuis la ligne de commande, mais il supporte quelques [paramètres](params_fr.md).
 
@@ -36,6 +37,7 @@ Notez que le contenu de cette liste n'est pas définitif. À part pour ce qui es
 
 - L'annulation remonte passe après passe, toujours à partir de la dernière (une opération du job est une passe) ; l'historique garde les 50 dernières passes de la session et disparaît à la fermeture du programme. Une passe au milieu ne peut pas être annulée seule, et les fichiers copiés avec « Copier au lieu de renommer » ne sont pas supprimés par une annulation.
 - EXIF : 36 tags sont lus, et la MakerNote (données privées des fabricants d'appareils) n'est pas décodée. L'IPTC n'est lu que dans les fichiers JPEG. Voir [Tags EXIF, IPTC et XMP](metadata_tags_fr.md).
+- EPUB : seules les métadonnées du fichier OPF sont lues (Dublin Core, série Calibre ou EPUB 3) ; elles sont parfois incomplètes ou approximatives, surtout pour les livres téléchargés.
 - Les tags audio sont les tags ID3 des fichiers MP3 ; les autres formats (FLAC, OGG, M4A...) ne sont pas lus.
 - La date de création d'un fichier n'est pas conservée par tous les systèmes de fichiers (elle manque souvent sous Linux) : la date de modification est alors utilisée.
 - L'aide existe en anglais, français, croate et tamoul ; l'interface elle-même existe en 28 langues (l'anglais et 27 traductions). Les pages écrites pour Ant Renamer Qt (disposition moderne, tags, fichiers associés...) peuvent n'exister qu'en anglais et en français, les autres langues affichent alors le texte anglais.

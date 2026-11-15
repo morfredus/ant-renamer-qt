@@ -128,7 +128,7 @@ int main(int argc, char** argv) {
     ActionPanel panel;
     int failures = 0;
 
-    const int last = int(ActionType::Exif);
+    const int last = int(ActionType::Epub);
     if (ActionList::create(ActionType(last + 1))->type() != ActionType::Unknown) {
         std::fprintf(stderr,
                      "FAIL: there is a new action type: add its page and bind() calls to ActionPanel::buildPages and to this test\n");

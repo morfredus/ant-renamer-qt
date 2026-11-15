@@ -8,6 +8,17 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.2.0-beta.1] - 2026-11-15
+
+Pre-release of 3.2.0: the EPUB action, and the Flatpak and documentation changes since 3.1.2-beta.5.
+
+### Added
+
+- New action 14 `Epub` ("Use EPUB info"), with its own page in the Operations list (separate from EXIF): masks `%author%` (several authors joined with ` & `), `%title%`, `%year%`, `%publisher%`, `%lang%`, `%isbn%`, `%series%`, `%seriesnum%` plus `%name%`, `%ext%`, `%folderN%` and `$if`; option for a two-digit series number. Saved in jobs as `<Epub Mask=... TwoDigit=...>`. `core/ren_epub.h/.cpp`: ZIP central directory reader and a small inflate (no new dependency), `META-INF/container.xml` then the OPF file (Dublin Core, Calibre series and EPUB 3 collection). `tests/epub_check.h` builds real ZIP files (deflated and stored) and checks the reader, the action and hostile input. `docs/ARCHITECTURE`, `USER_GUIDE`, `WHATS_NEW` (EN, FR) updated; the number of actions is now 15.
+- EPUB action, notes under the parameters: example of a mask with `$if` that avoids a dangling hyphen when the e-book has no series number (`%author% - %title%$if(%seriesnum%, - %seriesnum%,)%ext%`).
+- Help (`actions`, `format`, `what`, in EN, FR, HR, TA; HR and TA carry the English text until translated): new section "Use EPUB info", EPUB tags in the tags table. `English.lng` and `French.lng`: keys for the EPUB page (list entry 14, mask, two-digit option, notes, description); the other languages stay in English until a translator adds them. `docs/TRANSLATING` (EN, FR): 15 actions.
+- Help: the EPUB action is also mentioned in `qt` (what is new compared with the original) and in `what` (what the program reads, known limits), in EN, FR, HR, TA.
+
 ### Removed
 
 - Unused CMake option `ANTREN_INSTALL_DESKTOP_ID` (`CMakeLists.txt`): nothing read it; `ANTRENAMER_DESKTOP_ID` is the variable in use.

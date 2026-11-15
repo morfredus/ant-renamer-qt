@@ -1,6 +1,6 @@
 # Ant Renamer Qt : guide des fonctions
 
-*Toutes les fonctions d'Ant Renamer Qt 3.1.2-beta.5, avec le mode d'emploi.*
+*Toutes les fonctions d'Ant Renamer Qt 3.2.0-beta.1, avec le mode d'emploi.*
 English version : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détails complets, page par page, avec captures d'écran : l'aide intégrée (F1). Différences entre Windows et Linux : §13.
 
 ## 1. Principe général
@@ -68,7 +68,7 @@ Quand une photo est renommée, ses fichiers associés sont renommés avec elle, 
 - **Cas particuliers** : si un fichier portant le nouveau nom existe déjà, le fichier associé n'est pas touché et le journal le dit (la photo est renommée quand même) ; un fichier associé qui est aussi dans la liste suit sans être renommé deux fois ; sans effet en mode « Copier plutôt que renommer » et pour les dossiers.
 - Le fichier `.xmp` voisin est aussi lu par l'opération EXIF / IPTC / XMP (§7).
 
-## 4. Page Opérations : les 14 opérations
+## 4. Page Opérations : les 15 opérations
 
 Choisir l'opération dans la liste, régler ses paramètres (la zone *Notes* sous les paramètres rappelle les tags disponibles ; les noms d'autres opérations dans les notes sont des liens, et « voir Aide » ouvre l'aide), puis **Ajouter au job** (Ctrl+F2). Plusieurs opérations peuvent être empilées : elles s'appliquent dans l'ordre, chacune sur le nom déjà modifié par les précédentes (sauf les opérations de métadonnées, qui lisent le vrai fichier). Si le job est vide, **Démarrer** et l'aperçu utilisent l'opération actuellement affichée, une fois.
 
@@ -90,6 +90,7 @@ Choisir l'opération dans la liste, régler ses paramètres (la zone *Notes* sou
 | 12 | **Noms à partir d'une liste** | Appliquer une liste de noms | Une ligne par fichier, dans l'ordre de la liste (saisie, ou chargée/sauvée avec *Ouvrir...* / *Sauver...* ; *Vider* l'efface). Options : ajouter l'extension d'origine ; utiliser la liste comme extensions. Un fichier sans ligne correspondante, ou avec une ligne vide, n'est pas renommé. |
 | 13 | **Expressions rationnelles** | Découpage / réarrangement avancé | *Expression* (PCRE2, insensible à la casse par défaut ; `(?-i)` la rend sensible) et *Nouveau nom* avec `$1`, `$2`..., `$&` (tout ce qui a été trouvé), `${10}`, `\$` pour un dollar littéral. Elle s'applique au nom entier, extension comprise, et à chaque correspondance. Ex. `(.*) - (.*)\.mp3` → `$2 - $1.mp3` échange artiste et titre. Une expression invalide affiche `<RegExp Error>` dans l'aperçu et ne renomme rien ; une expression vide ne change rien. |
 | 14 | **EXIF / IPTC / XMP** | Nommer les photos d'après leurs métadonnées | Masque avec les tags du §7, plus `%num%` (mêmes réglages que l'Énumération) et `$if`. Le **Décalage** en secondes décale les tags de date. Un fichier sans aucune métadonnée n'est pas renommé (« No EXIF info found »). |
+| 15 | **EPUB** | Nommer les livres numériques d'après leurs métadonnées | Masque avec `%author%` (plusieurs auteurs reliés par ` & `), `%title%`, `%year%`, `%publisher%`, `%lang%`, `%isbn%`, `%series%`, `%seriesnum%`, `%name%`, `%ext%`, `%folderN%`. Par ex. `%author% - %title%%ext%`. Option : numéro de série sur deux chiffres. `$if` disponible (§6). Un fichier qui n'est pas un EPUB valide n'est pas renommé (ligne bleue dans le journal). Séparé de l'EXIF volontairement. |
 
 #### Jokers dans le remplacement de chaîne
 - **Activation** : cocher « Utiliser les jokers (* = n'importe quel texte, ? = n'importe quel caractère) », décoché par défaut. Cela ne concerne que l'opération *Remplacement de chaîne*.
@@ -117,7 +118,7 @@ Le panneau **Contenu du job** liste les opérations planifiées (case à cocher 
 - **Clair / sombre** (cercle à moitié plein) : change aussitôt de thème ; *Options > Affichage > Thème* propose aussi « Suivre le système » (par défaut).
 - **Copier plutôt que renommer** (Options > Traitement) : les originaux restent, les copies portent les nouveaux noms.
 
-## 6. Masques de formatage (opérations 4, 7, 8, 10, 14)
+## 6. Masques de formatage (opérations 4, 7, 8, 10, 14, 15)
 
 | Syntaxe | Signification |
 |---|---|

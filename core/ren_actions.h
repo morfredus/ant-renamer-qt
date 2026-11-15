@@ -1,6 +1,7 @@
 #pragma once
 // Actions. Settings are plain public fields so a UI can bind to them directly.
 #include "ren_files.h"
+#include "ren_epub.h"
 #include "ren_id3.h"
 
 #include <QMap>
@@ -29,7 +30,8 @@ enum class ActionType {
     Case,
     FromList,
     Regexp,
-    Exif
+    Exif,
+    Epub
 };
 
 enum class Op { Rename, Preview, Revert, Undo };  // Undo: passes of the session journal (FileList::undoPasses)
@@ -305,6 +307,23 @@ protected:
 private:
     QMap<QString, QString> tags_;
     Counter counter_;
+};
+
+class ActionEpub : public Action {
+public:
+    ActionEpub() : Action(ActionType::Epub) {}
+    QString mask = QStringLiteral("%author% - %title%%ext%");
+    bool twoDigit = false;  // series number
+    QString description() const override;
+    QString makeNewName(const QString&, bool) override;
+    void save(QXmlStreamWriter&) const override;
+    void load(const XmlElem&) override;
+
+protected:
+    bool getTag(const QString&, QString&) override;
+
+private:
+    EpubInfo epub_;
 };
 
 // A file about to be renamed: its folder (with the trailing separator), its new name and its current full path.

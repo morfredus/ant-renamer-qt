@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.2.0-beta.1 (15/11/2026)
+  - Nouveau : opération « Infos EPUB », sur sa propre page : nommer les livres numériques d'après leurs métadonnées (auteur, titre, année, éditeur, langue, ISBN, série et numéro dans la série), avec une option de numéro de série sur deux chiffres.
 - 3.1.2-beta.5 (14/11/2026)
   - Nouveau : la fenêtre de nouvelle version montre ce qui change (le texte de la release) avant de proposer le téléchargement.
   - Les fichiers Windows sont construits avec MSYS2 UCRT64 au lieu de MINGW64, obsolète (runtime UCRT de Windows).

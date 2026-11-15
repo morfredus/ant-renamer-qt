@@ -43,7 +43,7 @@ LICENSE           GNU General Public License
 |---|---|---|
 | File | `ren::File` | One entry of the list: folder, name, state, preview, log text |
 | File list | `ren::FileList` | The files to rename, in screen order |
-| Operation (action) | `ren::Action` and its 14 subclasses | One renaming rule with its settings |
+| Operation (action) | `ren::Action` and its 15 subclasses | One renaming rule with its settings |
 | Job (batch) | `ren::ActionList` | The ordered operations, saved as an `.arb` XML file |
 | Mask | a string like `%IptcDateCreated%_%num%%ext%` | Name template whose `%tags%` are replaced by their values |
 | Preview | `Op::Preview`, `File::preview` | The computed name, without touching the disk |
@@ -53,9 +53,10 @@ LICENSE           GNU General Public License
 
 | File | Role |
 |---|---|
-| `ren_actions.h/.cpp` | The 14 operations, loading and saving of jobs, the run loop (`Action::perform`) |
+| `ren_actions.h/.cpp` | The 15 operations, loading and saving of jobs, the run loop (`Action::perform`) |
 | `ren_files.h/.cpp` | `File` (rename, revert, sidecars), `FileList`, `Journal` (passes, undo, saved as JSON by the app), `Options` |
 | `ren_format.h/.cpp` | The mask language and the date format |
+| `ren_epub.h/.cpp` | EPUB reader: ZIP central directory, inflate, OPF metadata |
 | `ren_exif.h/.cpp` | EXIF, IPTC and XMP reader, sidecar file names |
 | `ren_id3.h/.cpp` | ID3 reader (MP3) |
 | `ren_path.h` | Delphi-style path helpers (header only) |
@@ -92,6 +93,7 @@ Settings are plain public fields that the interface reads and writes directly.
 | 11 | `ActionFromList` | `FromList` | One name per line of a list |
 | 12 | `ActionRegexp` | `Regexp` | Regular expression (case-insensitive, `.` matches line breaks, as TRegExpr) |
 | 13 | `ActionExif` | `Exif` | Names from EXIF, IPTC and XMP tags, with a `%num%` counter |
+| 14 | `ActionEpub` | `Epub` | Names from EPUB metadata (title, author, year, series...) |
 
 The values are those of the original and are the row numbers of the operations list on screen (`ActionType`).
 
@@ -120,6 +122,8 @@ An operation can report a problem without failing (`setInfo`): the file keeps it
 
 Settings are attributes (`True` / `False`), long texts (replacement table, list of names) are CDATA children. When loading, each element is matched by its tag name (table `kNames`), the action is created with `ActionList::create` and its `load()` reads the attributes; a missing attribute takes its default, so older jobs still load, and unknown attributes are ignored.
 
+**EPUB** (`readEpub`). An EPUB is a ZIP: `zipEntry` finds an entry through the central directory (stored or deflated, zip64 refused, 4 MB limit per entry), `inflateRaw` is a small inflate written for it (the project depends on Qt only). `META-INF/container.xml` gives the path of the OPF file, whose Dublin Core fields (`dc:title`, `dc:creator`, `dc:date`, `dc:publisher`, `dc:language`, `dc:identifier` for the ISBN) and series (Calibre `calibre:series`, EPUB 3 `belongs-to-collection`) fill `EpubInfo`. Creators with a role other than `aut` are skipped; several authors are joined with ` & `.
+
 **EXIF, IPTC, XMP** (`readExif`). Fills a name-to-value table (names are case-insensitive): first the XMP sidecar of the file (it wins over embedded data), then the first 512 KB of the file itself. JPEG: the "Exif" APP1 segment gives the TIFF block, the "Photoshop 3.0" APP13 segment gives the IPTC. TIFF and DNG: the IFDs are read directly. XMP is found by content (`<x:xmpmeta` ... `</x:xmpmeta>`), which covers JPEG, PNG, WebP, TIFF, DNG and `.xmp` files. The tables `tagNames()`, `iptcNames()` and `xmpProps()` list the known tags, and `sidecarExtensions()` lists the sidecar extensions (`xmp`, `dop`): it is the only place to change to add one.
 
 **ID3.** `readId3` reads ID3v2.2, 2.3 and 2.4 (Latin-1, UTF-16 and UTF-8 frames) and completes it with ID3v1/1.1.
@@ -130,7 +134,7 @@ Settings are attributes (`True` / `False`), long texts (replacement table, list 
 |---|---|
 | `main.cpp` | Entry point: single instance, language, `--install-shell`, main window |
 | `mainwindow.h`, `mainwindow.cpp`, `mainwindow_files.cpp`, `mainwindow_batch.cpp`, `mainwindow_run.cpp`, `mainwindow_internal.h` | Main window, one class split by topic: construction and settings / files list / batch / run, log and command line; the `.h` shared by the four `.cpp` holds their helpers, among them `droppedPaths()`, which turns the portal drop formats into readable paths over D-Bus (Qt6::DBus, Linux only) |
-| `actionpanel.h/.cpp` | The "Operations" page: the 14 types and their settings |
+| `actionpanel.h/.cpp` | The "Operations" page: the 15 types and their settings |
 | `dialogs.h/.cpp` | Add folders, drag and drop, Options, About |
 | `appsettings.h/.cpp` | Program options in an INI file; where the undo history file lives (`historyFile()`) |
 | `lngtranslator.h/.cpp` | Translation with the original `.lng` files |
@@ -149,7 +153,7 @@ Settings are attributes (`True` / `False`), long texts (replacement table, list 
 
 **Main window.** Three pages: Files, Actions, Log. Depending on an option: tabs (classic) or the modern single-screen layout (bands or columns). `files_` (`FileList`) and `batch_` (`ActionList`) are the real data; the views (`fileView_`, `batchView_`, `QTreeWidget`s that accept drag and drop) only mirror them: each row carries the `id()` of its `File` or `Action` (never a pointer: `FileList::byId` and `ActionList::byId` return `nullptr` for an object that was removed), and `updateItem` copies a file's state into the columns (and hides the row when "Changed only" is on and the preview equals the name).
 
-**The Operations panel** (`ActionPanel`) owns **one** action being configured. The list on the left holds the 14 types (the row index **is** the `ActionType` value), with one page of controls per type. Every control is created by a helper (`combo`, `spin`, `check`, `radios`) that registers it with a key, a getter and a setter, which is how the last values are saved and restored. Each control is also tied once, where it is built, to a member of its action with `bind(control, &Action::member)` (`bindFn` for the few that need a conversion); `makeAction()` and `setFromAction()` just run the list of the selected type, the first reading the controls to build the `Action`, the second loading an existing action into them (to edit an action of the job). `test_panel` checks that they round-trip for every field and every type: **adding a field to an action without a `bind` makes it fail**.
+**The Operations panel** (`ActionPanel`) owns **one** action being configured. The list on the left holds the 15 types (the row index **is** the `ActionType` value), with one page of controls per type. Every control is created by a helper (`combo`, `spin`, `check`, `radios`) that registers it with a key, a getter and a setter, which is how the last values are saved and restored. Each control is also tied once, where it is built, to a member of its action with `bind(control, &Action::member)` (`bindFn` for the few that need a conversion); `makeAction()` and `setFromAction()` just run the list of the selected type, the first reading the controls to build the `Action`, the second loading an existing action into them (to edit an action of the job). `test_panel` checks that they round-trip for every field and every type: **adding a field to an action without a `bind` makes it fail**.
 
 **Live preview.** The panel emits `changed()` at every modification; the window takes the selected file (or the first), copies it into a temporary `FileList`, runs `makeAction(false)` in `Preview` mode and shows "Current name / New name". The Preview button does the same on the whole list and fills the Preview column.
 

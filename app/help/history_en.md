@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.2.0-beta.1 (15/11/2026)
+  - New: "Use EPUB info" action, on its own page: name e-books from their metadata (author, title, year, publisher, language, ISBN, series and number in the series), with an option for a two-digit series number.
 - 3.1.2-beta.5 (14/11/2026)
   - New: the new-version window shows what changes (the release text) before offering the download.
   - Windows files are built with MSYS2 UCRT64 instead of the deprecated MINGW64 (Windows UCRT runtime).

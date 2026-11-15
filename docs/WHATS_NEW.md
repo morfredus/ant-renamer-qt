@@ -4,7 +4,13 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.1.2-beta.5**.
+Current version: **3.2.0-beta.1**.
+
+## 3.2.0-beta.1
+
+| What is new | Since |
+|---|---|
+| **New action "Use EPUB info"**: name e-books from their metadata (`%author%`, `%title%`, `%year%`, `%publisher%`, `%lang%`, `%isbn%`, `%series%`, `%seriesnum%`). It has its own page, apart from the EXIF tags. | 3.2.0-beta.1 |
 
 ## 3.1.2-beta.5
 

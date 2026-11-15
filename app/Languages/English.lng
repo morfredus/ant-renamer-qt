@@ -102,6 +102,7 @@ Once done, you can send the file to antrenamer-contact@antp.be to have it includ
         <Item Index="11" Value="Take names from list"/>
         <Item Index="12" Value="Regular expression"/>
         <Item Index="13" Value="Use EXIF info"/>
+        <Item Index="14" Value="Use EPUB info"/>
       </Items>
     </lstActions>
     <lblChangeExt Caption="Replace extension by:"/>
@@ -220,6 +221,9 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
 <n/>    <lblExifOffset Caption="Offset:"/>
 <n/>    <lblExifOffsetSec Caption="seconds"/>
     <lblExifNotes Caption="Notes:&lt;BR&gt;- %name% = Original file name (without extension)&lt;BR&gt;- %ext% = Original extension (including the dot)&lt;BR&gt;- %datetimeoriginal% or %datetime% = Original date and time of the picture&lt;BR&gt;- %orientation% = Picture orientation&lt;BR&gt;- %flash% = Flash was on or off&lt;BR&gt;- %% = % character&lt;BR&gt;see &lt;LINK&gt;Help&lt;/LINK&gt; for more information and for the complete list of EXIF, IPTC and XMP tags"/>
+    <lblEpubMask Caption="Mask:"/>
+    <cbxEpubTwoDigit Caption="Two-digit series number (insert a '0' in front of the number if required)"/>
+    <lblEpubNotes Caption="Notes:&lt;BR&gt;- %author% = Author (several authors are joined with &quot; &amp; &quot;)&lt;BR&gt;- %title% = Title&lt;BR&gt;- %year% = Publication year&lt;BR&gt;- %publisher% = Publisher&lt;BR&gt;- %lang% = Language&lt;BR&gt;- %isbn% = ISBN&lt;BR&gt;- %series% = Series&lt;BR&gt;- %seriesnum% = Number in the series&lt;BR&gt;- %name% = Original filename (without extension)&lt;BR&gt;- %ext% = Original extension (including dot)&lt;BR&gt;- %folderN% = Folder name, where N is the level (1 = current, 2 = parent, etc.)&lt;BR&gt;- %% = % character&lt;BR&gt;- $if(condition,true-value,false-value)&lt;BR&gt;Example, without a dangling hyphen when there is no series number: %author% - %title%$if(%seriesnum%, - %seriesnum%,)%ext%&lt;BR&gt;see &lt;LINK&gt;Help&lt;/LINK&gt; for more information"/>
     <lstLog Hint="|Log"/>
     <VarMessages>
       <Item Name="strfltAllFiles" Value="All files"/>
@@ -284,6 +288,8 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
       <Item Name="stradFromListOnlyExt" Value=", use items as extensions instead of names"/>
       <Item Name="stradRegexp" Value="Rename files using a regular expression"/>
       <Item Name="stradExif" Value="Generate names with EXIF info, based on the mask &#34;%s&#34;"/>
+      <Item Name="stradEpub" Value="Generate names with EPUB metadata, based on the mask &#34;%s&#34;"/>
+      <Item Name="stradEpubTwoDigit" Value=", insert '0' in series number if required"/>
       <Item Name="straeFromListEmpty" Value="Empty line"/>
       <Item Name="straeFromListEnd" Value="End of list"/>
 <n/>      <Item Name="straeExifNoInfo" Value="No EXIF info found"/>

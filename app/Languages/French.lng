@@ -98,6 +98,7 @@ Authors=Antoine Potten|antrenamer-contact@antp.be|Frédéric Biron (Ant Renamer Qt
         <Item Index="11" Value="Noms à partir d'une liste"/>
         <Item Index="12" Value="Expressions rationnelles"/>
         <Item Index="13" Value="Infos EXIF"/>
+        <Item Index="14" Value="Infos EPUB"/>
       </Items>
     </lstActions>
     <lblChangeExt Caption="Remplacer l'extension par :"/>
@@ -216,6 +217,9 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <lblExifOffset Caption="Décalage :"/>
     <lblExifOffsetSec Caption="seconds"/>
     <lblExifNotes Caption="Notes :&lt;BR&gt;- %name% = Nom de fichier original (sans extension)&lt;BR&gt;- %ext% = Extension originale (incluant le point)&lt;BR&gt;- %datetimeoriginal% ou %datetime% = Date et heure d'origine de l'image&lt;BR&gt;- %orientation% = Orientation de l'image&lt;BR&gt;- %flash% = Activation ou non du flash&lt;BR&gt;- %% = caractère %&lt;BR&gt;consultez l'&lt;LINK&gt;aide&lt;/LINK&gt; pour plus d'information et la liste complète des tags EXIF, IPTC et XMP"/>
+    <lblEpubMask Caption="Masque :"/>
+    <cbxEpubTwoDigit Caption="Numéro de série sur deux chiffres (insérer un '0' devant le numéro si nécessaire)"/>
+    <lblEpubNotes Caption="Notes :&lt;BR&gt;- %author% = Auteur (plusieurs auteurs sont reliés par &quot; &amp; &quot;)&lt;BR&gt;- %title% = Titre&lt;BR&gt;- %year% = Année de publication&lt;BR&gt;- %publisher% = Éditeur&lt;BR&gt;- %lang% = Langue&lt;BR&gt;- %isbn% = ISBN&lt;BR&gt;- %series% = Série&lt;BR&gt;- %seriesnum% = Numéro dans la série&lt;BR&gt;- %name% = Nom de fichier original (sans extension)&lt;BR&gt;- %ext% = Extension originale (incluant le point)&lt;BR&gt;- %folderN% = Nom du dossier, où N est le niveau (1 = courant, 2 = parent, etc.)&lt;BR&gt;- %% = caractère %&lt;BR&gt;- $if(condition,valeur-si-vrai,valeur-si-faux)&lt;BR&gt;Exemple, sans tiret orphelin quand il n'y a pas de numéro de série : %author% - %title%$if(%seriesnum%, - %seriesnum%,)%ext%&lt;BR&gt;consultez l'&lt;LINK&gt;aide&lt;/LINK&gt; pour plus d'information"/>
     <lstLog Hint="|Journal"/>
     <VarMessages>
       <Item Name="strfltAllFiles" Value="Tous les fichiers"/>
@@ -280,6 +284,8 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
       <Item Name="stradFromListOnlyExt" Value=", utiliser les éléments comme extensions plutôt que comme noms"/>
       <Item Name="stradRegexp" Value="Renommer les fichiers sur base d'une expression rationnelle"/>
       <Item Name="stradExif" Value="Générer des noms à partir des infos EXIF, basés sur le masque &#34;%s&#34;"/>
+      <Item Name="stradEpub" Value="Générer des noms avec les métadonnées EPUB, basés sur le masque &#34;%s&#34;"/>
+      <Item Name="stradEpubTwoDigit" Value=", insérer '0' dans le numéro de série si nécessaire"/>
       <Item Name="straeFromListEmpty" Value="Ligne vide"/>
       <Item Name="straeFromListEnd" Value="Fin de la liste"/>
       <Item Name="straeExifNoInfo" Value="Pas d'info EXIF trouvée"/>

@@ -1,6 +1,6 @@
 # Formatting strings
 
-In some actions, you can use special tags that are delimited by "%" characters. They are available in the actions that use a mask: [String insertion](actions_en.md#stringinsert), [Enumeration](actions_en.md#enum), [Use mp3 tag info](actions_en.md#mp3), [Random names](actions_en.md#random) and [Use EXIF info](actions_en.md#exif). (The [date & time](actions_en.md#datetime) action has its own system of letters.)
+In some actions, you can use special tags that are delimited by "%" characters. They are available in the actions that use a mask: [String insertion](actions_en.md#stringinsert), [Enumeration](actions_en.md#enum), [Use mp3 tag info](actions_en.md#mp3), [Random names](actions_en.md#random) [Use EXIF info](actions_en.md#exif) and [Use EPUB info](actions_en.md#epub). (The [date & time](actions_en.md#datetime) action has its own system of letters.)
 
 Since the "%" is then used as a special character, to have a simple "%" in the file name you have to enter "%%".
 
@@ -19,9 +19,10 @@ For example, the [Use mp3](actions_en.md#mp3) action supports ID3-related tags, 
 | `%%` | A "%" character | all |
 | `%num%` | The counter | Enumeration, EXIF |
 | `%author%`, `%title%`, `%album%`, `%year%`, `%genre%`, `%comm%`, `%track%` | ID3 tags | mp3 |
+| `%author%`, `%title%`, `%year%`, `%publisher%`, `%lang%`, `%isbn%`, `%series%`, `%seriesnum%` | EPUB metadata | EPUB |
 | `%random%` | The random part | Random names |
 | `%DateTimeOriginal%`, `%Make%`, `%IptcKeywords%`, `%XmpTitle%`... | EXIF, IPTC and XMP data, see [the list](metadata_tags_en.md) | EXIF |
-| `$if(...)` | Conditional text, see [below](#if) | mp3, EXIF |
+| `$if(...)` | Conditional text, see [below](#if) | mp3, EXIF, EPUB |
 
 Tags must be written exactly as in the table (in lowercase: `%name%`, not `%Name%`); only the EXIF, IPTC and XMP tags are recognised whatever their case. A tag that is not known (for example because of a typing error) is left as it is in the name, "%" characters included: this is how you notice it in the preview.
 
@@ -82,7 +83,7 @@ When renaming folders, `%count%` and a few derivated tags are available:
 
 ## The $if function {#if}
 
-For the [Use mp3 tags](actions_en.md#mp3) and [Use EXIF info](actions_en.md#exif) actions, there is also a special tag: $if. It allows you to make conditional formatting. For example, when a field is empty you may want to not display the " - " that follows it. Or to put a special value.
+For the [Use mp3 tags](actions_en.md#mp3), [Use EXIF info](actions_en.md#exif) and [Use EPUB info](actions_en.md#epub) actions, there is also a special tag: $if. It allows you to make conditional formatting. For example, when a field is empty you may want to not display the " - " that follows it. Or to put a special value.
 
 The syntax is the following: $if(condition,value-if-true,value-if-false). If "condition" is not an empty string, value-if-true will be used. In the other case, value-if-false will be used. Since you may need to use commas and parenthesis inside the $if function, you can put the values inside quotation marks ("...") to prevent them from being analyzed. But be careful with them: they also prevent the %tag% from being analyzed. To get a quotation mark itself, type it twice (""). A "$" that is not followed by "if(" is kept as a character; "$$" gives a "$".
 

@@ -26,6 +26,7 @@ static int failures = 0;
         }                                                                                                        \
     } while (0)
 
+#include "epub_check.h"
 #include "id3_check.h"
 #include "update_check.h"
 
@@ -358,6 +359,7 @@ int main(int argc, char** argv) {
     }
 
     id3Checks();
+    epubChecks();
     updateChecks();
     {  // exported preview: quotes doubled, unchanged file keeps its name
         FileList el;

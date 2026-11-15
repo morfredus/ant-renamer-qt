@@ -11,6 +11,7 @@ It supports unicode, which means that you can rename files that have characters 
 It reads the information stored inside some files to build the new names:
 
 - the ID3 tags of the MP3 files (ID3v1, ID3v1.1 and ID3v2.2, 2.3 and 2.4);
+- the metadata of EPUB e-books (title, author, year, series...);
 - the EXIF, IPTC and XMP data of the pictures (JPEG, and TIFF-based files such as most RAW files; XMP also from PNG, WebP... and from `.xmp` files);
 - the date and time of the files.
 
@@ -24,9 +25,9 @@ As I said, it won't modify the contents of the files.
 
 It will not either modify files' date & time.
 
-It will not modify the ID3 (tag) contained in MP3s or EXIF from JPEG; it only reads this info for building a new file name.
+It will not modify the ID3 (tag) contained in MP3s, the EXIF from JPEG or the metadata of EPUB files; it only reads this info for building a new file name.
 
-It does not read any info from files other than the MP3s and the pictures described above.
+It does not read any info from files other than the MP3s, the EPUB files and the pictures described above.
 
 It cannot be fully controlled from command line, though it supports some [parameters](params_ta.md).
 
@@ -36,6 +37,7 @@ Note that the contents of this list is not fixed. Except modifying the contents 
 
 - Undo goes back pass after pass, always from the last one (an action of the batch is a pass); the history keeps the last 50 passes of the session and is lost when the program is closed. A pass in the middle cannot be undone alone, and the files copied with "Copy instead of rename" are not removed by an undo.
 - EXIF: 36 tags are read, and the MakerNote (private data of the camera makers) is not decoded. IPTC is read from JPEG files only. See [EXIF, IPTC and XMP tags](metadata_tags_ta.md).
+- EPUB: only the metadata of the OPF file is read (Dublin Core, Calibre or EPUB 3 series); it is sometimes incomplete or approximate, especially for downloaded books.
 - The audio tags are the ID3 tags of MP3 files; other formats (FLAC, OGG, M4A...) are not read.
 - The creation date of a file is not stored by every file system (it is often missing on Linux): the modification date is then used.
 - The help is available in English, French, Croatian and Tamil; the interface itself exists in 28 languages (English and 27 translations). The pages written for Ant Renamer Qt (modern layout, tags, sidecar files...) may exist only in English and French, the other languages then show the English text.

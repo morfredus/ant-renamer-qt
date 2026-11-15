@@ -4,7 +4,13 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.1.2-beta.5**.
+Version courante : **3.2.0-beta.1**.
+
+## 3.2.0-beta.1
+
+| Nouveauté | Depuis |
+|---|---|
+| **Nouvelle opération « Use EPUB info »** : nommer les livres numériques d'après leurs métadonnées (`%author%`, `%title%`, `%year%`, `%publisher%`, `%lang%`, `%isbn%`, `%series%`, `%seriesnum%`). Elle a sa propre page, à part des tags EXIF. | 3.2.0-beta.1 |
 
 ## 3.1.2-beta.5
 

@@ -1,6 +1,6 @@
 # Ant Renamer Qt: function guide
 
-*Every function of Ant Renamer Qt 3.1.2-beta.5 with instructions.*
+*Every function of Ant Renamer Qt 3.2.0-beta.1 with instructions.*
 French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use cases): [USER_RECIPES.md](USER_RECIPES.md). Full details, page by page, with screenshots: the built-in help (F1). Differences between Windows and Linux: §13.
 
 ## 1. General principle
@@ -68,7 +68,7 @@ When a photo is renamed, its sidecar files are renamed with it, with nothing mor
 - **Special cases**: if a file with the new name already exists, the sidecar is left alone and the log says so (the photo is renamed anyway); a sidecar that is also in the list follows without being renamed twice; no effect in "Copy instead of rename" mode and for folders.
 - The neighbouring `.xmp` file is also read by the EXIF / IPTC / XMP action (§7).
 
-## 4. Actions page: the 14 actions
+## 4. Actions page: the 15 actions
 
 Pick the action in the list, set its parameters (the *Notes* area under the parameters recalls the available tags; the names of other actions in the notes are links, and "see Help" opens the help), then **Add to batch** (Ctrl+F2). Several actions can be stacked: they apply in order, each on the name already changed by the previous ones (except the metadata actions, which read the real file). If the batch is empty, **Go** and the preview use the action currently displayed, once.
 
@@ -90,6 +90,7 @@ Pick the action in the list, set its parameters (the *Notes* area under the para
 | 12 | **Names from a list** | Apply a list of names | One line per file, in list order (typed, or loaded/saved with *Open...* / *Save...*; *Clear* empties it). Options: add the original extension; use the list as extensions. A file without a matching line, or with an empty line, is not renamed. |
 | 13 | **Regular expressions** | Advanced splitting / rearranging | *Expression* (PCRE2, not case-sensitive by default; `(?-i)` makes it case-sensitive) and *New name* with `$1`, `$2`..., `$&` (all that was found), `${10}`, `\$` for a literal dollar. It applies to the whole name including the extension, and to every match in it. E.g. `(.*) - (.*)\.mp3` → `$2 - $1.mp3` swaps artist and title. An invalid expression shows `<RegExp Error>` in the preview and renames nothing; an empty one changes nothing. |
 | 14 | **EXIF / IPTC / XMP** | Name photos from their metadata | Mask with the tags of §7, plus `%num%` (same settings as Enumeration) and `$if`. **Offset** in seconds shifts the date tags. A file without any metadata is not renamed ("No EXIF info found"). |
+| 15 | **EPUB** | Name e-books from their metadata | Mask with `%author%` (several authors joined with ` & `), `%title%`, `%year%`, `%publisher%`, `%lang%`, `%isbn%`, `%series%`, `%seriesnum%`, `%name%`, `%ext%`, `%folderN%`. E.g. `%author% - %title%%ext%`. Option: two-digit series number. `$if` available (§6). A file that is not a valid EPUB is not renamed (blue line in the log). Kept separate from EXIF on purpose. |
 
 #### Wildcards in string replacement
 - **Enabling**: tick "Use wildcards (* = any text, ? = any character)", off by default. It only concerns the *String replacement* action.
@@ -117,7 +118,7 @@ The **Batch contents** panel lists the planned actions (tick box to show/hide it
 - **Light / dark** (half-filled circle): switches the theme at once; *Options > Display > Theme* also offers "Follow the system" (default).
 - **Copy instead of rename** (Options > Processing): the originals stay, the copies carry the new names.
 
-## 6. Format masks (actions 4, 7, 8, 10, 14)
+## 6. Format masks (actions 4, 7, 8, 10, 14, 15)
 
 | Syntax | Meaning |
 |---|---|

@@ -27,7 +27,7 @@ endif()
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 add_library(rencore STATIC
-    core/ren_actions.cpp core/ren_exif.cpp core/ren_files.cpp core/ren_format.cpp core/ren_id3.cpp core/ren_update.cpp)
+    core/ren_actions.cpp core/ren_epub.cpp core/ren_exif.cpp core/ren_files.cpp core/ren_format.cpp core/ren_id3.cpp core/ren_update.cpp)
 target_include_directories(rencore PUBLIC core)
 target_link_libraries(rencore PUBLIC Qt6::Core)
 if(MSVC)

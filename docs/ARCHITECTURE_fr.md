@@ -43,7 +43,7 @@ LICENSE           Licence publique générale GNU
 |---|---|---|
 | Fichier | `ren::File` | Une entrée de la liste : dossier, nom, état, aperçu, texte du journal |
 | Liste de fichiers | `ren::FileList` | Les fichiers à renommer, dans l'ordre de l'écran |
-| Opération (action) | `ren::Action` et ses 14 sous-classes | Une règle de renommage avec ses réglages |
+| Opération (action) | `ren::Action` et ses 15 sous-classes | Une règle de renommage avec ses réglages |
 | Job (lot, *batch*) | `ren::ActionList` | La suite ordonnée d'opérations, enregistrée dans un fichier XML `.arb` |
 | Masque | chaîne comme `%IptcDateCreated%_%num%%ext%` | Modèle de nom dont les `%tags%` sont remplacés par leurs valeurs |
 | Aperçu | `Op::Preview`, `File::preview` | Le nom calculé, sans toucher au disque |
@@ -53,9 +53,10 @@ LICENSE           Licence publique générale GNU
 
 | Fichier | Rôle |
 |---|---|
-| `ren_actions.h/.cpp` | Les 14 opérations, chargement et sauvegarde des jobs, boucle d'exécution (`Action::perform`) |
+| `ren_actions.h/.cpp` | Les 15 opérations, chargement et sauvegarde des jobs, boucle d'exécution (`Action::perform`) |
 | `ren_files.h/.cpp` | `File` (renommer, annuler, fichiers associés), `FileList`, `Journal` (passes, annulation, enregistré en JSON par l'application), `Options` |
 | `ren_format.h/.cpp` | Le langage des masques et le format de date |
+| `ren_epub.h/.cpp` | Lecteur EPUB : répertoire central du ZIP, inflate, métadonnées OPF |
 | `ren_exif.h/.cpp` | Lecteur EXIF, IPTC et XMP, noms des fichiers associés |
 | `ren_id3.h/.cpp` | Lecteur ID3 (MP3) |
 | `ren_path.h` | Fonctions de chemins à la Delphi (en-tête seul) |
@@ -92,6 +93,7 @@ Les réglages sont de simples champs publics que l'interface lit et écrit direc
 | 11 | `ActionFromList` | `FromList` | Un nom par ligne d'une liste |
 | 12 | `ActionRegexp` | `Regexp` | Expression régulière (insensible à la casse, `.` accepte les retours à la ligne, comme TRegExpr) |
 | 13 | `ActionExif` | `Exif` | Noms à partir des tags EXIF, IPTC et XMP, avec un compteur `%num%` |
+| 14 | `ActionEpub` | `Epub` | Noms à partir des métadonnées EPUB (titre, auteur, année, série...) |
 
 Les valeurs sont celles de l'original et sont les numéros de ligne de la liste des opérations à l'écran (`ActionType`).
 
@@ -120,6 +122,8 @@ Une opération peut signaler un problème sans échouer (`setInfo`) : le fichier
 
 Les réglages sont des attributs (`True` / `False`), les textes longs (table de remplacement, liste de noms) sont des enfants en CDATA. À la lecture, chaque élément est reconnu par le nom de sa balise (tableau `kNames`), l'action est créée avec `ActionList::create` et son `load()` lit les attributs ; un attribut absent prend sa valeur par défaut, donc les anciens jobs se lisent encore, et les attributs inconnus sont ignorés.
 
+**EPUB** (`readEpub`). Un EPUB est un ZIP : `zipEntry` retrouve une entrée par le répertoire central (stockée ou compressée, zip64 refusé, 4 Mo maximum par entrée), `inflateRaw` est un petit inflate écrit pour l'occasion (le projet ne dépend que de Qt). `META-INF/container.xml` donne le chemin du fichier OPF, dont les champs Dublin Core (`dc:title`, `dc:creator`, `dc:date`, `dc:publisher`, `dc:language`, `dc:identifier` pour l'ISBN) et la série (Calibre `calibre:series`, EPUB 3 `belongs-to-collection`) remplissent `EpubInfo`. Les créateurs dont le rôle n'est pas `aut` sont ignorés ; plusieurs auteurs sont reliés par ` & `.
+
 **EXIF, IPTC, XMP** (`readExif`). Remplit une table nom vers valeur (noms insensibles à la casse) : d'abord le XMP associé au fichier (il l'emporte sur les données intégrées), puis les 512 premiers Ko du fichier lui-même. JPEG : le segment APP1 « Exif » donne le bloc TIFF, le segment APP13 « Photoshop 3.0 » donne l'IPTC. TIFF et DNG : les IFD sont lus directement. Le XMP est trouvé par son contenu (`<x:xmpmeta` ... `</x:xmpmeta>`), ce qui couvre JPEG, PNG, WebP, TIFF, DNG et les fichiers `.xmp`. Les tables `tagNames()`, `iptcNames()` et `xmpProps()` listent les tags connus, et `sidecarExtensions()` les extensions de fichiers associés (`xmp`, `dop`) : c'est le seul endroit à modifier pour en ajouter une.
 
 **ID3.** `readId3` lit l'ID3v2.2, 2.3 et 2.4 (trames Latin-1, UTF-16 et UTF-8) et le complète avec l'ID3v1/1.1.
@@ -130,7 +134,7 @@ Les réglages sont des attributs (`True` / `False`), les textes longs (table de 
 |---|---|
 | `main.cpp` | Point d'entrée : instance unique, langue, `--install-shell`, fenêtre principale |
 | `mainwindow.h`, `mainwindow.cpp`, `mainwindow_files.cpp`, `mainwindow_batch.cpp`, `mainwindow_run.cpp`, `mainwindow_internal.h` | Fenêtre principale, une seule classe découpée par sujet : construction et réglages / liste des fichiers / lot / lancement, journal et ligne de commande ; le `.h` partagé par les quatre `.cpp` contient leurs fonctions d'aide, dont `droppedPaths()` qui transforme les formats de dépôt du portail en chemins lisibles par D-Bus (Qt6::DBus, Linux seulement) |
-| `actionpanel.h/.cpp` | La page « Opérations » : les 14 types et leurs réglages |
+| `actionpanel.h/.cpp` | La page « Opérations » : les 15 types et leurs réglages |
 | `dialogs.h/.cpp` | Ajouter des dossiers, glisser-déposer, Options, À propos |
 | `appsettings.h/.cpp` | Options du programme dans un fichier INI ; emplacement du fichier d'historique d'annulation (`historyFile()`) |
 | `lngtranslator.h/.cpp` | Traduction avec les fichiers `.lng` de l'original |
@@ -149,7 +153,7 @@ Les réglages sont des attributs (`True` / `False`), les textes longs (table de 
 
 **Fenêtre principale.** Trois pages : Fichiers, Opérations, Journal. Selon une option : onglets (classique) ou disposition moderne en un seul écran (bandes ou colonnes). `files_` (`FileList`) et `batch_` (`ActionList`) sont les vraies données ; les vues (`fileView_`, `batchView_`, des `QTreeWidget` qui acceptent le glisser-déposer) n'en sont qu'un miroir : chaque ligne porte l'`id()` de son `File` ou de son `Action` (jamais un pointeur : `FileList::byId` et `ActionList::byId` renvoient `nullptr` pour un objet retiré), et `updateItem` recopie l'état d'un fichier dans les colonnes (et masque la ligne quand « Seulement modifiés » est actif et que l'aperçu égale le nom).
 
-**Le panneau d'opérations** (`ActionPanel`) possède **une** action en cours de configuration. La liste de gauche contient les 14 types (l'index de la ligne **est** la valeur de `ActionType`), avec une page de contrôles par type. Chaque contrôle est créé par une aide (`combo`, `spin`, `check`, `radios`) qui l'enregistre avec une clé, un lecteur et un écrivain, ce qui sert à sauvegarder et restaurer les dernières valeurs. Chaque contrôle est aussi relié une seule fois, là où il est créé, à un membre de son action par `bind(contrôle, &Action::membre)` (`bindFn` pour les rares qui demandent une conversion) ; `makeAction()` et `setFromAction()` parcourent simplement la liste du type sélectionné, la première lisant les contrôles pour construire l'`Action`, la seconde chargeant une action existante dedans (pour modifier une action du job). `test_panel` vérifie qu'elles sont réciproques pour chaque champ et chaque type : **ajouter un champ à une action sans `bind` le fait échouer**.
+**Le panneau d'opérations** (`ActionPanel`) possède **une** action en cours de configuration. La liste de gauche contient les 15 types (l'index de la ligne **est** la valeur de `ActionType`), avec une page de contrôles par type. Chaque contrôle est créé par une aide (`combo`, `spin`, `check`, `radios`) qui l'enregistre avec une clé, un lecteur et un écrivain, ce qui sert à sauvegarder et restaurer les dernières valeurs. Chaque contrôle est aussi relié une seule fois, là où il est créé, à un membre de son action par `bind(contrôle, &Action::membre)` (`bindFn` pour les rares qui demandent une conversion) ; `makeAction()` et `setFromAction()` parcourent simplement la liste du type sélectionné, la première lisant les contrôles pour construire l'`Action`, la seconde chargeant une action existante dedans (pour modifier une action du job). `test_panel` vérifie qu'elles sont réciproques pour chaque champ et chaque type : **ajouter un champ à une action sans `bind` le fait échouer**.
 
 **Aperçu en direct.** Le panneau émet `changed()` à chaque modification ; la fenêtre prend le fichier sélectionné (ou le premier), le copie dans une `FileList` temporaire, exécute `makeAction(false)` en mode `Preview` et affiche « Nom actuel / Nouveau nom ». Le bouton Aperçu fait de même sur toute la liste et remplit la colonne Aperçu.
 

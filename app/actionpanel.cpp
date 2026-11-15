@@ -147,6 +147,7 @@ static const char* const kNames[] = {
     QT_TRANSLATE_NOOP("Ren", "Take names from list"),
     QT_TRANSLATE_NOOP("Ren", "Regular expression"),
     QT_TRANSLATE_NOOP("Ren", "Use EXIF info"),
+    QT_TRANSLATE_NOOP("Ren", "Use EPUB info"),
 };
 
 ActionPanel::ActionPanel(QWidget* parent) : QWidget(parent), binds_(std::size(kNames)) {
@@ -598,6 +599,23 @@ void ActionPanel::buildPages() {
                      "- %orientation% = Picture orientation<BR>- %flash% = Flash was on or off<BR>"
                      "- %% = % character<BR>see <LINK>Help</LINK> for more information and for the complete list of EXIF, IPTC "
                      "and XMP tags"));
+        p.v->addStretch();
+    }
+    {  // 14 EPUB
+        Page p = newPage(u"Epub"_s);
+        auto* epubMask = combo(p, u"Mask"_s, tr("Mask:"), u"%author% - %title%%ext%"_s);
+        auto* epubTwo = check(p, u"TwoDigit"_s, tr("Two-digit series number (insert a '0' in front of the number if required)"), false);
+        bind(epubMask, &ActionEpub::mask);
+        bind(epubTwo, &ActionEpub::twoDigit);
+        notes(p, u"lblEpubNotes"_s,
+              notesHead +
+                  tr("- %author% = Author (several authors are joined with \" & \")<BR>- %title% = Title<BR>- %year% = Publication year<BR>"
+                     "- %publisher% = Publisher<BR>- %lang% = Language<BR>- %isbn% = ISBN<BR>"
+                     "- %series% = Series<BR>- %seriesnum% = Number in the series<BR>") +
+                  tr("- %name% = Original filename (without extension)<BR>- %ext% = Original extension (including dot)<BR>") +
+                  tr("- %folderN% = Folder name, where N is the level (1 = current, 2 = parent, etc.)<BR>- %% = % character<BR>"
+                     "- $if(condition,true-value,false-value)<BR>Example, without a dangling hyphen when there is no series number: "
+                     "%author% - %title%$if(%seriesnum%, - %seriesnum%,)%ext%<BR>see <LINK>Help</LINK> for more information"));
         p.v->addStretch();
     }
 }
