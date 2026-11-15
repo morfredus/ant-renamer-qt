@@ -134,6 +134,8 @@ L'option « Même numéro pour les fichiers de même nom... » donne le même nu
 
 ## Infos des tags mp3 {#mp3}
 
+La liste complète des tags, avec leur origine, est [sur cette page dédiée](mp3_tags_fr.md).
+
 Ici encore vous devez entrer un masque. Les tags sont lus dans les informations ID3 du fichier : ID3v2 (2.2, 2.3 et 2.4) au début du fichier et ID3v1 / v1.1 à sa fin. Quand les deux existent, les valeurs v2 sont utilisées, et la v1 complète ce que la v2 n'a pas. Consultez la page ["Formatage de chaînes"](format_fr.md) pour plus d'informations.
 
 - `%author%` : Auteur/Artiste
@@ -277,6 +279,8 @@ Un fichier qui ne contient aucune information EXIF, IPTC ou XMP n'est pas renomm
 Le fichier XMP associé d'une image (`IMG.xmp` ou `IMG.CR2.xmp`) est lu avec l'image et l'emporte sur le XMP intégré, ce qui rend disponibles les mots-clés et la note d'un fichier RAW. Quand l'image est renommée, ses fichiers associés (`.xmp`, `.dop`, `.pp3`... et, pour un JPEG, son fichier RAW) sont renommés avec elle : voir l'option dans les [Options](options_fr.md), page *Traitement*.
 
 ## Infos EPUB {#epub}
+
+La liste complète des tags, avec leur origine, est [sur cette page dédiée](epub_tags_fr.md).
 
 Pour les livres numériques au format EPUB. Comme dans l'opération [mp3](#mp3), vous entrez un masque, et les tags sont lus dans les métadonnées stockées dans le fichier EPUB (un EPUB est une archive ZIP dont le fichier OPF contient le titre, les auteurs, la date...). Voir la page ["Formatage"](format_fr.md) pour plus d'informations, y compris la fonction `$if`.
 

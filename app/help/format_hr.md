@@ -18,8 +18,8 @@ For example, the [Use mp3](actions_hr.md#mp3) action supports ID3-related tags, 
 | `%count%` and similar | Number of items in a folder, see [below](#count) | all (renamed folders) |
 | `%%` | A "%" character | all |
 | `%num%` | The counter | Enumeration, EXIF |
-| `%author%`, `%title%`, `%album%`, `%year%`, `%genre%`, `%comm%`, `%track%` | ID3 tags | mp3 |
-| `%author%`, `%title%`, `%year%`, `%publisher%`, `%lang%`, `%isbn%`, `%series%`, `%seriesnum%` | EPUB metadata | EPUB |
+| `%author%`, `%title%`, `%album%`, `%year%`, `%genre%`, `%comm%`, `%track%` | ID3 tags, see [the list](mp3_tags_hr.md) | mp3 |
+| `%author%`, `%title%`, `%year%`, `%publisher%`, `%lang%`, `%isbn%`, `%series%`, `%seriesnum%` | EPUB metadata, see [the list](epub_tags_hr.md) | EPUB |
 | `%random%` | The random part | Random names |
 | `%DateTimeOriginal%`, `%Make%`, `%IptcKeywords%`, `%XmpTitle%`... | EXIF, IPTC and XMP data, see [the list](metadata_tags_hr.md) | EXIF |
 | `$if(...)` | Conditional text, see [below](#if) | mp3, EXIF, EPUB |

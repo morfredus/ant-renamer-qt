@@ -8,6 +8,11 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Changed
+
+- Help: two new pages, "MP3 tags" (`mp3_tags_*.md`) and "EPUB tags" (`epub_tags_*.md`), next to the page of the EXIF, IPTC and XMP tags: the tags, where each value comes from, good to know, examples of masks. Linked from the table of contents, the `actions` and `format` pages, and the "Help" link under the parameters of the MP3 and EPUB actions (`app/actionpanel.cpp`). EN and FR written, HR and TA carry the English text until translated.
+- `docs/TESTED_PLATFORMS.md` (EN, FR): 3.2.0-beta.2 tried on Windows 11 (Lenovo Legion), Windows 10, Fedora (Flatpak), Linux Mint (MacBook Pro, `.deb` and AppImage) and Raspberry Pi 4 (arm64 `.deb`).
+
 ## [3.2.0-beta.2] - 2026-11-15
 
 Pre-release of 3.2.0: fixes the build error of 3.2.0-beta.1 reported by the Linux CI job (static analysis).

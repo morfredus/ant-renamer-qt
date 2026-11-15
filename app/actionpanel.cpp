@@ -339,6 +339,8 @@ void ActionPanel::notes(Page& p, const QString& control, const QString& english)
         }
         emit helpRequested(control == u"lblRegexpNotes" ? u"regexp"_s
                            : control == u"lblExifNotes" ? u"metadata_tags"_s
+                           : control == u"lblMP3Notes" ? u"mp3_tags"_s
+                           : control == u"lblEpubNotes" ? u"epub_tags"_s
                                                         : u"format"_s);  // any other link is the \"Help\" link
     });
     p.v->addSpacing(8);
