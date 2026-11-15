@@ -552,7 +552,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="couldNotWriteFile" Value="Could not write %1"/>
     <Item Name="invalidRegexp" Value="Invalid regular expression: %1"/>
     <Item Name="logReverted" Value="Reverted"/>
-    <Item Name="helpNotFound" Value="The help files were not found in:&#10;%1&#10;&#10;Open the program's web site instead?"/>
+    <Item Name="helpNotFound" Value="The help files were not found in:&#10;%1&#10;&#10;Open the online help instead?"/>
     <Item Name="newNameInvalidChar" Value="the new name contains an invalid character"/>
     <Item Name="renameSummary" Value="Files renamed: %1, errors: %2"/>
     <Item Name="pasteFolder" Value="Paste from clipboard"/>

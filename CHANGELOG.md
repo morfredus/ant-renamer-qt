@@ -10,7 +10,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Fixed
 
-- Help not found: the "Open the program's web site instead?" box opened the web site of the original program (`antp.be`); it now opens the web site of Ant Renamer Qt, `morfredus.fr/ant-renamer-qt/` for the French help and `morfredus.fr/ant-renamer-qt-en/` otherwise (`app/helpwindow.cpp`).
+- Help not found: the "Open the program's web site instead?" box opened the web site of the original program (`antp.be`); it now opens the online help of Ant Renamer Qt, `morfredus.fr/ant-renamer-qt/aide/` for the French help and `morfredus.fr/ant-renamer-qt-en/help/` otherwise (`app/helpwindow.cpp`); the question of the box is now "Open the online help instead?" (`English.lng`, `French.lng`; the other languages keep their older wording, "web site of the program", until updated).
 
 ### Changed
 
