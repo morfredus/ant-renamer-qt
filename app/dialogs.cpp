@@ -588,6 +588,10 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
         b->setHtml(html);
         return b;
     };
+    const QString onlineHelp =
+        helpLanguageCode() == u"fr"
+            ? u"<a href='https://morfredus.fr/ant-renamer-qt/aide/'>morfredus.fr/ant-renamer-qt/aide</a><br>"_s
+            : u"<a href='https://morfredus.fr/ant-renamer-qt-en/help/'>morfredus.fr/ant-renamer-qt-en/help</a><br>"_s;
     tabs->addTab(
         browser(u"<b>Copyright &copy; 2000-2026 Antoine Potten - Frédéric Biron</b><br><br>"_s +
                 tr("Ant Renamer Qt is a C++/Qt port of Ant Renamer by Antoine Potten, developed in parallel with the original "
@@ -596,7 +600,8 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
                 u"<a href='https://github.com/morfredus/ant-renamer-qt/'>github.com/morfredus/ant-renamer-qt</a> ("_s +
                 tr("issues and discussions") + u")<br>"_s + tr("Support by e-mail (no GitHub account needed): ") +
                 u"<a href='mailto:ant-renamer-qt@morfredus.fr'>ant-renamer-qt@morfredus.fr</a><br><br>"_s + tr("Ant Renamer Qt web site: ") +
-                u"<a href='https://morfredus.fr/ant-renamer-qt/'>morfredus.fr/ant-renamer-qt</a><br>"_s +
+                u"<a href='https://morfredus.fr/ant-renamer-qt/'>morfredus.fr/ant-renamer-qt</a><br>"_s + tr("Online help: ") +
+                onlineHelp +
                 tr("Web site of the original program (Antoine Potten): ") +
                 u"<a href='https://www.antp.be/software/renamer/'>www.antp.be/software/renamer/</a><br><br>"_s + u"<b>"_s +
                 tr("License:") + u"</b><br>"_s +

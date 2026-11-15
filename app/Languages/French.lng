@@ -541,6 +541,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="exportPreviewTxt" Value="Fichier texte, nouveaux noms seulement (*.txt)"/>
     <Item Name="typeFolderPath" Value="Ou saisir le chemin d'un dossier"/>
     <Item Name="webSiteQt" Value="Site web d'Ant Renamer Qt : "/>
+    <Item Name="onlineHelp" Value="Aide en ligne : "/>
     <Item Name="webSiteOriginal" Value="Site web du programme d'origine (Antoine Potten) : "/>
     <Item Name="batchFilterXml" Value="Fichiers job Ant Renamer (*.arb *.xml)"/>
     <Item Name="batchFilter" Value="Fichiers job Ant Renamer (*.arb)"/>

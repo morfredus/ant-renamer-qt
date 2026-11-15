@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Added
+
+- Links to the online help (`https://morfredus.fr/ant-renamer-qt/aide/`, English: `https://morfredus.fr/ant-renamer-qt-en/help/`): in the About window (General tab, line "Online help:", `app/dialogs.cpp`; key `onlineHelp` in `English.lng` and `French.lng`, the other languages show it in English), in `README.md` and `README_fr.md` (with the note that a PDF of the complete help can be downloaded from the online help) and in `docs/PRESENTATION.md` and `PRESENTATION_fr.md`.
+
 ### Fixed
 
 - Help, page "About the author, credits & links" (EN, FR, HR, TA): the sentence "At first, I made this program because the only file renamers that I found were shareware" was the original author's, not the reason of this port; it is replaced by the real origin of the port (diamond characters in the interface of the original program on Windows 11 with the option "Beta: Use Unicode UTF-8 for worldwide language support" turned on). The first lines now say that the original program Ant Renamer was created by Antoine Potten with Borland Delphi 7 and that its code is free, and that Ant Renamer Qt is a port based on this free code, instead of "This program has been made by Antoine Potten".

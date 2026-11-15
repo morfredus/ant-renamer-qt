@@ -545,6 +545,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="exportPreviewTxt" Value="Text file, new names only (*.txt)"/>
     <Item Name="typeFolderPath" Value="Or type the path of a folder"/>
     <Item Name="webSiteQt" Value="Ant Renamer Qt web site: "/>
+    <Item Name="onlineHelp" Value="Online help: "/>
     <Item Name="webSiteOriginal" Value="Web site of the original program (Antoine Potten): "/>
     <Item Name="batchFilterXml" Value="Ant Renamer batch files (*.arb *.xml)"/>
     <Item Name="batchFilter" Value="Ant Renamer batch files (*.arb)"/>

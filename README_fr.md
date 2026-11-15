@@ -81,6 +81,7 @@ Toutes les fonctions avec leur mode d'emploi (opérations, raccourcis, masques, 
 [docs/USER_GUIDE_fr.md](docs/USER_GUIDE_fr.md) ([en](docs/USER_GUIDE.md)).
 Recettes pas à pas pour les cas courants et complexes (nettoyer des noms, numéroter, photos, musique, déplacer des fichiers, ligne de commande) :
 [docs/USER_RECIPES_fr.md](docs/USER_RECIPES_fr.md) ([en](docs/USER_RECIPES.md)).
+L'aide complète est aussi en ligne : [morfredus.fr/ant-renamer-qt/aide](https://morfredus.fr/ant-renamer-qt/aide/). Un PDF de l'aide complète peut y être téléchargé.
 
 ## Développement
 

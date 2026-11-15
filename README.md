@@ -81,6 +81,7 @@ Every function with instructions (actions, shortcuts, masks, tags, command line,
 [docs/USER_GUIDE.md](docs/USER_GUIDE.md) ([fr](docs/USER_GUIDE_fr.md)).
 Step-by-step recipes for common and complex cases (cleaning names, numbering, photos, music, moving files, command line):
 [docs/USER_RECIPES.md](docs/USER_RECIPES.md) ([fr](docs/USER_RECIPES_fr.md)).
+The complete help is also online: [morfredus.fr/ant-renamer-qt-en/help](https://morfredus.fr/ant-renamer-qt-en/help/). A PDF of the complete help can be downloaded from it.
 
 ## Development
 
