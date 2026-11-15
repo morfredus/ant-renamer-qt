@@ -2,11 +2,11 @@
 
 ---
 
-Ce programme a été créé par Antoine Potten à l'aide de Borland Delphi 7.
+Le programme d'origine, Ant Renamer, a été créé par Antoine Potten à l'aide de Borland Delphi 7. Son code est libre.
 
-Ant Renamer Qt, le portage C++/Qt 6 de ce programme (version 3.x, pour Windows 10 et 11 et pour Linux), est développé en parallèle de l'original par Frédéric Biron.
+Ant Renamer Qt, un portage C++/Qt 6 basé sur ce code libre (version 3.x, pour Windows 10 et 11 et pour Linux), est développé en parallèle de l'original par Frédéric Biron.
 
-Au début, j'ai fait ce programme parce que les seuls renommeurs de fichiers que j'avais trouvés à l'époque étaient payants (shareware).
+Ce portage est né d'un problème d'affichage : sous Windows 11, avec l'option « Bêta : utiliser le format Unicode UTF-8 pour la prise en charge des langues à l'échelle mondiale » activée, des losanges apparaissaient dans l'interface du programme d'origine.
 
 ---
 

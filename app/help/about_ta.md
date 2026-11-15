@@ -2,11 +2,11 @@
 
 ---
 
-This program has been made by Antoine Potten with Borland Delphi 7.
+The original program, Ant Renamer, was created by Antoine Potten with Borland Delphi 7. Its code is free software.
 
-Ant Renamer Qt, the C++/Qt 6 port of this program (version 3.x, for Windows 10 and 11 and for Linux), is developed in parallel with the original by Frédéric Biron.
+Ant Renamer Qt, a C++/Qt 6 port based on this free code (version 3.x, for Windows 10 and 11 and for Linux), is developed in parallel with the original by Frédéric Biron.
 
-At first, I made this program because the only file renamers that I found were shareware (at that time).
+This port started from a display problem: on Windows 11, with the option "Beta: Use Unicode UTF-8 for worldwide language support" turned on, diamond characters appeared in the interface of the original program.
 
 ---
 
