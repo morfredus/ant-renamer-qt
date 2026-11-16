@@ -18,29 +18,29 @@ Ovdje je popis podržanih parametara:
 
 Nazivi datoteka i putanje mogu biti relativne ili apsolutne i mogu sadržavati zamjenske znakove (\* i ?).
 
-**Ant Renamer Qt**: the program is called `antrenamer-qt.exe` (Windows) or `antrenamer-qt` (Linux); in the examples below, replace `Renamer.exe` with this name.
+**Ant Renamer Qt**: the program is called `antrenamer-qt.exe` (Windows) or `antrenamer-qt` (Linux); the examples below use the Windows name; on Linux, type `antrenamer-qt`.
 
 Evo nekoliko primjera:
 
-- `Renamer.exe -b d:\test.arb -af c:\data\*.* -g -x`  
+- `antrenamer-qt.exe -b d:\test.arb -af c:\data\*.* -g -x`  
 
     To će učitati navedenu datoteku za skupne obradbe, dodati sve datoteke sadržane u C:\\data mapi, pokrenuti preimenovanje i onda izaći
-- `Renamer.exe -af c:\data`  
+- `antrenamer-qt.exe -af c:\data`  
 
     To će dodati datoteku naziva c:\\data
-- `Renamer.exe -afr c:\data`  
+- `antrenamer-qt.exe -afr c:\data`  
 
     To će dodati datoteku naziva c:\\data. Ako je to mapa, dodati će datoteke koje sadrži (rekurzivna pretraga)
-- `Renamer.exe -aF c:\data`  
+- `antrenamer-qt.exe -aF c:\data`  
 
     To će dodati "data" mapu
-- `Renamer.exe -aF c:\data\*.*`  
+- `antrenamer-qt.exe -aF c:\data\*.*`  
 
     To će dodati mape sadržane u mapi "data", ali ne i datoteke
-- `Renamer.exe -af c:\data\*.* c:\images\*.jpg c:\test.txt -afr c:\mp3\*.*`  
+- `antrenamer-qt.exe -af c:\data\*.* c:\images\*.jpg c:\test.txt -afr c:\mp3\*.*`  
 
     Možete kombinirati nekoliko putanja/naziva datoteka koristeći maske i koristeći različite "-a" parametre u jednom naredbenom retku
 
-Ako je naziv dan bez ikakvog "-a" parametra, to će se analizirati kao u Ant Renamer 2.07 (i starijim) : ako naziv datoteke završava s ".arb", biti će učitana kao datoteka za skupne obradbe; ako je dana mapa, njen se sadržaj dodaje rekurzivno (samo datoteke, nisu podržani zamjenski znakovi, potreban je potpuni naziv mape).
+Ako je naziv dan bez ikakvog "-a" parametra, to će se jednostavno analizirati: ako naziv datoteke završava s ".arb", biti će učitana kao datoteka za skupne obradbe; ako je dana mapa, njen se sadržaj dodaje rekurzivno (samo datoteke, nisu podržani zamjenski znakovi, potreban je potpuni naziv mape).
 
-On Windows, it is possible to add Ant Renamer in the "Send to" list (in the menu that appears when you click with right mouse button on a folder in Windows Explorer). So this adds the possibility to send a folder to Ant Renamer from its contextual menu, to load its content in the files list. To do that, go to "Start" -\> "Run" and type `sendto`. A folder window should open; place there a shortcut to Ant Renamer.
+On Windows, it is possible to add Ant Renamer Qt in the "Send to" list (in the menu that appears when you click with right mouse button on a folder in Windows Explorer). So this adds the possibility to send a folder to Ant Renamer Qt from its contextual menu, to load its content in the files list. To do that, press Windows+R, type `shell:sendto` and press Enter. A folder window should open; place there a shortcut to `antrenamer-qt.exe`.

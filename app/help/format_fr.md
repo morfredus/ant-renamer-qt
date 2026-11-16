@@ -28,7 +28,7 @@ Les tags doivent être écrits exactement comme dans le tableau (en minuscules :
 
 ## Le tag folder {#folder}
 
-Un tag %folderN% est souvent disponible. Ce tag vous permet d'utiliser le nom des dossiers parents dans le nom de fichier lui-même. C'est un peu compliqué à expliquer, je vais donc vous donner quelques exemples.
+Un tag %folderN% est souvent disponible. Ce tag vous permet d'utiliser le nom des dossiers parents dans le nom de fichier lui-même. C'est un peu compliqué à expliquer, voici donc quelques exemples.
 
 Si vous avez un fichier dans "c:\\data\\images\\movies\\poster.jpg" et que vous utilisez l'opération [Insertion de chaîne](actions_fr.md#stringinsert) :
 

@@ -188,7 +188,7 @@ Les tags "c", "ddddd" et "dddddd" du programme d'origine (date au format de Wind
 
 Faites attention avec les formats de date et d'heure : les caractères "/" et ":" ne peuvent pas être utilisés dans un nom de fichier. Si vous voulez des séparateurs entre les nombres, insérez-les entre guillemets, comme expliqué dans les paragraphes suivants.
 
-Ici tous les caractères qui ne font pas partie du masque devraient être mis entre guillemets (simples ou doubles). Je recommande d'utiliser les guillemets doubles ("...") plutôt que les simples (apostrophes '...') pour pouvoir mettre des apostrophes à l'intérieur. Une exception : les lettres « f » (nom du fichier) et « e » (extension) sont remplacées même entre guillemets simples, donc un texte qui contient un « f » ou un « e » doit être mis entre guillemets doubles.
+Ici tous les caractères qui ne font pas partie du masque devraient être mis entre guillemets (simples ou doubles). Il est recommandé d'utiliser les guillemets doubles ("...") plutôt que les simples (apostrophes '...') pour pouvoir mettre des apostrophes à l'intérieur. Une exception : les lettres « f » (nom du fichier) et « e » (extension) sont remplacées même entre guillemets simples, donc un texte qui contient un « f » ou un « e » doit être mis entre guillemets doubles.
 
 Voici quelques exemples valides :
 

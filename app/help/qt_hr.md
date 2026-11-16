@@ -26,19 +26,6 @@
 - **Light and dark theme**: a button of the toolbar switches at once; *Options* \> *Display* can also follow the system.
 - **Check for a new version**: optional (off by default), once a day, see [Options](options_hr.md#display).
 
-## Corrections compared with 2.13
-
-- An empty ID3 or EXIF tag stays empty. Before, it was replaced by a number, so `$if(%title%,...)` was always true.
-- A lone `$` in a mask no longer freezes the renaming.
-- The "Restart" setting of the enumeration is saved correctly in batch files.
-- The preview of the date, mp3 and EXIF actions works when they come after another action.
-- Names with characters outside the system code page are no longer damaged by the "Use date & time" action.
-
-## Small differences to know
-
-- Regular expressions use the PCRE2 engine (Qt) instead of TRegExpr: very unusual constructs may behave differently.
-- The EXIF reader knows 36 common EXIF tags (plus the IPTC and XMP ones), not the whole list of the original program.
-
 ## Support
 
 Support for Ant Renamer Qt is provided on GitHub: [github.com/morfredus/ant-renamer-qt](https://github.com/morfredus/ant-renamer-qt/)

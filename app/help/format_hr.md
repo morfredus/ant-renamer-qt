@@ -28,7 +28,7 @@ Tags must be written exactly as in the table (in lowercase: `%name%`, not `%Name
 
 ## The folder tag {#folder}
 
-A %folderN% tag is usually available. This tag allows you to use the name of the parent folders in the filename itself. This is a little difficult to explain, so I'll give you some examples.
+A %folderN% tag is usually available. This tag allows you to use the name of the parent folders in the filename itself. This is a little difficult to explain, so here are some examples.
 
 If you have a file in "c:\\data\\images\\movies\\poster.jpg" and that you use the [String insertion](actions_hr.md#stringinsert) action:
 

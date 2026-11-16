@@ -21,7 +21,7 @@ Ant Renamer Qt runs on Windows and on Linux.
 
 # ... and what it does not
 
-As I said, it won't modify the contents of the files.
+It won't modify the contents of the files.
 
 It will not either modify files' date & time.
 

@@ -498,6 +498,9 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="port" Value="Port:"/>
     <Item Name="cQtPortAnd" Value="C++/Qt 6 port and Linux port: "/>
     <Item Name="components" Value="Components:"/>
+    <Item Name="icons" Value="Icons:"/>
+    <Item Name="thanksAuthorOriginal" Value="author of the original program"/>
+    <Item Name="thanksChineseUpdate" Value="update of the Chinese (Simplified) translation"/>
     <Item Name="translations" Value="Translations:"/>
     <Item Name="thanksTo" Value="Thanks to:"/>
     <Item Name="andAllThePeople" Value="...and all the people that sent me suggestions and comments"/>

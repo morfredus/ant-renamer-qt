@@ -18,29 +18,29 @@ Here is the list of supported parameters:
 
 The filenames and paths can be relative or absolute, and they can contain wildcards (\* and ?).
 
-**Ant Renamer Qt**: the program is called `antrenamer-qt.exe` (Windows) or `antrenamer-qt` (Linux); in the examples below, replace `Renamer.exe` with this name.
+**Ant Renamer Qt**: the program is called `antrenamer-qt.exe` (Windows) or `antrenamer-qt` (Linux); the examples below use the Windows name; on Linux, type `antrenamer-qt`.
 
 Here are some examples:
 
-- `Renamer.exe -b d:\test.arb -af c:\data\*.* -g -x`  
+- `antrenamer-qt.exe -b d:\test.arb -af c:\data\*.* -g -x`  
 
     This will load the batch file specified, add all files contained in c:\\data folder, start renaming and then exit
-- `Renamer.exe -af c:\data`  
+- `antrenamer-qt.exe -af c:\data`  
 
     This will add the file called c:\\data
-- `Renamer.exe -afr c:\data`  
+- `antrenamer-qt.exe -afr c:\data`  
 
     This will add the file called c:\\data. If it is a folder, it will add the files that it contains (recursive search)
-- `Renamer.exe -aF c:\data`  
+- `antrenamer-qt.exe -aF c:\data`  
 
     This will add the "data" folder
-- `Renamer.exe -aF c:\data\*.*`  
+- `antrenamer-qt.exe -aF c:\data\*.*`  
 
     This will add the folders containted in the "data" folder, but not the files
-- `Renamer.exe -af c:\data\*.* c:\images\*.jpg c:\test.txt -afr c:\mp3\*.*`  
+- `antrenamer-qt.exe -af c:\data\*.* c:\images\*.jpg c:\test.txt -afr c:\mp3\*.*`  
 
     You can combine several paths/filenames, use masks, and use different "-a" parameters in one command line
 
-If a name is given without any "-a" parameter, it will be analyzed like in Ant Renamer 2.07 (and older) : if a filename ending by ".arb" is given, it is loaded as batch file; if a folder is given, its contents is added recursively (files only, does not support wildcards, requires a full folder name).
+If a name is given without any "-a" parameter, it is analyzed simply: if a filename ending by ".arb" is given, it is loaded as batch file; if a folder is given, its contents is added recursively (files only, does not support wildcards, requires a full folder name).
 
-On Windows, it is possible to add Ant Renamer in the "Send to" list (in the menu that appears when you click with right mouse button on a folder in Windows Explorer). So this adds the possibility to send a folder to Ant Renamer from its contextual menu, to load its content in the files list. To do that, go to "Start" -\> "Run" and type `sendto`. A folder window should open; place there a shortcut to Ant Renamer.
+On Windows, it is possible to add Ant Renamer Qt in the "Send to" list (in the menu that appears when you click with right mouse button on a folder in Windows Explorer). So this adds the possibility to send a folder to Ant Renamer Qt from its contextual menu, to load its content in the files list. To do that, press Windows+R, type `shell:sendto` and press Enter. A folder window should open; place there a shortcut to `antrenamer-qt.exe`.

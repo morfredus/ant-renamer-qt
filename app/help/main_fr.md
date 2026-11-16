@@ -1,6 +1,6 @@
 # Fenêtre principale
 
-La fenêtre principale de Ant Renamer est divisée en trois pages :
+La fenêtre principale d'Ant Renamer Qt est divisée en trois pages :
 
 - [Fichiers](files_fr.md) : Cette page contient la liste des fichiers qui seront renommés.
 - [Opérations](actions_fr.md) : Cette page permet de choisir ce qui doit être fait avec les fichiers.

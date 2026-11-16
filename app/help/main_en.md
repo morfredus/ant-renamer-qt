@@ -1,6 +1,6 @@
 # Main window
 
-The main window of Ant Renamer is divided in three pages:
+The main window of Ant Renamer Qt is divided in three pages:
 
 - [Files](files_en.md): This page contains the list of the files that will be renamed.
 - [Actions](actions_en.md): This page allows you to select what has to be done to the files.

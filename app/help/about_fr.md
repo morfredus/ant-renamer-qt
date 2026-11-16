@@ -22,32 +22,26 @@ Ce programme est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE GAR
 - Assistance par e-mail (sans compte GitHub) : [ant-renamer-qt@morfredus.fr](mailto:ant-renamer-qt@morfredus.fr)
 - Page de l'Ant Renamer d'origine : [www.antp.be/software/renamer/fr](https://www.antp.be/software/renamer/fr)
 
-## Liens
+## Composants et outils
 
-Icônes utilisées pour les différents thèmes :
+Icônes des barres d'outils : le jeu « Scrows » (collection de glyphes de Virtual Plastic) et les jeux « Windows XP » viennent du programme d'origine ; le jeu « Moderne » est dessiné par Ant Renamer Qt lui-même.
 
-- Barre d'outils par standard : [Scrows](http://www.virtualplastic.org/scrow/)' glyphs collections
-- Barres d'outils Windows XP : les jeux d'icônes du programme d'origine
-
-Composants utilisés par Ant Renamer Qt :
+Utilisés par Ant Renamer Qt, pour le construire et le publier :
 
 - [Qt 6](https://www.qt.io/) (interface, expressions régulières, XML)
-- [InnoSetup](https://www.jrsoftware.org/), utilisé pour la procédure d'installation sous Windows
-
-Composants utilisés par le programme d'origine (Delphi), dont le portage reprend les idées et le code :
-
-- Quelques composants de la [JVCL](https://wiki.delphi-jedi.org/wiki/JEDI_Visual_Component_Library)
-- [CorelButton](https://www.theill.com/)
-- [Toolbar2000](https://jrsoftware.org/tb2k.php) & TBX
-- [VirtualTreeview](https://www.jam-software.com/virtual-treeview)
-- [Tnt Unicode Controls](https://www.tntware.com/delphicontrols/unicode/)
-- dEXIF
-- [TRegExpr library](https://regex.sorokin.engineer/)
+- [GCC](https://gcc.gnu.org/) et [MSYS2](https://www.msys2.org/) (environnement UCRT64 : compilateur et Qt pour les fichiers Windows)
+- [CMake](https://cmake.org/) et [Ninja](https://ninja-build.org/) (compilation)
+- [Inno Setup](https://www.jrsoftware.org/) (procédure d'installation sous Windows)
+- [linuxdeploy](https://github.com/linuxdeploy/linuxdeploy) (AppImage)
+- [Flatpak](https://flatpak.org/) et le runtime [KDE](https://kde.org/) Platform (paquet Flatpak)
+- [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) (analyse statique)
+- [GitHub Actions](https://github.com/features/actions) (compilations, tests et paquets à chaque modification)
+- [GnuPG](https://gnupg.org/) (signature des paquets Linux)
 
 ## Merci à
 
-- Sebastien Buysse, Gregory Zicot et Michel Potten
-- ... Et à toutes les personnes qui m'ont envoyé des suggestions et commentaires, et bien sûr ceux qui utilisent le programme.
+- Antoine Potten, auteur du programme d'origine
+- 大眼仔~旭, pour la mise à jour de la traduction en chinois simplifié
 
 ## Traductions
 

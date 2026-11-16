@@ -26,19 +26,6 @@
 - **Thème clair et sombre** : un bouton de la barre d'outils bascule aussitôt ; *Options* \> *Affichage* peut aussi suivre le système.
 - **Recherche de nouvelle version** : facultative (désactivée par défaut), une fois par jour, voir les [Options](options_fr.md#display).
 
-## Corrections par rapport à la 2.13
-
-- Un tag ID3 ou EXIF vide reste vide. Avant, il était remplacé par un nombre, donc `$if(%title%,...)` était toujours vrai.
-- Un `$` isolé dans un masque ne bloque plus le renommage.
-- Le réglage "Retour à la valeur de démarrage" de l'énumération est correctement enregistré dans les jobs.
-- L'aperçu des opérations date, mp3 et EXIF fonctionne quand elles suivent une autre opération.
-- Les noms contenant des caractères hors de la page de code du système ne sont plus abimés par l'opération "Date et heure".
-
-## Petites différences à connaître
-
-- Les expressions rationnelles utilisent le moteur PCRE2 (Qt) à la place de TRegExpr : des constructions très inhabituelles peuvent se comporter différemment.
-- Le lecteur EXIF connaît 36 tags EXIF courants (plus ceux de l'IPTC et du XMP), pas toute la liste du programme d'origine.
-
 ## Assistance
 
 L'assistance pour Ant Renamer Qt se fait sur GitHub : [github.com/morfredus/ant-renamer-qt](https://github.com/morfredus/ant-renamer-qt/)

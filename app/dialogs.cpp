@@ -615,14 +615,21 @@ AboutDialog::AboutDialog(QWidget* parent) : QDialog(parent) {
     tabs->addTab(
         browser(
             u"<b>"_s + tr("Port:") + u"</b><br>"_s + tr("C++/Qt 6 port and Linux port: ") + u"Frédéric Biron<br><br>"_s +
-            u"<b>"_s + tr("Thanks to:") + u"</b><br>Sebastien Buysse, Grégory Zicot, Michel Potten, "_s +
-            tr("...and all the people that sent me suggestions and comments") + u"<br><br><b>"_s + tr("Translations:") +
+            u"<b>"_s + tr("Thanks to:") + u"</b><br>Antoine Potten, "_s + tr("author of the original program") +
+            u"<br>大眼仔~旭, "_s + tr("update of the Chinese (Simplified) translation") + u"<br><br><b>"_s + tr("Translations:") +
             u"</b><br>"_s +
             u"Arek Czak, Asabukuro, Carlos A Medina R, Damir13, Denny, dzmitry[li], elega, GVG, Hiro5, Ivo Blaauw, Jim Liu, "
             u"Kari Eveli, Karin Andersson, Lin Fan (林繁), N.Nedelev, Nazar Tychkivskyi, Roberto Paiva, Salvatore Meschini, "
             u"Sepp Winkler, Seunghoe Yang, Ulisses F Braga, Vico//Koby, Volker Schmidt, Wasilis Mandratzis, Zoltán Danhauser, "
             u"大眼仔~旭, 无名用户, தமிழ்நேரக்குழு<br><br><b>"_s +
-            tr("Components:") + u"</b><br>Qt (<a href='https://www.qt.io'>www.qt.io</a>)"_s),
+            tr("Icons:") + u"</b><br>Scrows (Virtual Plastic), Windows XP (Ant Renamer)<br><br><b>"_s +
+            tr("Components:") + u"</b><br>Qt (<a href='https://www.qt.io'>www.qt.io</a>)<br>"_s +
+            u"<a href='https://gcc.gnu.org/'>GCC</a>, <a href='https://www.msys2.org/'>MSYS2</a>, "_s +
+            u"<a href='https://cmake.org/'>CMake</a>, <a href='https://ninja-build.org/'>Ninja</a><br>"_s +
+            u"<a href='https://www.jrsoftware.org/'>Inno Setup</a>, "_s +
+            u"<a href='https://github.com/linuxdeploy/linuxdeploy'>linuxdeploy</a>, <a href='https://flatpak.org/'>Flatpak</a><br>"_s +
+            u"<a href='https://clang.llvm.org/extra/clang-tidy/'>clang-tidy</a>, "_s +
+            u"<a href='https://github.com/features/actions'>GitHub Actions</a>, <a href='https://gnupg.org/'>GnuPG</a>"_s),
         tr("Credits"));
 
     // history of the original program, in the interface language when available

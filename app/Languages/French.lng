@@ -494,6 +494,9 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="port" Value="Portage :"/>
     <Item Name="cQtPortAnd" Value="Portage C++/Qt 6 et portage Linux : "/>
     <Item Name="components" Value="Composants :"/>
+    <Item Name="icons" Value="Icônes :"/>
+    <Item Name="thanksAuthorOriginal" Value="auteur du programme d'origine"/>
+    <Item Name="thanksChineseUpdate" Value="mise à jour de la traduction en chinois simplifié"/>
     <Item Name="translations" Value="Traductions :"/>
     <Item Name="thanksTo" Value="Remerciements :"/>
     <Item Name="andAllThePeople" Value="...et toutes les personnes qui m'ont envoyé des suggestions et des commentaires"/>

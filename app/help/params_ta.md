@@ -18,34 +18,34 @@
 
 கோப்பு பெயர்கள் மற்றும் பாதைகள் உறவினர் அல்லது முழுமையானதாக இருக்கலாம், மேலும் அவை வைல்டு கார்டுகளைக் கொண்டிருக்கலாம் (\* மற்றும் ?).
 
-**Ant Renamer Qt**: the program is called `antrenamer-qt.exe` (Windows) or `antrenamer-qt` (Linux); in the examples below, replace `Renamer.exe` with this name.
+**Ant Renamer Qt**: the program is called `antrenamer-qt.exe` (Windows) or `antrenamer-qt` (Linux); the examples below use the Windows name; on Linux, type `antrenamer-qt`.
 
 இங்கே சில உதாரணங்கள்:
 
-- `Renamer.exe -b ஈ:\சோதனை.arb -af இ:\தகவல்\*.* -g -x`  
+- `antrenamer-qt.exe -b ஈ:\சோதனை.arb -af இ:\தகவல்\*.* -g -x`  
 
     இது குறிப்பிடப்பட்ட தொகுதி கோப்பை ஏற்றும், இ:\\தகவல் கோப்புறையில் உள்ள
  அனைத்து கோப்புகளையும் சேர்த்து, மறுபெயரிடத் தொடங்கி பின்னர் வெளியேறும் 
-- `Renamer.exe -af இ:\தகவல்`  
+- `antrenamer-qt.exe -af இ:\தகவல்`  
 
     இது இ:\\தகவல் எனப்படும் கோப்பைச் சேர்க்கும் 
-- `Renamer.exe -afr இ:\தகவல்`  
+- `antrenamer-qt.exe -afr இ:\தகவல்`  
 
     இது இ:\\தகவல் எனப்படும் கோப்பைச் சேர்க்கும். இது ஒரு கோப்புறையாக 
 இருந்தால், அது கொண்டிருக்கும் கோப்புகளைச் சேர்க்கும் (மீண்டும் மீண்டும் 
 தேடல்) 
-- `Renamer.exe -aF இ:\தகவல்`  
+- `antrenamer-qt.exe -aF இ:\தகவல்`  
 
     இது "தரவு" கோப்புறையைச் சேர்க்கும் 
-- `Renamer.exe -aF இ:\தகவல்\*.*`  
+- `antrenamer-qt.exe -aF இ:\தகவல்\*.*`  
 
     இது "தரவு" கோப்புறையில் உள்ள கோப்புறைகளைச் சேர்க்கும், ஆனால் கோப்புகள் அல்ல 
-- `Renamer.exe -af இ:\தகவல்\*.* இ:\படங்\*.jpg இ:\சோதனை.txt -afr இ:\எம்பி3\*.*`  
+- `antrenamer-qt.exe -af இ:\தகவல்\*.* இ:\படங்\*.jpg இ:\சோதனை.txt -afr இ:\எம்பி3\*.*`  
 
     நீங்கள் பல பாதைகள்/கோப்பு பெயர்களை இணைக்கலாம், முகமூடிகளைப் 
 பயன்படுத்தலாம் மற்றும் ஒரு கட்டளை வரியில் வெவ்வேறு "-a" அளவுருக்களைப் 
 பயன்படுத்தலாம் 
 
-எந்த "-a" அளவுருவும் இல்லாமல் ஒரு பெயர் கொடுக்கப்பட்டால், அது எறும்பு மறுபெயரிடு 2.07 (மற்றும் பழையது) இல் உள்ளதைப் போல பகுப்பாய்வு செய்யப்படும்: ".arb" ஆல் முடிவடையும் கோப்பு பெயர் கொடுக்கப்பட்டால், இது தொகுதி கோப்பாக ஏற்றப்படுகிறது; ஒரு கோப்புறை கொடுக்கப்பட்டால், அதன் உள்ளடக்கங்கள் மீண்டும் மீண்டும் சேர்க்கப்படும் (கோப்புகள் மட்டும், வைல்டு கார்டுகளை ஆதரிக்காது, முழு கோப்புறை பெயர் தேவை).
+எந்த "-a" அளவுருவும் இல்லாமல் ஒரு பெயர் கொடுக்கப்பட்டால், அது பகுப்பாய்வு செய்யப்படும்: ".arb" ஆல் முடிவடையும் கோப்பு பெயர் கொடுக்கப்பட்டால், இது தொகுதி கோப்பாக ஏற்றப்படுகிறது; ஒரு கோப்புறை கொடுக்கப்பட்டால், அதன் உள்ளடக்கங்கள் மீண்டும் மீண்டும் சேர்க்கப்படும் (கோப்புகள் மட்டும், வைல்டு கார்டுகளை ஆதரிக்காது, முழு கோப்புறை பெயர் தேவை).
 
-On Windows, it is possible to add Ant Renamer in the "Send to" list (in the menu that appears when you click with right mouse button on a folder in Windows Explorer). So this adds the possibility to send a folder to Ant Renamer from its contextual menu, to load its content in the files list. To do that, go to "Start" -\> "Run" and type `sendto`. A folder window should open; place there a shortcut to Ant Renamer.
+On Windows, it is possible to add Ant Renamer Qt in the "Send to" list (in the menu that appears when you click with right mouse button on a folder in Windows Explorer). So this adds the possibility to send a folder to Ant Renamer Qt from its contextual menu, to load its content in the files list. To do that, press Windows+R, type `shell:sendto` and press Enter. A folder window should open; place there a shortcut to `antrenamer-qt.exe`.

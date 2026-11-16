@@ -188,7 +188,7 @@ The "c", "ddddd" and "dddddd" tags of the original program (date in the format o
 
 Be careful with date and time formats: the "/" and ":" cannot be used in a filename. So if you want delimiters between the numbers, insert them between quotes, as explained in next paragraphs.
 
-Here all the characters that are not part of the mask should be put inside quotes (single or double). I recommend to use double quotes (quotation marks "...") instead of single (apostrophes '...') so you can put apostrophes inside the quotes. One exception: the letters "f" (file name) and "e" (extension) are replaced even between single quotes, so text that contains an "f" or an "e" must be put between double quotes.
+Here all the characters that are not part of the mask should be put inside quotes (single or double). It is recommended to use double quotes (quotation marks "...") instead of single (apostrophes '...') so you can put apostrophes inside the quotes. One exception: the letters "f" (file name) and "e" (extension) are replaced even between single quotes, so text that contains an "f" or an "e" must be put between double quotes.
 
 Here are a few valid examples:
 

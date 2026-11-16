@@ -21,7 +21,7 @@ Ant Renamer Qt fonctionne sous Windows et sous Linux.
 
 # ... et ce qu'il ne fait pas
 
-Comme je l'ai dit, il ne modifiera pas le contenu des fichiers.
+Il ne modifiera pas le contenu des fichiers.
 
 Il ne va pas non plus modifier la date et l'heure des fichiers.
 
