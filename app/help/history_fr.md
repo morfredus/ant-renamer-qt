@@ -2,6 +2,9 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.2.0-beta.3 (18/11/2026)
+  - Correction : un fichier dont les tags ne donnent rien à mettre dans le nom (livre sans titre ni auteur, MP3 aux tags vides...) n'est plus renommé en « - .epub » ou équivalent : il est laissé tel quel et le journal dit pourquoi. Aide et crédits nettoyés.
+  - Nouveau : Menu de l'Explorateur : affiche la fenêtre du glisser-déposer pour choisir quoi ajouter. Aperçu : un fichier laissé tel quel est affiché en orange.
 - 3.2.0-beta.2 (15/11/2026)
   - Correction : erreur de compilation du lecteur EPUB signalée par l'analyse statique du build Linux. Rien ne change pour l'utilisateur.
 - 3.2.0-beta.1 (15/11/2026)

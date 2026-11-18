@@ -293,6 +293,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
       <Item Name="straeFromListEmpty" Value="Empty line"/>
       <Item Name="straeFromListEnd" Value="End of list"/>
 <n/>      <Item Name="straeExifNoInfo" Value="No EXIF info found"/>
+      <Item Name="straeNoUsableTag" Value="No usable tag: the new name would be empty"/>
       <Item Name="straeDateTimeNoDate" Value="Could not get file date"/>
       <Item Name="strfsNotRenamed" Value="%s was not renamed : %s"/>
       <Item Name="strfsRenamed" Value="%s renamed to %s"/>

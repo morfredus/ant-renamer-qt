@@ -23,6 +23,8 @@ void MainWindow::updateItem(QTreeWidgetItem* item) {
     item->setText(ColFullPath, f->filePath());
     item->setText(ColExt, extractFileExt(f->fileName()));
     item->setText(ColPreview, f->preview);
+    // refused by the preview (Info) or by the last run (a reason in the description), no new name to show
+    markRefusedRow(item, f->preview.isEmpty() && (f->status() == State::Info || !f->description().isEmpty()), palette());
     const bool hide = (aChangedOnly_->isChecked() && !f->preview.isEmpty() && f->preview == f->fileName()) ||
                       (f->hidden && !aShowHidden_->isChecked());
     item->setHidden(hide);
@@ -190,19 +192,35 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, boo
     updateSamplePreview();
 }
 
-// Paths sent by the Explorer context menu: like a drop with the saved options, but without the question.
+// Paths sent by the Explorer context menu (or "Open with"): like a drop, with the same window. Explorer starts one process
+// per selected item, so the paths arrive one by one: the question is asked once, when no more comes for a moment.
 void MainWindow::addShellPaths(const QStringList& paths) {
-    if (worker_ || paths.isEmpty()) {
+    if (paths.isEmpty()) {
         return;
     }
-    const AddChoice c{true, appOptions().addFolders, appOptions().recursive,
-                      appOptions().addHidden};  // selected files are always added
-    addFiles(paths, &c);
+    shellPaths_ += paths;
+    if (!shellTimer_) {
+        shellTimer_ = new QTimer(this);
+        shellTimer_->setSingleShot(true);
+        connect(shellTimer_, &QTimer::timeout, this, &MainWindow::importShellPaths);
+    }
+    shellTimer_->start(400);
+}
+
+void MainWindow::importShellPaths() {
+    if (worker_) {
+        shellTimer_->start(400);  // a run is going on: try again afterwards, the files must not be lost
+        return;
+    }
+    QStringList paths;
+    paths.swap(shellPaths_);
+    paths.removeDuplicates();
     showTab(0);
     setWindowState(windowState() & ~Qt::WindowMinimized);
     show();
     raise();
     activateWindow();
+    importDropped(paths, true);
 }
 
 // The question is asked once the drop is over: a modal window opened inside the drop handler stays behind the file
@@ -214,11 +232,12 @@ void MainWindow::filesDropped(const QStringList& paths) {
     QTimer::singleShot(0, this, [this, paths] { importDropped(paths); });
 }
 
-void MainWindow::importDropped(const QStringList& paths) {
+void MainWindow::importDropped(const QStringList& paths, bool fromShell) {
     if (worker_) {
         return;
     }
-    AddChoice c{appOptions().addFiles, appOptions().addFolders, appOptions().recursive, appOptions().addHidden};
+    // without the question, selected files of the Explorer menu are always added
+    AddChoice c{fromShell || appOptions().addFiles, appOptions().addFolders, appOptions().recursive, appOptions().addHidden};
     if (!appOptions().dragNoAsk) {
         bringToFront(this);
         DragDropDialog dlg(this);

@@ -23,6 +23,7 @@ Les tags `%name%`, `%ext%`, `%folderN%` et `%%` sont aussi disponibles, ainsi qu
 
 - **La qualité des noms est celle des métadonnées.** Les livres trouvés sur Internet sont inégaux : le titre contient parfois déjà la série ou l'édition (« (French Edition) »), la série et son numéro manquent souvent, l'auteur peut être faux. Vérifiez l'aperçu avant de renommer.
 - **Un tag absent donne un texte vide.** Utilisez `$if` pour éviter un séparateur orphelin quand il est vide.
+- **Un fichier sans tag utilisable n'est pas renommé.** Si le masque ne donne ni lettre ni chiffre (par exemple `%author% - %title%%ext%` sur un fichier qui n'a ni l'un ni l'autre), le fichier garde son nom et le journal indique « Aucune info utilisable : le nouveau nom serait vide ».
 - **Numéro de série.** Calibre écrit « 1.0 » : il est affiché `1`. L'option « Numéro de série sur deux chiffres » de l'opération ajoute un zéro devant un nombre d'un seul chiffre (« 1 » devient « 01 »), pour que les tomes soient triés dans le bon ordre.
 - **Auteurs.** Les créateurs ayant un autre rôle (illustrateur, traducteur, éditeur scientifique...) sont ignorés.
 - **Année.** Le premier `dc:date` est utilisé. Certains livres donnent la date de conversion au lieu de celle de la première publication.

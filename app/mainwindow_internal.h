@@ -164,6 +164,15 @@ inline QColor folderColor(const QPalette& p) {  // window colour darkened by 8 p
     return QColor(qMax(0, base.red() - 8), qMax(0, base.green() - 8), qMax(0, base.blue() - 8));
 }
 
+// A file that the preview leaves alone on purpose (nothing usable in its tags, hidden...): its row in a visible colour instead
+// of an empty "new name" cell that looks like a bug. refused=false puts the default colour back.
+inline void markRefusedRow(QTreeWidgetItem* item, bool refused, const QPalette& p) {
+    const QBrush b = refused ? QBrush(isDarkPalette(p) ? QColor(0xff, 0xa0, 0x50) : QColor(0xc0, 0x50, 0x00)) : QBrush();
+    for (int c = 0; c < item->columnCount(); ++c) {
+        item->setForeground(c, b);
+    }
+}
+
 }  // namespace mwdetail
 
 using namespace mwdetail;

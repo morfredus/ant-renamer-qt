@@ -88,6 +88,19 @@ inline void epubChecks() {
         CHECK_EQ(a.makeNewName(p, false), QStringLiteral("Antoine de Saint-Exupéry & Second Author - Contes 03 - Le Petit Prince (1943).epub"));
     }
 
+    // no usable tag (blank title and author): the mask would give "- .epub", the file is left alone
+    {
+        const QByteArray blank = "<?xml version=\"1.0\"?><package xmlns=\"http://www.idpf.org/2007/opf\" version=\"2.0\"><metadata "
+                                 "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><dc:title>   </dc:title><dc:creator></dc:creator>"
+                                 "<dc:language>fr</dc:language></metadata></package>";
+        const QString p = write(u"blank.epub"_s, zip({{u"META-INF/container.xml"_s, container, true}, {u"OEBPS/content.opf"_s, blank, true}}));
+        ActionEpub a;
+        a.mask = u"%author% - %title%%ext%"_s;
+        CHECK_EQ(a.makeNewName(p, false), QString());
+        a.mask = u"%author% - %title% (%lang%)%ext%"_s;  // a tag that is there: the name is made
+        CHECK_EQ(a.makeNewName(p, false), QStringLiteral(" -  (fr).epub"));
+    }
+
     // not an EPUB, truncated, hostile
     {
         EpubInfo info;

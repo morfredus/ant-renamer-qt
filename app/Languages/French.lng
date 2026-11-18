@@ -289,6 +289,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
       <Item Name="straeFromListEmpty" Value="Ligne vide"/>
       <Item Name="straeFromListEnd" Value="Fin de la liste"/>
       <Item Name="straeExifNoInfo" Value="Pas d'info EXIF trouvée"/>
+      <Item Name="straeNoUsableTag" Value="Aucune info utilisable : le nouveau nom serait vide"/>
       <Item Name="straeDateTimeNoDate" Value="Impossible d'obtenir la date du fichier"/>
       <Item Name="strfsNotRenamed" Value="%s n'a pas été renommé : %s"/>
       <Item Name="strfsRenamed" Value="%s renommé en %s"/>

@@ -4,7 +4,16 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.2.0-beta.2**.
+Current version: **3.2.0-beta.3**.
+
+## 3.2.0-beta.3
+
+| What is new | Since |
+|---|---|
+| **No more empty-looking names**: with the EPUB, MP3 and EXIF actions, a file whose tags give nothing to put in the name (an e-book without title and author, an MP3 with empty tags) is no longer renamed to "- .epub" or the like. It is left alone and the log says "No usable tag: the new name would be empty". | 3.2.0-beta.3 |
+| **Explorer menu asks what to add**: "Add to Ant Renamer Qt" now shows the same window as a drop (files, folders, subfolders, hidden files) instead of adding everything silently. Tick "Do not show this window again" to keep the old behaviour. | 3.2.0-beta.3 |
+| **Files left alone are in colour**: in the preview, a file that will not be renamed (nothing usable in its tags, hidden...) is shown in orange instead of an empty "new name". | 3.2.0-beta.3 |
+| **Help and credits**: the comparisons with the original program and its author's first-person wording are removed; the thanks are reduced to Antoine Potten and the Chinese translation update; links to the online help in the About window. | 3.2.0-beta.3 |
 
 ## 3.2.0-beta.2
 

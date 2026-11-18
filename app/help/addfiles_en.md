@@ -41,7 +41,7 @@ The same limitations as for the "Add files" window apply (files order and speed 
 
 ## Context menu of the file manager (Windows) {#explorer}
 
-On Windows, the program can add an "Add to Ant Renamer Qt" entry to the context menu of the files and folders of Windows Explorer. It is enabled in the [Options](options_en.md#files), "Files & Folders" page. When several items are selected, they all arrive together in the window of Ant Renamer that is already open (the program is started if it is not running). On Windows 11 the entry is in the "Show more options" menu (or Shift+F10).
+On Windows, the program can add an "Add to Ant Renamer Qt" entry to the context menu of the files and folders of Windows Explorer. It is enabled in the [Options](options_en.md#files), "Files & Folders" page. When several items are selected, they all arrive together in the window of Ant Renamer that is already open (the program is started if it is not running). On Windows 11 the entry is in the "Show more options" menu (or Shift+F10). The same window as for a drop asks what to add (files, folders, subfolders, hidden files), unless "Do not show this window again" was ticked there or in the Options.
 
 ## Command line {#cmdline}
 

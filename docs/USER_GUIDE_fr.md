@@ -1,6 +1,6 @@
 # Ant Renamer Qt : guide des fonctions
 
-*Toutes les fonctions d'Ant Renamer Qt 3.2.0-beta.2, avec le mode d'emploi.*
+*Toutes les fonctions d'Ant Renamer Qt 3.2.0-beta.3, avec le mode d'emploi.*
 English version : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détails complets, page par page, avec captures d'écran : l'aide intégrée (F1). Différences entre Windows et Linux : §13.
 
 ## 1. Principe général
@@ -36,7 +36,7 @@ Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau 
 - **Fichiers** (F2) : sélecteur de fichiers standard (Ctrl et Maj sélectionnent plusieurs fichiers). L'ordre que renvoie le système n'est pas toujours l'ordre affiché : triez la liste ensuite si l'ordre compte.
 - **Dossiers** (F3) : affiche les lecteurs et dossiers sous forme d'arbre ; en choisir un ou plusieurs, puis cocher ce qu'il faut ajouter : les fichiers qu'ils contiennent, les dossiers eux-mêmes, les sous-dossiers (tous niveaux). Un champ sous l'arbre accepte le chemin d'un dossier saisi ou collé (ajouté avec la sélection, s'il existe). Les choix sont mémorisés.
 - **Glisser-déposer** depuis le gestionnaire de fichiers (Explorateur, Nautilus, Dolphin, Total Commander...) : une fenêtre propose les mêmes options. « Ne plus afficher cette fenêtre » les mémorise (modifiable dans Options > Fichiers & Dossiers) ; maintenir Ctrl ou Maj en déposant réaffiche la fenêtre une fois.
-- **Menu de l'Explorateur** « Ajouter à Ant Renamer Qt » (Windows ; à activer dans Options > Fichiers & Dossiers). Plusieurs éléments sélectionnés arrivent ensemble dans la fenêtre déjà ouverte. Windows 11 : *Afficher plus d'options* (ou Maj+F10).
+- **Menu de l'Explorateur** « Ajouter à Ant Renamer Qt » (Windows ; à activer dans Options > Fichiers & Dossiers). Plusieurs éléments sélectionnés arrivent ensemble dans la fenêtre déjà ouverte, qui demande quoi ajouter comme pour un dépôt (sauf si « Ne plus afficher cette fenêtre » a été coché). Windows 11 : *Afficher plus d'options* (ou Maj+F10).
 - **Fichiers cachés et système** (`desktop.ini`, `.git`...) d'un dossier ajouté : ignorés, sauf si *Inclure les fichiers cachés et système à l'ajout d'un dossier* est coché (Options > Fichiers & Dossiers). Un fichier choisi ou déposé seul est toujours ajouté. Avant un renommage, un avertissement (Oui/Non) s'affiche si la liste contient des fichiers cachés ou système.
 - **Ligne de commande** : voir §8.
 

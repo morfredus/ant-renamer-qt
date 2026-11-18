@@ -24,6 +24,7 @@ Les tags `%name%`, `%ext%`, `%folderN%` et `%%` sont aussi disponibles, ainsi qu
 ## Bon à savoir
 
 - **Un tag absent donne un texte vide**, pas un nombre : `$if(%title%,...)` teste vraiment si le fichier a un titre.
+- **Un fichier sans tag utilisable n'est pas renommé.** Si le masque ne donne ni lettre ni chiffre (par exemple `%author% - %title%%ext%` sur un fichier qui n'a ni l'un ni l'autre), le fichier garde son nom et le journal indique « Aucune info utilisable : le nouveau nom serait vide ».
 - **Piste.** « 3/12 » donne `3`. L'option « Numéro de piste sur deux chiffres » de l'opération ajoute un zéro devant un nombre d'un seul chiffre (« 3 » devient « 03 »), pour que les fichiers soient triés dans l'ordre de l'album. Un fichier sans numéro de piste donne un texte vide.
 - **Genre.** Les codes numériques v2 comme `(17)` sont remplacés par le nom du genre (« Rock »).
 - **Caractères interdits.** Un tag peut contenir n'importe quel caractère, donc les valeurs sont nettoyées comme tout nom de fichier : les guillemets (") deviennent des apostrophes ('), les points d'interrogation un point, et `\ / : * < > |` ainsi que les caractères de contrôle un tiret.

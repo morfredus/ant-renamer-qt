@@ -30,7 +30,7 @@ The "Icon set" list offers four sets: "Scrows", "Windows XP", "Windows XP Large"
 
 ![Files & Folders page of the options](img/options_files_en.png)
 
-- **Do not ask what to do, always use the following options** : Prevents from displaying a window each time you drag & drop files to Ant Renamer window. You can specify here the options instead of having to select them each time (add the files of the folders, add the folders, apply to subfolders). These options are detailed in the chapter "[Adding files & folders](addfiles_ta.md#dragdrop)".
+- **Do not ask what to do, always use the following options** : Prevents from displaying a window each time you drag & drop files to Ant Renamer window, or add them from the Explorer context menu. You can specify here the options instead of having to select them each time (add the files of the folders, add the folders, apply to subfolders). These options are detailed in the chapter "[Adding files & folders](addfiles_ta.md#dragdrop)".
 - **Natural sort in files list (2 before 10) instead of alphabetical** : If this option is enabled (default), sorting the Files list by clicking on a column header orders numbers inside names by value ("file 2" before "file 10"). Otherwise the order is alphabetical ("file 10" before "file 2").
 - **Launch file on double click** : If this option is enabled, when you double-click on a file from the Files list it will be opened like if you double-clicked it in the file manager.
 - **The Undo button** : undoes the last pass (default) or opens the [history](main_ta.md) of the passes, where you choose how far to go back. The History button (Shift+F12) always opens the history.

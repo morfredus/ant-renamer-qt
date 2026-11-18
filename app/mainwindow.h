@@ -11,6 +11,7 @@
 
 #include <vector>
 
+class QTimer;
 class QAction;
 class QFrame;
 class QGroupBox;
@@ -77,7 +78,7 @@ public:
     MainWindow();
     void processCommandLine(const QStringList& args);
     void showTab(int tab);
-    void addShellPaths(const QStringList& paths);  // from the Explorer context menu
+    void addShellPaths(const QStringList& paths);  // from the Explorer context menu: asked once, like a drop
 
 protected:
     void closeEvent(QCloseEvent*) override;
@@ -131,7 +132,8 @@ private:
     void addFile(const QString& path);
     QTreeWidgetItem* addFileRow(const ren::File& f);
     void filesDropped(const QStringList& paths);
-    void importDropped(const QStringList& paths);
+    void importDropped(const QStringList& paths, bool fromShell = false);
+    void importShellPaths();
     void updateItem(QTreeWidgetItem* item);
     void updateAllItems();
     ren::File* fileOf(QTreeWidgetItem* item) const;
@@ -194,6 +196,8 @@ private:
     RenWorker* worker_ = nullptr;
     bool clearBatchAfter_ = false;
     bool exitAfterRun_ = false;
+    QStringList shellPaths_;        // paths of the Explorer menu, waiting for the last one before the question
+    QTimer* shellTimer_ = nullptr;
     bool silent_ = false;  // -q: no window, no dialog; the result is the exit code (0 done, 1 some file failed, 2 nothing done)
     int runErrors_ = 0;    // files that failed during the run in progress
     int runRenamed_ = 0;   // files renamed so far in the run in progress

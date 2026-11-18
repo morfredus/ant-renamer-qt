@@ -24,6 +24,7 @@ When both exist, the v2 value is used and v1 only fills what v2 does not have. A
 ## Good to know
 
 - **A missing tag gives an empty text**, not a number: `$if(%title%,...)` really tests whether the file has a title.
+- **A file with no usable tag is not renamed.** If the mask gives no letter or digit (for example `%author% - %title%%ext%` on a file with neither), the file keeps its name and the log says "No usable tag: the new name would be empty".
 - **Track.** "3/12" gives `3`. The option "Two-digit track number" of the action adds a zero in front of a one-digit number ("3" becomes "03"), so that the files sort in the album order. A file without a track number gives an empty text.
 - **Genre.** v2 numeric codes such as `(17)` are replaced by the name of the genre ("Rock").
 - **Forbidden characters.** A tag can contain any character, so the values are cleaned like every file name: quotation marks (") become apostrophes ('), question marks become a dot, and `\ / : * < > |` and the control characters become a dash.

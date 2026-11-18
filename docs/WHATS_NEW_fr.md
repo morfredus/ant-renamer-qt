@@ -4,7 +4,16 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.2.0-beta.2**.
+Version courante : **3.2.0-beta.3**.
+
+## 3.2.0-beta.3
+
+| Nouveauté | Depuis |
+|---|---|
+| **Plus de noms qui ont l'air vides** : avec les opérations EPUB, MP3 et EXIF, un fichier dont les tags ne donnent rien à mettre dans le nom (un livre sans titre ni auteur, un MP3 aux tags vides) n'est plus renommé en « - .epub » ou équivalent. Il est laissé tel quel et le journal indique « Aucune info utilisable : le nouveau nom serait vide ». | 3.2.0-beta.3 |
+| **Le menu de l'Explorateur demande quoi ajouter** : « Ajouter à Ant Renamer Qt » affiche maintenant la même fenêtre qu'un glisser-déposer (fichiers, dossiers, sous-dossiers, fichiers cachés) au lieu de tout ajouter sans rien demander. Cochez « Ne plus afficher cette fenêtre » pour garder l'ancien comportement. | 3.2.0-beta.3 |
+| **Les fichiers laissés tels quels sont en couleur** : dans l'aperçu, un fichier qui ne sera pas renommé (rien d'utilisable dans ses tags, caché...) est affiché en orange au lieu d'un « nouveau nom » vide. | 3.2.0-beta.3 |
+| **Aide et crédits** : les comparaisons avec le programme d'origine et la première personne de son auteur disparaissent ; les remerciements sont réduits à Antoine Potten et à la mise à jour de la traduction chinoise ; liens vers l'aide en ligne dans la fenêtre À propos. | 3.2.0-beta.3 |
 
 ## 3.2.0-beta.2
 

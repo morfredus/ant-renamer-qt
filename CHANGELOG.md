@@ -8,12 +8,17 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.2.0-beta.3] - 2026-11-18
+
+Pre-release of 3.2.0: no file is renamed to an empty-looking name any more (EPUB, MP3, EXIF) and a file left alone is shown in colour in the preview, the Explorer menu asks what to add like a drop, and the help and credits of 3.2.0-beta.2 are cleaned up.
+
 ### Added
 
 - Links to the online help (`https://morfredus.fr/ant-renamer-qt/aide/`, English: `https://morfredus.fr/ant-renamer-qt-en/help/`): in the About window (General tab, line "Online help:", `app/dialogs.cpp`; key `onlineHelp` in `English.lng` and `French.lng`, the other languages show it in English), in `README.md` and `README_fr.md` (with the note that a PDF of the complete help can be downloaded from the online help) and in `docs/PRESENTATION.md` and `PRESENTATION_fr.md`.
 
 ### Fixed
 
+- EPUB, MP3 and EXIF actions: a file whose tags give no letter or digit in the new name (blank title and author, an empty ID3 tag, no EXIF value asked by the mask) was renamed to something like `- .epub` or ` - .mp3`, the same useless name for every such file. It is now left alone, with the line "No usable tag: the new name would be empty" in the log (`hasContent` in `core/ren_actions.cpp`; key `straeNoUsableTag` in `English.lng` and `French.lng`, the other languages show it in English). A name with a tag that is there (`%lang%`, a year...) is still made. Test in `tests/epub_check.h`. Found with the new test folders 10, 15 and 16 (broken and absurd e-books, MP3 and pictures).
 - Help (EN, FR, HR, TA): the comparisons with the original program are removed: the sections "Corrections compared with 2.13" and "Small differences to know" of the `qt` page, and the "like in Ant Renamer 2.07" wording of the command-line page (the way a name given without `-a` is handled is unchanged and stays described).
 - Help (EN, FR, HR, TA), review of what is obsolete: the first-person voice of the original author is made neutral (`what`: "As I said"; `actions`: "I recommend"; `format`: "I'll give you some examples"), the main window page says Ant Renamer Qt, and the "Send to" paragraph of the command-line page now says to press Windows+R and type `shell:sendto` (instead of Start > Run > `sendto`) and to place a shortcut to `antrenamer-qt.exe`.
 - Help, About page (EN, FR, HR, TA) and Credits tab of the About window: the thanks of the original program (Sebastien Buysse, Gregory Zicot, Michel Potten, "all the people that sent me suggestions") are removed; "Thanks to" now names Antoine Potten (author of the original program) and 大眼仔~旭 (update of the Chinese (Simplified) translation). The Scrows and Windows XP icon sets, still shipped, are credited as text, without link ("Icons").
@@ -25,6 +30,9 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Changed
 
+- Explorer menu "Add to Ant Renamer Qt" (and a launch given only paths: "Open with", Linux `%F`): the window of the drop (files, folders, subfolders, hidden files, "Do not show this window again") is now shown, instead of adding everything silently with the saved options. Explorer starts one process per selected item, so the paths are collected for 400 ms and the question is asked once (`addShellPaths` and `importShellPaths` in `app/mainwindow_files.cpp`). With "Do not ask" ticked in the Options, nothing is asked and selected files are always added, as before. It was not a bug: the menu never asked since 3.0.0-rc.1.
+- Preview: a file that is left alone (no usable tag, hidden, refused by the action) is shown in orange (lighter on a dark theme) instead of an empty "new name" cell that looked like a bug (`markRefusedRow` in `app/mainwindow_internal.h`; a refused preview now marks its file with the state Info, without a log text, in `core/ren_actions.cpp`). Looked at in a screenshot of the built program on the e-book test folder.
+- Help (EN, FR, HR, TA): the "Add files" page and the option "Do not ask what to do" say that the Explorer menu asks like a drop; `USER_GUIDE` (EN, FR) too.
 - Help: two new pages, "MP3 tags" (`mp3_tags_*.md`) and "EPUB tags" (`epub_tags_*.md`), next to the page of the EXIF, IPTC and XMP tags: the tags, where each value comes from, good to know, examples of masks. Linked from the table of contents, the `actions` and `format` pages, and the "Help" link under the parameters of the MP3 and EPUB actions (`app/actionpanel.cpp`). EN and FR written, HR and TA carry the English text until translated.
 - `docs/TESTED_PLATFORMS.md` (EN, FR): 3.2.0-beta.2 tried on Windows 11 (Lenovo Legion), Windows 10, Fedora (Flatpak), Linux Mint (MacBook Pro, `.deb` and AppImage) and Raspberry Pi 4 (arm64 `.deb`).
 

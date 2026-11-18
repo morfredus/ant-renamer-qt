@@ -23,6 +23,7 @@ A file that is not a valid EPUB (not a ZIP, no `container.xml`, no OPF file) is 
 
 - **The quality of the names is the quality of the metadata.** E-books found on the Internet are uneven: the title may already contain the series or the edition ("(French Edition)"), the series and its number are often missing, the author may be wrong. Check the preview before renaming.
 - **A missing tag gives an empty text.** Use `$if` to avoid a dangling separator when it is empty.
+- **A file with no usable tag is not renamed.** If the mask gives no letter or digit (for example `%author% - %title%%ext%` on a file with neither), the file keeps its name and the log says "No usable tag: the new name would be empty".
 - **Series number.** Calibre writes "1.0": it is shown as `1`. The option "Two-digit series number" of the action adds a zero in front of a one-digit number ("1" becomes "01"), so that the volumes sort in the right order.
 - **Authors.** Creators with another role (illustrator, translator, editor...) are ignored.
 - **Year.** The first `dc:date` is used. Some e-books give the date of the conversion instead of the date of the first publication.

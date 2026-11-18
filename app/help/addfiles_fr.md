@@ -42,7 +42,7 @@ Les mêmes limitations que pour la fenêtre d'ajout de fichiers s'appliquent (or
 
 ## Menu contextuel du gestionnaire de fichiers (Windows) {#explorer}
 
-Sous Windows, le programme peut ajouter une entrée « Ajouter à Ant Renamer Qt » au menu contextuel des fichiers et des dossiers de l'Explorateur Windows. Elle s'active dans les [Options](options_fr.md#files), page "Fichiers & Dossiers". Quand plusieurs éléments sont sélectionnés, ils arrivent tous ensemble dans la fenêtre d'Ant Renamer déjà ouverte (le programme est lancé s'il ne tourne pas). Sous Windows 11, l'entrée se trouve dans le menu « Afficher plus d'options » (ou Maj+F10).
+Sous Windows, le programme peut ajouter une entrée « Ajouter à Ant Renamer Qt » au menu contextuel des fichiers et des dossiers de l'Explorateur Windows. Elle s'active dans les [Options](options_fr.md#files), page "Fichiers & Dossiers". Quand plusieurs éléments sont sélectionnés, ils arrivent tous ensemble dans la fenêtre d'Ant Renamer déjà ouverte (le programme est lancé s'il ne tourne pas). Sous Windows 11, l'entrée se trouve dans le menu « Afficher plus d'options » (ou Maj+F10). La même fenêtre que pour un glisser-déposer demande quoi ajouter (fichiers, dossiers, sous-dossiers, fichiers cachés), sauf si « Ne plus afficher cette fenêtre » y a été coché ou dans les Options.
 
 ## Ligne de commande {#cmdline}
 

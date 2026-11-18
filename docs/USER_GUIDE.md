@@ -1,6 +1,6 @@
 # Ant Renamer Qt: function guide
 
-*Every function of Ant Renamer Qt 3.2.0-beta.2 with instructions.*
+*Every function of Ant Renamer Qt 3.2.0-beta.3 with instructions.*
 French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use cases): [USER_RECIPES.md](USER_RECIPES.md). Full details, page by page, with screenshots: the built-in help (F1). Differences between Windows and Linux: §13.
 
 ## 1. General principle
@@ -36,7 +36,7 @@ The program only changes **names** (or copies the files under a new name); it ne
 - **Files** (F2): standard file picker (Ctrl and Shift select several files). The order the system returns is not always the order displayed: sort the list afterwards if the order matters.
 - **Folders** (F3): shows the drives and folders as a tree; select one or more, then tick what to add: the files they contain, the folders themselves, the subfolders (all levels). A field under the tree takes the path of a folder typed or pasted (added with the selection, if it exists). The choices are remembered.
 - **Drag and drop** from the file manager (Explorer, Nautilus, Dolphin, Total Commander...): a window offers the same options. "Do not show this window again" remembers them (changeable in Options > Files & Folders); holding Ctrl or Shift when dropping shows the window once more.
-- **Explorer menu** "Add to Ant Renamer Qt" (Windows; enable it in Options > Files & Folders). Several selected items arrive together in the window that is already open. Windows 11: *Show more options* (or Shift+F10).
+- **Explorer menu** "Add to Ant Renamer Qt" (Windows; enable it in Options > Files & Folders). Several selected items arrive together in the window that is already open, which asks what to add like a drop does (unless "Do not show this window again" was ticked). Windows 11: *Show more options* (or Shift+F10).
 - **Hidden and system files** (`desktop.ini`, `.git`...) of an added folder are skipped, unless *Include hidden and system files when adding a folder* is ticked (Options > Files & Folders). A file picked or dropped on its own is always added. Before a renaming, a warning (Yes/No) is shown if the list holds hidden or system files.
 - **Command line**: see §8.
 

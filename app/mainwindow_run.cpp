@@ -138,6 +138,7 @@ void MainWindow::onProgress(const Snapshot& s) {
             it->setText(ColFullPath, s.folder + s.name);
             it->setText(ColExt, extractFileExt(s.name));
             it->setText(ColPreview, s.preview);
+            markRefusedRow(it, s.preview.isEmpty() && (State(s.state) == State::Info || !s.description.isEmpty()), palette());
             const bool hide = aChangedOnly_->isChecked() && !s.preview.isEmpty() && s.preview == s.name;
             it->setHidden(hide);
             if (hide) {

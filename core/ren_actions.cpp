@@ -473,7 +473,9 @@ void Action::perform(FileList& list, Op op, const Progress& progress) {
                 f.preview = f.fileName();
             }
             f.preview = makeNewName(f.fileFolder() + f.preview, f.isFolder());
-            lastError_ = Error{};  // previews never report action errors
+            // previews never report action errors (no text, so nothing in the log), but the row shows that the file is left alone
+            f.setError(QString(), lastError_.status == State::Info ? State::Info : State::NotRenamed);
+            lastError_ = Error{};
         }
         if (progress) {
             progress(f, position, int(i));
@@ -903,6 +905,22 @@ void ActionEnum::load(const XmlElem& e) {
     sharePairs = e.flag("SharePairs", false);
 }
 
+// A name with no letter or digit once the extension is left out ("- .epub", " - .mp3"): the file has none of the tags the
+// mask asks for, and renaming it would give the same useless name to every such file.
+static bool hasContent(const QString& name, const QString& original) {
+    QString s = name;
+    const QString ext = QFileInfo(original).suffix();
+    if (!ext.isEmpty() && s.endsWith(u'.' + ext, Qt::CaseInsensitive)) {
+        s.chop(int(ext.size()) + 1);
+    }
+    for (const QChar c : s) {
+        if (c.isLetterOrNumber()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 // --- MP3 ---
 QString ActionMP3::description() const {
     QString r = tr("Generate names with MP3 tags, based on the mask \"%1\"").arg(mask);
@@ -940,7 +958,12 @@ QString ActionMP3::makeNewName(const QString& fn, bool isFolder) {
         setInfo(err);
         return {};
     }
-    return advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
+    const QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
+    if (!r.isEmpty() && !hasContent(r, fn)) {
+        setInfo(tr("No usable tag: the new name would be empty"));
+        return {};
+    }
+    return r;
 }
 void ActionMP3::save(QXmlStreamWriter& w) const {
     begin(w, "MP3", {{"Mask", mask}, {"TwoDigit", twoDigit}});
@@ -1281,6 +1304,10 @@ QString ActionExif::makeNewName(const QString& fn, bool isFolder) {
     counter_.step(fn, numStart, numIncr, numRestart, numSharePairs);
     const QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
     counter_.cur += numIncr;
+    if (!r.isEmpty() && !hasContent(r, fn)) {
+        setInfo(tr("No usable tag: the new name would be empty"));
+        return {};
+    }
     return r;
 }
 void ActionExif::save(QXmlStreamWriter& w) const {
@@ -1345,7 +1372,12 @@ QString ActionEpub::makeNewName(const QString& fn, bool isFolder) {
         setInfo(err);
         return {};
     }
-    return advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
+    const QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
+    if (!r.isEmpty() && !hasContent(r, fn)) {
+        setInfo(tr("No usable tag: the new name would be empty"));
+        return {};
+    }
+    return r;
 }
 void ActionEpub::save(QXmlStreamWriter& w) const {
     begin(w, "Epub", {{"Mask", mask}, {"TwoDigit", twoDigit}});
