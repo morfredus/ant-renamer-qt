@@ -958,7 +958,7 @@ QString ActionMP3::makeNewName(const QString& fn, bool isFolder) {
         setInfo(err);
         return {};
     }
-    const QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
+    QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
     if (!r.isEmpty() && !hasContent(r, fn)) {
         setInfo(tr("No usable tag: the new name would be empty"));
         return {};
@@ -1302,7 +1302,7 @@ QString ActionExif::makeNewName(const QString& fn, bool isFolder) {
         return {};
     }
     counter_.step(fn, numStart, numIncr, numRestart, numSharePairs);
-    const QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
+    QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
     counter_.cur += numIncr;
     if (!r.isEmpty() && !hasContent(r, fn)) {
         setInfo(tr("No usable tag: the new name would be empty"));
@@ -1372,7 +1372,7 @@ QString ActionEpub::makeNewName(const QString& fn, bool isFolder) {
         setInfo(err);
         return {};
     }
-    const QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
+    QString r = advancedFormat(mask, [this](auto& t, auto& v) { return getTag(t, v); }, AllowIf | AllowQuotes);
     if (!r.isEmpty() && !hasContent(r, fn)) {
         setInfo(tr("No usable tag: the new name would be empty"));
         return {};
