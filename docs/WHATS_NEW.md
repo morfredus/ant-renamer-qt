@@ -4,7 +4,13 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.2.0-beta.3**.
+Current version: **3.2.0**.
+
+## 3.2.0
+
+| What is new | Since |
+|---|---|
+| **Final version**: the code of 3.2.0-beta.3, with everything of the 3.2.0 betas ("Use EPUB info" action, no more empty-looking names, Explorer menu asking what to add, files left alone in orange, help and credits cleaned up). | 3.2.0 |
 
 ## 3.2.0-beta.3
 

@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.2.0 (20/11/2026)
+  - Final version of 3.2.0: the code of 3.2.0-beta.3 ("Use EPUB info" action, no more empty-looking names, Explorer menu asking what to add, files left alone shown in orange, help and credits cleaned up).
 - 3.2.0-beta.3 (18/11/2026)
   - Fix: a file whose tags give nothing to put in the name (an e-book without title and author, an MP3 with empty tags...) is no longer renamed to "- .epub" or similar: it is left alone and the log says why. Help and credits cleaned up.
   - New: Windows Explorer menu: shows the window of the drop to choose what to add. Preview: a file left alone is shown in orange.

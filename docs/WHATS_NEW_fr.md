@@ -4,7 +4,13 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.2.0-beta.3**.
+Version courante : **3.2.0**.
+
+## 3.2.0
+
+| Nouveauté | Depuis |
+|---|---|
+| **Version finale** : le code de la 3.2.0-beta.3, avec tout ce que les bêtas de la 3.2.0 ont apporté (opération « Infos EPUB », plus de noms qui ont l'air vides, menu de l'Explorateur qui demande quoi ajouter, fichiers laissés tels quels en orange, aide et crédits nettoyés). | 3.2.0 |
 
 ## 3.2.0-beta.3
 

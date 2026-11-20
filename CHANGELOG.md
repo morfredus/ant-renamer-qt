@@ -8,6 +8,14 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-11-20
+
+Final version of 3.2.0: the code of 3.2.0-beta.3, unchanged. Everything the betas brought (3.2.0-beta.1 to beta.3, below): the "Use EPUB info" action, the Flatpak and documentation changes, no empty-looking names (EPUB, MP3, EXIF), the Explorer menu asking what to add, files left alone shown in orange in the preview, the help and credits cleaned up, links to the online help.
+
+### Changed
+
+- `VERSION`, history pages (EN, FR, HR, TA), `WHATS_NEW` (EN, FR), `USER_GUIDE` (EN, FR): 3.2.0. Release notes `docs/release-notes/3.2.0.md` (EN, FR).
+
 ## [3.2.0-beta.3] - 2026-11-18
 
 Pre-release of 3.2.0: no file is renamed to an empty-looking name any more (EPUB, MP3, EXIF) and a file left alone is shown in colour in the preview, the Explorer menu asks what to add like a drop, and the help and credits of 3.2.0-beta.2 are cleaned up.
