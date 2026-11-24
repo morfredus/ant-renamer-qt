@@ -1,6 +1,6 @@
 # Ant Renamer Qt : guide des fonctions
 
-*Toutes les fonctions d'Ant Renamer Qt 3.3.0-beta.2, avec le mode d'emploi.*
+*Toutes les fonctions d'Ant Renamer Qt 3.3.0, avec le mode d'emploi.*
 English version : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détails complets, page par page, avec captures d'écran : l'aide intégrée (F1). Différences entre Windows et Linux : §13.
 
 ## 1. Principe général
@@ -121,6 +121,7 @@ Le panneau **Contenu du job** liste les opérations planifiées (case à cocher 
 - **Avant-plan** (F11) : garde la fenêtre au-dessus des autres.
 - **Clair / sombre** (cercle à moitié plein) : change aussitôt de thème ; *Options > Affichage > Thème* propose aussi « Suivre le système » (par défaut).
 - **Copier plutôt que renommer** (Options > Traitement) : les originaux restent, les copies portent les nouveaux noms ; l'annulation supprime une copie si elle n'a pas été modifiée depuis (sinon elle est gardée et le journal le dit).
+- **Dossiers synchronisés** (pCloud, Dropbox, Nextcloud, OneDrive, Syncthing, disque réseau...) : mettez la synchronisation en pause avant un renommage, ou travaillez sur une copie du dossier (ou avec *Copier plutôt que renommer*). Une synchronisation qui tourne en même temps peut entrer en conflit avec le renommage (doublons, copies « en conflit », un fichier vu comme supprimé puis recréé). Le programme ne peut pas le détecter ; le journal et l'annulation (F12) sont votre filet de sécurité.
 
 ## 6. Masques de formatage (opérations 4, 7, 8, 10, 14, 15)
 
@@ -214,5 +215,5 @@ Même moteur, autre présentation, choisie dans Options > Affichage. C'est celle
 - Annuler : passe après passe (les 50 dernières, gardées à la fermeture du programme), dans une session uniquement à partir de sa dernière passe ; les copies faites avec « Copier au lieu de renommer » sont supprimées par l'annulation si elles n'ont pas été modifiées depuis (les originaux ne sont jamais touchés).
 - Le menu contextuel court de Windows 11 n'est pas pris en charge (utiliser « Afficher plus d'options »).
 - Mettre les dates d'après l'EXIF : seule la date de modification est changée (la date de création ne peut pas être changée de la même façon sous Linux), d'après la balise EXIF `DateTimeOriginal` ou le fichier XMP associé ; un fichier qui n'en a pas est laissé tel quel.
-- Flatpak : le programme ne voit que les dossiers auxquels on lui donne accès (la fenêtre « Ajouter des dossiers » utilise le sélecteur de dossiers du système) et n'a pas d'accès au réseau, donc la recherche de nouvelle version n'est pas proposée ; la mise à jour vient de Flathub.
+- Flatpak : le programme peut écrire dans votre dossier personnel (un renommeur crée des fichiers à côté de ceux qu'on lui donne), mais pas ailleurs (autre disque, `/media`) : là, ajoutez le dossier avec « Ajouter des dossiers » (le sélecteur de dossiers du système) ; un fichier donné seul hors du dossier personnel est refusé, sans y toucher, et un avertissement s'affiche. Les partages réseau montés par le gestionnaire de fichiers (SMB, NFS) ne sont pas visibles. Le programme n'a pas d'accès au réseau, donc la recherche de nouvelle version n'est pas proposée ; la mise à jour vient de Flathub.
 - L'aide en croate et en tamoul affiche l'anglais pour les pages écrites pour Ant Renamer Qt.

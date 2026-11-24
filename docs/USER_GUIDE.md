@@ -1,6 +1,6 @@
 # Ant Renamer Qt: function guide
 
-*Every function of Ant Renamer Qt 3.3.0-beta.2 with instructions.*
+*Every function of Ant Renamer Qt 3.3.0 with instructions.*
 French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use cases): [USER_RECIPES.md](USER_RECIPES.md). Full details, page by page, with screenshots: the built-in help (F1). Differences between Windows and Linux: §13.
 
 ## 1. General principle
@@ -121,6 +121,7 @@ The **Batch contents** panel lists the planned actions (tick box to show/hide it
 - **Always on top** (F11): keeps the window above the others.
 - **Light / dark** (half-filled circle): switches the theme at once; *Options > Display > Theme* also offers "Follow the system" (default).
 - **Copy instead of rename** (Options > Processing): the originals stay, the copies carry the new names; undo deletes a copy if it has not been changed since (otherwise it is kept and the log says so).
+- **Synchronized folders** (pCloud, Dropbox, Nextcloud, OneDrive, Syncthing, a network disk...): pause the synchronization before a renaming, or work on a copy of the folder (or with *Copy instead of rename*). A synchronization running at the same time can conflict with the renaming (duplicates, "conflict" copies, a file seen as deleted then created). The program cannot detect it; the log and Undo (F12) are your safety net.
 
 ## 6. Format masks (actions 4, 7, 8, 10, 14, 15)
 
@@ -214,5 +215,5 @@ Same engine, other presentation, set in Options > Display. It is the default of 
 - Undo: pass after pass (the last 50, kept when the program is closed), inside a session only from its last pass; the copies made with "Copy instead of rename" are deleted by the undo if they have not been changed since (the originals are never touched).
 - Set dates from EXIF: only the modification date is set (the creation date cannot be changed the same way on Linux), from the EXIF `DateTimeOriginal` tag or the XMP sidecar; a file without it is left alone.
 - The short Windows 11 context menu is not supported (use "Show more options").
-- Flatpak: the program sees only the folders it is given access to (the "Add folders" window uses the system folder picker) and has no network access, so the new-version check is not offered; the update comes from Flathub.
+- Flatpak: the program can write in your home folder (a renamer creates files next to the ones it is given), but not elsewhere (another disk, `/media`): there, add the folder with "Add folders" (the system folder picker); a file given alone outside the home folder is refused, without being touched, and a warning is shown. Network shares mounted by the file manager (SMB, NFS) are not visible. The program has no network access, so the new-version check is not offered; the update comes from Flathub.
 - The help in Croatian and Tamil shows English for the pages written for Ant Renamer Qt.

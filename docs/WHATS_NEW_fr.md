@@ -4,7 +4,15 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.3.0-beta.2**.
+Version courante : **3.3.0**.
+
+## 3.3.0
+
+| Nouveauté | Depuis |
+|---|---|
+| **Version finale** : tout ce qu'apportent la 3.3.0-beta.1 et la beta.2 (Filtrer les fichiers, l'annulation qui supprime les copies, l'historique d'annulation partagé, Mettre les dates d'après l'EXIF). | 3.3.0 |
+| **Flatpak** : les fichiers donnés un par un au bac à sable (glisser-déposer depuis le gestionnaire de fichiers, sélecteur de fichiers) ne pouvaient pas être renommés et disparaissaient de leur dossier (copies cachées `.xdp-*` laissées par le portail de documents). Corrigé : le paquet peut maintenant écrire dans le dossier personnel, et un fichier donné seul en dehors est refusé sans y toucher, avec un avertissement. | 3.3.0 |
+| **Dossiers synchronisés** (pCloud, Dropbox, Nextcloud...) : le guide conseille de mettre la synchronisation en pause avant un renommage, ou de travailler sur une copie. | 3.3.0 |
 
 ## 3.3.0-beta.2
 

@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.3.0 (24/11/2026)
+  - Final version of 3.3.0: Filter files, the undo of copies, the shared undo history, Set dates from EXIF (3.3.0-beta.1 and beta.2), plus: Flatpak, files given one by one to the sandbox could not be renamed and disappeared: fixed, the Flatpak package can now write in the home folder, and a file given alone outside it is refused without being touched, with a warning. Advice for synchronized folders (pause the synchronization or work on a copy).
 - 3.3.0-beta.2 (23/11/2026)
   - New: Set dates from EXIF (right-click menu of the list, command line `--set-dates-from-exif`): the modification date of the files becomes their EXIF shooting date. A table shows the old and the new date and nothing changes before you confirm; the content of the files is never touched; the sidecar files (.xmp, .dop, RAW) follow their picture; the history can undo it. The modification date is not a proof of authenticity: for originals that must stay evidence, work on copies.
   - Fix: the .deb package points to the GitHub repository as its home page, not to the site of the original program.

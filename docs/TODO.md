@@ -9,12 +9,13 @@ These are ideas, not promises: some may never be done, and nothing here is froze
 - The sources of the requests: the "Comments" forum of the original program, forum.antp.be (120 topics read on 2026-10-22), then the issues and discussions of this project.
 - Nothing is written for an idea that nobody needs: an idea waits for a real request or a real problem.
 
-## Where we are (2026-11-23)
+## Where we are (2026-11-24)
 
 - **3.2.0** published on 2026-11-20: the "Use EPUB info" action, no more empty-looking names (EPUB, MP3, EXIF), the Explorer menu asking what to add, files left alone shown in orange in the preview, the update notice showing the release notes, help and credits cleaned up, links to the online help, a new Flatpak manifest built with `cmake --install`.
 - **Distribution**: the application is on Flathub since 2026-11-22 (updates by pull request on `flathub/fr.morfredus.AntRenamerQt`, with `publish-antrenamer-flatpak.sh`), in AppImageHub and Portable Linux Apps; a winget pull request is waiting for a moderator.
 - **3.3.0-beta.1** published on 2026-11-22 (Filter files, undo of copies, shared history), tried on Ubuntu, Fedora and Windows 11 and 10. **3.3.0-beta.2** published on 2026-11-23 as a pre-release from `dev/3.3.0` (Set dates from EXIF with the sidecar files following, `--set-dates-from-exif`, the .deb home page); the CI of the branch (build, tests, clang-tidy, `appstreamcli validate`, packages) was green on the released commit. Not tried by hand yet: the undo of the dates on real files, the function on Linux, the 3.3.0-beta.2 packages installed.
-- The branch `dev/3.3.0` is open; it also carries the corrections that were planned for a 3.2.1.
+- **3.3.0** final prepared on `dev/3.3.0` (2026-11-24), waiting for the merge into `main`, the tag and the packages. It adds to beta.2: the Flatpak fix (files given one by one vanished, found on Fedora KDE), `--filesystem=home`, advice for synchronized folders. To do after the tag: `tag` and `commit` of the Flathub manifest, then `publish-antrenamer-flatpak.sh`.
+- The branch `dev/3.3.0` carries the corrections that were planned for a 3.2.1.
 
 ## Next versions, in order
 

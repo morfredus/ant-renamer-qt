@@ -37,6 +37,8 @@ struct Options {
 };
 // Text of the core in the language of the program (context "Ren"), for the messages of the log.
 QString tr(const char* s);
+// Flatpak: true for a file given alone through the document portal (it cannot be renamed, see ren_files.cpp)
+bool isPortalSingleFile(const QString& path);
 
 // Identifier that is never reused during a run: what a view stores to find a File or an Action again. Unlike a pointer,
 // an id whose object was removed finds nothing (FileList::byId, ActionList::byId return nullptr).

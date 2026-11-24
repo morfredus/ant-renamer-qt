@@ -193,6 +193,17 @@ int main(int argc, char** argv) {
                                   a.onlyExt = true;
                               }),
              u"hello.TXT"_s);
+    // Flatpak document portal: only a file given alone is refused; ordinary paths of every system are left alone
+    for (const QString& p : {u"/run/user/1000/doc/AbC_d-1/IMG 1.jpg"_s, u"/run/user/1000/doc/AbC_d-1/IMG_1.jpg"_s,
+                             u"/run/user/1000/doc/AbC_d-1/Photos"_s /* the granted folder itself: no sibling can be created */}) {
+        CHECK_EQ(ren::isPortalSingleFile(p) ? u"y"_s : u"n"_s, u"y"_s);
+    }
+    for (const QString& p : {u"/run/user/1000/doc/AbC_d-1/Photos/IMG_1.jpg"_s, u"/run/user/1000/doc/AbC_d-1/Photos/Sub/IMG_1.jpg"_s,
+                             u"/run/user/1000/doc/AbC_d-1"_s, u"/run/user/1000/other/x/IMG_1.jpg"_s,
+                             u"/home/me/doc/x/IMG_1.jpg"_s, u"/home/me/Pictures/IMG_1.jpg"_s, u"/tmp/a/b/c.jpg"_s,
+                             u"C:/Users/me/doc/x/IMG_1.jpg"_s, u"C:\\Users\\me\\IMG_1.jpg"_s, u""_s}) {
+        CHECK_EQ(ren::isPortalSingleFile(p) ? u"y"_s : u"n"_s, u"n"_s);
+    }
     CHECK_EQ(prev<ActionRegexp>(u"IMG_0042.jpg"_s,
                                 [](auto& a) {
                                     a.expr = u"^img_(\\d+)"_s;

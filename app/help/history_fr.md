@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.3.0 (24/11/2026)
+  - Version finale de la 3.3.0 : Filtrer les fichiers, l'annulation des copies, l'historique d'annulation partagé, Mettre les dates d'après l'EXIF (3.3.0-beta.1 et beta.2), plus : Flatpak, les fichiers donnés un par un au bac à sable ne pouvaient pas être renommés et disparaissaient : corrigé, le paquet Flatpak peut maintenant écrire dans le dossier personnel, et un fichier donné seul en dehors est refusé sans y toucher, avec un avertissement. Conseil pour les dossiers synchronisés (mettre la synchronisation en pause ou travailler sur une copie).
 - 3.3.0-beta.2 (23/11/2026)
   - Nouveau : Mettre les dates d'après l'EXIF (menu du clic droit de la liste, ligne de commande `--set-dates-from-exif`) : la date de modification des fichiers devient leur date de prise de vue EXIF. Un tableau montre l'ancienne et la nouvelle date et rien ne change avant votre confirmation ; le contenu des fichiers n'est jamais touché ; les fichiers associés (.xmp, .dop, RAW) suivent leur photo ; l'historique peut annuler. La date de modification n'est pas une preuve d'authenticité : pour des originaux qui doivent rester des preuves, travaillez sur des copies.
   - Correction : le paquet .deb renvoie vers le dépôt GitHub comme page d'accueil, et non vers le site du programme d'origine.

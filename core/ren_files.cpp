@@ -44,6 +44,19 @@ QDateTime adjustFileTime(const QDateTime& t) {
     return QDateTime(u.date(), u.time());
 }
 
+// Flatpak: a file given alone to the program (dropped from the file manager or chosen with the file picker) is
+// /run/user/<uid>/doc/<id>/<name>: exactly two components after "doc". The portal then "renames" it by writing a hidden
+// temporary copy (.xdp-...) and deleting the original, and the last step fails: the file is lost to the user. A rename of
+// such a file is refused before anything is touched. A folder given to the program is /doc/<id>/<folder>/...: deeper, it works.
+bool isPortalSingleFile(const QString& path) {
+    static const QString root = QStringLiteral("/run/user/");
+    if (!path.startsWith(root)) {
+        return false;
+    }
+    const QStringList parts = path.mid(root.size()).split(QLatin1Char('/'), Qt::SkipEmptyParts);  // uid, "doc", id, name
+    return parts.size() == 4 && parts.at(1) == QLatin1String("doc");
+}
+
 namespace {
 
 bool pathExists(const QString& p) {
@@ -72,6 +85,10 @@ bool moveFile(const QString& from, const QString& to, QString& err) {
 }
 #else
 bool moveFile(const QString& from, const QString& to, QString& err) {
+    if (isPortalSingleFile(from) || isPortalSingleFile(to)) {
+        err = QCoreApplication::translate("RenFiles", "file given alone to the Flatpak sandbox (drag and drop, file picker): it cannot be renamed, nothing was changed. Add the folder that contains it instead (Add folders, or drag the folder)");
+        return false;
+    }
     QFile f(from);
     if (f.rename(to)) {
         return true;

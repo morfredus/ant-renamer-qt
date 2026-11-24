@@ -162,6 +162,7 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, boo
     setStatus(0, tr_("Adding files"));
     QApplication::setOverrideCursor(Qt::WaitCursor);
     fileView_->setUpdatesEnabled(false);
+    bool portalFile = false;  // Flatpak: a file given alone cannot be renamed
     QString emptyDir;  // first folder that brought nothing: without a word, an empty folder looks like a failure
     for (const QString& p : paths) {
         const QFileInfo fi(p);
@@ -176,6 +177,7 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, boo
             }
         } else if (!choice || (choice->files && fi.isFile())) {
             addFile(native(p));
+            portalFile = portalFile || ren::isPortalSingleFile(QDir::fromNativeSeparators(p));
         }
     }
     fileView_->setUpdatesEnabled(true);
@@ -190,6 +192,10 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, boo
         }
     }
     updateSamplePreview();
+    if (portalFile) {
+        QMessageBox::warning(this, QStringLiteral("Ant Renamer Qt"),
+                             tr_("Files given one by one to the Flatpak sandbox (drag and drop, file picker) cannot be renamed: the program will refuse, nothing will be changed. Add the folder that contains them instead (Add folders, or drag the folder)."));
+    }
 }
 
 // Paths sent by the Explorer context menu (or "Open with"): like a drop, with the same window. Explorer starts one process

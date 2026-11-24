@@ -4,7 +4,15 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.3.0-beta.2**.
+Current version: **3.3.0**.
+
+## 3.3.0
+
+| What is new | Since |
+|---|---|
+| **Final version**: everything of 3.3.0-beta.1 and beta.2 (Filter files, the undo that deletes the copies, the shared undo history, Set dates from EXIF). | 3.3.0 |
+| **Flatpak**: files given one by one to the sandbox (drag and drop from the file manager, file picker) could not be renamed and vanished from their folder (hidden `.xdp-*` copies left by the document portal). Fixed: the package can now write in the home folder, and a file given alone outside it is refused without being touched, with a warning. | 3.3.0 |
+| **Synchronized folders** (pCloud, Dropbox, Nextcloud...): the guide advises to pause the synchronization before a renaming, or to work on a copy. | 3.3.0 |
 
 ## 3.3.0-beta.2
 
