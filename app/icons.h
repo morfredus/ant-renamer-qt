@@ -37,7 +37,8 @@ enum TbIcon {
     TbTheme,  // only drawn in code (light / dark toggle), whatever the icon set
     TbChangedOnly,
     TbShowHidden,
-    TbHistory  // idem (view filters of the files list)
+    TbHistory,  // idem (view filters of the files list)
+    TbFilter    // a funnel: Filter files (idem, drawn in code)
 };
 
 QIcon tbIcon(int index);

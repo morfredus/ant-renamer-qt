@@ -162,6 +162,7 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, boo
     setStatus(0, tr_("Adding files"));
     QApplication::setOverrideCursor(Qt::WaitCursor);
     fileView_->setUpdatesEnabled(false);
+    bool portalFile = false;  // Flatpak: a file given alone cannot be renamed
     QString emptyDir;  // first folder that brought nothing: without a word, an empty folder looks like a failure
     for (const QString& p : paths) {
         const QFileInfo fi(p);
@@ -176,6 +177,7 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, boo
             }
         } else if (!choice || (choice->files && fi.isFile())) {
             addFile(native(p));
+            portalFile = portalFile || ren::isPortalSingleFile(QDir::fromNativeSeparators(p));
         }
     }
     fileView_->setUpdatesEnabled(true);
@@ -190,6 +192,10 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, boo
         }
     }
     updateSamplePreview();
+    if (portalFile) {
+        QMessageBox::warning(this, QStringLiteral("Ant Renamer Qt"),
+                             tr_("Files given one by one to the Flatpak sandbox (drag and drop, file picker) cannot be renamed: the program will refuse, nothing will be changed. Add the folder that contains them instead (Add folders, or drag the folder)."));
+    }
 }
 
 // Paths sent by the Explorer context menu (or "Open with"): like a drop, with the same window. Explorer starts one process
@@ -295,6 +301,7 @@ void MainWindow::removeAllFiles() {
     fileView_->clear();
     rows_.clear();
     files_.clear();
+    filterRemoved_.clear();  // "Remove all" empties the list for good
     setStatus();
     updateSamplePreview();
 }
@@ -312,6 +319,189 @@ void MainWindow::removeDeadFiles() {
             delete it;
         }
     }
+    setStatus();
+    updateSamplePreview();
+}
+
+// A file added at a given row of the list (past the end: at the end).
+void MainWindow::insertFileAt(const QString& path, int row) {
+    File& f = files_.add(path);
+    f.hidden = isHiddenOrSystem(QFileInfo(path));
+    QTreeWidgetItem* item = addFileRow(f);
+    updateItem(item);
+    const int last = fileView_->topLevelItemCount() - 1;
+    if (row >= 0 && row < last) {
+        fileView_->insertTopLevelItem(row, fileView_->takeTopLevelItem(last));
+    }
+}
+
+// "Set dates from EXIF": the modification date of each file becomes its EXIF shooting date. Never automatic: a table shows the
+// old and the new date of every file, with the safeguards written out, and nothing happens before the button is pressed.
+// The run goes through the worker (log, history, undo like a renaming).
+void MainWindow::setDatesFromExif() {
+    if (worker_) {
+        return;
+    }
+    if (files_.size() == 0) {
+        QMessageBox::information(this, tr_("Set the dates from EXIF"), tr_("No file: add files first."));
+        return;
+    }
+    QDialog dlg(this);
+    dlg.setWindowTitle(tr_("Set the dates from EXIF"));
+    auto* lay = new QVBoxLayout(&dlg);
+    auto* intro = new QLabel(
+        tr_("The modification date of each file below will become the shooting date written in its EXIF data. Only the date "
+            "kept by the file system changes: the content of the file, its EXIF data and its tags are not touched. A file with "
+            "no EXIF shooting date is left alone.\n\nThe modification date is not a proof of authenticity. For originals that "
+            "must stay evidence, work on copies (option \"Copy instead of rename\"). This can be undone from the history."));
+    intro->setWordWrap(true);
+    lay->addWidget(intro);
+    auto* tree = new QTreeWidget;
+    tree->setRootIsDecorated(false);
+    tree->setHeaderLabels({tr_("File"), tr_("Modification date"), tr_("EXIF shooting date"), tr_("Result")});
+    lay->addWidget(tree, 1);
+    QApplication::setOverrideCursor(Qt::WaitCursor);  // the EXIF of every picture is read
+    int changes = 0;
+    const QString fmt = u"yyyy-MM-dd HH:mm:ss"_s;
+    const std::vector<ren::DatePlan> plans = ren::planDates(files_);
+    for (size_t i = 0; i < files_.size(); ++i) {
+        const File& f = files_.at(i);
+        const ren::DatePlan& p = plans[i];
+        QString result;
+        switch (p.kind) {
+        case ren::DatePlan::Kind::Change:
+            result = p.sidecars.isEmpty() ? tr_("will be changed") : tr_("will be changed, with %1 sidecar file(s)").arg(p.sidecars.size());
+            ++changes;
+            break;
+        case ren::DatePlan::Kind::Sidecar:
+            result = tr_("follows its picture");
+            break;
+        case ren::DatePlan::Kind::Same:
+            result = tr_("already right");
+            break;
+        case ren::DatePlan::Kind::NoDate:
+            result = tr_("no EXIF shooting date");
+            break;
+        case ren::DatePlan::Kind::Skipped:
+            result = f.isFolder() ? tr_("a folder has no EXIF date") : tr_("hidden file");
+            break;
+        }
+        auto* it = new QTreeWidgetItem(tree, {native(f.filePath()), p.current.isValid() ? p.current.toString(fmt) : QString(),
+                                              p.shot.isValid() ? p.shot.toString(fmt) : QString(), result});
+        if (p.kind != ren::DatePlan::Kind::Change) {
+            for (int c = 0; c < 4; ++c) {
+                it->setForeground(c, palette().color(QPalette::Disabled, QPalette::Text));
+            }
+        }
+    }
+    QApplication::restoreOverrideCursor();
+    for (int c = 1; c < 4; ++c) {
+        tree->resizeColumnToContents(c);
+    }
+    tree->setColumnWidth(0, 330);
+    lay->addWidget(new QLabel(tr_("%1 file(s) will get a new modification date.").arg(changes)));
+    auto* box = new QDialogButtonBox(QDialogButtonBox::Cancel);
+    QPushButton* go = box->addButton(tr_("Set the dates"), QDialogButtonBox::AcceptRole);
+    go->setEnabled(changes > 0);
+    box->button(QDialogButtonBox::Cancel)->setDefault(true);  // Enter does not change dates by reflex
+    connect(box, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+    connect(box, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
+    lay->addWidget(box);
+    dlg.resize(1000, 480);  // wide enough for the longest result ("will be changed, with 2 sidecar file(s)") in French too
+    if (dlg.exec() == QDialog::Accepted) {
+        run(Op::SetDates);
+    }
+}
+
+// Keeps (or removes) the files that match a filter on a date, a time of the day or the size. The files are only taken out of
+// the list: nothing is touched on the disk. The dialog shows the last criteria again and, when the last filter took files
+// out, offers to put them back first, so that a filter that left nothing can be corrected. "Clear the filter" (or no
+// criterion left ticked while the files are put back) gives every file back and filters nothing. A file comes back right
+// after the file that was before it when it was taken out (at the end if that one is gone).
+void MainWindow::filterFiles() {
+    if (worker_) {
+        return;
+    }
+    if (files_.size() == 0 && filterRemoved_.isEmpty()) {
+        QMessageBox::information(this, tr_("Filter files"), tr_("No file to filter: add files first."));
+        return;
+    }
+    FilterDialog dlg(this, lastFilter_, lastKeep_, int(filterRemoved_.size()));
+    if (dlg.exec() != QDialog::Accepted) {
+        return;
+    }
+    const ren::FileFilter flt = dlg.filter();
+    const bool clear = dlg.clearRequested() || (flt.isEmpty() && dlg.putBack());
+    if (flt.isEmpty() && !clear) {
+        QMessageBox::information(this, tr_("Filter files"), tr_("Nothing to filter: tick at least one criterion."));
+        return;
+    }
+    const bool keep = dlg.keepMatching();
+    QApplication::setOverrideCursor(Qt::WaitCursor);  // the EXIF date needs a read of every picture
+    if (dlg.putBack() || clear) {
+        QString lastAnchor;
+        int nextRow = -1;
+        for (const FilterRemoved& r : std::as_const(filterRemoved_)) {
+            if (!QFileInfo::exists(r.path)) {
+                continue;
+            }
+            int row = fileView_->topLevelItemCount();  // the anchor is gone: at the end
+            if (nextRow >= 0 && r.anchor == lastAnchor) {
+                row = nextRow;  // several files in a row come back in their order
+            } else if (r.anchor.isEmpty()) {
+                row = 0;  // it was at the top of the list
+            } else {
+                for (int k = 0; k < fileView_->topLevelItemCount(); ++k) {
+                    const File* f = fileOf(fileView_->topLevelItem(k));
+                    if (f && f->filePath() == r.anchor) {
+                        row = k + 1;
+                        break;
+                    }
+                }
+            }
+            insertFileAt(r.path, row);
+            lastAnchor = r.anchor;
+            nextRow = row + 1;
+        }
+        filterRemoved_.clear();
+        renumberFiles();
+    }
+    if (clear) {
+        QApplication::restoreOverrideCursor();
+        lastFilter_ = {};
+        lastKeep_ = true;
+        setStatus();
+        updateSamplePreview();
+        return;
+    }
+    // forward pass: each file that goes remembers the kept file before it
+    QList<FilterRemoved> removed;
+    QList<QTreeWidgetItem*> gone;
+    QString lastKept;
+    for (int i = 0; i < fileView_->topLevelItemCount(); ++i) {
+        QTreeWidgetItem* it = fileView_->topLevelItem(i);
+        File* f = fileOf(it);
+        if (!f) {
+            continue;
+        }
+        if (flt.matches(*f) != keep) {
+            removed.append({f->filePath(), lastKept});
+            gone.append(it);
+        } else {
+            lastKept = f->filePath();
+        }
+    }
+    for (QTreeWidgetItem* it : std::as_const(gone)) {
+        if (File* f = fileOf(it)) {
+            rows_.remove(f->id());
+            files_.remove(f);
+        }
+        delete it;
+    }
+    QApplication::restoreOverrideCursor();
+    filterRemoved_ += removed;
+    lastFilter_ = flt;
+    lastKeep_ = keep;
     setStatus();
     updateSamplePreview();
 }

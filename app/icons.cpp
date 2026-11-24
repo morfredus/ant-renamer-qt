@@ -348,6 +348,9 @@ void drawVectorIcon(QPainter& p, int index, QIcon::Mode mode) {
             p.drawEllipse(QPointF(12, 12), 8.6, 8.6);
             open({{12, 6.8}, {12, 12}, {15.6, 14.2}});
             break;
+        case TbFilter:  // a funnel: keep the files that match
+            closed({{4, 5.5}, {20, 5.5}, {14, 12.5}, {14, 19}, {10, 17}, {10, 12.5}});
+            break;
         case TbExit:
             open({{10, 4}, {5, 4}, {5, 20}, {10, 20}});
             p.setPen(QPen(red, 1.9, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));

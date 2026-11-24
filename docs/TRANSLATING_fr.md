@@ -44,7 +44,7 @@ Modifiez le texte de la clé dans le fichier existant `app/Languages/<Langue>.ln
 - **Tags** comme `%name%`, `%ext%`, `%folderN%`, `%num%`, `%author%` ou les lettres du masque de date (`yyyy`, `mm`...) : **ne se traduisent pas**, ce sont eux que le programme reconnaît.
 - **Espaces aux extrémités** : certains textes sont collés par le programme (" at position %1", " using creation date"). Le texte anglais décide : s'il commence ou finit par une espace, la traduction aussi, quoi que vous ayez tapé.
 - **Longueur** : les boutons des barres d'outils ont peu de place, préférez des titres courts.
-- **Textes ajoutés par Ant Renamer Qt** (mode portable, thème, fenêtre *À propos*, fichiers associés...) : ils sont dans la dernière section de `English.lng`, `<QtPort>`, avec leur traduction française dans `French.lng`. Un traducteur ajoute les mêmes lignes `<Item Name="..." Value="..."/>` à son fichier ; en attendant ces textes restent en anglais.
+- **Textes ajoutés par Ant Renamer Qt** (mode portable, thème, fenêtre *À propos*, fichiers associés, filtre, dates d'après l'EXIF...) : ils sont dans la dernière section de `English.lng`, `<QtPort>`, avec leur traduction française dans `French.lng`. Un traducteur ajoute les mêmes lignes `<Item Name="..." Value="..."/>` à son fichier ; en attendant ces textes restent en anglais.
 
 ## 5. Tester
 
@@ -63,7 +63,7 @@ Modifiez le texte de la clé dans le fichier existant `app/Languages/<Langue>.ln
 
 Sur GitHub, [github.com/morfredus/ant-renamer-qt](https://github.com/morfredus/ant-renamer-qt) : ouvrez une *pull request* avec le fichier `.lng` nouveau ou modifié (et les lignes de crédits), ou, si vous n'en avez pas l'habitude, une *issue* avec le fichier en pièce jointe. Indiquez avec quelle version du programme vous avez testé. Une ligne dans `CHANGELOG.md` (section *Unreleased*) et dans `docs/WHATS_NEW.md` / `WHATS_NEW_fr.md` mentionne la nouvelle langue.
 
-Les traducteurs de l'Ant Renamer d'origine peuvent envoyer leur fichier tel quel, comme les autres (voir ci-dessus) : le format est le même. Les textes ajoutés par Ant Renamer Qt (la section `<QtPort>` de `English.lng`, une centaine) manqueront et resteront en anglais tant que le traducteur ne les a pas ajoutés.
+Les traducteurs de l'Ant Renamer d'origine peuvent envoyer leur fichier tel quel, comme les autres (voir ci-dessus) : le format est le même. Les textes ajoutés par Ant Renamer Qt (la section `<QtPort>` de `English.lng`, environ 170) manqueront et resteront en anglais tant que le traducteur ne les a pas ajoutés.
 
 ## 8. L'aide
 

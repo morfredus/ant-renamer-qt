@@ -27,11 +27,11 @@ common, on purpose: both programs read each other's batches.
 
 | | Original (Delphi 7) | Port (C++20 / Qt 6) |
 |---|---|---|
-| Size | about 14,700 lines of Pascal | about 2,650 lines (engine) + 4,750 lines (interface) + 750 lines of tests |
+| Size | about 14,700 lines of Pascal | about 4,750 lines (engine) + 6,650 lines (interface) + 1,850 lines of tests |
 | Needs | Delphi 7 + 5 third-party component packs | a C++20 compiler and Qt 6, nothing else |
 | Platforms | Windows | Windows (MinGW, tested), Linux x86_64 and ARM64 (Raspberry Pi; installed from the packages and run, tested) |
 | Unicode | WideString + Tnt controls | `QString` (UTF-16), same semantics for positions |
-| Distribution | Inno Setup installer | portable zip + Inno Setup 6 installer (Windows), `.deb` and AppImage (Linux) |
+| Distribution | Inno Setup installer | portable zip + Inno Setup 6 installer (Windows), `.deb`, AppImage and Flatpak (Linux) |
 
 ## What was kept (compatibility)
 
@@ -145,6 +145,11 @@ These are the places where the port does not do exactly what version 2.13 does. 
 - **Numbering of files given the same name** by the Date and time and EXIF actions (`_01`, `_02`... in the order of the shooting), so that a burst shot in the same second is renamed instead of refused.
 - **One window at a time**: a second launch shows a message and quits (paths given alone are added to the open window).
 - **Silent command line** `-q`: no window and no dialog, for scripts; the exit code tells how it went.
+- **A 15th action, "Use EPUB info"**: names of e-books from their metadata (author, title, year, publisher, language, ISBN, series and number).
+- **Filter files** (toolbar button, F4): keeps, or removes, the files of the list that match a period, a time of the day ("everything shot between 14:00 and 15:00") and a size, on the modification date, the creation date or the EXIF shooting date; nothing is touched on the disk.
+- **Set dates from EXIF**: gives the files their EXIF shooting date as modification date (photos copied with their date overwritten). Never automatic: a table of the old and new dates and a confirmation first; no date typed by hand or invented, the content and the EXIF are never touched, the sidecar files follow their picture, the history can undo it, and `--set-dates-from-exif` is the explicit command-line option. The documentation reminds that the modification date is no proof of authenticity.
+- **Undo of copies**: the undo of a pass made with "Copy instead of rename" deletes the copies if they have not been changed since; a `-q` run and an open window share the undo history instead of erasing each other's passes.
+- **Flatpak package** (Flathub), with an AppStream file, besides the `.deb` and the AppImage.
 - **Build system**: CMake presets for Windows (MinGW), Linux x86_64, Linux ARM64 and ARM64 cross
   compilation; Qt and MinGW DLLs are deployed automatically next to the executable on Windows.
 - **Packaging**: `scripts/windows/package-win.ps1` builds a portable zip and, with Inno Setup 6, an
@@ -168,12 +173,14 @@ Users of Ant Renamer 2.x asked for a number of things on the forum of the origin
 - Seeing the files list while setting up an action (the single screen).
 - A version for Linux.
 - A check for a new version.
+- Bringing the modification date of a photo back in line with its EXIF shooting date (asked many times, "on the to-do list" of the original since 2005), with safeguards.
+- Choosing the files of the list by date, time of the day and size (Filter files).
 
 ## Quality and testing
 
 - The engine has an automated test program: paths, mask formatting and `$if`, date formatting, every
   action's preview on sample names, real renames on disk (enumeration, case-only, revert), batch XML
-  round trip, ID3v2.3 with fallback to v1, EXIF counter settings.
+  round trip, ID3v2.3 with fallback to v1, EXIF counter settings, the Filter files criteria, Set dates from EXIF (sidecar files, read-only files, undo), the undo of copies and the history shared with a silent run. The actions editor and the Filter files dialog have their own test programs (`ctest` runs the three).
 - By hand: batches with string replacement and EXIF + enumeration were run on real files; the interface
   was compared page by page with screenshots of version 2.13; the installer was installed and removed
   silently; the portable zip was run with a minimal `PATH`; the Explorer menu "Add to Ant Renamer Qt" was
@@ -187,6 +194,7 @@ Users of Ant Renamer 2.x asked for a number of things on the forum of the origin
 - 36 EXIF tags (IFD0 and Exif IFD only, no MakerNote decoding); IPTC is read from JPEG only; XMP
   sidecar files are read and renamed with their picture (IMG.xmp, IMG.CR2.xmp, DxO `.dop`, RawTherapee `.pp3`, Capture One `.cos`... and the RAW files of a renamed JPEG).
 - Only ID3 tags; no other audio tag formats.
+- Set dates from EXIF changes the modification date only (the creation date cannot be changed the same way on Linux) and reads `DateTimeOriginal` (or the XMP sidecar); no date comes from a file name.
 - The Windows 11 short context menu needs a packaged COM component and a signed package, not done.
 - The executable is not code-signed, so SmartScreen may warn on the first download.
 - The interface is translated through the original `.lng` files; the strings added by the port (About text,

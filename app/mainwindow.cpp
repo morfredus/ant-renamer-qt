@@ -42,6 +42,12 @@ void ItemTree::dropEvent(QDropEvent* e) {
 // --- RenWorker ---
 void RenWorker::run() {
     try {
+        if (op_ == Op::SetDates) {
+            files_->setDatesFromExif([this](File& f) {
+                emit progress({f.id(), f.description(), int(f.status()), 0, 0, QString(), f.fileFolder(), f.fileName(), f.preview});
+            });
+            return;
+        }
         if (op_ == Op::Undo) {
             files_->undoPasses(
                 undoCount_,
@@ -95,6 +101,11 @@ MainWindow::MainWindow() {
     aStop_->setEnabled(false);
     aUndo_->setEnabled(journal_.size() > 0);
     aHistory_->setEnabled(journal_.size() > 0);
+    connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState st) {
+        if (st == Qt::ApplicationActive && !worker_) {  // back to the window: a `-q` run may have added passes
+            refreshHistory();
+        }
+    });
 }
 
 // Builds everything the user sees from the current options. Files, batch, journal and log are not touched, so it can run again
@@ -251,7 +262,14 @@ void MainWindow::createActions() {
     aRemoveSel_ = makeAction(tr_("Remove sel."), tr_("Remove selected files from the list"), TbRemoveSelected, K(Qt::Key_F6));
     aRemoveAll_ = makeAction(tr_("Remove all"), tr_("Remove all files from the list"), TbRemoveAll, K(Qt::Key_F7));
     aRemoveDead_ = makeAction(tr_("Remove dead"), tr_("Remove dead files from the list"), TbRemoveDead, K(Qt::Key_F8));
+    aFilter_ = makeAction(tr_("Filter files..."), tr_("Keep or remove the files of the list by date, time of the day and size"),
+                          TbFilter, K(Qt::Key_F4));
+    aFilter_->setCheckable(true);  // pressed while a filter hides files: set by showFilterState(), never by the click
     aPreview_ = makeAction(tr_("Preview"), tr_("Refresh preview"), TbPreview, K(Qt::Key_F5));
+    // Not on the toolbar and without a shortcut: it changes dates, never by accident
+    aSetDates_ = new QAction(tr_("Set dates from EXIF..."), this);
+    aSetDates_->setToolTip(tr_("Give the files the EXIF shooting date as their modification date"));
+    connect(aSetDates_, &QAction::triggered, this, [this] { setDatesFromExif(); });
 
     // view filter only: files hidden by "Changed only" stay in the list and are processed as usual
     aChangedOnly_ = makeAction(tr_("Changed only"), tr_("Show only the files whose name changes in the preview"), TbChangedOnly);
@@ -395,6 +413,10 @@ void MainWindow::createActions() {
     connect(aRemoveSel_, &QAction::triggered, this, [this] { removeSelectedFiles(); });
     connect(aRemoveAll_, &QAction::triggered, this, [this] { removeAllFiles(); });
     connect(aRemoveDead_, &QAction::triggered, this, [this] { removeDeadFiles(); });
+    connect(aFilter_, &QAction::triggered, this, [this] {
+        filterFiles();
+        showFilterState();  // the click toggled the button: show the real state again
+    });
 
     connect(aBatchAdd_, &QAction::triggered, this, [this] { addToBatch(); });
     connect(aBatchRemoveSel_, &QAction::triggered, this, [this] { removeSelectedActions(); });
@@ -499,7 +521,7 @@ void MainWindow::createToolbars() {
     // --- what each bar contains ---
     const Items tabs = {T(aTab_[0]), T(aTab_[1]), T(aTab_[2])};
     const Items moves = {A(aUp_), A(aDown_), A(aTop_), A(aBottom_)};
-    Items files = {T(aAddFiles_),    T(aAddFolders_), sep, A(aRemoveSel_), T(aRemoveAll_), A(aRemoveDead_), sep, A(aPreview_),
+    Items files = {T(aAddFiles_),    T(aAddFolders_), sep, A(aRemoveSel_), T(aRemoveAll_), A(aRemoveDead_), A(aFilter_), sep, A(aPreview_),
                    A(aChangedOnly_), A(aShowHidden_)};
     Items actions = {newUi_ ? T(aBatchAdd_) : A(aBatchAdd_)};
     if (newUi_) {
@@ -616,8 +638,11 @@ void MainWindow::createPages() {
         m.addAction(aSelNone_);
         m.addAction(aSelInvert_);
         m.addSeparator();
+        m.addAction(aFilter_);
         m.addAction(aPreview_);
         m.addAction(tr_("Export preview..."), this, [this] { exportPreview(); });
+        m.addSeparator();
+        m.addAction(aSetDates_);
         m.exec(fileView_->viewport()->mapToGlobal(p));
     });
 
@@ -1048,8 +1073,24 @@ void MainWindow::updateTabCounts() {
     }
 }
 
+// While a filter hides files, say so everywhere the user looks: the file count (orange, with the number of hidden files)
+// and the Filter button (pressed, with a tooltip that says how to get the files back).
+void MainWindow::showFilterState() {
+    const int hidden = int(filterRemoved_.size());
+    if (hidden > 0) {
+        countLabel_->setText(tr_("%1 files, %2 hidden by the filter").arg(files_.size()).arg(hidden));
+        countLabel_->setStyleSheet(u"font-weight: bold; color: #e08000;"_s);
+        aFilter_->setToolTip(tr_("A filter hides %1 file(s) of the list. Press to correct it or to clear it.").arg(hidden));
+    } else {
+        countLabel_->setText(tr_("%1 files").arg(files_.size()));
+        countLabel_->setStyleSheet(QString());
+        aFilter_->setToolTip(tr_("Keep or remove the files of the list by date, time of the day and size"));
+    }
+    aFilter_->setChecked(hidden > 0);
+}
+
 void MainWindow::setStatus() {
-    countLabel_->setText(tr_("%1 files").arg(files_.size()));
+    showFilterState();
     updateTabCounts();
     statusLabel_->clear();
     progress_->setValue(0);

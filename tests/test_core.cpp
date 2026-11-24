@@ -50,6 +50,8 @@ template <class A, class Fn> static QString prev(const QString& name, Fn setup, 
 
 #include "robust_check.h"
 #include "duplicates_check.h"
+#include "filter_check.h"
+#include "date_check.h"
 
 int main(int argc, char** argv) {
     QCoreApplication app(argc, argv);
@@ -191,6 +193,17 @@ int main(int argc, char** argv) {
                                   a.onlyExt = true;
                               }),
              u"hello.TXT"_s);
+    // Flatpak document portal: only a file given alone is refused; ordinary paths of every system are left alone
+    for (const QString& p : {u"/run/user/1000/doc/AbC_d-1/IMG 1.jpg"_s, u"/run/user/1000/doc/AbC_d-1/IMG_1.jpg"_s,
+                             u"/run/user/1000/doc/AbC_d-1/Photos"_s /* the granted folder itself: no sibling can be created */}) {
+        CHECK_EQ(ren::isPortalSingleFile(p) ? u"y"_s : u"n"_s, u"y"_s);
+    }
+    for (const QString& p : {u"/run/user/1000/doc/AbC_d-1/Photos/IMG_1.jpg"_s, u"/run/user/1000/doc/AbC_d-1/Photos/Sub/IMG_1.jpg"_s,
+                             u"/run/user/1000/doc/AbC_d-1"_s, u"/run/user/1000/other/x/IMG_1.jpg"_s,
+                             u"/home/me/doc/x/IMG_1.jpg"_s, u"/home/me/Pictures/IMG_1.jpg"_s, u"/tmp/a/b/c.jpg"_s,
+                             u"C:/Users/me/doc/x/IMG_1.jpg"_s, u"C:\\Users\\me\\IMG_1.jpg"_s, u""_s}) {
+        CHECK_EQ(ren::isPortalSingleFile(p) ? u"y"_s : u"n"_s, u"n"_s);
+    }
     CHECK_EQ(prev<ActionRegexp>(u"IMG_0042.jpg"_s,
                                 [](auto& a) {
                                     a.expr = u"^img_(\\d+)"_s;
@@ -606,6 +619,95 @@ int main(int argc, char** argv) {
         CHECK_EQ(QString::number(f5.undoPasses(1)), u"0"_s);
         CHECK_EQ(QFile::exists(d4 + u"y.txt"_s) ? u"y"_s : u"n"_s, u"n"_s);  // not touched
         CHECK_EQ(QString::number(j5.size()), u"1"_s);
+
+        // "Copy instead of rename": the undo deletes the copy (the original was never touched), unless the copy was changed
+        {
+            QTemporaryDir t7;
+            const QString d7 = t7.path() + u'/';
+            touch(d7 + u"c.txt"_s);
+            options().copy = true;
+            FileList fc;
+            Journal jc;
+            fc.setJournal(&jc);
+            fc.add(d7 + u"c.txt"_s).position = 0;
+            ActionList toC;
+            auto& ec = static_cast<ActionEnum&>(toC.add(ActionType::Enum));
+            ec.mask = u"cp%num%%ext%"_s;
+            ec.digits = 1;
+            toC.perform(fc, Op::Rename);
+            options().copy = false;
+            CHECK_EQ(QFile::exists(d7 + u"c.txt"_s) && QFile::exists(d7 + u"cp1.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
+            CHECK_EQ(QString::number(jc.size()), u"1"_s);
+            CHECK_EQ(jc.passes().back().moves.front().copy ? u"y"_s : u"n"_s, u"y"_s);
+            Journal jd;  // the flag survives the file on disk
+            CHECK_EQ(jd.fromJson(jc.toJson()) ? u"y"_s : u"n"_s, u"y"_s);
+            CHECK_EQ(jd.passes().back().moves.front().copy ? u"y"_s : u"n"_s, u"y"_s);
+
+            QFile edit(d7 + u"cp1.txt"_s);  // changed since: kept, the pass stays
+            CHECK_EQ(edit.open(QIODevice::Append) ? u"y"_s : u"n"_s, u"y"_s);
+            edit.write("more");
+            edit.close();
+            CHECK_EQ(QString::number(fc.undoPasses(1)), u"0"_s);
+            CHECK_EQ(QFile::exists(d7 + u"cp1.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
+            CHECK_EQ(QString::number(jc.size()), u"1"_s);
+
+            // an unchanged copy is deleted
+            touch(d7 + u"e.txt"_s);
+            options().copy = true;
+            FileList fe;
+            Journal je;
+            fe.setJournal(&je);
+            fe.add(d7 + u"e.txt"_s).position = 0;
+            ActionList toE;
+            auto& ee = static_cast<ActionEnum&>(toE.add(ActionType::Enum));
+            ee.mask = u"ec%num%%ext%"_s;
+            ee.digits = 1;
+            toE.perform(fe, Op::Rename);
+            options().copy = false;
+            CHECK_EQ(QFile::exists(d7 + u"ec1.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
+            CHECK_EQ(QString::number(fe.undoPasses(1)), u"1"_s);
+            CHECK_EQ(QFile::exists(d7 + u"e.txt"_s) && !QFile::exists(d7 + u"ec1.txt"_s) ? u"y"_s : u"n"_s, u"y"_s);
+            CHECK_EQ(fe.at(0).fileName(), u"e.txt"_s);  // the entry is the original again
+        }
+
+        // A `-q` run writes the history file while a window is open: each side takes in the passes of the other
+        {
+            QTemporaryDir t8;
+            const QString d8 = t8.path() + u'/';
+            for (const char* n : {"m.txt", "n.txt"}) {
+                touch(d8 + QString::fromLatin1(n));
+            }
+            Journal window, quiet;  // both start from the same (empty) history file
+            FileList fw, fq;
+            fw.setJournal(&window);
+            fq.setJournal(&quiet);
+            fw.add(d8 + u"m.txt"_s).position = 0;
+            fq.add(d8 + u"n.txt"_s).position = 0;
+            ActionList toW, toQ;
+            auto& ew = static_cast<ActionEnum&>(toW.add(ActionType::Enum));
+            ew.mask = u"w%num%%ext%"_s;
+            ew.digits = 1;
+            auto& eqq = static_cast<ActionEnum&>(toQ.add(ActionType::Enum));
+            eqq.mask = u"q%num%%ext%"_s;
+            eqq.digits = 1;
+            toW.perform(fw, Op::Rename);
+            toQ.perform(fq, Op::Rename);
+            CHECK_EQ(QString::number(window.mergeFromJson(quiet.toJson())), u"1"_s);  // the window learns the pass of the -q run
+            CHECK_EQ(QString::number(window.size()), u"2"_s);
+            CHECK_EQ(QString::number(window.mergeFromJson(quiet.toJson())), u"0"_s);  // a second time: nothing new
+            CHECK_EQ(QString::number(quiet.mergeFromJson(window.toJson())), u"1"_s);  // and the other way round
+            CHECK_EQ(QString::number(quiet.size()), u"2"_s);
+            CHECK_EQ(QString::number(window.mergeFromJson("not json")), u"0"_s);
+            CHECK_EQ(QString::number(window.size()), u"2"_s);
+            const QByteArray both = window.toJson();
+            CHECK_EQ(QString::number(window.mergeFromJson(both)), u"0"_s);
+
+            // a pass undone here is not brought back by the older content of the file
+            CHECK_EQ(QString::number(fw.undoPasses(1, {}, window.passes().back().session)), u"1"_s);
+            CHECK_EQ(QString::number(window.size()), u"1"_s);
+            CHECK_EQ(QString::number(window.mergeFromJson(both)), u"0"_s);
+            CHECK_EQ(QString::number(window.size()), u"1"_s);
+        }
     }
 
     ActionList upper;  // a.txt -> A.TXT must work although the volume is case-insensitive
@@ -643,6 +745,8 @@ int main(int argc, char** argv) {
     CHECK_EQ(static_cast<ActionFromList&>(again.at(1)).listContents, u"one\ntwo"_s);
 
     duplicatesCheck();
+    filterCheck();
+    dateCheck();
 
     std::printf(failures ? "%d FAILURE(S)\n" : "all core checks passed\n", failures);
     return failures ? 1 : 0;

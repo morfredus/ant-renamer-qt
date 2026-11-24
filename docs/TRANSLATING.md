@@ -44,7 +44,7 @@ Edit the text of the key in the existing `app/Languages/<Language>.lng`, keeping
 - **Tags** such as `%name%`, `%ext%`, `%folderN%`, `%num%`, `%author%` or the letters of the date mask (`yyyy`, `mm`...) are **not translated**: they are what the program recognises.
 - **Spaces at the ends**: some texts are glued together by the program (" at position %1", " using creation date"). The English text decides: if it starts or ends with a space, so does the translation, whatever you typed.
 - **Same length**: toolbar buttons have little room, prefer short captions to long ones.
-- **Texts added by Ant Renamer Qt** (portable mode, theme, *About* window, sidecar files...) are in the last section of `English.lng`, `<QtPort>`, with their French translation in `French.lng`. A translator adds the same `<Item Name="..." Value="..."/>` lines to their file; until then these texts stay in English.
+- **Texts added by Ant Renamer Qt** (portable mode, theme, *About* window, sidecar files, filter, dates from EXIF...) are in the last section of `English.lng`, `<QtPort>`, with their French translation in `French.lng`. A translator adds the same `<Item Name="..." Value="..."/>` lines to their file; until then these texts stay in English.
 
 ## 5. Test
 
@@ -63,7 +63,7 @@ Edit the text of the key in the existing `app/Languages/<Language>.lng`, keeping
 
 On GitHub, [github.com/morfredus/ant-renamer-qt](https://github.com/morfredus/ant-renamer-qt): open a *pull request* with the new or modified `.lng` file (and the credit lines), or, if you are not used to it, an *issue* with the file attached. Say which version of the program you tested with. A line in `CHANGELOG.md` (section *Unreleased*) and in `docs/WHATS_NEW.md` / `WHATS_NEW_fr.md` mentions the new language.
 
-The translators of the original Ant Renamer can send their file as it is, like any other (see above): the format is the same. The texts added by Ant Renamer Qt (the `<QtPort>` section of `English.lng`, about a hundred) will be missing and stay in English until the translator adds them.
+The translators of the original Ant Renamer can send their file as it is, like any other (see above): the format is the same. The texts added by Ant Renamer Qt (the `<QtPort>` section of `English.lng`, about 170) will be missing and stay in English until the translator adds them.
 
 ## 8. The help
 

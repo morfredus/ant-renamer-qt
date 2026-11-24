@@ -4,6 +4,8 @@
 
 #include <memory>
 
+#include "ren_files.h"
+
 class QCheckBox;
 class QFileSystemModel;
 class QLineEdit;
@@ -56,6 +58,23 @@ public:
 private:
     AddChoiceBoxes boxes_;
     QCheckBox* notAgain_;
+};
+
+// "Filter files": keep (or remove) the files of the list by date, time of the day and size.
+class FilterDialog : public QDialog {
+public:
+    // `previous` and `keep` fill the fields again (to correct the last filter); removed > 0 adds the choice to put back the
+    // files that the previous filter took out of the list before filtering.
+    explicit FilterDialog(QWidget* parent, const ren::FileFilter& previous = {}, bool keep = true, int removed = 0);
+    ~FilterDialog() override;
+    ren::FileFilter filter() const;
+    bool keepMatching() const;  // true: the files that match stay; false: they are removed
+    bool putBack() const;       // put the files of the previous filter back before filtering
+    bool clearRequested() const;  // the "Clear the filter" button: put every file back, filter nothing
+
+private:
+    struct Ui;
+    std::unique_ptr<Ui> ui_;
 };
 
 class OptionsDialog : public QDialog {

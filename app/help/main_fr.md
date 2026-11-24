@@ -40,6 +40,7 @@ Dans Ant Renamer Qt, la fenêtre principale peut aussi être affichée avec une 
 | Maj+F1 | À propos | Échap | Arrêter |
 | F2 | Ajouter des fichiers | F10 | Options |
 | F3 | Ajouter des dossiers | F11 | Avant-plan |
+| F4 | Filtrer les fichiers | | |
 | F5 | Actualiser l'aperçu | F12 | Annuler |
 | Maj+F12 | Historique | | |
 | F6 | Retirer les fichiers sélectionnés | Alt+F4 | Quitter |

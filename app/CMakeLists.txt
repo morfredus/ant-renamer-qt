@@ -54,6 +54,12 @@ target_compile_definitions(test_panel PRIVATE LNG_SOURCE_DIR="${CMAKE_CURRENT_SO
 target_link_libraries(test_panel PRIVATE rencore Qt6::Widgets Qt6::Network)
 add_test(NAME panel COMMAND test_panel)
 
+add_executable(test_filter_dialog ../tests/test_filter_dialog.cpp dialogs.cpp appsettings.cpp icons.cpp lngtranslator.cpp helpwindow.cpp shellmenu.cpp updatecheck.cpp)
+target_include_directories(test_filter_dialog PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_definitions(test_filter_dialog PRIVATE LNG_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Languages" AR_APP_VERSION="test")
+target_link_libraries(test_filter_dialog PRIVATE rencore Qt6::Widgets Qt6::Network)
+add_test(NAME filter_dialog COMMAND test_filter_dialog)
+
 add_custom_target(antrenamer-data ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Languages $<TARGET_FILE_DIR:antrenamer-qt>/Languages
     COMMAND ${CMAKE_COMMAND} -E remove_directory $<TARGET_FILE_DIR:antrenamer-qt>/help

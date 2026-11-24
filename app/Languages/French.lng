@@ -526,6 +526,37 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="undoHistoryClear" Value="Effacer l'historique"/>
     <Item Name="undoHistoryClearConfirm" Value="Oublier toutes les passes ? Elles ne pourront plus être annulées."/>
     <Item Name="undoChanged" Value="Le fichier a été modifié après le renommage"/>
+    <Item Name="undoCopyNotDeleted" Value="Impossible de supprimer la copie %1"/>
+    <Item Name="undoCopyDeleted" Value="Copie %1 supprimée"/>
+    <Item Name="dateChangeFailed" Value="Impossible de changer la date de %1 : %2"/>
+    <Item Name="dateChanged" Value="%1 : date de modification changée de %2 à %3"/>
+    <Item Name="dateUndone" Value="%1 : date de modification remise à %2"/>
+    <Item Name="datePassSummary" Value="Date de modification mise à la date de prise de vue EXIF"/>
+    <Item Name="dateNotChanged" Value="%1 n'a pas été modifié : %2"/>
+    <Item Name="dateAlready" Value="sa date de modification est déjà la date de prise de vue EXIF"/>
+    <Item Name="dateNoExif" Value="pas de date de prise de vue EXIF"/>
+    <Item Name="dateFolder" Value="un dossier n'a pas de date EXIF"/>
+    <Item Name="dateHidden" Value="fichier caché"/>
+    <Item Name="dateAlreadyIs" Value="%1 : la date de modification est déjà %2"/>
+    <Item Name="dateSidecarsFollowed" Value="(%1 fichier(s) associé(s) ont reçu la même date)"/>
+    <Item Name="dateFollows" Value="suit sa photo"/>
+    <Item Name="dateWillChangeSidecars" Value="sera modifiée, avec %1 fichier(s) associé(s)"/>
+    <Item Name="dateMenu" Value="Mettre les dates d'après l'EXIF..."/>
+    <Item Name="dateMenuHint" Value="Donner aux fichiers la date de prise de vue EXIF comme date de modification"/>
+    <Item Name="dateDlgTitle" Value="Mettre les dates d'après l'EXIF"/>
+    <Item Name="dateNoFiles" Value="Aucun fichier : ajoutez d'abord des fichiers."/>
+    <Item Name="dateIntro" Value="La date de modification de chaque fichier ci-dessous deviendra la date de prise de vue écrite dans ses données EXIF. Seule la date conservée par le système de fichiers change : le contenu du fichier, ses données EXIF et ses étiquettes ne sont pas touchés. Un fichier sans date de prise de vue EXIF est laissé tel quel.&#10;&#10;La date de modification n'est pas une preuve d'authenticité. Pour des originaux qui doivent rester des preuves, travaillez sur des copies (option « Copier au lieu de renommer »). Cela peut être annulé depuis l'historique."/>
+    <Item Name="dateColFile" Value="Fichier"/>
+    <Item Name="dateColCurrent" Value="Date de modification"/>
+    <Item Name="dateColShot" Value="Date de prise de vue EXIF"/>
+    <Item Name="dateColResult" Value="Résultat"/>
+    <Item Name="dateWillChange" Value="sera modifiée"/>
+    <Item Name="dateAlreadyRight" Value="déjà correcte"/>
+    <Item Name="dateCount" Value="%1 fichier(s) recevront une nouvelle date de modification."/>
+    <Item Name="dateGo" Value="Mettre les dates"/>
+    <Item Name="dateLogStart" Value="Mise à la date de prise de vue EXIF des dates de modification"/>
+    <Item Name="dateLogEnd" Value="Mise à jour des dates terminée"/>
+    <Item Name="dateLogSummary" Value="Dates modifiées : %1, erreurs : %2"/>
     <Item Name="undoLogStart" Value="Annulation des dernières passes de renommage"/>
     <Item Name="undoOptHeader" Value="Bouton Annuler"/>
     <Item Name="undoOptLabel" Value="Le bouton Annuler :"/>
@@ -539,6 +570,27 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="helpBack" Value="Retour"/>
     <Item Name="helpForward" Value="Suivant"/>
     <Item Name="exportPreviewMenu" Value="Exporter l'aperçu..."/>
+    <Item Name="filterMenu" Value="Filtrer les fichiers..."/>
+    <Item Name="filterTitle" Value="Filtrer les fichiers"/>
+    <Item Name="filterDateKind" Value="Date à regarder :"/>
+    <Item Name="filterModified" Value="Date de modification"/>
+    <Item Name="filterCreated" Value="Date de création"/>
+    <Item Name="filterShot" Value="Date de prise de vue (EXIF ; sinon date de modification)"/>
+    <Item Name="filterFrom" Value="Du"/>
+    <Item Name="filterTo" Value="Au"/>
+    <Item Name="filterTimeFrom" Value="Heure de la journée, de"/>
+    <Item Name="filterTimeTo" Value="à"/>
+    <Item Name="filterMin" Value="Taille d'au moins"/>
+    <Item Name="filterMax" Value="Taille d'au plus"/>
+    <Item Name="filterKeep" Value="Garder les fichiers qui correspondent"/>
+    <Item Name="filterRemove" Value="Retirer les fichiers qui correspondent"/>
+    <Item Name="filterNothing" Value="Rien à filtrer : cochez au moins un critère."/>
+    <Item Name="filterCount" Value="%1 fichiers, %2 masqués par le filtre"/>
+    <Item Name="filterActiveHint" Value="Un filtre masque %1 fichier(s) de la liste. Appuyez pour le corriger ou l'effacer."/>
+    <Item Name="filterClear" Value="Effacer le filtre"/>
+    <Item Name="filterHint" Value="Garder ou retirer les fichiers de la liste selon la date, l'heure de la journée et la taille"/>
+    <Item Name="filterPutBack" Value="Remettre d'abord les %1 fichier(s) retiré(s) par le filtre précédent"/>
+    <Item Name="filterNoFile" Value="Aucun fichier à filtrer : ajoutez d'abord des fichiers."/>
     <Item Name="exportPreview" Value="Exporter l'aperçu"/>
     <Item Name="exportPreviewCsv" Value="Fichier CSV, noms actuels et nouveaux (*.csv)"/>
     <Item Name="saveLogCsv" Value="Fichier CSV (*.csv)"/>

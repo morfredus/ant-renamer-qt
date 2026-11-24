@@ -1,6 +1,6 @@
 # Ant Renamer Qt: function guide
 
-*Every function of Ant Renamer Qt 3.2.0 with instructions.*
+*Every function of Ant Renamer Qt 3.3.0 with instructions.*
 French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use cases): [USER_RECIPES.md](USER_RECIPES.md). Full details, page by page, with screenshots: the built-in help (F1). Differences between Windows and Linux: §13.
 
 ## 1. General principle
@@ -13,7 +13,7 @@ The work is done in three steps, one page each:
 
 The preview at the bottom of the Actions page shows the current and future name of the selected file, live. The **Preview** column of the Files list (F5) shows it for the whole list.
 
-The program only changes **names** (or copies the files under a new name); it never modifies the contents or the dates of the files. It handles Unicode names (Greek, Japanese, Cyrillic...), files and folders.
+The program only changes **names** (or copies the files under a new name); it never modifies the contents of the files, and the only date it changes, when you ask for it, is the modification date (*Set dates from EXIF...*, §3). It handles Unicode names (Greek, Japanese, Cyrillic...), files and folders.
 
 ## 2. Keyboard shortcuts
 
@@ -23,6 +23,7 @@ The program only changes **names** (or copies the files under a new name); it ne
 | Shift+F1 | About | Esc | Stop |
 | F2 | Add files | F10 | Options |
 | F3 | Add folders | F11 | Always on top |
+| F4 | Filter files | | |
 | F5 | Refresh preview | F12 | Undo |
 | Shift+F12 | History | | |
 | F6 / F7 / F8 | Remove selected / all / dead | Alt+F4 | Exit |
@@ -46,6 +47,7 @@ The program only changes **names** (or copies the files under a new name); it ne
 | Remove selected (F6) | removes the selected files from the list (not from disk) |
 | Remove all (F7) | empties the list |
 | Remove dead (F8) | removes files that no longer exist on disk |
+| Filter files (F4) | keeps or removes the files that match a date, a time of the day and a size |
 | Refresh preview (F5) | fills the Preview column (not automatic, for performance). It uses the batch, or the action displayed if the batch is empty |
 | Changed only | hides the files whose name does not change in the preview (a display filter only: they are still renamed, and a hidden file is never hit by "Remove selected" or the move buttons); refresh the preview first |
 | Hidden files | shows the hidden and system files of the list; off by default: they are hidden and left alone by every operation (not renamed). A warning appears before a renaming when it is on and the list holds some |
@@ -53,8 +55,10 @@ The program only changes **names** (or copies the files under a new name); it ne
 
 - **Columns**: right-click the header to show Folder, File name, Full path, Ext., Preview, Size, Creation date, Modification date. They can be resized and moved; one column at least stays visible.
 - **Sorting**: click a header (again to reverse). By default the sort is natural: "file 2" before "file 10" (Options > Files & Folders gives the alphabetical order back). **Sorting really reorders the list, so it sets the processing order**, hence the numbering order of an enumeration. Right-click > *Unsorted items* removes the sort indicator.
-- Right-click in the list: remove selected / all, select all, select none, invert the selection, refresh the preview, **Export preview...**.
+- Right-click in the list: remove selected / all, select all, select none, invert the selection, refresh the preview, **Filter files...**, **Export preview...**, **Set dates from EXIF...**.
+- **Filter files...** (the funnel button of the toolbar, F4, and the right-click menu) keeps (or removes) the files of the list that match a date, a time of the day and a size, all the ticked criteria together. The date is the modification date, the creation date (not kept by every Linux file system: such a file never matches) or the shooting date (EXIF, else the modification date). "From" and "To" give a period; "Time of the day" keeps, for example, everything shot between 14:00 and 15:00 whatever the day (22:00 to 02:00 works across midnight); the size limits are for files (a folder is judged on its dates). The files are only taken out of the list, nothing is touched on the disk. Press the button again to correct the filter: the last criteria are shown and the files it took out can be put back first (each one after the file that was before it); while a filter hides files, the count at the bottom turns orange and the button stays pressed; "Clear the filter" gives every file back.
 - **Export preview...** writes the files shown (the "Changed only" and "Hidden files" filters apply) to a CSV file (columns Folder, Name, New name; semicolon, every field quoted, UTF-8 with a BOM so that Excel and LibreOffice read the accents) or to a text file with the new names only, one per line. A file with no preview keeps its current name: refresh the preview first. Useful to proofread a big batch or to keep a trace.
+- **Set dates from EXIF...** (right-click menu only: no button, no shortcut) gives the files, as their modification date, the shooting date written in their EXIF data (or XMP sidecar). A typical case: photos that were copied and whose date was overwritten. It is never automatic: a table shows the old and the new date of every file and nothing changes before you press **Set the dates**. Only the modification date kept by the file system changes: the content of the file, its EXIF data and its tags are not touched, and no date is typed by hand or invented (a file with no EXIF shooting date, a folder and a hidden file are left alone, and the log says why). The sidecar files (`.xmp`, `.dop`, the RAW of a JPEG...) follow their picture like in a renaming: they get the same date. The log keeps the old and the new date, and the history (Undo) puts the old date back. **The modification date is not a proof of authenticity**: for originals that must stay evidence, work on copies (option *Copy instead of rename*). On the command line, `--set-dates-from-exif` replaces the renaming (see the table of the parameters).
 - Double-click a file: opens it with its associated program, if "Launch file on double click" is ticked (Options > Files & Folders).
 - Folders can be in the list too: they are renamed like files (in list order); the files of the list that are inside a renamed folder follow it.
 
@@ -116,7 +120,8 @@ The **Batch contents** panel lists the planned actions (tick box to show/hide it
 - **History** (Shift+F12, clock): lists the passes, newest first, grouped by **session** (one session = one run of the program: the heading gives its date and time), with the date and time, number of moves and action of each pass. *Undo up to this pass* undoes the chosen pass and all those made after it **in the same session**; a pass in the middle of a session cannot be undone alone. The other sessions are not touched, so you can undo yesterday's session while keeping today's. If today's session has renamed the same files again, the undo of the older one stops (file not found or changed). If a file was moved, deleted or changed outside the program (another size or date than right after the renaming), the undo stops there and the pass stays in the list; *Clear the history* forgets all the passes if one of them blocks the others. The last 50 passes are kept, **also after the program is closed**: you can undo the next day. The history is saved next to the settings file (the program folder in portable mode, the user profile otherwise: `antrenamer-qt-history.json`). In *Options > Files & Folders* the Undo button can open the history instead of undoing the last pass.
 - **Always on top** (F11): keeps the window above the others.
 - **Light / dark** (half-filled circle): switches the theme at once; *Options > Display > Theme* also offers "Follow the system" (default).
-- **Copy instead of rename** (Options > Processing): the originals stay, the copies carry the new names.
+- **Copy instead of rename** (Options > Processing): the originals stay, the copies carry the new names; undo deletes a copy if it has not been changed since (otherwise it is kept and the log says so).
+- **Synchronized folders** (pCloud, Dropbox, Nextcloud, OneDrive, Syncthing, a network disk...): pause the synchronization before a renaming, or work on a copy of the folder (or with *Copy instead of rename*). A synchronization running at the same time can conflict with the renaming (duplicates, "conflict" copies, a file seen as deleted then created). The program cannot detect it; the log and Undo (F12) are your safety net.
 
 ## 6. Format masks (actions 4, 7, 8, 10, 14, 15)
 
@@ -150,6 +155,7 @@ Good to know: a missing tag gives an empty text; multiple values are joined with
 | `-g` | starts the processing once files and batch are loaded |
 | `-x` | exits when the processing is done |
 | `-q` | silent mode for scripts: no window, no dialog, same as `-g -x`. Exit code: 0 all done, 1 at least one file failed, 2 nothing done (no file, no batch, unreadable batch file, hidden files in the list). Without `-q`, a launch with `-g` or `-x` while another window is open returns 3 (only one window at a time) |
+| `--set-dates-from-exif` | instead of renaming, gives the files their EXIF shooting date as modification date. With `-g` or `-q` it runs at once (the option is the consent), alone the window shows the table of the dates and asks first |
 | `-af` / `-aF` / `-afr` | adds the following files / folders / recursive content of folders (wildcards `*` `?` accepted) |
 | `--shell path` | adds the path to the window that is already open (used by the Explorer menu) |
 | `--install-shell` / `--remove-shell` | adds / removes the Explorer menu entry (Windows), then exits |
@@ -200,12 +206,14 @@ Same engine, other presentation, set in Options > Display. It is the default of 
 | Explorer context menu | yes (Windows 11: *Show more options*) | no (use drag and drop or the command line) |
 | Settings | `%APPDATA%\AntRenamerQt` | `~/.local/share/AntRenamerQt` |
 | Program name | `antrenamer-qt.exe` | `antrenamer-qt` |
-| Packages | installer and portable zip | `.deb` (amd64, arm64), AppImage |
+| Packages | installer and portable zip | `.deb` (amd64, arm64), AppImage, Flatpak (Flathub) |
 
 ## 14. Known limits
 
 - EXIF: 36 tags only, MakerNote not decoded; IPTC read only in JPEG.
 - Audio tags: ID3 only (MP3); FLAC, OGG, M4A are not read.
-- Undo: pass after pass (the last 50, kept when the program is closed), inside a session only from its last pass; files copied with "Copy instead of rename" are not removed.
+- Undo: pass after pass (the last 50, kept when the program is closed), inside a session only from its last pass; the copies made with "Copy instead of rename" are deleted by the undo if they have not been changed since (the originals are never touched).
+- Set dates from EXIF: only the modification date is set (the creation date cannot be changed the same way on Linux), from the EXIF `DateTimeOriginal` tag or the XMP sidecar; a file without it is left alone.
 - The short Windows 11 context menu is not supported (use "Show more options").
+- Flatpak: the program can write in your home folder (a renamer creates files next to the ones it is given), but not elsewhere (another disk, `/media`): there, add the folder with "Add folders" (the system folder picker); a file given alone outside the home folder is refused, without being touched, and a warning is shown. Network shares mounted by the file manager (SMB, NFS) are not visible. The program has no network access, so the new-version check is not offered; the update comes from Flathub.
 - The help in Croatian and Tamil shows English for the pages written for Ant Renamer Qt.

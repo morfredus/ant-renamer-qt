@@ -530,6 +530,37 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="undoHistoryClear" Value="Clear the history"/>
     <Item Name="undoHistoryClearConfirm" Value="Forget all the passes? They can no longer be undone."/>
     <Item Name="undoChanged" Value="The file was changed after the renaming"/>
+    <Item Name="undoCopyNotDeleted" Value="Could not delete the copy %1"/>
+    <Item Name="undoCopyDeleted" Value="Copy %1 deleted"/>
+    <Item Name="dateChangeFailed" Value="Could not change the date of %1: %2"/>
+    <Item Name="dateChanged" Value="%1: modification date changed from %2 to %3"/>
+    <Item Name="dateUndone" Value="%1: modification date put back to %2"/>
+    <Item Name="datePassSummary" Value="Set the modification date from the EXIF shooting date"/>
+    <Item Name="dateNotChanged" Value="%1 was not changed : %2"/>
+    <Item Name="dateAlready" Value="its modification date already is the EXIF shooting date"/>
+    <Item Name="dateNoExif" Value="no EXIF shooting date"/>
+    <Item Name="dateFolder" Value="a folder has no EXIF date"/>
+    <Item Name="dateHidden" Value="hidden file"/>
+    <Item Name="dateAlreadyIs" Value="%1: the modification date already is %2"/>
+    <Item Name="dateSidecarsFollowed" Value="(%1 sidecar file(s) given the same date)"/>
+    <Item Name="dateFollows" Value="follows its picture"/>
+    <Item Name="dateWillChangeSidecars" Value="will be changed, with %1 sidecar file(s)"/>
+    <Item Name="dateMenu" Value="Set dates from EXIF..."/>
+    <Item Name="dateMenuHint" Value="Give the files the EXIF shooting date as their modification date"/>
+    <Item Name="dateDlgTitle" Value="Set the dates from EXIF"/>
+    <Item Name="dateNoFiles" Value="No file: add files first."/>
+    <Item Name="dateIntro" Value="The modification date of each file below will become the shooting date written in its EXIF data. Only the date kept by the file system changes: the content of the file, its EXIF data and its tags are not touched. A file with no EXIF shooting date is left alone.&#10;&#10;The modification date is not a proof of authenticity. For originals that must stay evidence, work on copies (option &quot;Copy instead of rename&quot;). This can be undone from the history."/>
+    <Item Name="dateColFile" Value="File"/>
+    <Item Name="dateColCurrent" Value="Modification date"/>
+    <Item Name="dateColShot" Value="EXIF shooting date"/>
+    <Item Name="dateColResult" Value="Result"/>
+    <Item Name="dateWillChange" Value="will be changed"/>
+    <Item Name="dateAlreadyRight" Value="already right"/>
+    <Item Name="dateCount" Value="%1 file(s) will get a new modification date."/>
+    <Item Name="dateGo" Value="Set the dates"/>
+    <Item Name="dateLogStart" Value="Setting the modification dates from the EXIF shooting dates"/>
+    <Item Name="dateLogEnd" Value="Date setting process finished"/>
+    <Item Name="dateLogSummary" Value="Dates changed: %1, errors: %2"/>
     <Item Name="undoLogStart" Value="Undoing the last renaming passes"/>
     <Item Name="undoOptHeader" Value="Undo button"/>
     <Item Name="undoOptLabel" Value="The Undo button:"/>
@@ -543,6 +574,27 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="helpBack" Value="Back"/>
     <Item Name="helpForward" Value="Forward"/>
     <Item Name="exportPreviewMenu" Value="Export preview..."/>
+    <Item Name="filterMenu" Value="Filter files..."/>
+    <Item Name="filterTitle" Value="Filter files"/>
+    <Item Name="filterDateKind" Value="Date to look at:"/>
+    <Item Name="filterModified" Value="Modification date"/>
+    <Item Name="filterCreated" Value="Creation date"/>
+    <Item Name="filterShot" Value="Shooting date (EXIF; else modification date)"/>
+    <Item Name="filterFrom" Value="From"/>
+    <Item Name="filterTo" Value="To"/>
+    <Item Name="filterTimeFrom" Value="Time of the day, from"/>
+    <Item Name="filterTimeTo" Value="to"/>
+    <Item Name="filterMin" Value="Size at least"/>
+    <Item Name="filterMax" Value="Size at most"/>
+    <Item Name="filterKeep" Value="Keep the files that match"/>
+    <Item Name="filterRemove" Value="Remove the files that match"/>
+    <Item Name="filterNothing" Value="Nothing to filter: tick at least one criterion."/>
+    <Item Name="filterCount" Value="%1 files, %2 hidden by the filter"/>
+    <Item Name="filterActiveHint" Value="A filter hides %1 file(s) of the list. Press to correct it or to clear it."/>
+    <Item Name="filterClear" Value="Clear the filter"/>
+    <Item Name="filterHint" Value="Keep or remove the files of the list by date, time of the day and size"/>
+    <Item Name="filterPutBack" Value="Put back the %1 file(s) removed by the previous filter first"/>
+    <Item Name="filterNoFile" Value="No file to filter: add files first."/>
     <Item Name="exportPreview" Value="Export preview"/>
     <Item Name="exportPreviewCsv" Value="CSV file, current and new names (*.csv)"/>
     <Item Name="saveLogCsv" Value="CSV file (*.csv)"/>

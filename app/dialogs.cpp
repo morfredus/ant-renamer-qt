@@ -10,7 +10,9 @@
 #include <QCheckBox>
 #include <QClipboard>
 #include <QComboBox>
+#include <QDateTimeEdit>
 #include <QDialogButtonBox>
+#include <QRadioButton>
 #include <QDir>
 #include <QFileDialog>
 #include <QListWidget>
@@ -20,6 +22,8 @@
 #include <QTreeView>
 #include <QFontComboBox>
 #include <QFormLayout>
+#include <QGridLayout>
+#include <QTimeEdit>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -237,6 +241,180 @@ AddChoice DragDropDialog::choice() const {
 }
 bool DragDropDialog::dontAskAgain() const {
     return notAgain_->isChecked();
+}
+
+// --- Filter files ---
+struct FilterDialog::Ui {
+    QComboBox* kind;
+    QCheckBox *useFrom, *useTo, *useTime, *useMin, *useMax;
+    QDateTimeEdit *from, *to;
+    QTimeEdit *timeFrom, *timeTo;
+    QSpinBox *minSize, *maxSize;
+    QComboBox *minUnit, *maxUnit;
+    QRadioButton *keep, *remove;
+    QCheckBox* putBack = nullptr;
+    bool clear = false;
+};
+
+FilterDialog::FilterDialog(QWidget* parent, const ren::FileFilter& previous, bool keep, int removed)
+    : QDialog(parent), ui_(std::make_unique<Ui>()) {
+    setWindowTitle(tr("Filter files"));
+    auto* v = new QVBoxLayout(this);
+    if (removed > 0) {
+        ui_->putBack = new QCheckBox(tr("Put back the %1 file(s) removed by the previous filter first").arg(removed));
+        ui_->putBack->setChecked(true);
+        v->addWidget(ui_->putBack);
+    }
+    auto* g = new QGridLayout;
+    v->addLayout(g);
+    int row = 0;
+    ui_->kind = new QComboBox;
+    ui_->kind->addItems({tr("Modification date"), tr("Creation date"), tr("Shooting date (EXIF; else modification date)")});
+    g->addWidget(new QLabel(tr("Date to look at:")), row, 0);
+    g->addWidget(ui_->kind, row++, 1, 1, 2);
+
+    const QDateTime now = QDateTime::currentDateTime();
+    ui_->useFrom = new QCheckBox(tr("From"));
+    ui_->from = new QDateTimeEdit(QDateTime(now.date().addDays(-7), QTime(0, 0)));
+    ui_->useTo = new QCheckBox(tr("To"));
+    ui_->to = new QDateTimeEdit(QDateTime(now.date(), QTime(23, 59, 59)));
+    for (auto* e : {ui_->from, ui_->to}) {
+        e->setDisplayFormat(QLocale().dateTimeFormat(QLocale::ShortFormat));
+        e->setCalendarPopup(true);
+    }
+    g->addWidget(ui_->useFrom, row, 0);
+    g->addWidget(ui_->from, row++, 1, 1, 2);
+    g->addWidget(ui_->useTo, row, 0);
+    g->addWidget(ui_->to, row++, 1, 1, 2);
+
+    ui_->useTime = new QCheckBox(tr("Time of the day, from"));
+    ui_->timeFrom = new QTimeEdit(QTime(14, 0));
+    ui_->timeTo = new QTimeEdit(QTime(15, 0));
+    for (auto* e : {ui_->timeFrom, ui_->timeTo}) {
+        e->setDisplayFormat(u"HH:mm:ss"_s);
+    }
+    g->addWidget(ui_->useTime, row, 0);
+    g->addWidget(ui_->timeFrom, row, 1);
+    auto* toLabel = new QLabel(tr("to"));
+    auto* th = new QHBoxLayout;
+    th->addWidget(toLabel);
+    th->addWidget(ui_->timeTo);
+    g->addLayout(th, row++, 2);
+
+    auto sizeRow = [&](QCheckBox*& use, QSpinBox*& spin, QComboBox*& unit, const QString& label) {
+        use = new QCheckBox(label);
+        spin = new QSpinBox;
+        spin->setRange(0, 1000000);
+        unit = new QComboBox;
+        unit->addItems({u"KB"_s, u"MB"_s, u"GB"_s});
+        unit->setCurrentIndex(1);
+        spin->setValue(1);
+        g->addWidget(use, row, 0);
+        g->addWidget(spin, row, 1);
+        g->addWidget(unit, row++, 2);
+    };
+    sizeRow(ui_->useMin, ui_->minSize, ui_->minUnit, tr("Size at least"));
+    sizeRow(ui_->useMax, ui_->maxSize, ui_->maxUnit, tr("Size at most"));
+
+    // a criterion is used only when its box is ticked
+    // (a QList, not an initializer_list: the lambda outlives the call and must own the pointers)
+    auto link = [](QCheckBox* box, const QList<QWidget*>& ws) {
+        for (QWidget* w : ws) {
+            w->setEnabled(box->isChecked());
+        }
+        QObject::connect(box, &QCheckBox::toggled, box, [ws](bool on) {
+            for (QWidget* w : ws) {
+                w->setEnabled(on);
+            }
+        });
+    };
+    link(ui_->useFrom, {ui_->from});
+    link(ui_->useTo, {ui_->to});
+    link(ui_->useTime, {ui_->timeFrom, ui_->timeTo});
+    link(ui_->useMin, {ui_->minSize, ui_->minUnit});
+    link(ui_->useMax, {ui_->maxSize, ui_->maxUnit});
+
+    v->addSpacing(6);
+    ui_->keep = new QRadioButton(tr("Keep the files that match"));
+    ui_->remove = new QRadioButton(tr("Remove the files that match"));
+    (keep ? ui_->keep : ui_->remove)->setChecked(true);
+    v->addWidget(ui_->keep);
+    v->addWidget(ui_->remove);
+    QDialogButtonBox* buttons = standardButtons(this);
+    if (removed > 0) {  // a way to get every file of the list back without choosing a criterion
+        auto* clearBtn = buttons->addButton(tr("Clear the filter"), QDialogButtonBox::ActionRole);
+        connect(clearBtn, &QPushButton::clicked, this, [this] {
+            ui_->clear = true;
+            accept();
+        });
+    }
+    v->addWidget(buttons);
+
+    // the last criteria again, to correct them (set after link(): ticking a box enables its fields)
+    ui_->kind->setCurrentIndex(int(previous.kind));
+    if (previous.from) {
+        ui_->useFrom->setChecked(true);
+        ui_->from->setDateTime(*previous.from);
+    }
+    if (previous.to) {
+        ui_->useTo->setChecked(true);
+        ui_->to->setDateTime(*previous.to);
+    }
+    if (previous.timeFrom || previous.timeTo) {
+        ui_->useTime->setChecked(true);
+        ui_->timeFrom->setTime(previous.timeFrom.value_or(QTime(0, 0)));
+        ui_->timeTo->setTime(previous.timeTo ? previous.timeTo->addMSecs(-999) : QTime(23, 59, 59));
+    }
+    auto showSize = [](const std::optional<qint64>& size, QCheckBox* use, QSpinBox* spin, QComboBox* unit) {
+        if (!size) {
+            return;
+        }
+        use->setChecked(true);
+        const int u = (*size % (1ll << 30) == 0) ? 2 : (*size % (1ll << 20) == 0) ? 1 : 0;  // the biggest unit that is exact
+        unit->setCurrentIndex(u);
+        spin->setValue(int(qMax<qint64>(*size >> (10 * (u + 1)), 0)));
+    };
+    showSize(previous.minSize, ui_->useMin, ui_->minSize, ui_->minUnit);
+    showSize(previous.maxSize, ui_->useMax, ui_->maxSize, ui_->maxUnit);
+}
+
+FilterDialog::~FilterDialog() = default;
+
+ren::FileFilter FilterDialog::filter() const {
+    ren::FileFilter f;
+    f.kind = static_cast<ren::FileFilter::DateKind>(ui_->kind->currentIndex());
+    if (ui_->useFrom->isChecked()) {
+        f.from = ui_->from->dateTime();
+    }
+    if (ui_->useTo->isChecked()) {
+        f.to = ui_->to->dateTime();
+    }
+    if (ui_->useTime->isChecked()) {
+        f.timeFrom = ui_->timeFrom->time();
+        f.timeTo = ui_->timeTo->time().addMSecs(999);  // up to the end of the last second
+    }
+    auto bytes = [](const QSpinBox* s, const QComboBox* u) {
+        return qint64(s->value()) << (10 * (u->currentIndex() + 1));
+    };
+    if (ui_->useMin->isChecked()) {
+        f.minSize = bytes(ui_->minSize, ui_->minUnit);
+    }
+    if (ui_->useMax->isChecked()) {
+        f.maxSize = bytes(ui_->maxSize, ui_->maxUnit);
+    }
+    return f;
+}
+
+bool FilterDialog::keepMatching() const {
+    return ui_->keep->isChecked();
+}
+
+bool FilterDialog::clearRequested() const {
+    return ui_->clear;
+}
+
+bool FilterDialog::putBack() const {
+    return ui_->putBack && ui_->putBack->isChecked();
 }
 
 // --- Options ---

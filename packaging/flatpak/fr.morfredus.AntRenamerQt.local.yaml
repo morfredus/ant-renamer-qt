@@ -1,15 +1,22 @@
+# Built from this working copy (not for Flathub): flatpak-builder --user --install --force-clean build-dir packaging/flatpak/fr.morfredus.AntRenamerQt.local.yaml
 app-id: fr.morfredus.AntRenamerQt
 runtime: org.kde.Platform
 runtime-version: '6.11'
 sdk: org.kde.Sdk
 command: antrenamer-qt
+
 rename-icon: antrenamer-qt
 rename-desktop-file: antrenamer-qt.desktop
+
 finish-args:
   - --share=ipc
   - --socket=wayland
   - --socket=fallback-x11
   - --device=dri
+  # A renamer must create files next to the files it is given (the new names, the sidecars, the undo). The document portal
+  # gives a file dropped or picked alone a private folder where no sibling can be created, so renaming fails there.
+  - --filesystem=home
+
 modules:
   - name: antrenamer-qt
     buildsystem: cmake-ninja
@@ -21,4 +28,6 @@ modules:
         path: ../..
         skip:
           - build
+          - build-arm64-cross
+          - build-mingw
           - .flatpak-builder

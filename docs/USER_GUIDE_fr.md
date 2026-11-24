@@ -1,6 +1,6 @@
 # Ant Renamer Qt : guide des fonctions
 
-*Toutes les fonctions d'Ant Renamer Qt 3.2.0, avec le mode d'emploi.*
+*Toutes les fonctions d'Ant Renamer Qt 3.3.0, avec le mode d'emploi.*
 English version : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détails complets, page par page, avec captures d'écran : l'aide intégrée (F1). Différences entre Windows et Linux : §13.
 
 ## 1. Principe général
@@ -13,7 +13,7 @@ Le travail se fait en trois étapes, une page chacune :
 
 L'aperçu en bas de la page Opérations montre en direct le nom actuel et le futur nom du fichier sélectionné. La colonne **Aperçu** de la liste des Fichiers (F5) le montre pour toute la liste.
 
-Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau nom) ; il ne touche jamais au contenu ni aux dates des fichiers. Il gère les noms Unicode (grec, japonais, cyrillique...), les fichiers et les dossiers.
+Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau nom) ; il ne touche jamais au contenu des fichiers, et la seule date qu'il change, quand vous le demandez, est la date de modification (*Mettre les dates d'après l'EXIF...*, §3). Il gère les noms Unicode (grec, japonais, cyrillique...), les fichiers et les dossiers.
 
 ## 2. Raccourcis clavier
 
@@ -23,6 +23,7 @@ Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau 
 | Maj+F1 | À propos | Échap | Arrêter |
 | F2 | Ajouter des fichiers | F10 | Options |
 | F3 | Ajouter des dossiers | F11 | Avant-plan |
+| F4 | Filtrer les fichiers | | |
 | F5 | Actualiser l'aperçu | F12 | Annuler |
 | Maj+F12 | Historique | | |
 | F6 / F7 / F8 | Retirer sélectionnés / tous / manquants | Alt+F4 | Quitter |
@@ -46,6 +47,7 @@ Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau 
 | Retirer sélec. (F6) | retire de la liste les fichiers sélectionnés (pas du disque) |
 | Retirer tout (F7) | vide la liste |
 | Retirer manquants (F8) | retire les fichiers qui n'existent plus sur le disque |
+| Filtrer les fichiers (F4) | garde ou retire les fichiers qui correspondent à une date, une heure de la journée et une taille |
 | Aperçu (F5) | remplit la colonne Aperçu (pas automatique, pour la performance). Il utilise le job, ou l'opération affichée si le job est vide |
 | Seulement modifiés | masque les fichiers dont le nom ne change pas dans l'aperçu (simple filtre d'affichage : ils sont quand même renommés, et un fichier masqué n'est jamais touché par « Retirer sélec. » ni par les boutons de déplacement) ; actualisez l'aperçu d'abord |
 | Fichiers cachés | affiche les fichiers cachés et système de la liste ; désactivé par défaut : ils sont masqués et ignorés par toutes les opérations (pas renommés). Un avertissement s'affiche avant un renommage quand il est activé et que la liste en contient |
@@ -53,8 +55,10 @@ Le programme ne modifie que les **noms** (ou copie les fichiers sous un nouveau 
 
 - **Colonnes** : clic droit sur l'en-tête pour afficher Dossier, Nom de fichier, Chemin complet, Ext., Aperçu, Taille, Date de création, Date de modification. Elles se redimensionnent et se déplacent ; une colonne au moins reste visible.
 - **Tri** : clic sur un en-tête (à nouveau pour inverser). Par défaut le tri est naturel : « fichier 2 » avant « fichier 10 » (Options > Fichiers & Dossiers redonne l'ordre alphabétique). **Trier réordonne vraiment la liste, donc fixe l'ordre de traitement**, et donc l'ordre de numérotation d'une énumération. Clic droit > *Non trié* retire l'indicateur de tri.
-- Clic droit dans la liste : retirer la sélection / tout, tout sélectionner, ne rien sélectionner, inverser la sélection, actualiser l'aperçu, **Exporter l'aperçu...**.
+- Clic droit dans la liste : retirer la sélection / tout, tout sélectionner, ne rien sélectionner, inverser la sélection, actualiser l'aperçu, **Filtrer les fichiers...**, **Exporter l'aperçu...**, **Mettre les dates d'après l'EXIF...**.
+- **Filtrer les fichiers...** (le bouton entonnoir de la barre d'outils, F4, et le menu du clic droit) garde (ou retire) les fichiers de la liste qui correspondent à une date, une heure de la journée et une taille, tous les critères cochés ensemble. La date est la date de modification, la date de création (que tous les systèmes de fichiers Linux ne gardent pas : un tel fichier ne correspond jamais) ou la date de prise de vue (EXIF, sinon la date de modification). « Du » et « Au » donnent une période ; « Heure de la journée » garde par exemple tout ce qui a été pris entre 14 h et 15 h quel que soit le jour (de 22 h à 2 h marche à cheval sur minuit) ; les limites de taille concernent les fichiers (un dossier est jugé sur ses dates). Les fichiers sont seulement retirés de la liste, rien n'est touché sur le disque. Appuyez de nouveau sur le bouton pour corriger le filtre : les derniers critères sont affichés et les fichiers qu'il avait retirés peuvent être remis d'abord (chacun après le fichier qui le précédait) ; tant qu'un filtre masque des fichiers, le nombre en bas passe en orange et le bouton reste enfoncé ; « Effacer le filtre » les rend tous.
 - **Exporter l'aperçu...** écrit les fichiers affichés (les filtres « Seulement modifiés » et « Fichiers cachés » s'appliquent) dans un fichier CSV (colonnes Dossier, Nom, Nouveau nom ; point-virgule, chaque champ entre guillemets, UTF-8 avec BOM pour qu'Excel et LibreOffice lisent les accents) ou dans un fichier texte avec les seuls nouveaux noms, un par ligne. Un fichier sans aperçu garde son nom actuel : actualisez d'abord l'aperçu. Utile pour relire un gros lot ou en garder une trace.
+- **Mettre les dates d'après l'EXIF...** (menu du clic droit seulement : ni bouton ni raccourci) donne aux fichiers, comme date de modification, la date de prise de vue écrite dans leurs données EXIF (ou dans le fichier XMP associé). Cas typique : des photos qui ont été copiées et dont la date a été écrasée. Ce n'est jamais automatique : un tableau montre l'ancienne et la nouvelle date de chaque fichier et rien ne change avant que vous appuyiez sur **Mettre les dates**. Seule la date de modification gardée par le système de fichiers change : le contenu du fichier, ses données EXIF et ses étiquettes ne sont pas touchés, et aucune date n'est saisie à la main ni inventée (un fichier sans date de prise de vue EXIF, un dossier et un fichier caché sont laissés tels quels, et le journal dit pourquoi). Les fichiers associés (`.xmp`, `.dop`, le RAW d'un JPEG...) suivent leur photo comme dans un renommage : ils reçoivent la même date. Le journal garde l'ancienne et la nouvelle date, et l'historique (Annuler) remet l'ancienne. **La date de modification n'est pas une preuve d'authenticité** : pour des originaux qui doivent rester des preuves, travaillez sur des copies (option *Copier au lieu de renommer*). En ligne de commande, `--set-dates-from-exif` remplace le renommage (voir le tableau des paramètres).
 - Double-clic sur un fichier : l'ouvre avec son programme associé, si « Exécuter le fichier lors d'un double clic » est coché (Options > Fichiers & Dossiers).
 - Des dossiers peuvent aussi être dans la liste : ils sont renommés comme les fichiers (dans l'ordre de la liste) ; les fichiers de la liste qui se trouvent dans un dossier renommé le suivent.
 
@@ -116,7 +120,8 @@ Le panneau **Contenu du job** liste les opérations planifiées (case à cocher 
 - **Historique** (Maj+F12, horloge) : liste les passes, la plus récente en premier, regroupées par **session** (une session = un lancement du programme : le titre donne sa date et son heure), avec la date et l'heure, le nombre de déplacements et l'opération de chaque passe. *Annuler jusqu'à cette passe* annule la passe choisie et toutes celles faites après **dans la même session** ; une passe au milieu d'une session ne peut pas être annulée seule. Les autres sessions ne sont pas touchées : vous pouvez annuler la session d'hier en gardant celle d'aujourd'hui. Si la session d'aujourd'hui a renommé encore les mêmes fichiers, l'annulation de l'ancienne s'arrête (fichier introuvable ou modifié). Si un fichier a été déplacé, supprimé ou modifié en dehors du programme (taille ou date différentes de celles de juste après le renommage), l'annulation s'arrête là et la passe reste dans la liste ; *Effacer l'historique* oublie toutes les passes si l'une d'elles bloque les autres. Les 50 dernières passes sont gardées, **même après la fermeture du programme** : vous pouvez annuler le lendemain. L'historique est enregistré à côté du fichier de réglages (le dossier du programme en mode portable, le profil de l'utilisateur sinon : `antrenamer-qt-history.json`). Dans *Options > Fichiers & Dossiers*, le bouton Annuler peut ouvrir l'historique au lieu d'annuler la dernière passe.
 - **Avant-plan** (F11) : garde la fenêtre au-dessus des autres.
 - **Clair / sombre** (cercle à moitié plein) : change aussitôt de thème ; *Options > Affichage > Thème* propose aussi « Suivre le système » (par défaut).
-- **Copier plutôt que renommer** (Options > Traitement) : les originaux restent, les copies portent les nouveaux noms.
+- **Copier plutôt que renommer** (Options > Traitement) : les originaux restent, les copies portent les nouveaux noms ; l'annulation supprime une copie si elle n'a pas été modifiée depuis (sinon elle est gardée et le journal le dit).
+- **Dossiers synchronisés** (pCloud, Dropbox, Nextcloud, OneDrive, Syncthing, disque réseau...) : mettez la synchronisation en pause avant un renommage, ou travaillez sur une copie du dossier (ou avec *Copier plutôt que renommer*). Une synchronisation qui tourne en même temps peut entrer en conflit avec le renommage (doublons, copies « en conflit », un fichier vu comme supprimé puis recréé). Le programme ne peut pas le détecter ; le journal et l'annulation (F12) sont votre filet de sécurité.
 
 ## 6. Masques de formatage (opérations 4, 7, 8, 10, 14, 15)
 
@@ -150,6 +155,7 @@ Bon à savoir : un tag absent donne un texte vide ; les valeurs multiples sont j
 | `-g` | démarre le traitement une fois fichiers et job chargés |
 | `-x` | quitte à la fin du traitement |
 | `-q` | mode silencieux pour les scripts : ni fenêtre ni boîte de dialogue, comme `-g -x`. Code de sortie : 0 tout est fait, 1 au moins un fichier a échoué, 2 rien n'a été fait (aucun fichier, aucun batch, fichier batch illisible, fichiers cachés dans la liste). Sans `-q`, un lancement avec `-g` ou `-x` alors qu'une autre fenêtre est ouverte rend 3 (une seule fenêtre à la fois) |
+| `--set-dates-from-exif` | au lieu de renommer, donne aux fichiers leur date de prise de vue EXIF comme date de modification. Avec `-g` ou `-q` elle s'exécute tout de suite (l'option vaut consentement), seule elle ouvre la fenêtre avec le tableau des dates et demande d'abord |
 | `-af` / `-aF` / `-afr` | ajoute les fichiers / dossiers / contenu récursif des dossiers qui suivent (jokers `*` `?` acceptés) |
 | `--shell chemin` | ajoute le chemin à la fenêtre déjà ouverte (utilisé par le menu de l'Explorateur) |
 | `--install-shell` / `--remove-shell` | ajoute / retire l'entrée du menu de l'Explorateur (Windows), puis quitte |
@@ -200,12 +206,14 @@ Même moteur, autre présentation, choisie dans Options > Affichage. C'est celle
 | Menu contextuel de l'Explorateur | oui (Windows 11 : *Afficher plus d'options*) | non (utiliser le glisser-déposer ou la ligne de commande) |
 | Réglages | `%APPDATA%\AntRenamerQt` | `~/.local/share/AntRenamerQt` |
 | Nom du programme | `antrenamer-qt.exe` | `antrenamer-qt` |
-| Paquets | installeur et zip portable | `.deb` (amd64, arm64), AppImage |
+| Paquets | installeur et zip portable | `.deb` (amd64, arm64), AppImage, Flatpak (Flathub) |
 
 ## 14. Limites connues
 
 - EXIF : 36 tags seulement, MakerNote non décodée ; IPTC lu seulement dans les JPEG.
 - Tags audio : ID3 seulement (MP3) ; FLAC, OGG, M4A ne sont pas lus.
-- Annuler : passe après passe (les 50 dernières, gardées à la fermeture du programme), dans une session uniquement à partir de sa dernière passe ; les fichiers copiés avec « Copier au lieu de renommer » ne sont pas supprimés.
+- Annuler : passe après passe (les 50 dernières, gardées à la fermeture du programme), dans une session uniquement à partir de sa dernière passe ; les copies faites avec « Copier au lieu de renommer » sont supprimées par l'annulation si elles n'ont pas été modifiées depuis (les originaux ne sont jamais touchés).
 - Le menu contextuel court de Windows 11 n'est pas pris en charge (utiliser « Afficher plus d'options »).
+- Mettre les dates d'après l'EXIF : seule la date de modification est changée (la date de création ne peut pas être changée de la même façon sous Linux), d'après la balise EXIF `DateTimeOriginal` ou le fichier XMP associé ; un fichier qui n'en a pas est laissé tel quel.
+- Flatpak : le programme peut écrire dans votre dossier personnel (un renommeur crée des fichiers à côté de ceux qu'on lui donne), mais pas ailleurs (autre disque, `/media`) : là, ajoutez le dossier avec « Ajouter des dossiers » (le sélecteur de dossiers du système) ; un fichier donné seul hors du dossier personnel est refusé, sans y toucher, et un avertissement s'affiche. Les partages réseau montés par le gestionnaire de fichiers (SMB, NFS) ne sont pas visibles. Le programme n'a pas d'accès au réseau, donc la recherche de nouvelle version n'est pas proposée ; la mise à jour vient de Flathub.
 - L'aide en croate et en tamoul affiche l'anglais pour les pages écrites pour Ant Renamer Qt.

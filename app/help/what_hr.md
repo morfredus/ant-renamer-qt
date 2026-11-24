@@ -23,7 +23,7 @@ Ant Renamer Qt runs on Windows and on Linux.
 
 It won't modify the contents of the files.
 
-It will not either modify files' date & time.
+It does not modify the date and time of the files either, unless you ask for it: [Set dates from EXIF](files_hr.md#setdates) gives a picture its EXIF shooting date as modification date (never automatic, with a confirmation, and the history can undo it).
 
 It will not modify the ID3 (tag) contained in MP3s, the EXIF from JPEG or the metadata of EPUB files; it only reads this info for building a new file name.
 
@@ -35,7 +35,7 @@ Note that the contents of this list is not fixed. Except modifying the contents 
 
 ## Known limitations
 
-- Undo goes back pass after pass, always from the last one (an action of the batch is a pass); the history keeps the last 50 passes of the session and is lost when the program is closed. A pass in the middle cannot be undone alone, and the files copied with "Copy instead of rename" are not removed by an undo.
+- Undo goes back pass after pass, always from the last one (an action of the batch is a pass); the history keeps the last 50 passes, session by session, and is kept when the program is closed. A pass in the middle cannot be undone alone. A file copied with "Copy instead of rename" is deleted by the undo if it has not been changed since (otherwise it is kept and the log says so); the original is never touched.
 - EXIF: 36 tags are read, and the MakerNote (private data of the camera makers) is not decoded. IPTC is read from JPEG files only. See [EXIF, IPTC and XMP tags](metadata_tags_hr.md).
 - EPUB: only the metadata of the OPF file is read (Dublin Core, Calibre or EPUB 3 series); it is sometimes incomplete or approximate, especially for downloaded books.
 - The audio tags are the ID3 tags of MP3 files; other formats (FLAC, OGG, M4A...) are not read.

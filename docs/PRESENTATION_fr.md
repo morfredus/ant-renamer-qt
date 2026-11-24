@@ -28,11 +28,11 @@ jobs de l'autre.
 
 | | Original (Delphi 7) | Portage (C++20 / Qt 6) |
 |---|---|---|
-| Taille | environ 14 700 lignes de Pascal | environ 2 650 lignes (moteur) + 4 750 lignes (interface) + 750 lignes de tests |
+| Taille | environ 14 700 lignes de Pascal | environ 4 750 lignes (moteur) + 6 650 lignes (interface) + 1 850 lignes de tests |
 | Prérequis | Delphi 7 + 5 paquets de composants tiers | un compilateur C++20 et Qt 6, rien d'autre |
 | Plateformes | Windows | Windows (MinGW, testé), Linux x86_64 et ARM64 (Raspberry Pi ; installé depuis les paquets et utilisé, testé) |
 | Unicode | WideString + contrôles Tnt | `QString` (UTF-16), mêmes positions de caractères |
-| Distribution | installeur Inno Setup | zip portable + installeur Inno Setup 6 (Windows), `.deb` et AppImage (Linux) |
+| Distribution | installeur Inno Setup | zip portable + installeur Inno Setup 6 (Windows), `.deb`, AppImage et Flatpak (Linux) |
 
 ## Ce qui a été conservé (compatibilité)
 
@@ -151,6 +151,11 @@ Ce sont les endroits où le portage ne fait pas exactement ce que fait la 2.13. 
 - **Une seule fenêtre à la fois** : un deuxième lancement affiche un message et quitte (les chemins donnés seuls sont ajoutés à la fenêtre ouverte).
 - **Ligne de commande silencieuse** `-q` : ni fenêtre ni boîte de dialogue, pour les scripts ; le code de sortie dit
   comment ça s'est passé.
+- **Une 15e action, « Infos EPUB »** : noms de livres numériques d'après leurs métadonnées (auteur, titre, année, éditeur, langue, ISBN, série et numéro).
+- **Filtrer les fichiers** (bouton de la barre d'outils, F4) : garde, ou retire, les fichiers de la liste qui correspondent à une période, une heure de la journée (« tout ce qui a été pris entre 14 h et 15 h ») et une taille, sur la date de modification, la date de création ou la date de prise de vue EXIF ; rien n'est touché sur le disque.
+- **Mettre les dates d'après l'EXIF** : donne aux fichiers leur date de prise de vue EXIF comme date de modification (photos copiées dont la date a été écrasée). Jamais automatique : un tableau des anciennes et nouvelles dates et une confirmation d'abord ; aucune date saisie à la main ni inventée, le contenu et l'EXIF ne sont jamais touchés, les fichiers associés suivent leur photo, l'historique peut annuler, et `--set-dates-from-exif` est l'option explicite en ligne de commande. La documentation rappelle que la date de modification n'est pas une preuve d'authenticité.
+- **Annulation des copies** : l'annulation d'une passe faite avec « Copier au lieu de renommer » supprime les copies si elles n'ont pas été modifiées depuis ; un lancement `-q` et une fenêtre ouverte partagent l'historique d'annulation au lieu d'effacer les passes l'un de l'autre.
+- **Paquet Flatpak** (Flathub), avec un fichier AppStream, en plus du `.deb` et de l'AppImage.
 - **Système de build** : presets CMake pour Windows (MinGW), Linux x86_64, Linux ARM64 et compilation croisée
   ARM64 ; les DLL Qt et MinGW sont déployées automatiquement à côté de l'exécutable sous Windows.
 - **Livrables** : `scripts/windows/package-win.ps1` produit un zip portable et, avec Inno Setup 6, un installeur
@@ -174,12 +179,14 @@ Les utilisateurs d'Ant Renamer 2.x ont formulé plusieurs demandes sur le forum 
 - Voir la liste des fichiers en réglant une opération (l'écran unique).
 - Une version pour Linux.
 - Une vérification de nouvelle version.
+- Remettre la date de modification d'une photo en accord avec sa date de prise de vue EXIF (demandé de nombreuses fois, « sur la liste des choses à faire » de l'original depuis 2005), avec des garde-fous.
+- Choisir les fichiers de la liste par date, heure de la journée et taille (Filtrer les fichiers).
 
 ## Qualité et tests
 
 - Le moteur a un programme de test automatique : chemins, formatage des masques et `$if`, formatage des dates,
   aperçu de chaque action sur des noms d'exemple, vrais renommages sur disque (énumération, casse seule,
-  annulation), aller-retour XML des jobs, ID3v2.3 avec repli sur la v1, réglages du compteur EXIF.
+  annulation), aller-retour XML des jobs, ID3v2.3 avec repli sur la v1, réglages du compteur EXIF, les critères de Filtrer les fichiers, Mettre les dates d'après l'EXIF (fichiers associés, fichiers en lecture seule, annulation), l'annulation des copies et l'historique partagé avec un lancement silencieux. L'éditeur d'opérations et la boîte Filtrer les fichiers ont leurs propres programmes de test (`ctest` lance les trois).
 - À la main : des jobs avec remplacement de chaîne et EXIF + énumération ont été exécutés sur de vrais fichiers ;
   l'interface a été comparée page par page à des captures de la 2.13 ; l'installeur a été installé et retiré en
   mode silencieux ; le zip portable a été lancé avec un `PATH` minimal ; le menu « Ajouter à Ant Renamer Qt » a été
@@ -194,6 +201,7 @@ Les utilisateurs d'Ant Renamer 2.x ont formulé plusieurs demandes sur le forum 
 - 36 balises EXIF (IFD0 et IFD Exif seulement, MakerNote non décodé) ; l'IPTC n'est lu que dans les
   JPEG ; les fichiers XMP associés sont lus et renommés avec leur image (IMG.xmp, IMG.CR2.xmp, `.dop` de DxO, `.pp3` de RawTherapee, `.cos` de Capture One... et les fichiers RAW d'un JPEG renommé).
 - Seulement les tags ID3 ; pas d'autres formats de tags audio.
+- Mettre les dates d'après l'EXIF ne change que la date de modification (la date de création ne peut pas être changée de la même façon sous Linux) et lit `DateTimeOriginal` (ou le fichier XMP associé) ; aucune date ne vient d'un nom de fichier.
 - Le menu court de Windows 11 demande un composant COM empaqueté et signé, non réalisé.
 - L'exécutable n'est pas signé, donc SmartScreen peut avertir au premier téléchargement.
 - L'interface est traduite par les fichiers `.lng` d'origine ; les textes ajoutés par le portage (À propos, mode portable, menu

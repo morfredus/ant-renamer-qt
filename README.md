@@ -8,7 +8,8 @@
 
 C++/Qt 6 port of [Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (originally Delphi 7,
 GPL v2 or later). Batch file renaming: replace, insert, move, delete, enumerate, change case, regular
-expressions, names from a list, file date, MP3 tags (ID3v1/v2), EXIF / IPTC / XMP.
+expressions, names from a list, file date, MP3 tags (ID3v1/v2), EXIF / IPTC / XMP, EPUB metadata. Also: filter the list by date,
+time of the day and size, and put the shooting date of photos back as their modification date (with safeguards).
 
 **Ant Renamer Qt** is the official name of this port, agreed with the author of the original program. It is
 developed in parallel with the original Ant Renamer and has its own executable, installation folder, settings and
@@ -16,11 +17,12 @@ package names, so both can be installed side by side without confusion.
 
 ![Ant Renamer Qt, modern interface, light theme](docs/screenshots/English/modern-ui-light-single-screen-bands.png)
 
-More screenshots (classic and modern interface, light and dark theme, help, About) are in [docs/screenshots/English](docs/screenshots/English).
+More screenshots (classic and modern interface, light and dark theme, Filter files, Set dates from EXIF, options, help, About) are in [docs/screenshots/English](docs/screenshots/English).
 
 ## Download
 
 Windows installer and portable zip, Linux `.deb` (x86_64, arm64) and AppImage: [Releases](https://github.com/morfredus/ant-renamer-qt/releases).
+Linux, Flatpak: [Flathub](https://flathub.org/apps/fr.morfredus.AntRenamerQt) (`flatpak install flathub fr.morfredus.AntRenamerQt`); final versions only, a new version reaches Flathub some time after its release.
 
 **Checking the Linux files.** The Linux files of the releases after 3.0.0 come with a detached GPG signature (`.asc`), also for `SHA256SUMS-linux.txt`. Public key: [`docs/antrenamer-qt-public.asc`](docs/antrenamer-qt-public.asc), fingerprint `D82C 3ED0 BE99 1611 C2C9 06FA 910B 46ED 3C84 B4A7` (Frederic Biron, Ant Renamer Qt releases). Compare the fingerprint before trusting the key.
 
@@ -62,11 +64,12 @@ Windows prerequisites: MSYS2 with `mingw-w64-ucrt-x86_64-{gcc,cmake,ninja,qt6-ba
 |---|---|
 | `core/` | renaming engine, QtCore only |
 | `app/` | Qt Widgets interface, `Languages/` and `help/` from the original program |
-| `tests/` | engine checks and actions editor checks (`ctest`) |
+| `tests/` | engine checks, actions editor checks and Filter files dialog checks (`ctest`) |
 | `cmake/toolchains/` | ARM64 cross toolchain |
-| `scripts/windows/` | MinGW DLL deployment, VS Code helper, zip and installer |
+| `scripts/windows/` | MinGW DLL deployment, VS Code helper, zip and installer, screenshots of the docs and of the help |
 | `scripts/linux/` | `.deb`, AppImage, `.desktop` file |
 | `installer/` | Inno Setup script (Windows installer) |
+| `packaging/` | Flatpak manifests and AppStream file (Flathub) |
 | `docs/` | guides, presentation, release notes |
 | `.github/` | CI workflow, Dependabot, issue templates |
 
@@ -100,7 +103,8 @@ Explorer context menu (Windows): Options > Files & Folders adds "Add to Ant Rena
 "Show more options"). Everything selected is sent to the window that is already open.
 
 Command line: `-b file.arb` load a batch, `-g` start, `-x` exit when done, `-q` silent (no window, for scripts), `-a[fFr]` choose what the
-following paths add (f files, F folders, r recursive; wildcards allowed).
+following paths add (f files, F folders, r recursive; wildcards allowed), `--set-dates-from-exif` put the EXIF shooting date of the photos back as
+their modification date instead of renaming (with `-g` or `-q` it runs at once).
 
 ## Privacy
 

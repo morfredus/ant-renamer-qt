@@ -23,7 +23,7 @@ Ant Renamer Qt fonctionne sous Windows et sous Linux.
 
 Il ne modifiera pas le contenu des fichiers.
 
-Il ne va pas non plus modifier la date et l'heure des fichiers.
+Il ne modifie pas non plus la date et l'heure des fichiers, sauf si vous le demandez : [Mettre les dates d'après l'EXIF](files_fr.md#setdates) donne à une photo sa date de prise de vue EXIF comme date de modification (jamais automatique, avec une confirmation, et l'historique peut annuler).
 
 Il ne modifie pas les tags ID3 contenus dans les MP3, les infos EXIF des JPEG ni les métadonnées des EPUB ; il va seulement lire ces infos pour construire un nouveau nom de fichier.
 
@@ -35,7 +35,7 @@ Notez que le contenu de cette liste n'est pas définitif. À part pour ce qui es
 
 ## Limitations connues
 
-- L'annulation remonte passe après passe, toujours à partir de la dernière (une opération du job est une passe) ; l'historique garde les 50 dernières passes de la session et disparaît à la fermeture du programme. Une passe au milieu ne peut pas être annulée seule, et les fichiers copiés avec « Copier au lieu de renommer » ne sont pas supprimés par une annulation.
+- L'annulation remonte passe après passe, toujours à partir de la dernière (une opération du job est une passe) ; l'historique garde les 50 dernières passes, session par session, et est conservé quand le programme est fermé. Une passe au milieu ne peut pas être annulée seule. Un fichier copié avec « Copier au lieu de renommer » est supprimé par l'annulation s'il n'a pas été modifié depuis (sinon il est gardé et le journal le dit) ; l'original n'est jamais touché.
 - EXIF : 36 tags sont lus, et la MakerNote (données privées des fabricants d'appareils) n'est pas décodée. L'IPTC n'est lu que dans les fichiers JPEG. Voir [Tags EXIF, IPTC et XMP](metadata_tags_fr.md).
 - EPUB : seules les métadonnées du fichier OPF sont lues (Dublin Core, série Calibre ou EPUB 3) ; elles sont parfois incomplètes ou approximatives, surtout pour les livres téléchargés.
 - Les tags audio sont les tags ID3 des fichiers MP3 ; les autres formats (FLAC, OGG, M4A...) ne sont pas lus.

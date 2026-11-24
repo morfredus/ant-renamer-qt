@@ -7,6 +7,7 @@
 #include "ren_actions.h"
 
 #include <QApplication>
+#include <QDialog>
 #include <QListWidget>
 #include <QTabWidget>
 #include <QTimer>
@@ -24,6 +25,7 @@ void runDeveloperAids(MainWindow& w, QApplication& app) {
         AboutDialog d2(&w);
         DragDropDialog d3(&w);
         AddFoldersDialog d4({}, &w);
+        FilterDialog d5(&w, {}, true, 3);  // with the put-back choice and the Clear button
     }
     // Developer aid: ANTREN_SHOT=out.png renders the window (optionally switching to ANTREN_TAB) and exits.
     if (const QByteArray shot = qgetenv("ANTREN_SHOT"); !shot.isEmpty()) {
@@ -66,13 +68,29 @@ void runDeveloperAids(MainWindow& w, QApplication& app) {
             w.resize(size.split('x')[0].toInt(), size.split('x')[1].toInt());
         }
         QTimer::singleShot(qEnvironmentVariableIntValue("ANTREN_DELAY") + 300, [&w, &app, shot] {
-            const QByteArray which = qgetenv("ANTREN_DIALOG");  // "options" / "about": grab that dialog instead
+            const QByteArray which = qgetenv("ANTREN_DIALOG");  // "options" / "about" / "filter" / "setdates" / "help": grab that dialog instead
             if (which == "help") {  // the help window: grab the visible top-level that is not the main window
                 showHelp(QString::fromLocal8Bit(qgetenv("ANTREN_HELPTOPIC").isEmpty() ? "index" : qgetenv("ANTREN_HELPTOPIC")),
                          &w);
                 for (QWidget* t : QApplication::topLevelWidgets()) {
                     if (t != &w && t->isVisible() && t->windowTitle().contains(QStringLiteral(" - "))) {
                         t->grab().save(QString::fromLocal8Bit(shot));
+                        break;
+                    }
+                }
+            } else if (which == "filter") {  // the Filter files dialog, with a time of the day on the shooting date ticked
+                ren::FileFilter flt;
+                flt.kind = ren::FileFilter::DateKind::Shot;
+                flt.timeFrom = QTime(14, 0);
+                flt.timeTo = QTime(15, 0);
+                auto* d = new FilterDialog(&w, flt, true, 0);
+                d->show();
+                d->grab().save(QString::fromLocal8Bit(shot));
+            } else if (which == "setdates") {  // the Set dates from EXIF dialog, opened by the --set-dates-from-exif parameter
+                for (QWidget* t : QApplication::topLevelWidgets()) {
+                    if (auto* d = qobject_cast<QDialog*>(t); d && t != &w && t->isVisible()) {
+                        d->grab().save(QString::fromLocal8Bit(shot));
+                        d->reject();
                         break;
                     }
                 }

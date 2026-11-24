@@ -1,5 +1,7 @@
 #include "mainwindow_internal.h"
 
+#include <QLockFile>
+
 // MainWindow: running the batch (worker thread, progress, undo), the log and the command line.
 
 // --- running ---
@@ -52,8 +54,12 @@ void MainWindow::run(Op op, int undoCount, int undoSession) {
         QMessageBox::information(this, windowTitle(), tr_("Application is busy: Renaming operation in progress."));
         return;
     }
+    if (op == Op::Undo) {
+        refreshHistory();
+    }
     if (op == Op::Undo ? journal_.size() == 0
-                       : (files_.size() == 0 || (batch_.size() == 0 && panel_->currentIndex() < 0 && op != Op::Revert))) {
+                       : (files_.size() == 0 ||
+                          (batch_.size() == 0 && panel_->currentIndex() < 0 && op != Op::Revert && op != Op::SetDates))) {
         if (silent_) {
             quitSilently(2);
             return;
@@ -87,6 +93,7 @@ void MainWindow::run(Op op, int undoCount, int undoSession) {
     addLog(op == Op::Rename    ? tr_("Renaming process started")
            : op == Op::Preview ? tr_("Refreshing preview")
            : op == Op::Undo    ? tr_("Undoing the last renaming passes")
+           : op == Op::SetDates ? tr_("Setting the modification dates from the EXIF shooting dates")
                                : tr_("Revert to previous names"),
            State::Info);
 
@@ -96,7 +103,7 @@ void MainWindow::run(Op op, int undoCount, int undoSession) {
     aGo_->setEnabled(false);
     setStatus(0, tr_("Renaming files"));
 
-    if (op != Op::Revert && op != Op::Undo &&
+    if (op != Op::Revert && op != Op::Undo && op != Op::SetDates &&
         batch_.size() == 0) {  // empty batch: run the action configured on screen, then forget it
         auto a = panel_->makeAction(true);
         if (a) {
@@ -125,7 +132,8 @@ void MainWindow::run(Op op, int undoCount, int undoSession) {
 void MainWindow::onProgress(const Snapshot& s) {
     const AppOptions& o = appOptions();
     runErrors_ += State(s.state) == State::Error;
-    runRenamed_ += State(s.state) == State::Ok && !s.from.isEmpty();  // from is set for a rename only
+    const bool dates = worker_ && worker_->op() == Op::SetDates;
+    runRenamed_ += State(s.state) == State::Ok && (!s.from.isEmpty() || dates);  // from is set for a rename only
     if (!s.file) {
         addLog(s.description, State(s.state));
         return;
@@ -149,12 +157,13 @@ void MainWindow::onProgress(const Snapshot& s) {
     if (o.genLog) {
         // CSV row: a renamed file shows its old and new names, any other one the reason (the end of the log text)
         QStringList row;
-        if (State(s.state) == State::Ok && !s.from.isEmpty()) {
+        if (State(s.state) == State::Ok && !s.from.isEmpty() && !dates) {
             const bool sameFolder = extractFilePath(s.from) == s.folder;
             row = {extractFilePath(s.from), extractFileName(s.from), sameFolder ? s.name : s.folder + s.name, QString()};
         } else {
             const int k = s.description.lastIndexOf(u": "_s);
-            row = {s.folder, s.name, QString(), State(s.state) == State::Ok ? tr_("Reverted") : s.description.mid(k < 0 ? 0 : k + 2)};
+            row = {s.folder, s.name, QString(),
+                   State(s.state) == State::Ok && !dates ? tr_("Reverted") : s.description.mid(k < 0 ? 0 : k + 2)};
         }
         addLog(s.description, State(s.state), row);
     }
@@ -191,9 +200,12 @@ void MainWindow::onFinished() {
     }
     addLog(op == Op::Rename    ? tr_("Renaming process finished")
            : op == Op::Preview ? tr_("Preview process finished")
+           : op == Op::SetDates ? tr_("Date setting process finished")
                                : tr_("Revert process finished"),
            State::Info);
-    const QString summary = op == Op::Rename ? tr_("Files renamed: %1, errors: %2").arg(runRenamed_).arg(runErrors_) : QString();
+    const QString summary = op == Op::Rename     ? tr_("Files renamed: %1, errors: %2").arg(runRenamed_).arg(runErrors_)
+                            : op == Op::SetDates ? tr_("Dates changed: %1, errors: %2").arg(runRenamed_).arg(runErrors_)
+                                                 : QString();
     if (!summary.isEmpty()) {
         addLog(summary, runErrors_ ? State::Error : State::Info);
     }
@@ -266,7 +278,7 @@ void MainWindow::quitSilently(int code) {
 // the actions makes that visible and stops their shortcuts.
 void MainWindow::setBusy(bool busy) {
     for (QAction* a :
-         {aOptions_, aAddFiles_, aAddFolders_, aRemoveSel_, aRemoveAll_, aRemoveDead_, aPreview_, aChangedOnly_, aShowHidden_,
+         {aSetDates_, aOptions_, aAddFiles_, aAddFolders_, aRemoveSel_, aRemoveAll_, aRemoveDead_, aFilter_, aPreview_, aChangedOnly_, aShowHidden_,
           aBatchAdd_, aBatchRemoveSel_, aBatchClear_, aBatchOpen_, aBatchSave_, aUp_, aDown_, aTop_, aBottom_, aUnsort_}) {
         a->setEnabled(!busy);
     }
@@ -279,9 +291,23 @@ void MainWindow::updateUndoState() {
     setBusy(worker_ != nullptr);
 }
 
+// A `-q` run (no window, no instance lock) can write the history file while this window is open. Its passes are merged in
+// before this window writes the file or undoes something, so neither run loses the passes of the other.
+void MainWindow::refreshHistory() {
+    if (QFile f(historyFile()); f.open(QIODevice::ReadOnly) && journal_.mergeFromJson(f.readAll()) > 0) {
+        updateUndoState();
+    }
+}
+
 // The history is written after every run, so it survives a crash. A failure is silent.
 void MainWindow::saveHistory() {
     const QString path = historyFile();
+    QLockFile lock(path + u".lock"_s);  // two runs writing at once: read, merge and write as one step
+    lock.setStaleLockTime(15000);
+    lock.tryLock(3000);
+    if (QFile f(path); f.open(QIODevice::ReadOnly)) {
+        journal_.mergeFromJson(f.readAll());
+    }
     if (journal_.size() == 0) {
         QFile::remove(path);
     } else if (QSaveFile f(path); f.open(QIODevice::WriteOnly)) {
@@ -292,6 +318,7 @@ void MainWindow::saveHistory() {
 
 // The passes of the history, newest first. Undo goes back linearly: choosing a pass undoes it and every pass after it.
 void MainWindow::showHistory() {
+    refreshHistory();
     if (worker_ || journal_.size() == 0) {
         return;
     }
@@ -437,10 +464,13 @@ void MainWindow::logAction(int which) {
 // --- command line ---
 // -b file.arb  load a batch      -g  start renaming      -x  exit when finished
 // -q           silent: no window, no dialog; same as -g -x, the exit code tells how it went
+// --set-dates-from-exif  instead of renaming: the modification date of the files becomes their EXIF shooting date. With -g or
+//              -q it runs at once (the option is the consent); alone, the window shows the table of the dates and asks.
 // -a[fFr]      what the following paths add: f = files, F = folders, r = recursive; wildcards allowed
 void MainWindow::processCommandLine(const QStringList& args) {
     silent_ = args.contains(u"-q"_s);
     bool go = silent_, exit = silent_;
+    bool setDates = false;  // --set-dates-from-exif
     AddChoice add{false, false, false};
     bool haveAdd = false;
     const QString start = QDir::currentPath();
@@ -454,6 +484,8 @@ void MainWindow::processCommandLine(const QStringList& args) {
             openBatchFile(QDir(start).absoluteFilePath(args[++i]));
         } else if (a == u"-q") {  // read before the loop (silent_)
             continue;
+        } else if (a == u"--set-dates-from-exif") {
+            setDates = true;
         } else if (a == u"-g") {
             go = true;
         } else if (a == u"-x") {
@@ -496,7 +528,9 @@ void MainWindow::processCommandLine(const QStringList& args) {
     updateSamplePreview();
     if (go && files_.size() > 0) {
         exitAfterRun_ = exit;
-        run(Op::Rename);
+        run(setDates ? Op::SetDates : Op::Rename);
+    } else if (setDates && files_.size() > 0) {  // without -g or -q: the window asks first, with the table of the dates
+        QTimer::singleShot(0, this, [this] { setDatesFromExif(); });
     } else if (silent_) {
         quitSilently(2);  // no file to rename
     } else if (exit) {

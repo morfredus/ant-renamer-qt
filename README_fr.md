@@ -8,7 +8,8 @@
 
 Portage C++/Qt 6 d'[Ant Renamer](https://www.antp.be/software/renamer/) 2.13 (Delphi 7 à l'origine,
 GPL v2 ou ultérieure). Renommage de fichiers par lots : remplacer, insérer, déplacer, supprimer, énumérer, changer
-la casse, expressions régulières, noms depuis une liste, date du fichier, tags MP3 (ID3v1/v2), EXIF / IPTC / XMP.
+la casse, expressions régulières, noms depuis une liste, date du fichier, tags MP3 (ID3v1/v2), EXIF / IPTC / XMP, métadonnées EPUB. Aussi :
+filtrer la liste par date, heure de la journée et taille, et remettre la date de prise de vue des photos comme date de modification (avec des garde-fous).
 
 **Ant Renamer Qt** est le nom officiel de ce portage, convenu avec l'auteur du programme d'origine. Il est
 développé en parallèle de l'Ant Renamer d'origine et a son propre exécutable, son propre dossier d'installation,
@@ -16,11 +17,12 @@ ses propres réglages et ses propres noms de paquets : les deux peuvent être in
 
 ![Ant Renamer Qt, interface moderne, thème clair](docs/screenshots/French/modern-ui-light-single-screen-bands.png)
 
-D'autres captures (interface classique et moderne, thème clair et sombre, aide, À propos) sont dans [docs/screenshots/French](docs/screenshots/French).
+D'autres captures (interface classique et moderne, thème clair et sombre, Filtrer les fichiers, Mettre les dates d'après l'EXIF, options, aide, À propos) sont dans [docs/screenshots/French](docs/screenshots/French).
 
 ## Téléchargement
 
 Installeur et zip portable Windows, `.deb` Linux (x86_64, arm64) et AppImage : [Releases](https://github.com/morfredus/ant-renamer-qt/releases).
+Linux, Flatpak : [Flathub](https://flathub.org/apps/fr.morfredus.AntRenamerQt) (`flatpak install flathub fr.morfredus.AntRenamerQt`) ; versions finales seulement, une nouvelle version arrive sur Flathub un certain temps après sa publication.
 
 **Vérifier les fichiers Linux.** Les fichiers Linux des versions postérieures à la 3.0.0 sont accompagnés d'une signature GPG détachée (`.asc`), y compris `SHA256SUMS-linux.txt`. Clé publique : [`docs/antrenamer-qt-public.asc`](docs/antrenamer-qt-public.asc), empreinte `D82C 3ED0 BE99 1611 C2C9 06FA 910B 46ED 3C84 B4A7` (Frederic Biron, Ant Renamer Qt releases). Comparez l'empreinte avant de faire confiance à la clé.
 
@@ -62,11 +64,12 @@ Prérequis Windows : MSYS2 avec `mingw-w64-ucrt-x86_64-{gcc,cmake,ninja,qt6-base
 |---|---|
 | `core/` | moteur de renommage, QtCore seulement |
 | `app/` | interface Qt Widgets, `Languages/` et `help/` de l'original |
-| `tests/` | vérifications du moteur et de l'éditeur d'opérations (`ctest`) |
+| `tests/` | vérifications du moteur, de l'éditeur d'opérations et de la boîte Filtrer les fichiers (`ctest`) |
 | `cmake/toolchains/` | toolchain de cross-compilation ARM64 |
-| `scripts/windows/` | déploiement des DLL MinGW, aide VS Code, zip et installeur |
+| `scripts/windows/` | déploiement des DLL MinGW, aide VS Code, zip et installeur, captures d'écran des docs et de l'aide |
 | `scripts/linux/` | `.deb`, AppImage, fichier `.desktop` |
 | `installer/` | script Inno Setup (installeur Windows) |
+| `packaging/` | manifestes Flatpak et fichier AppStream (Flathub) |
 | `docs/` | guides, présentation, notes de version |
 | `.github/` | workflow CI, Dependabot, modèles de tickets |
 
@@ -100,7 +103,8 @@ Menu contextuel de l'Explorateur (Windows) : Options > Fichiers & Dossiers ajout
 dossiers (Windows 11 : « Afficher plus d'options »). Tout ce qui est sélectionné arrive dans la fenêtre déjà ouverte.
 
 Ligne de commande : `-b fichier.arb` charge un job, `-g` démarre, `-x` quitte à la fin, `-q` silencieux (sans fenêtre, pour les scripts), `-a[fFr]`
-choisit ce qu'ajoutent les chemins suivants (f fichiers, F dossiers, r récursif ; jokers acceptés).
+choisit ce qu'ajoutent les chemins suivants (f fichiers, F dossiers, r récursif ; jokers acceptés), `--set-dates-from-exif` remet la date de prise de vue
+EXIF des photos comme date de modification au lieu de renommer (avec `-g` ou `-q` elle s'exécute tout de suite).
 
 ## Confidentialité
 

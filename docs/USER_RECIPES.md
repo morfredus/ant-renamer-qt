@@ -121,6 +121,12 @@ Nothing to do if "Also rename the sidecar files (.xmp, .dop) of a renamed pictur
 
 ---
 
+### 3.8 Put the shooting date back on copied photos
+Right-click the list > *Set dates from EXIF...*: the table shows, for each photo, its modification date and its EXIF shooting date; press **Set the dates**. Only the modification date changes (the pictures and their EXIF are not touched), the `.xmp` and RAW files follow their photo, a file without an EXIF date is left alone, and **Undo** (F12) puts the old dates back. Do it before naming by file date (*Date and time*, §3.4) if you want that action to see the shooting date. For originals that must stay evidence, work on copies (*Copy instead of rename*): the modification date is not a proof of authenticity.
+
+### 3.9 Keep only the photos shot between two times
+*Filter files...* (funnel, F4): choose the shooting date (EXIF) as the date to look at, tick **Time of the day** and give 14:00 to 15:00: only the photos shot in that hour remain in the list, whatever the day. A period (*From*, *To*) or a size can be added; all the ticked criteria hold together. Nothing is touched on the disk: press the funnel again to correct the filter or to clear it, then rename as usual.
+
 ## 4. Music and videos
 
 ### 4.1 "Artist - Title" from ID3 tags
@@ -178,7 +184,7 @@ loads the batch, adds the files of the folder, renames and exits. `-afr folder` 
 Enable "Add to Ant Renamer Qt" (Options > Files & Folders). Right-click a selection of files and folders (Windows 11: *Show more options*): everything arrives in the window that is already open.
 
 ### 6.6 Undo a rename
-Every action of the batch run by Go is a *pass*. **Undo** (F12) restores the names of the last pass, sidecars included, and you can click again to go back pass after pass. To return to a precise moment, open the **History** (Shift+F12), choose the pass and click *Undo up to this pass*: it and all the passes after it are undone. The undo is always linear: a pass in the middle cannot be undone alone. The last 50 passes are kept, and they are lost when the program is closed; if a file was moved outside the program, the undo stops there. When in doubt, work in "Copy instead of rename" mode and keep the log saved (Options > Events > Store the log).
+Every action of the batch run by Go is a *pass*. **Undo** (F12) restores the names of the last pass, sidecars included, and you can click again to go back pass after pass. To return to a precise moment, open the **History** (Shift+F12), choose the pass and click *Undo up to this pass*: it and all the passes after it are undone. The undo is always linear: a pass in the middle cannot be undone alone. The last 50 passes are kept, also when the program is closed; if a file was moved outside the program, the undo stops there. With *Copy instead of rename*, the undo deletes the copies if they have not been changed since (the originals are never touched), and the dates set by *Set dates from EXIF* are put back too. When in doubt, work in "Copy instead of rename" mode and keep the log saved (Options > Events > Store the log).
 
 ---
 
@@ -187,6 +193,7 @@ Every action of the batch run by Go is a *pass*. **Undo** (F12) restores the nam
 | Symptom | Cause and solution |
 |---|---|
 | Empty preview in the list | F5 was not used: the preview is not automatic. |
+| The photos carry the date of the copy, not of the shot | *Set dates from EXIF...* (§3.8), or name them with *Use EXIF info* (§3.1). |
 | Numbers do not follow the wanted order | The list is not sorted as expected: sort or reorder before starting. |
 | "Name already used" (red) | Two files give the same new name: with Date and time or EXIF this is numbered automatically (`_01`, `_02`...) unless the option is off in Options > Processing; with the other operations, add a counter (`%num%`). |
 | A file is not renamed (blue) | New name identical to the old one, missing tag (MP3, EXIF) or missing file: read the log message. |

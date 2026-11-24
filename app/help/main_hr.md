@@ -40,6 +40,7 @@ In Ant Renamer Qt the main window can also be shown with a modern layout, with t
 | Shift+F1 | About | Esc | Stop |
 | F2 | Add files | F10 | Options |
 | F3 | Add folders | F11 | Always on top |
+| F4 | Filter files | | |
 | F5 | Refresh preview | F12 | Undo |
 | Shift+F12 | History | | |
 | F6 | Remove selected files | Alt+F4 | Exit |

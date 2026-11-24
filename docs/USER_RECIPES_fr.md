@@ -121,6 +121,12 @@ Rien à faire si la case « Renommer aussi les fichiers associés (.xmp, .dop) d
 
 ---
 
+### 3.8 Remettre la date de prise de vue sur des photos copiées
+Clic droit dans la liste > *Mettre les dates d'après l'EXIF...* : le tableau montre, pour chaque photo, sa date de modification et sa date de prise de vue EXIF ; appuyez sur **Mettre les dates**. Seule la date de modification change (les images et leur EXIF ne sont pas touchés), les fichiers `.xmp` et RAW suivent leur photo, un fichier sans date EXIF est laissé tel quel, et **Annuler** (F12) remet les anciennes dates. Faites-le avant de nommer d'après la date du fichier (*Date et heure*, §3.4) si vous voulez que cette opération voie la date de prise de vue. Pour des originaux qui doivent rester des preuves, travaillez sur des copies (*Copier au lieu de renommer*) : la date de modification n'est pas une preuve d'authenticité.
+
+### 3.9 Ne garder que les photos prises entre deux heures
+*Filtrer les fichiers...* (entonnoir, F4) : choisissez la date de prise de vue (EXIF) comme date à regarder, cochez **Heure de la journée** et indiquez de 14:00 à 15:00 : seules les photos prises pendant cette heure restent dans la liste, quel que soit le jour. Une période (*Du*, *Au*) ou une taille peuvent s'y ajouter ; tous les critères cochés valent ensemble. Rien n'est touché sur le disque : appuyez de nouveau sur l'entonnoir pour corriger le filtre ou l'effacer, puis renommez comme d'habitude.
+
 ## 4. Musique et vidéos
 
 ### 4.1 « Artiste - Titre » depuis les tags ID3
@@ -178,7 +184,7 @@ charge le job, ajoute les fichiers du dossier, renomme et quitte. `-afr dossier`
 Activer « Ajouter à Ant Renamer Qt » (Options > Fichiers & Dossiers). Clic droit sur une sélection de fichiers et de dossiers (Windows 11 : *Afficher plus d'options*) : tout arrive dans la fenêtre déjà ouverte.
 
 ### 6.6 Défaire un renommage
-Chaque opération du job lancé par Démarrer est une *passe*. **Annuler** (F12) restaure les noms de la dernière passe, y compris les fichiers associés, et vous pouvez recliquer pour remonter passe après passe. Pour revenir à un moment précis, ouvrez l'**Historique** (Maj+F12), choisissez la passe et cliquez *Annuler jusqu'à cette passe* : elle et toutes les passes suivantes sont annulées. L'annulation est toujours linéaire : une passe au milieu ne peut pas être annulée seule. Les 50 dernières passes sont gardées, et perdues à la fermeture du programme ; si un fichier a été déplacé en dehors du programme, l'annulation s'arrête là. En cas de doute, travaillez en mode « Copier plutôt que renommer » et gardez le journal enregistré (Options > Événements > Stocker le journal).
+Chaque opération du job lancé par Démarrer est une *passe*. **Annuler** (F12) restaure les noms de la dernière passe, y compris les fichiers associés, et vous pouvez recliquer pour remonter passe après passe. Pour revenir à un moment précis, ouvrez l'**Historique** (Maj+F12), choisissez la passe et cliquez *Annuler jusqu'à cette passe* : elle et toutes les passes suivantes sont annulées. L'annulation est toujours linéaire : une passe au milieu ne peut pas être annulée seule. Les 50 dernières passes sont gardées, même quand le programme est fermé ; si un fichier a été déplacé en dehors du programme, l'annulation s'arrête là. Avec « Copier plutôt que renommer », l'annulation supprime les copies si elles n'ont pas été modifiées depuis (les originaux ne sont jamais touchés), et les dates posées par *Mettre les dates d'après l'EXIF* sont remises aussi. En cas de doute, travaillez en mode « Copier plutôt que renommer » et gardez le journal enregistré (Options > Événements > Stocker le journal).
 
 ---
 
@@ -187,6 +193,7 @@ Chaque opération du job lancé par Démarrer est une *passe*. **Annuler** (F12)
 | Symptôme | Cause et solution |
 |---|---|
 | Aperçu vide dans la liste | F5 n'a pas été utilisé : l'aperçu n'est pas automatique. |
+| Les photos portent la date de la copie, pas celle de la prise de vue | *Mettre les dates d'après l'EXIF...* (§3.8), ou les nommer avec *Infos EXIF* (§3.1). |
 | Les numéros ne suivent pas l'ordre voulu | La liste n'est pas triée comme prévu : trier ou réordonner avant de démarrer. |
 | « Nom déjà utilisé » (rouge) | Deux fichiers donnent le même nouveau nom : avec Date et heure ou EXIF la numérotation est automatique (`_01`, `_02`...) sauf si l'option est décochée dans Options > Traitement ; avec les autres opérations, ajouter un compteur (`%num%`). |
 | Un fichier n'est pas renommé (bleu) | Nouveau nom identique à l'ancien, tag manquant (MP3, EXIF) ou fichier absent : lire le message du journal. |

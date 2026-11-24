@@ -2,6 +2,14 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.3.0 (24/11/2026)
+  - Final version of 3.3.0: Filter files, the undo of copies, the shared undo history, Set dates from EXIF (3.3.0-beta.1 and beta.2), plus: Flatpak, files given one by one to the sandbox could not be renamed and disappeared: fixed, the Flatpak package can now write in the home folder, and a file given alone outside it is refused without being touched, with a warning. Advice for synchronized folders (pause the synchronization or work on a copy).
+- 3.3.0-beta.2 (23/11/2026)
+  - New: Set dates from EXIF (right-click menu of the list, command line `--set-dates-from-exif`): the modification date of the files becomes their EXIF shooting date. A table shows the old and the new date and nothing changes before you confirm; the content of the files is never touched; the sidecar files (.xmp, .dop, RAW) follow their picture; the history can undo it. The modification date is not a proof of authenticity: for originals that must stay evidence, work on copies.
+  - Fix: the .deb package points to the GitHub repository as its home page, not to the site of the original program.
+- 3.3.0-beta.1 (22/11/2026)
+  - New: Filter files (toolbar button and F4, right-click menu): keeps or removes the files of the list that match a period, a time of the day and a size, on the modification date, the creation date or the EXIF shooting date; the filter can be corrected and cleared, and a hidden-files count is shown while it is on.
+  - Fix: undoing a pass made with "Copy instead of rename" deletes the copies that have not been changed. Fix: a silent run (-q) and an open window no longer erase each other's undo history.
 - 3.2.0 (20/11/2026)
   - Final version of 3.2.0: the code of 3.2.0-beta.3 ("Use EPUB info" action, no more empty-looking names, Explorer menu asking what to add, files left alone shown in orange, help and credits cleaned up).
 - 3.2.0-beta.3 (18/11/2026)

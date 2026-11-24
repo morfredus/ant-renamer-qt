@@ -1,10 +1,12 @@
-# CI: build and test on every push, pull request and tag (Linux + Windows). Windows files are run artifacts only; releases
-# are published separately so that SHA256SUMS matches the published files. Same code as package-win.ps1 and the CMake presets.
+# CI: build and test (Linux + Windows) on every pull request, every push to a dev/ or fix/ branch, every tag and on demand, and
+# on a push to main only when that push is a merge (a commit with two parents, see the `gate` job). A commit pushed straight to
+# main builds nothing. Windows files are run artifacts only; releases are published separately so that SHA256SUMS matches the
+# published files. Same code as package-win.ps1 and the CMake presets.
 name: Build
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'dev/**', 'fix/**']
     tags: ['v*']
   pull_request:
   workflow_dispatch:
@@ -13,16 +15,41 @@ permissions:
   contents: read
 
 jobs:
+  # A push to main builds only when it is a merge commit (two parents): a merge of a dev/ or fix/ branch, with `git merge --no-ff`
+  # or the "Create a merge commit" button. A plain commit pushed to main (one parent), a fast-forward or a squash does not.
+  gate:
+    name: Gate (push to main)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.g.outputs.run }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+      - id: g
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = push ] && [ "$GITHUB_REF" = refs/heads/main ] && ! git rev-parse --verify -q 'HEAD^2' >/dev/null; then
+            echo "Push to main that is not a merge: no build."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
   linux:
     name: Linux (build + tests)
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
       - name: Dependencies
-        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build g++ qt6-base-dev libgl1-mesa-dev clang-tidy
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build g++ qt6-base-dev libgl1-mesa-dev clang-tidy appstream
       - name: Build
         run: cmake --preset linux -DANTREN_WERROR=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && cmake --build --preset linux
+      - name: AppStream file (the one the .deb, the AppImage and Flathub ship)
+        run: appstreamcli validate --no-net build/app/fr.morfredus.AntRenamerQt.metainfo.xml
       - name: clang-tidy (rules in .clang-tidy)
         run: clang-tidy -p build --quiet --warnings-as-errors='*' core/*.cpp app/*.cpp
       - name: Tests
@@ -46,6 +73,8 @@ jobs:
     # Oldest Ubuntu LTS runner: an AppImage uses the glibc of the machine that runs it. Qt 6.5 comes from install-qt-action
     # because Ubuntu 22.04 ships Qt 6.2 and the project needs 6.4.
     name: Linux (AppImage, glibc 2.35)
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-22.04
     timeout-minutes: 30
     steps:
@@ -68,6 +97,8 @@ jobs:
 
   windows:
     name: Windows (build + packages)
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: windows-2022
     timeout-minutes: 30
     steps:

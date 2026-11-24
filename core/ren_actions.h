@@ -34,7 +34,8 @@ enum class ActionType {
     Epub
 };
 
-enum class Op { Rename, Preview, Revert, Undo };  // Undo: passes of the session journal (FileList::undoPasses)
+// Undo: passes of the session journal (FileList::undoPasses). SetDates: FileList::setDatesFromExif, not a batch of actions.
+enum class Op { Rename, Preview, Revert, Undo, SetDates };
 
 // (file just handled, position of the action in the batch, index of the file)
 using Progress = std::function<void(File&, int batchPos, int filePos)>;

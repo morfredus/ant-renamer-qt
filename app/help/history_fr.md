@@ -2,6 +2,14 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.3.0 (24/11/2026)
+  - Version finale de la 3.3.0 : Filtrer les fichiers, l'annulation des copies, l'historique d'annulation partagé, Mettre les dates d'après l'EXIF (3.3.0-beta.1 et beta.2), plus : Flatpak, les fichiers donnés un par un au bac à sable ne pouvaient pas être renommés et disparaissaient : corrigé, le paquet Flatpak peut maintenant écrire dans le dossier personnel, et un fichier donné seul en dehors est refusé sans y toucher, avec un avertissement. Conseil pour les dossiers synchronisés (mettre la synchronisation en pause ou travailler sur une copie).
+- 3.3.0-beta.2 (23/11/2026)
+  - Nouveau : Mettre les dates d'après l'EXIF (menu du clic droit de la liste, ligne de commande `--set-dates-from-exif`) : la date de modification des fichiers devient leur date de prise de vue EXIF. Un tableau montre l'ancienne et la nouvelle date et rien ne change avant votre confirmation ; le contenu des fichiers n'est jamais touché ; les fichiers associés (.xmp, .dop, RAW) suivent leur photo ; l'historique peut annuler. La date de modification n'est pas une preuve d'authenticité : pour des originaux qui doivent rester des preuves, travaillez sur des copies.
+  - Correction : le paquet .deb renvoie vers le dépôt GitHub comme page d'accueil, et non vers le site du programme d'origine.
+- 3.3.0-beta.1 (22/11/2026)
+  - Nouveau : Filtrer les fichiers (bouton de la barre d'outils et F4, menu du clic droit) : garde ou retire les fichiers de la liste qui correspondent à une période, une heure de la journée et une taille, sur la date de modification, de création ou de prise de vue EXIF ; le filtre peut être corrigé et effacé, et le nombre de fichiers masqués est affiché tant qu'il est actif.
+  - Correction : l'annulation d'une passe faite avec « Copier au lieu de renommer » supprime les copies qui n'ont pas été modifiées. Correction : un lancement silencieux (-q) et une fenêtre ouverte ne s'effacent plus l'historique d'annulation l'un de l'autre.
 - 3.2.0 (20/11/2026)
   - Version finale de la 3.2.0 : le code de la 3.2.0-beta.3 (opération « Infos EPUB », noms qui n'ont pas l'air vides évités, menu de l'Explorateur qui demande quoi ajouter, fichiers laissés tels quels en orange, aide et crédits nettoyés).
 - 3.2.0-beta.3 (18/11/2026)

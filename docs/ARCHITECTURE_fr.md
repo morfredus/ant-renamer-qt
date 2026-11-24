@@ -16,7 +16,7 @@ core/             Moteur (bibliothèque statique rencore)
 app/              Interface (exécutable antrenamer-qt)
   Languages/      Fichiers de langue de l'original (.lng, lus à l'exécution)
   help/           Aide Markdown en 4 langues, table des matières, images
-tests/            test_core (moteur ; inclut id3_check.h, robust_check.h, update_check.h), test_panel (éditeur d'actions, chargeur de langues)
+tests/            test_core (moteur ; inclut id3_check.h, robust_check.h, update_check.h, filter_check.h, date_check.h), test_filter_dialog (la boîte Filtrer les fichiers), test_panel (éditeur d'actions, chargeur de langues)
 cmake/toolchains/ Toolchain de compilation croisée ARM64
 scripts/          windows/ (compilation MinGW, zip et installeur) et linux/ (.deb, AppImage, .desktop)
 installer/        Script Inno Setup de l'installeur Windows
@@ -54,7 +54,7 @@ LICENSE           Licence publique générale GNU
 | Fichier | Rôle |
 |---|---|
 | `ren_actions.h/.cpp` | Les 15 opérations, chargement et sauvegarde des jobs, boucle d'exécution (`Action::perform`) |
-| `ren_files.h/.cpp` | `File` (renommer, annuler, fichiers associés), `FileList`, `Journal` (passes, annulation, enregistré en JSON par l'application), `Options` |
+| `ren_files.h/.cpp` | `File` (renommer, annuler, fichiers associés), `FileList`, `Journal` (passes, annulation, enregistré en JSON par l'application), `Options` ; `Journal::mergeFromJson` reprend les passes qu'un autre lancement a écrites, un `Move` peut être une copie (`Move::copy`) ; `FileFilter` : les critères de « Filtrer les fichiers » (date, heure de la journée, taille) ; `shootingDate` / `planDate` / `FileList::setDatesFromExif` (« Mettre les dates d'après l'EXIF » : un `Move` dont `date` est vrai garde l'ancienne et la nouvelle date de modification, et l'annulation remet l'ancienne) |
 | `ren_format.h/.cpp` | Le langage des masques et le format de date |
 | `ren_epub.h/.cpp` | Lecteur EPUB : répertoire central du ZIP, inflate, métadonnées OPF |
 | `ren_exif.h/.cpp` | Lecteur EXIF, IPTC et XMP, noms des fichiers associés |

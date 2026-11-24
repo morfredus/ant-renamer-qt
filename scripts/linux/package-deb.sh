@@ -183,7 +183,7 @@ Depends: $DEPENDS
 Recommends: qt6-wayland
 Section: utils
 Priority: optional
-Homepage: https://www.antp.be/software/renamer/
+Homepage: https://github.com/morfredus/ant-renamer-qt
 Description: Batch file renamer (Qt port of Ant Renamer)
  Ant Renamer Qt renames many files and folders at once: replace, insert, move or
  delete text, enumerate, change case, regular expressions, names from a list,
