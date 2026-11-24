@@ -1,6 +1,6 @@
 # Ant Renamer Qt : guide des fonctions
 
-*Toutes les fonctions d'Ant Renamer Qt 3.3.0, avec le mode d'emploi.*
+*Toutes les fonctions d'Ant Renamer Qt 3.3.1, avec le mode d'emploi.*
 English version : [USER_GUIDE.md](USER_GUIDE.md). Recettes (cas d'usage pas à pas) : [USER_RECIPES_fr.md](USER_RECIPES_fr.md). Détails complets, page par page, avec captures d'écran : l'aide intégrée (F1). Différences entre Windows et Linux : §13.
 
 ## 1. Principe général
@@ -215,5 +215,5 @@ Même moteur, autre présentation, choisie dans Options > Affichage. C'est celle
 - Annuler : passe après passe (les 50 dernières, gardées à la fermeture du programme), dans une session uniquement à partir de sa dernière passe ; les copies faites avec « Copier au lieu de renommer » sont supprimées par l'annulation si elles n'ont pas été modifiées depuis (les originaux ne sont jamais touchés).
 - Le menu contextuel court de Windows 11 n'est pas pris en charge (utiliser « Afficher plus d'options »).
 - Mettre les dates d'après l'EXIF : seule la date de modification est changée (la date de création ne peut pas être changée de la même façon sous Linux), d'après la balise EXIF `DateTimeOriginal` ou le fichier XMP associé ; un fichier qui n'en a pas est laissé tel quel.
-- Flatpak : le programme peut écrire dans votre dossier personnel (un renommeur crée des fichiers à côté de ceux qu'on lui donne), mais pas ailleurs (autre disque, `/media`) : là, ajoutez le dossier avec « Ajouter des dossiers » (le sélecteur de dossiers du système) ; un fichier donné seul hors du dossier personnel est refusé, sans y toucher, et un avertissement s'affiche. Les partages réseau montés par le gestionnaire de fichiers (SMB, NFS) ne sont pas visibles. Le programme n'a pas d'accès au réseau, donc la recherche de nouvelle version n'est pas proposée ; la mise à jour vient de Flathub.
+- Flatpak : le programme ne voit que ce qu'on lui donne, avec les sélecteurs du système, et le système garde l'autorisation. Ajoutez un dossier avec « Ajouter des dossiers ». Un fichier donné seul (sélecteur de fichiers, glisser-déposer) ne peut pas être renommé seul, puisqu'un renommeur crée des fichiers à côté de ceux qu'on lui donne : le programme demande le dossier qui le contient. Un dossier déposé depuis le gestionnaire de fichiers est redemandé de la même façon (le gestionnaire le donne en lecture seule, pour la session). Si vous refusez, le fichier est refusé, sans y toucher, et un avertissement s'affiche. Les partages réseau montés par le gestionnaire de fichiers (SMB, NFS) ne sont pas visibles. Le programme n'a pas d'accès au réseau, donc la recherche de nouvelle version n'est pas proposée ; la mise à jour vient de Flathub.
 - L'aide en croate et en tamoul affiche l'anglais pour les pages écrites pour Ant Renamer Qt.

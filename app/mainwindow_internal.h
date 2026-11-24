@@ -52,6 +52,7 @@
 #include <QDBusConnection>
 #include <QDBusMessage>
 #endif
+#include <QDebug>
 #include <algorithm>
 using namespace ren;
 using namespace Qt::StringLiterals;
