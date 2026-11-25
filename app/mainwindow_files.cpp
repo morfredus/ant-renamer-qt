@@ -1,6 +1,89 @@
 #include "mainwindow_internal.h"
 
+#include <QEventLoop>
+#include <QRandomGenerator>
+#ifdef Q_OS_LINUX
+#include <cerrno>
+#include <sys/xattr.h>
+#endif
+
 // MainWindow: the files list (add, remove, sort, move, drop) and the preview of one file.
+
+namespace {
+
+// Flatpak: the document portal keeps the real (host) path of an exported entry in the xattr user.document-portal.host-path.
+// Used only as the starting folder of the FileChooser portal (it may ignore it): empty when unknown, so nothing changes.
+// For a file the start is its folder, for a folder the folder itself.
+QString portalStartDir(const QString& docPath) {
+#ifdef Q_OS_LINUX
+    const QByteArray p = QFile::encodeName(docPath);
+    char buf[4096];
+    const ssize_t n = getxattr(p.constData(), "user.document-portal.host-path", buf, sizeof buf);
+    if (n <= 0) {
+        if (qEnvironmentVariableIsSet("AR_DEBUG_DROP")) {
+            qWarning() << "host-path xattr not readable for" << docPath << "errno" << errno;
+        }
+        return {};
+    }
+    const QString host = QString::fromLocal8Bit(buf, int(n));
+    const QString start = QFileInfo(docPath).isDir() ? host : QFileInfo(host).absolutePath();
+    if (qEnvironmentVariableIsSet("AR_DEBUG_DROP")) {
+        qWarning() << "picker start folder for" << docPath << "=" << start;
+    }
+    return start;
+#else
+    Q_UNUSED(docPath);
+    return {};
+#endif
+}
+
+}  // namespace
+
+void MainWindow::portalFolderResponse(uint code, const QVariantMap& results) {
+    portalUris_ = code == 0 ? results.value(u"uris"_s).toStringList() : QStringList();
+    portalDone_ = true;
+    if (portalLoop_) {
+        portalLoop_->quit();
+    }
+}
+
+QString MainWindow::pickFolder(const QString& startHost) {
+#ifdef AR_HAVE_DBUS
+    QDBusConnection bus = QDBusConnection::sessionBus();
+    if (!startHost.isEmpty() && bus.isConnected() && !portalLoop_) {
+        const QString token = u"antrenamer%1"_s.arg(QRandomGenerator::global()->generate());
+        QString sender = bus.baseService().mid(1);
+        sender.replace(u'.', u'_');
+        const QString request = u"/org/freedesktop/portal/desktop/request/%1/%2"_s.arg(sender, token);
+        const QString service = u"org.freedesktop.portal.Desktop"_s, iface = u"org.freedesktop.portal.Request"_s;
+        portalDone_ = false;
+        portalUris_.clear();
+        if (bus.connect(service, request, iface, u"Response"_s, this, SLOT(portalFolderResponse(uint,QVariantMap)))) {
+            QVariantMap opts;
+            opts.insert(u"handle_token"_s, token);
+            opts.insert(u"directory"_s, true);
+            opts.insert(u"modal"_s, true);
+            opts.insert(u"current_folder"_s, QFile::encodeName(startHost) + '\0');  // bytestring, NUL ended
+            QDBusMessage call = QDBusMessage::createMethodCall(service, u"/org/freedesktop/portal/desktop"_s,
+                                                               u"org.freedesktop.portal.FileChooser"_s, u"OpenFile"_s);
+            call << QString() << tr_("Select folder") << opts;
+            const QDBusMessage reply = bus.call(call, QDBus::Block, 5000);
+            if (reply.type() == QDBusMessage::ReplyMessage) {
+                QEventLoop loop;
+                portalLoop_ = &loop;
+                if (!portalDone_) {
+                    loop.exec(QEventLoop::ExcludeUserInputEvents);
+                }
+                portalLoop_ = nullptr;
+                bus.disconnect(service, request, iface, u"Response"_s, this, SLOT(portalFolderResponse(uint,QVariantMap)));
+                return portalUris_.isEmpty() ? QString() : QUrl(portalUris_.first()).toLocalFile();  // empty: cancelled
+            }
+            bus.disconnect(service, request, iface, u"Response"_s, this, SLOT(portalFolderResponse(uint,QVariantMap)));
+        }
+    }
+#endif
+    return QFileDialog::getExistingDirectory(this, tr_("Select folder"), startHost, QFileDialog::ShowDirsOnly);
+}
 
 // --- files ---
 Action* MainWindow::actionOf(QTreeWidgetItem* item) {
@@ -162,7 +245,7 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, boo
     setStatus(0, tr_("Adding files"));
     QApplication::setOverrideCursor(Qt::WaitCursor);
     fileView_->setUpdatesEnabled(false);
-    bool portalFile = false;  // Flatpak: a file given alone cannot be renamed
+    QStringList portalFiles;  // Flatpak: files given alone, they cannot be renamed until their folder is granted
     QString emptyDir;  // first folder that brought nothing: without a word, an empty folder looks like a failure
     for (const QString& p : paths) {
         const QFileInfo fi(p);
@@ -176,8 +259,36 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, boo
                 emptyDir = fi.fileName().isEmpty() ? native(p) : fi.fileName();
             }
         } else if (!choice || (choice->files && fi.isFile())) {
-            addFile(native(p));
-            portalFile = portalFile || ren::isPortalSingleFile(QDir::fromNativeSeparators(p));
+            if (ren::isPortalSingleFile(QDir::fromNativeSeparators(p))) {
+                portalFiles << p;
+            } else {
+                addFile(native(p));
+            }
+        }
+    }
+    bool portalFile = false;
+    if (!portalFiles.isEmpty()) {
+        // Flatpak only (isPortalSingleFile is false elsewhere). The sandbox has no access to the home folder: the folder is asked
+        // through the FileChooser portal, which keeps the permission. Its files are then reached by their real folder, not
+        // through the private folder of the document portal, and can be renamed.
+        fileView_->setUpdatesEnabled(true);
+        QApplication::restoreOverrideCursor();
+        QString dir;
+        if (QMessageBox::question(this, QStringLiteral("Ant Renamer Qt"),
+                                  tr_("Files given one by one to the Flatpak sandbox cannot be renamed. Give the program access to the folder that contains them (the system keeps this permission)?")) ==
+            QMessageBox::Yes) {
+            dir = pickFolder(portalStartDir(portalFiles.first()));
+        }
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+        fileView_->setUpdatesEnabled(false);
+        for (const QString& p : std::as_const(portalFiles)) {
+            const QString inDir = dir.isEmpty() ? QString() : QDir(dir).filePath(QFileInfo(p).fileName());
+            if (!inDir.isEmpty() && QFileInfo(inDir).isFile()) {
+                addFile(native(inDir));
+            } else {
+                addFile(native(p));
+                portalFile = true;
+            }
         }
     }
     fileView_->setUpdatesEnabled(true);
@@ -257,7 +368,29 @@ void MainWindow::importDropped(const QStringList& paths, bool fromShell) {
         appOptions().dragNoAsk = dlg.dontAskAgain();
         appOptions().save();
     }
-    addFiles(paths, &c, true);
+    // Flatpak only: a dropped folder is /run/user/<uid>/doc/<id>/<folder>, given by the file manager, often read-only and gone
+    // at the next session. The same folder chosen with the FileChooser portal is writable and kept, so it is asked once and
+    // replaces the dropped one (the names must match, else the dropped one stays).
+    QStringList list = paths;
+    for (QString& p : list) {
+        const QFileInfo fi(p);
+        if (!fi.isDir() || !ren::isPortalSingleFile(QDir::fromNativeSeparators(p))) {
+            continue;
+        }
+        if (QMessageBox::question(this, QStringLiteral("Ant Renamer Qt"),
+                                  tr_("The folder \"%1\" was given to the Flatpak sandbox by drag and drop: it can be read, but renaming may fail. Select it again to give the program lasting access (the system keeps this permission)?").arg(fi.fileName())) !=
+            QMessageBox::Yes) {
+            continue;
+        }
+        const QString dir = pickFolder(portalStartDir(p));
+        if (!dir.isEmpty() && QFileInfo(dir).fileName() == fi.fileName()) {
+            p = dir;
+        } else if (!dir.isEmpty()) {
+            QMessageBox::warning(this, QStringLiteral("Ant Renamer Qt"),
+                                 tr_("This is not the same folder: the dropped folder is kept."));
+        }
+    }
+    addFiles(list, &c, true);
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent* e) {
@@ -266,7 +399,21 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* e) {
     }
 }
 void MainWindow::dropEvent(QDropEvent* e) {
-    filesDropped(droppedPaths(e->mimeData()));
+    const QStringList paths = droppedPaths(e->mimeData());
+    if (qEnvironmentVariableIsSet("AR_DEBUG_DROP")) {  // to see what a file manager really sends
+        qWarning() << "drop formats:" << e->mimeData()->formats() << "paths:" << paths;
+    }
+    if (runsInFlatpak() && !paths.isEmpty()) {
+        // The sandbox only sees what the portal gave: a file manager that sends host paths (no portal key) gives paths that
+        // do not exist here, and nothing could be added without a word.
+        const bool anyVisible = std::any_of(paths.cbegin(), paths.cend(), [](const QString& p) { return QFileInfo::exists(p); });
+        if (!anyVisible) {
+            QMessageBox::warning(this, QStringLiteral("Ant Renamer Qt"),
+                                 tr_("The Flatpak sandbox cannot see what this file manager dropped. Use Add folders or Add files instead."));
+            return;
+        }
+    }
+    filesDropped(paths);
 }
 
 void MainWindow::renumberFiles() {

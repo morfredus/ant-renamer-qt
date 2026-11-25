@@ -616,5 +616,11 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="addFolderButton" Value="Add folder..."/>
     <Item Name="removeSelectedButton" Value="Remove selected"/>
     <Item Name="whatChanges" Value="What changes:"/>
+    <Item Name="flatpakSingleFilesWarning" Value="Files given one by one to the Flatpak sandbox (drag and drop, file picker) cannot be renamed: the program will refuse, nothing will be changed. Add the folder that contains them instead (Add folders, or drag the folder)."/>
+    <Item Name="flatpakAskFileFolder" Value="Files given one by one to the Flatpak sandbox cannot be renamed. Give the program access to the folder that contains them (the system keeps this permission)?"/>
+    <Item Name="flatpakDropInvisible" Value="The Flatpak sandbox cannot see what this file manager dropped. Use Add folders or Add files instead."/>
+    <Item Name="flatpakAskDroppedFolder" Value="The folder &quot;%1&quot; was given to the Flatpak sandbox by drag and drop: it can be read, but renaming may fail. Select it again to give the program lasting access (the system keeps this permission)?"/>
+    <Item Name="flatpakNotSameFolder" Value="This is not the same folder: the dropped folder is kept."/>
+    <Item Name="flatpakSingleFileRefused" Value="file given alone to the Flatpak sandbox (drag and drop, file picker): it cannot be renamed, nothing was changed. Add the folder that contains it instead (Add folders, or drag the folder)"/>
   </QtPort>
 </Application>

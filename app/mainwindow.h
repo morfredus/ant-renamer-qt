@@ -134,6 +134,13 @@ private:
     void filesDropped(const QStringList& paths);
     void importDropped(const QStringList& paths, bool fromShell = false);
     void importShellPaths();
+    // Flatpak: the folder picker, asked of the FileChooser portal directly so that it opens on startHost (Qt drops a start
+    // folder that does not exist in the sandbox). Falls back to QFileDialog. Empty when cancelled.
+    QString pickFolder(const QString& startHost);
+    Q_SLOT void portalFolderResponse(uint code, const QVariantMap& results);
+    class QEventLoop* portalLoop_ = nullptr;
+    QStringList portalUris_;
+    bool portalDone_ = false;
     void updateItem(QTreeWidgetItem* item);
     void updateAllItems();
     ren::File* fileOf(QTreeWidgetItem* item) const;

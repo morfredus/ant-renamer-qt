@@ -4,7 +4,13 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.3.0**.
+Current version: **3.3.1**.
+
+## 3.3.1
+
+| What is new | Since |
+|---|---|
+| **Flatpak**: no more access to the home folder (Flathub refused it). A file given alone (drag and drop, file picker) or a folder dropped from the file manager is asked again with the system folder picker, which keeps the permission; the program then renames normally. A drop the sandbox cannot see gets a message. The Flatpak messages are translated into French. Nothing changes for Windows, the `.deb` and the AppImage. | 3.3.1 |
 
 ## 3.3.0
 

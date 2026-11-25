@@ -13,9 +13,8 @@ finish-args:
   - --socket=wayland
   - --socket=fallback-x11
   - --device=dri
-  # A renamer must create files next to the files it is given (the new names, the sidecars, the undo). The document portal
-  # gives a file dropped or picked alone a private folder where no sibling can be created, so renaming fails there.
-  - --filesystem=home
+  # No --filesystem: folders are chosen with the FileChooser portal, which keeps the permission. A file given alone is
+  # replaced by its folder, asked the same way (see MainWindow::addFiles).
 
 modules:
   - name: antrenamer-qt

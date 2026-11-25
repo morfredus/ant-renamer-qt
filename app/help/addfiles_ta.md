@@ -27,7 +27,7 @@ A fourth option ("Include hidden and system files when adding a folder") also ad
 
 Under the tree, a field ("Or type the path of a folder") lets you type or paste the path of a folder: it is added together with the folders selected in the tree, if it exists.
 
-**In a Flatpak** (which sees your home folder, not the whole disk) the window shows no tree: it opens the system folder picker at once and lists the folders you chose. *Add folder...* picks another one, *Remove selected* takes the selected folders off the list, and the path field is not there.
+**In a Flatpak** (which sees only what you give it) the window shows no tree: it opens the system folder picker at once and lists the folders you chose; the system keeps the permission. *Add folder...* picks another one, *Remove selected* takes the selected folders off the list, and the path field is not there. A file given alone (file picker, drag and drop) cannot be renamed on its own: the program asks for the folder that contains it, with the same picker, and a folder dropped from the file manager is asked again the same way.
 
 To add the files of a folder located on the network, the [drag & drop](#dragdrop) or the [command line](#cmdline) may be easier than this window.
 

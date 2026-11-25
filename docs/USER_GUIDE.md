@@ -1,6 +1,6 @@
 # Ant Renamer Qt: function guide
 
-*Every function of Ant Renamer Qt 3.3.0 with instructions.*
+*Every function of Ant Renamer Qt 3.3.1 with instructions.*
 French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use cases): [USER_RECIPES.md](USER_RECIPES.md). Full details, page by page, with screenshots: the built-in help (F1). Differences between Windows and Linux: §13.
 
 ## 1. General principle
@@ -215,5 +215,5 @@ Same engine, other presentation, set in Options > Display. It is the default of 
 - Undo: pass after pass (the last 50, kept when the program is closed), inside a session only from its last pass; the copies made with "Copy instead of rename" are deleted by the undo if they have not been changed since (the originals are never touched).
 - Set dates from EXIF: only the modification date is set (the creation date cannot be changed the same way on Linux), from the EXIF `DateTimeOriginal` tag or the XMP sidecar; a file without it is left alone.
 - The short Windows 11 context menu is not supported (use "Show more options").
-- Flatpak: the program can write in your home folder (a renamer creates files next to the ones it is given), but not elsewhere (another disk, `/media`): there, add the folder with "Add folders" (the system folder picker); a file given alone outside the home folder is refused, without being touched, and a warning is shown. Network shares mounted by the file manager (SMB, NFS) are not visible. The program has no network access, so the new-version check is not offered; the update comes from Flathub.
+- Flatpak: the program sees only what you give it, through the system pickers, and the system keeps the permission. Add a folder with "Add folders". A file given alone (file picker, drag and drop) cannot be renamed on its own, since a renamer creates files next to the ones it is given: the program asks for the folder that contains it. A folder dropped from the file manager is asked again the same way (the file manager gives it read-only, for the session). If you decline, the file is refused, without being touched, and a warning is shown. Network shares mounted by the file manager (SMB, NFS) are not visible. The program has no network access, so the new-version check is not offered; the update comes from Flathub.
 - The help in Croatian and Tamil shows English for the pages written for Ant Renamer Qt.

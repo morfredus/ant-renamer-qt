@@ -612,5 +612,11 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="addFolderButton" Value="Ajouter un dossier..."/>
     <Item Name="removeSelectedButton" Value="Retirer la s&#233;lection"/>
     <Item Name="whatChanges" Value="Ce qui change :"/>
+    <Item Name="flatpakSingleFilesWarning" Value="Les fichiers donn&#233;s un par un au bac &#224; sable Flatpak (glisser-d&#233;poser, s&#233;lecteur de fichiers) ne peuvent pas &#234;tre renomm&#233;s : le programme refusera, rien ne sera modifi&#233;. Ajoutez plut&#244;t le dossier qui les contient (Ajouter des dossiers, ou glissez le dossier)."/>
+    <Item Name="flatpakAskFileFolder" Value="Les fichiers donn&#233;s un par un au bac &#224; sable Flatpak ne peuvent pas &#234;tre renomm&#233;s. Donner au programme l'acc&#232;s au dossier qui les contient (le syst&#232;me garde cette autorisation) ?"/>
+    <Item Name="flatpakDropInvisible" Value="Le bac &#224; sable Flatpak ne voit pas ce que ce gestionnaire de fichiers a d&#233;pos&#233;. Utilisez plut&#244;t Ajouter des dossiers ou Ajouter des fichiers."/>
+    <Item Name="flatpakAskDroppedFolder" Value="Le dossier &#171; %1 &#187; a &#233;t&#233; donn&#233; au bac &#224; sable Flatpak par glisser-d&#233;poser : il peut &#234;tre lu, mais le renommage peut &#233;chouer. Le s&#233;lectionner &#224; nouveau pour donner au programme un acc&#232;s durable (le syst&#232;me garde cette autorisation) ?"/>
+    <Item Name="flatpakNotSameFolder" Value="Ce n'est pas le m&#234;me dossier : le dossier d&#233;pos&#233; est conserv&#233;."/>
+    <Item Name="flatpakSingleFileRefused" Value="fichier donn&#233; seul au bac &#224; sable Flatpak (glisser-d&#233;poser, s&#233;lecteur de fichiers) : il ne peut pas &#234;tre renomm&#233;, rien n'a &#233;t&#233; modifi&#233;. Ajoutez plut&#244;t le dossier qui le contient (Ajouter des dossiers, ou glissez le dossier)"/>
   </QtPort>
 </Application>

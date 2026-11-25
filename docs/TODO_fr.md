@@ -9,12 +9,13 @@ Ce sont des idées, pas des promesses : certaines ne seront peut-être jamais fa
 - Les sources des demandes : le forum « Comments » du programme d'origine, forum.antp.be (120 sujets lus le 22/10/2026), puis les issues et discussions de ce projet.
 - Rien n'est écrit pour une idée dont personne n'a besoin : une idée attend une vraie demande ou un vrai problème.
 
-## Où nous en sommes (24/11/2026)
+## Où nous en sommes (25/11/2026)
 
 - **3.2.0** publiée le 20/11/2026 : l'opération « Infos EPUB », plus de noms qui ont l'air vides (EPUB, MP3, EXIF), le menu de l'Explorateur qui demande quoi ajouter, les fichiers laissés tels quels affichés en orange dans l'aperçu, l'annonce de mise à jour qui montre les notes de version, l'aide et les crédits nettoyés, des liens vers l'aide en ligne, un nouveau manifeste Flatpak construit avec `cmake --install`.
 - **Diffusion** : l'application est sur Flathub depuis le 22/11/2026 (mises à jour par pull request sur `flathub/fr.morfredus.AntRenamerQt`, avec `publish-antrenamer-flatpak.sh`), dans AppImageHub et Portable Linux Apps ; une pull request winget attend un modérateur.
 - **3.3.0-beta.1** publiée le 22/11/2026 (Filtrer les fichiers, annulation des copies, historique partagé), essayée sous Ubuntu, Fedora et Windows 11 et 10. **3.3.0-beta.2** publiée le 23/11/2026 en préversion depuis `dev/3.3.0` (Mettre les dates d'après l'EXIF avec les fichiers associés qui suivent, `--set-dates-from-exif`, page d'accueil du .deb) ; la CI de la branche (compilation, tests, clang-tidy, `appstreamcli validate`, paquets) était verte sur le commit publié. Pas encore essayé à la main : l'annulation des dates sur de vrais fichiers, la fonction sous Linux, les paquets de la 3.3.0-beta.2 installés.
 - **3.3.0** finale préparée sur `dev/3.3.0` (24/11/2026), en attente de la fusion dans `main`, de l'étiquette (tag) et des paquets. Elle ajoute à la beta.2 : la correction Flatpak (des fichiers donnés un par un disparaissaient, trouvée sous Fedora KDE), `--filesystem=home`, un conseil pour les dossiers synchronisés. À faire après le tag : `tag` et `commit` du manifeste Flathub, puis `publish-antrenamer-flatpak.sh`.
+- **3.3.1** préparée sur `dev/3.3.1` (25/11/2026), corrective : le Flatpak sans `--filesystem=home` (refusé par Flathub), le dossier demandé avec le portail FileChooser, les messages Flatpak en français. Essayée sous Fedora KDE (Dolphin) depuis le manifeste local. À faire après le tag : `tag` et `commit` du manifeste Flathub, puis `publish-antrenamer-flatpak.sh`.
 - La branche `dev/3.3.0` porte les corrections prévues pour une 3.2.1.
 
 ## Versions à venir, dans l'ordre

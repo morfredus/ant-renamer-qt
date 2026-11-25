@@ -8,6 +8,23 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.3.1] - 2026-11-25
+
+Corrective version of the Flatpak package. 3.3.0 asked for `--filesystem=home` to rename files given one by one; Flathub refused that permission. The package now has no access to your files except what you give it: a file or a folder given by drag and drop or by the file picker is asked for again with the system folder picker, which keeps the permission. Nothing changes for Windows, the `.deb` and the AppImage.
+
+### Fixed
+
+- Flatpak: `--filesystem=home` removed from the manifests (`packaging/flatpak/*.yaml`, refused by the Flathub reviewer), so the sandbox has no view of the home folder. Files given one by one (drop, file picker) are still renamed: the program asks for the folder that contains them with the FileChooser portal (the system keeps the permission), and the files are then reached through that folder. A dropped folder is asked again the same way (the file manager gives it read-only and for the session only). If the question is declined, nothing is changed and the rename of a file given alone stays refused. This keeps what 3.3.0 fixed (3.2.0 lost the files given alone: see 3.3.0).
+- Flatpak: the picker is asked of the FileChooser portal directly (D-Bus, option `current_folder`) and opens on the real folder, read from the xattr `user.document-portal.host-path` of the entry (Qt drops a start folder that does not exist in the sandbox). Falls back to the Qt dialog.
+- Flatpak: a drop whose paths the sandbox cannot see (a file manager that sends host paths) now gets a message instead of nothing. `AR_DEBUG_DROP=1` logs what a file manager sends and the folder the picker starts on.
+
+### Changed
+
+- French translation of every message of the Flatpak handling (`QtPort` of `English.lng` and `French.lng`: 6 new texts, among them the warning of 3.3.0, which was shown in English).
+- Documentation: `USER_GUIDE` (EN, FR: the Flatpak limit rewritten), help `addfiles` (EN, FR, HR, TA), `ARCHITECTURE` (EN, FR), `WHATS_NEW` (EN, FR), `TESTED_PLATFORMS` (EN, FR), history pages (EN, FR, HR, TA), `TODO` (EN, FR), MetaInfo (release 3.3.1), `VERSION`, release notes `docs/release-notes/3.3.1.md` (EN, FR). Before submitting to Flathub: set `tag` and `commit` of the main manifest to the tag of this version.
+- AppStream developer name (`packaging/flatpak/fr.morfredus.AntRenamerQt.metainfo.xml.in`): "morfredus" instead of "Frederic Biron" (shown by the software centers; the licence texts and copyright lines are unchanged).
+- CI (`.github/workflows/build.yml`): every push to `main` builds again, the `gate` job is removed. With the gate, the squash merge of the 3.3.0 branch built nothing, and the release script found that run (same commit as the tag, no `windows-dist` artifact) instead of the run of the tag.
+
 ## [3.3.0] - 2026-11-24
 
 Final version of 3.3.0. Everything the betas brought (3.3.0-beta.1 and beta.2, below): Filter files, the undo of copies, the undo history shared with a silent run, Set dates from EXIF with the sidecar files following their picture. Since beta.2: a serious Flatpak problem found on Fedora KDE and fixed (files given one by one to the sandbox could not be renamed and disappeared), the manifests ask for `--filesystem=home`, advice for synchronized folders, and the documentation and screenshots brought up to date.

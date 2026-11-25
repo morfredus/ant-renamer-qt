@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.3.1 (25/11/2026)
+  - Correction : paquet Flatpak, plus d'accès au dossier personnel (Flathub l'a refusé). Un fichier donné seul, ou un dossier déposé, est redemandé avec le sélecteur de dossier du système, qui garde l'autorisation ; le programme renomme ensuite normalement. Un dépôt que le bac à sable ne voit pas affiche un message. Traduction française des messages Flatpak. Rien ne change pour Windows, le .deb et l'AppImage.
 - 3.3.0 (24/11/2026)
   - Version finale de la 3.3.0 : Filtrer les fichiers, l'annulation des copies, l'historique d'annulation partagé, Mettre les dates d'après l'EXIF (3.3.0-beta.1 et beta.2), plus : Flatpak, les fichiers donnés un par un au bac à sable ne pouvaient pas être renommés et disparaissaient : corrigé, le paquet Flatpak peut maintenant écrire dans le dossier personnel, et un fichier donné seul en dehors est refusé sans y toucher, avec un avertissement. Conseil pour les dossiers synchronisés (mettre la synchronisation en pause ou travailler sur une copie).
 - 3.3.0-beta.2 (23/11/2026)

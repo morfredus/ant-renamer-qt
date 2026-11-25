@@ -2,6 +2,8 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.3.1 (25/11/2026)
+  - Fix: Flatpak package, no more access to the home folder (Flathub refused it). A file given alone, or a folder dropped, is asked again with the system folder picker, which keeps the permission; the program then renames normally. A drop the sandbox cannot see gets a message. French translation of the Flatpak messages. Nothing changes for Windows, the .deb and the AppImage.
 - 3.3.0 (24/11/2026)
   - Final version of 3.3.0: Filter files, the undo of copies, the shared undo history, Set dates from EXIF (3.3.0-beta.1 and beta.2), plus: Flatpak, files given one by one to the sandbox could not be renamed and disappeared: fixed, the Flatpak package can now write in the home folder, and a file given alone outside it is refused without being touched, with a warning. Advice for synchronized folders (pause the synchronization or work on a copy).
 - 3.3.0-beta.2 (23/11/2026)

@@ -4,7 +4,13 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.3.0**.
+Version courante : **3.3.1**.
+
+## 3.3.1
+
+| Nouveauté | Depuis |
+|---|---|
+| **Flatpak** : plus d'accès au dossier personnel (Flathub l'a refusé). Un fichier donné seul (glisser-déposer, sélecteur de fichiers) ou un dossier déposé depuis le gestionnaire de fichiers est redemandé avec le sélecteur de dossier du système, qui garde l'autorisation ; le programme renomme ensuite normalement. Un dépôt que le bac à sable ne voit pas affiche un message. Les messages Flatpak sont traduits en français. Rien ne change pour Windows, le `.deb` et l'AppImage. | 3.3.1 |
 
 ## 3.3.0
 

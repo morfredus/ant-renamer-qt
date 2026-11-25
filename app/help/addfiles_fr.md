@@ -28,7 +28,7 @@ Une quatrième option (« Inclure les fichiers cachés et système à l'ajout d'
 
 Sous l'arbre, un champ (« Ou saisir le chemin d'un dossier ») permet de saisir ou coller le chemin d'un dossier (le bouton *Coller depuis le presse-papiers* à côté colle le chemin copié dans l'Explorateur Windows, même entre guillemets) : il est ajouté avec les dossiers sélectionnés dans l'arbre, s'il existe.
 
-**Dans un Flatpak** (qui voit votre dossier personnel, pas tout le disque), la fenêtre n'affiche pas d'arbre : elle ouvre tout de suite le sélecteur de dossier du système et liste les dossiers choisis. *Ajouter un dossier...* en choisit un autre, *Retirer la sélection* enlève les dossiers sélectionnés de la liste, et le champ du chemin n'est pas affiché.
+**Dans un Flatpak** (qui ne voit que ce qu'on lui donne), la fenêtre n'affiche pas d'arbre : elle ouvre tout de suite le sélecteur de dossier du système et liste les dossiers choisis ; le système garde l'autorisation. *Ajouter un dossier...* en choisit un autre, *Retirer la sélection* enlève les dossiers sélectionnés de la liste, et le champ du chemin n'est pas affiché. Un fichier donné seul (sélecteur de fichiers, glisser-déposer) ne peut pas être renommé seul : le programme demande le dossier qui le contient, avec le même sélecteur, et un dossier déposé depuis le gestionnaire de fichiers est redemandé de la même façon.
 
 Pour ajouter les fichiers d'un dossier situé sur le réseau, le [drag & drop](#dragdrop) ou la [ligne de commande](#cmdline) peuvent être plus faciles que cette fenêtre.
 
