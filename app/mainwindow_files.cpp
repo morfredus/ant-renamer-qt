@@ -413,6 +413,12 @@ void MainWindow::importDropped(const QStringList& paths, bool fromShell) {
     if (worker_) {
         return;
     }
+    if (qEnvironmentVariableIsSet("AR_DEBUG_DROP")) {  // what arrives here, whichever way (list, window, shell)
+        for (const QString& p : paths) {
+            qWarning() << "dropped:" << p << "exists" << QFileInfo::exists(p) << "dir" << QFileInfo(p).isDir() << "portal-alone"
+                       << ren::isPortalSingleFile(QDir::fromNativeSeparators(p));
+        }
+    }
     // without the question, selected files of the Explorer menu are always added
     AddChoice c{fromShell || appOptions().addFiles, appOptions().addFolders, appOptions().recursive, appOptions().addHidden};
     if (!appOptions().dragNoAsk) {
