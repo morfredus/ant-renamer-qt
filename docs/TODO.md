@@ -42,14 +42,15 @@ No separate 3.2.1: the corrections wait for 3.3 so that one release carries them
   - The log keeps the old and the new date, and the history can undo it.
   - On the command line, the function needs its own explicit option.
   - The documentation (guide, help, README) says that the modification date is not a proof of authenticity and that, for originals that are evidence, one should work on copies (the "Copy instead of rename" option).
-- **Filter by date and/or time** (done in `dev/3.3.0`, right-click "Filter files..."; the same filters on the command line come in 3.4): keep the files whose modification date, creation date or EXIF shooting date falls in a period or in a time of day ("everything shot between 14:00 and 15:00"), also by size.
+- **Filter by date and/or time** (done in `dev/3.3.0`, right-click "Filter files..."; the same filters on the command line are done in `dev/3.4.0`): keep the files whose modification date, creation date or EXIF shooting date falls in a period or in a time of day ("everything shot between 14:00 and 15:00"), also by size.
 
 ### 3.4: choosing the files
 
-Today only the hidden and system files are filtered.
-- **Filter by mask or regular expression**, before or after adding the files.
-- **Find a file** in the list (by name, date, time).
-- Command line: the same filters, and the choice of what the log keeps (successes, errors, unchanged files; today the filter only applies to the window).
+Done in `dev/3.4.0` (2026-11-28, tried on Windows with the unit tests and the command line; by hand on Windows 11 and on Fedora (Flatpak): the mask when adding folders and in the drag and drop window, the Filter files name criterion and Find in the list all work):
+- **Filter by mask or regular expression**: a "Name matches" criterion in Filter files, and an "Only files named" line in Add folders and the drag and drop window (before adding).
+- **Find a file** in the list (Ctrl+F): by name, folder, date or time, with Next, Previous and Select all.
+- Command line: the same filters (`--filter-*`), and the choice of what the log file keeps (`--log-keep`); a value not understood gives exit code 4.
+Left for later: the "Only files named" line is for files only (folders are not masked), and a mask or an expression is not saved with the other options.
 
 ### 3.5: reusing and fixing names
 

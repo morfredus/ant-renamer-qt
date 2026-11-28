@@ -588,7 +588,7 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="filterCount" Value="%1 fichiers, %2 masqués par le filtre"/>
     <Item Name="filterActiveHint" Value="Un filtre masque %1 fichier(s) de la liste. Appuyez pour le corriger ou l'effacer."/>
     <Item Name="filterClear" Value="Effacer le filtre"/>
-    <Item Name="filterHint" Value="Garder ou retirer les fichiers de la liste selon la date, l'heure de la journée et la taille"/>
+    <Item Name="filterHint" Value="Garder ou retirer les fichiers de la liste selon le nom, la date, l'heure de la journée et la taille"/>
     <Item Name="filterPutBack" Value="Remettre d'abord les %1 fichier(s) retiré(s) par le filtre précédent"/>
     <Item Name="filterNoFile" Value="Aucun fichier à filtrer : ajoutez d'abord des fichiers."/>
     <Item Name="exportPreview" Value="Exporter l'aperçu"/>
@@ -618,5 +618,31 @@ Si m ou mm suit h ou hh, il est interprété comme minutes plutôt que mois]]>
     <Item Name="flatpakAskDroppedFolder" Value="Le dossier &#171; %1 &#187; a &#233;t&#233; donn&#233; au bac &#224; sable Flatpak par glisser-d&#233;poser : il peut &#234;tre lu, mais le renommage peut &#233;chouer. Le s&#233;lectionner &#224; nouveau pour donner au programme un acc&#232;s durable (le syst&#232;me garde cette autorisation) ?"/>
     <Item Name="flatpakNotSameFolder" Value="Ce n'est pas le m&#234;me dossier : le dossier d&#233;pos&#233; est conserv&#233;."/>
     <Item Name="flatpakSingleFileRefused" Value="fichier donn&#233; seul au bac &#224; sable Flatpak (glisser-d&#233;poser, s&#233;lecteur de fichiers) : il ne peut pas &#234;tre renomm&#233;, rien n'a &#233;t&#233; modifi&#233;. Ajoutez plut&#244;t le dossier qui le contient (Ajouter des dossiers, ou glissez le dossier)"/>
+    <Item Name="findAction" Value="Rechercher dans la liste..."/>
+    <Item Name="findHint" Value="Retrouver un fichier de la liste par nom, dossier, date ou heure, et le s&#233;lectionner"/>
+    <Item Name="findTitle" Value="Rechercher dans la liste"/>
+    <Item Name="findPlaceholder" Value="Nom, dossier, date (2024-05-01) ou heure (14:30)"/>
+    <Item Name="findPrevious" Value="Pr&#233;c&#233;dent"/>
+    <Item Name="findNext" Value="Suivant"/>
+    <Item Name="findSelectAll" Value="Tout s&#233;lectionner"/>
+    <Item Name="findNone" Value="Aucun fichier trouv&#233;"/>
+    <Item Name="findCount" Value="%1 fichier(s) trouv&#233;(s)"/>
+    <Item Name="findAt" Value="%1 sur %2"/>
+    <Item Name="findSelected" Value="%1 fichier(s) s&#233;lectionn&#233;(s)"/>
+    <Item Name="maskRegex" Value="Expression r&#233;guli&#232;re"/>
+    <Item Name="maskPlaceholder" Value="ex. *.jpg;*.png (vide : tous les fichiers)"/>
+    <Item Name="maskTip" Value="Seuls les fichiers dont le nom correspond sont ajout&#233;s (les dossiers ne sont pas concern&#233;s). Masques : * et ?, plusieurs s&#233;par&#233;s par ; . Avec la case coch&#233;e : une expression r&#233;guli&#232;re, trouv&#233;e n'importe o&#249; dans le nom. Non retenu pour l'ajout suivant."/>
+    <Item Name="maskLabel" Value="Seulement les fichiers nomm&#233;s :"/>
+    <Item Name="addFilesTitle" Value="Ajouter des fichiers"/>
+    <Item Name="badRegex" Value="Cette expression r&#233;guli&#232;re n'est pas valide : %1"/>
+    <Item Name="filterNameMatches" Value="Le nom correspond"/>
+    <Item Name="filterNamePlaceholder" Value="ex. *.jpg;*.png"/>
+    <Item Name="filterNameMasks" Value="Masques (* et ?, plusieurs s&#233;par&#233;s par ;)"/>
+    <Item Name="filterNameRegex" Value="Expression r&#233;guli&#232;re (trouv&#233;e n'importe o&#249; dans le nom)"/>
+    <Item Name="filterCase" Value="Respecter la casse"/>
+    <Item Name="cliNeedsValue" Value="%1 demande une valeur"/>
+    <Item Name="cliUnknown" Value="Option inconnue %1"/>
+    <Item Name="cliBadValue" Value="%1 : la valeur &quot;%2&quot; n'est pas comprise"/>
+    <Item Name="cliFilterGone" Value="Filtre : %1 fichier(s) retir&#233;(s) de la liste"/>
   </QtPort>
 </Application>

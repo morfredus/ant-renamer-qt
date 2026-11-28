@@ -54,7 +54,7 @@ LICENSE           GNU General Public License
 | File | Role |
 |---|---|
 | `ren_actions.h/.cpp` | The 15 operations, loading and saving of jobs, the run loop (`Action::perform`) |
-| `ren_files.h/.cpp` | `File` (rename, revert, sidecars), `FileList`, `Journal` (passes, undo, saved as JSON by the app; `mergeFromJson` takes in the passes another run wrote; a `Move` can be a copy, `Move::copy`), `FileFilter` (the Filter files criteria: date, time of the day, size), `shootingDate` / `planDate` / `FileList::setDatesFromExif` ("Set dates from EXIF": a `Move` with `date` set records the old and the new modification date, and the undo puts the old one back), `Options` |
+| `ren_files.h/.cpp` | `File` (rename, revert, sidecars), `FileList`, `Journal` (passes, undo, saved as JSON by the app; `mergeFromJson` takes in the passes another run wrote; a `Move` can be a copy, `Move::copy`), `NameFilter` (masks or a regular expression on a name, compiled once; also used by "what to add") and `FileFilter` (the Filter files criteria: name, date, time of the day, size; `parseFilterSize/Time/Date` read the command-line values), `shootingDate` / `planDate` / `FileList::setDatesFromExif` ("Set dates from EXIF": a `Move` with `date` set records the old and the new modification date, and the undo puts the old one back), `Options` |
 | `ren_format.h/.cpp` | The mask language and the date format |
 | `ren_epub.h/.cpp` | EPUB reader: ZIP central directory, inflate, OPF metadata |
 | `ren_exif.h/.cpp` | EXIF, IPTC and XMP reader, sidecar file names |

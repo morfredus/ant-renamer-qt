@@ -1,6 +1,7 @@
 #include "mainwindow_internal.h"
 
 #include <QEventLoop>
+#include <QLineEdit>
 #include <QRandomGenerator>
 #ifdef Q_OS_LINUX
 #include <cerrno>
@@ -284,7 +285,7 @@ void MainWindow::addFolderContents(const QString& dir, const AddChoice& c) {
                 addFile(p);
             }
             addFolderContents(p, c);
-        } else if (c.files) {
+        } else if (c.files && c.name.matches(fi.fileName())) {
             addFile(p);
         }
     }
@@ -311,7 +312,7 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, boo
             if (files_.size() == before && emptyDir.isEmpty()) {
                 emptyDir = fi.fileName().isEmpty() ? native(p) : fi.fileName();
             }
-        } else if (!choice || (choice->files && fi.isFile())) {
+        } else if (!choice || (choice->files && fi.isFile() && choice->name.matches(fi.fileName()))) {
             if (ren::isPortalSingleFile(QDir::fromNativeSeparators(p))) {
                 // Flatpak: its folder may already have been given to the program (kept by the system): then nothing is asked.
                 const QString host = portalHostPath(p);
@@ -694,6 +695,16 @@ void MainWindow::filterFiles() {
         updateSamplePreview();
         return;
     }
+    applyFileFilter(flt, keep);
+    QApplication::restoreOverrideCursor();
+    setStatus();
+    updateSamplePreview();
+}
+
+// Takes out of the list the files that the filter sends away (those that do not match when keep, those that match otherwise),
+// remembers them (to put them back) and the criteria (to correct them). Returns how many went. Shared by the Filter files
+// dialog and the command line.
+int MainWindow::applyFileFilter(const ren::FileFilter& flt, bool keep) {
     // forward pass: each file that goes remembers the kept file before it
     QList<FilterRemoved> removed;
     QList<QTreeWidgetItem*> gone;
@@ -718,12 +729,103 @@ void MainWindow::filterFiles() {
         }
         delete it;
     }
-    QApplication::restoreOverrideCursor();
     filterRemoved_ += removed;
     lastFilter_ = flt;
     lastKeep_ = keep;
-    setStatus();
-    updateSamplePreview();
+    return int(removed.size());
+}
+
+// Ctrl+F: finds the files of the list whose name, folder, modification date or creation date contains the text typed (case
+// ignored; dates as 2024-05-01 or 14:30, or as the system shows them). "Next" and "Previous" go from match to match (the list
+// wraps round) and select it; "Select all" selects every match, to remove or move them together. The window stays open (it does
+// not block the list) and is made again at each Ctrl+F, so it always speaks the language of the moment.
+void MainWindow::findFiles() {
+    if (findDialog_) {
+        findDialog_->show();
+        findDialog_->raise();
+        findDialog_->activateWindow();
+        return;
+    }
+    auto* dlg = new QDialog(this);
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
+    dlg->setWindowTitle(tr_("Find in the list"));
+    auto* v = new QVBoxLayout(dlg);
+    auto* edit = new QLineEdit;
+    edit->setPlaceholderText(tr_("Name, folder, date (2024-05-01) or time (14:30)"));
+    edit->setClearButtonEnabled(true);
+    v->addWidget(edit);
+    auto* info = new QLabel;
+    v->addWidget(info);
+    auto* row = new QHBoxLayout;
+    auto* prev = new QPushButton(tr_("Previous"));
+    auto* next = new QPushButton(tr_("Next"));
+    auto* all = new QPushButton(tr_("Select all"));
+    next->setDefault(true);  // Enter goes to the next match
+    row->addWidget(prev);
+    row->addWidget(next);
+    row->addWidget(all);
+    row->addStretch();
+    v->addLayout(row);
+
+    // the rows that contain the text, in list order (a row hidden by "Changed only" or as a hidden file is not looked at)
+    auto hits = [this, edit]() {
+        QList<QTreeWidgetItem*> out;
+        const QString needle = edit->text().trimmed();
+        if (needle.isEmpty()) {
+            return out;
+        }
+        for (int i = 0; i < fileView_->topLevelItemCount(); ++i) {
+            QTreeWidgetItem* it = fileView_->topLevelItem(i);
+            const File* f = fileOf(it);
+            if (!f || it->isHidden()) {
+                continue;
+            }
+            QString hay = f->fileName() + u'\n' + f->fileFolder() + u'\n';
+            for (const QDateTime& d : {f->modifiedDate(), f->createdDate()}) {
+                if (d.isValid()) {
+                    hay += d.toString(u"yyyy-MM-dd HH:mm:ss"_s) + u'\n' + QLocale().toString(d, QLocale::ShortFormat) + u'\n';
+                }
+            }
+            if (hay.contains(needle, Qt::CaseInsensitive)) {
+                out << it;
+            }
+        }
+        return out;
+    };
+    auto count = [hits, info, edit] {
+        const int n = int(hits().size());
+        info->setText(edit->text().trimmed().isEmpty() ? QString()
+                      : n == 0                          ? tr_("No file found")
+                                                        : tr_("%1 file(s) found").arg(n));
+    };
+    auto go = [this, hits, info](int step) {
+        const QList<QTreeWidgetItem*> list = hits();
+        if (list.isEmpty()) {
+            info->setText(tr_("No file found"));
+            return;
+        }
+        const int cur = int(list.indexOf(fileView_->currentItem()));
+        const int at = cur < 0 ? (step > 0 ? 0 : int(list.size()) - 1) : (cur + step + int(list.size())) % int(list.size());
+        fileView_->clearSelection();
+        fileView_->setCurrentItem(list[at]);
+        list[at]->setSelected(true);
+        fileView_->scrollToItem(list[at]);
+        info->setText(tr_("%1 of %2").arg(at + 1).arg(list.size()));
+    };
+    connect(edit, &QLineEdit::textChanged, dlg, count);
+    connect(next, &QPushButton::clicked, dlg, [go] { go(1); });
+    connect(prev, &QPushButton::clicked, dlg, [go] { go(-1); });
+    connect(all, &QPushButton::clicked, dlg, [this, hits, info] {
+        const QList<QTreeWidgetItem*> list = hits();
+        fileView_->clearSelection();
+        for (QTreeWidgetItem* it : list) {
+            it->setSelected(true);
+        }
+        info->setText(list.isEmpty() ? tr_("No file found") : tr_("%1 file(s) selected").arg(list.size()));
+    });
+    findDialog_ = dlg;
+    dlg->show();
+    edit->setFocus();
 }
 
 void MainWindow::fileHeaderMenu(const QPoint& pos) {

@@ -592,7 +592,7 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="filterCount" Value="%1 files, %2 hidden by the filter"/>
     <Item Name="filterActiveHint" Value="A filter hides %1 file(s) of the list. Press to correct it or to clear it."/>
     <Item Name="filterClear" Value="Clear the filter"/>
-    <Item Name="filterHint" Value="Keep or remove the files of the list by date, time of the day and size"/>
+    <Item Name="filterHint" Value="Keep or remove the files of the list by name, date, time of the day and size"/>
     <Item Name="filterPutBack" Value="Put back the %1 file(s) removed by the previous filter first"/>
     <Item Name="filterNoFile" Value="No file to filter: add files first."/>
     <Item Name="exportPreview" Value="Export preview"/>
@@ -622,5 +622,31 @@ If m or mm immediately follows h or hh, minute rather than month is used]]>
     <Item Name="flatpakAskDroppedFolder" Value="The folder &quot;%1&quot; was given to the Flatpak sandbox by drag and drop: it can be read, but renaming may fail. Select it again to give the program lasting access (the system keeps this permission)?"/>
     <Item Name="flatpakNotSameFolder" Value="This is not the same folder: the dropped folder is kept."/>
     <Item Name="flatpakSingleFileRefused" Value="file given alone to the Flatpak sandbox (drag and drop, file picker): it cannot be renamed, nothing was changed. Add the folder that contains it instead (Add folders, or drag the folder)"/>
+    <Item Name="findAction" Value="Find in the list..."/>
+    <Item Name="findHint" Value="Find a file of the list by name, folder, date or time, and select it"/>
+    <Item Name="findTitle" Value="Find in the list"/>
+    <Item Name="findPlaceholder" Value="Name, folder, date (2024-05-01) or time (14:30)"/>
+    <Item Name="findPrevious" Value="Previous"/>
+    <Item Name="findNext" Value="Next"/>
+    <Item Name="findSelectAll" Value="Select all"/>
+    <Item Name="findNone" Value="No file found"/>
+    <Item Name="findCount" Value="%1 file(s) found"/>
+    <Item Name="findAt" Value="%1 of %2"/>
+    <Item Name="findSelected" Value="%1 file(s) selected"/>
+    <Item Name="maskRegex" Value="Regular expression"/>
+    <Item Name="maskPlaceholder" Value="e.g. *.jpg;*.png (empty: every file)"/>
+    <Item Name="maskTip" Value="Only the files whose name fits are added (folders are not concerned). Masks: * and ?, several separated by ; . With the box ticked: a regular expression, found anywhere in the name. Not remembered for the next addition."/>
+    <Item Name="maskLabel" Value="Only files named:"/>
+    <Item Name="addFilesTitle" Value="Add files"/>
+    <Item Name="badRegex" Value="This regular expression is not valid: %1"/>
+    <Item Name="filterNameMatches" Value="Name matches"/>
+    <Item Name="filterNamePlaceholder" Value="e.g. *.jpg;*.png"/>
+    <Item Name="filterNameMasks" Value="Masks (* and ?, several separated by ;)"/>
+    <Item Name="filterNameRegex" Value="Regular expression (found anywhere in the name)"/>
+    <Item Name="filterCase" Value="Case sensitive"/>
+    <Item Name="cliNeedsValue" Value="%1 needs a value"/>
+    <Item Name="cliUnknown" Value="Unknown option %1"/>
+    <Item Name="cliBadValue" Value="%1: the value &quot;%2&quot; is not understood"/>
+    <Item Name="cliFilterGone" Value="Filter: %1 file(s) taken out of the list"/>
   </QtPort>
 </Application>

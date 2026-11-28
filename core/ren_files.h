@@ -2,6 +2,8 @@
 // One entry of the list to rename, plus the list itself.
 #include <QByteArray>
 #include <QDateTime>
+#include <QList>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 #include <QTime>
@@ -249,15 +251,40 @@ DatePlan planDate(const File& f);
 // The plan of every file of the list, in order: planDate, except for the sidecars of pictures that are in the list.
 std::vector<DatePlan> planDates(FileList& list);
 
-// Which files of the list to keep (or to remove): by one of their dates (a period, and/or a time of the day) and by size.
-// Every criterion that is set must hold. A folder is judged on its dates only; the size limits are for files.
+// A criterion on the name of a file (extension included), shared by the filter of the list and by "what to add": either a list
+// of masks separated by ";" ("*.jpg;IMG_??.png": * and ? only, the whole name must fit), or a regular expression (found anywhere
+// in the name; ^ and $ tie it to the start and the end). Not case sensitive unless caseSensitive. An empty pattern is no criterion.
+struct NameFilter {
+    QString pattern;
+    bool regex = false;
+    bool caseSensitive = false;
+    bool isEmpty() const { return pattern.trimmed().isEmpty(); }
+    bool matches(const QString& fileName) const;  // an empty filter matches everything; a bad expression, nothing
+    QString error() const;                        // empty when usable; else why the regular expression does not compile
+
+private:
+    void prepare() const;
+    mutable QString key_;  // what the compiled list below was made from
+    mutable QList<QRegularExpression> compiled_;
+};
+
+// Values given on the command line, for the filter. false when the text is not understood.
+bool parseFilterSize(const QString& text, qint64& bytes);  // "500", "10K", "2.5M", "1G" (K = 1024 bytes)
+bool parseFilterTime(const QString& text, QTime& t);       // HH:mm or HH:mm:ss
+// yyyy-MM-dd, or with a time (yyyy-MM-ddTHH:mm[:ss], a space instead of T works too). A date alone means its first moment, or
+// its last one when asEnd is true (so "to 2024-05-01" keeps the whole day).
+bool parseFilterDate(const QString& text, bool asEnd, QDateTime& d);
+
+// Which files of the list to keep (or to remove): by name, by one of their dates (a period, and/or a time of the day) and by size.
+// Every criterion that is set must hold. A folder is judged on its name and dates only; the size limits are for files.
 struct FileFilter {
+    NameFilter name;
     enum class DateKind { Modified, Created, Shot };  // Shot: EXIF shooting date, else the modification date
     DateKind kind = DateKind::Modified;
     std::optional<QDateTime> from, to;        // period, both ends included
     std::optional<QTime> timeFrom, timeTo;    // time of the day, both ends included; from after to means across midnight
     std::optional<qint64> minSize, maxSize;   // bytes, both ends included
-    bool isEmpty() const { return !from && !to && !timeFrom && !timeTo && !minSize && !maxSize; }
+    bool isEmpty() const { return name.isEmpty() && !from && !to && !timeFrom && !timeTo && !minSize && !maxSize; }
     bool matches(const File& f) const;
 };
 

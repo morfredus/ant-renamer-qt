@@ -25,6 +25,8 @@ The first one ("Add files of selected folders") specifies if the files contained
 
 A fourth option ("Include hidden and system files when adding a folder") also adds the hidden and system files of the folders (`desktop.ini`, `.git`...); it is off by default.
 
+*(Ant Renamer Qt)* The line "Only files named" of the "Add folders" window and of the drag and drop window adds only the files whose name fits: masks (`*.jpg;*.png`: `*` and `?`, several separated by `;`) or, with its box ticked, a regular expression (found anywhere in the name). Folders are not concerned, and the line is not remembered for the next addition, so that no file is left out by a forgotten mask. To choose among the files already in the list, use [Filter files](files_en.md#filter).
+
 Under the tree, a field ("Or type the path of a folder") lets you type or paste the path of a folder (the *Paste from clipboard* button next to it pastes the path copied in the Windows Explorer, even between quotes): it is added together with the folders selected in the tree, if it exists.
 
 **In a Flatpak** (which sees only what you give it) the window shows no tree: it opens the system folder picker at once and lists the folders you chose; the system keeps the permission. *Add folder...* picks another one, *Remove selected* takes the selected folders off the list, and the path field is not there. A file given alone (file picker, drag and drop) cannot be renamed on its own: the program asks for the folder that contains it, with the same picker, and a folder dropped from the file manager is asked again the same way.

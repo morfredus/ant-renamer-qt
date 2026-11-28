@@ -1,6 +1,6 @@
 # Ant Renamer Qt: function guide
 
-*Every function of Ant Renamer Qt 3.3.1 with instructions.*
+*Every function of Ant Renamer Qt 3.4.0-beta.1 with instructions.*
 French version: [USER_GUIDE_fr.md](USER_GUIDE_fr.md). Recipes (step-by-step use cases): [USER_RECIPES.md](USER_RECIPES.md). Full details, page by page, with screenshots: the built-in help (F1). Differences between Windows and Linux: §13.
 
 ## 1. General principle
@@ -23,7 +23,7 @@ The program only changes **names** (or copies the files under a new name); it ne
 | Shift+F1 | About | Esc | Stop |
 | F2 | Add files | F10 | Options |
 | F3 | Add folders | F11 | Always on top |
-| F4 | Filter files | | |
+| F4 | Filter files | Ctrl+F | Find in the list |
 | F5 | Refresh preview | F12 | Undo |
 | Shift+F12 | History | | |
 | F6 / F7 / F8 | Remove selected / all / dead | Alt+F4 | Exit |
@@ -47,7 +47,8 @@ The program only changes **names** (or copies the files under a new name); it ne
 | Remove selected (F6) | removes the selected files from the list (not from disk) |
 | Remove all (F7) | empties the list |
 | Remove dead (F8) | removes files that no longer exist on disk |
-| Filter files (F4) | keeps or removes the files that match a date, a time of the day and a size |
+| Filter files (F4) | keeps or removes the files that match a name, a date, a time of the day and a size |
+| Find in the list (Ctrl+F) | selects the files whose name, folder or date contains the text typed |
 | Refresh preview (F5) | fills the Preview column (not automatic, for performance). It uses the batch, or the action displayed if the batch is empty |
 | Changed only | hides the files whose name does not change in the preview (a display filter only: they are still renamed, and a hidden file is never hit by "Remove selected" or the move buttons); refresh the preview first |
 | Hidden files | shows the hidden and system files of the list; off by default: they are hidden and left alone by every operation (not renamed). A warning appears before a renaming when it is on and the list holds some |
@@ -55,8 +56,10 @@ The program only changes **names** (or copies the files under a new name); it ne
 
 - **Columns**: right-click the header to show Folder, File name, Full path, Ext., Preview, Size, Creation date, Modification date. They can be resized and moved; one column at least stays visible.
 - **Sorting**: click a header (again to reverse). By default the sort is natural: "file 2" before "file 10" (Options > Files & Folders gives the alphabetical order back). **Sorting really reorders the list, so it sets the processing order**, hence the numbering order of an enumeration. Right-click > *Unsorted items* removes the sort indicator.
-- Right-click in the list: remove selected / all, select all, select none, invert the selection, refresh the preview, **Filter files...**, **Export preview...**, **Set dates from EXIF...**.
-- **Filter files...** (the funnel button of the toolbar, F4, and the right-click menu) keeps (or removes) the files of the list that match a date, a time of the day and a size, all the ticked criteria together. The date is the modification date, the creation date (not kept by every Linux file system: such a file never matches) or the shooting date (EXIF, else the modification date). "From" and "To" give a period; "Time of the day" keeps, for example, everything shot between 14:00 and 15:00 whatever the day (22:00 to 02:00 works across midnight); the size limits are for files (a folder is judged on its dates). The files are only taken out of the list, nothing is touched on the disk. Press the button again to correct the filter: the last criteria are shown and the files it took out can be put back first (each one after the file that was before it); while a filter hides files, the count at the bottom turns orange and the button stays pressed; "Clear the filter" gives every file back.
+- Right-click in the list: remove selected / all, select all, select none, invert the selection, refresh the preview, **Filter files...**, **Find in the list...**, **Export preview...**, **Set dates from EXIF...**.
+- **Filter files...** (the funnel button of the toolbar, F4, and the right-click menu) keeps (or removes) the files of the list that match a name, a date, a time of the day and a size, all the ticked criteria together. The name is a list of masks (`*.jpg;IMG_??.png`: `*` and `?`, the whole name must fit, several masks separated by `;`) or a regular expression (found anywhere in the name; `^` and `$` tie it to the start and the end); capitals do not matter unless "Case sensitive" is ticked, and a folder is judged on its name too. The date is the modification date, the creation date (not kept by every Linux file system: such a file never matches) or the shooting date (EXIF, else the modification date). "From" and "To" give a period; "Time of the day" keeps, for example, everything shot between 14:00 and 15:00 whatever the day (22:00 to 02:00 works across midnight); the size limits are for files (a folder is judged on its dates). The files are only taken out of the list, nothing is touched on the disk. Press the button again to correct the filter: the last criteria are shown and the files it took out can be put back first (each one after the file that was before it); while a filter hides files, the count at the bottom turns orange and the button stays pressed; "Clear the filter" gives every file back.
+- **Find in the list...** (Ctrl+F, and the right-click menu) opens a small window that stays open while you work: type a text, and *Next* / *Previous* select, one by one, the files whose name, folder, modification date or creation date contains it (dates as `2024-05-01` or `14:30`, or as the system shows them; capitals do not matter; the list wraps round). *Select all* selects every match, to remove or move them together.
+- **Add folders** and the drag and drop window have an *Only files named* line: only the files whose name fits (masks, or a regular expression with its box ticked) are added. Folders are not concerned, and the line is not remembered for the next addition.
 - **Export preview...** writes the files shown (the "Changed only" and "Hidden files" filters apply) to a CSV file (columns Folder, Name, New name; semicolon, every field quoted, UTF-8 with a BOM so that Excel and LibreOffice read the accents) or to a text file with the new names only, one per line. A file with no preview keeps its current name: refresh the preview first. Useful to proofread a big batch or to keep a trace.
 - **Set dates from EXIF...** (right-click menu only: no button, no shortcut) gives the files, as their modification date, the shooting date written in their EXIF data (or XMP sidecar). A typical case: photos that were copied and whose date was overwritten. It is never automatic: a table shows the old and the new date of every file and nothing changes before you press **Set the dates**. Only the modification date kept by the file system changes: the content of the file, its EXIF data and its tags are not touched, and no date is typed by hand or invented (a file with no EXIF shooting date, a folder and a hidden file are left alone, and the log says why). The sidecar files (`.xmp`, `.dop`, the RAW of a JPEG...) follow their picture like in a renaming: they get the same date. The log keeps the old and the new date, and the history (Undo) puts the old date back. **The modification date is not a proof of authenticity**: for originals that must stay evidence, work on copies (option *Copy instead of rename*). On the command line, `--set-dates-from-exif` replaces the renaming (see the table of the parameters).
 - Double-click a file: opens it with its associated program, if "Launch file on double click" is ticked (Options > Files & Folders).
@@ -154,22 +157,28 @@ Good to know: a missing tag gives an empty text; multiple values are joined with
 | `-b file.arb` | loads a batch |
 | `-g` | starts the processing once files and batch are loaded |
 | `-x` | exits when the processing is done |
-| `-q` | silent mode for scripts: no window, no dialog, same as `-g -x`. Exit code: 0 all done, 1 at least one file failed, 2 nothing done (no file, no batch, unreadable batch file, hidden files in the list). Without `-q`, a launch with `-g` or `-x` while another window is open returns 3 (only one window at a time) |
+| `-q` | silent mode for scripts: no window, no dialog, same as `-g -x`. Exit code: 0 all done, 1 at least one file failed, 2 nothing done (no file, no batch, unreadable batch file, hidden files in the list), 4 an option of the line is not understood (nothing was renamed). Without `-q`, a launch with `-g` or `-x` while another window is open returns 3 (only one window at a time) |
 | `--set-dates-from-exif` | instead of renaming, gives the files their EXIF shooting date as modification date. With `-g` or `-q` it runs at once (the option is the consent), alone the window shows the table of the dates and asks first |
 | `-af` / `-aF` / `-afr` | adds the following files / folders / recursive content of folders (wildcards `*` `?` accepted) |
+| `--filter-name MASKS`, `--filter-regex EXPR` | after all the paths are added, keeps only the files whose name fits (masks separated by `;`, or a regular expression found anywhere in the name). `--filter-case` makes the comparison case sensitive |
+| `--filter-date modified\|created\|shot`, `--filter-from DATE`, `--filter-to DATE` | the date to look at (default modified; shot = EXIF, else modified) and a period, `yyyy-MM-dd` or `yyyy-MM-ddTHH:mm[:ss]` (`--filter-to` with a date alone keeps that whole day) |
+| `--filter-time-from HH:mm[:ss]`, `--filter-time-to HH:mm[:ss]` | a time of the day, whatever the day (from after to works across midnight) |
+| `--filter-min-size N`, `--filter-max-size N` | size limits in bytes, or with `K`, `M`, `G` (1K = 1024 bytes) |
+| `--filter-remove` | takes out the files that match the `--filter-*` criteria and keeps the others (every criterion given must hold) |
+| `--log-keep ok,error,unchanged` | what the log file (Options > Events, *Save log to file*) keeps for this run; everything by default |
 | `--shell path` | adds the path to the window that is already open (used by the Explorer menu) |
 | `--install-shell` / `--remove-shell` | adds / removes the Explorer menu entry (Windows), then exits |
 
 Only one window can be open at a time: a second launch shows a message and quits, except when it is given only paths (a file dropped on the program or its shortcut, "Open with"), which are then added to the open window, like `--shell`.
 
-Examples: `antrenamer-qt.exe -b d:\test.arb -af c:\data\*.* -g -x` (Windows), `antrenamer-qt -b ~/test.arb -af "/data/*" -g -x` (Linux, quote the wildcards so that the shell does not expand them).
+Examples: `antrenamer-qt.exe -b d:\test.arb -af c:\data\*.* --filter-name "*.jpg;*.png" --filter-from 2024-05-01 -g -x` (Windows: only the pictures dated from 1 May 2024), `antrenamer-qt.exe -b d:\test.arb -af c:\data\*.* -g -x` (Windows), `antrenamer-qt -b ~/test.arb -af "/data/*" -g -x` (Linux, quote the wildcards so that the shell does not expand them).
 Without `-a`, 2.07 behaviour: a name ending in `.arb` is a batch, a folder is added recursively.
 
 ## 9. Log page
 
 Each processed file gives one line: **green** (renamed, old → new name; the full path when the folder changes; sidecar files mentioned), **blue** (not renamed: identical name, missing tag, empty line or end of the list, file missing), **red** (error: name already used, invalid character, file locked).
 Buttons: **Filter** (Successes / Errors / Not renamed), **Clear**, **Save** (CSV or text file), **Copy** (clipboard); right-click in the log: Clear, Copy.
-The *Save log to file* option (Options > Events) saves it automatically after each run in UTF-8, with an option to append to an existing file. With a `.csv` file name (the default choice in the file dialog) it is a CSV that Excel or LibreOffice open with the accents right, one line per file with four columns: Folder, Original name, New name, Reason (why it was not renamed), ready to filter; with `.log` or `.txt` it is two tab-separated columns (`v` success, `x` error). The *Save* button of the Log page offers the same two formats.
+The *Save log to file* option (Options > Events) saves it automatically after each run in UTF-8, with an option to append to an existing file (on the command line, `--log-keep` chooses which lines it keeps: successes, errors, unchanged files). With a `.csv` file name (the default choice in the file dialog) it is a CSV that Excel or LibreOffice open with the accents right, one line per file with four columns: Folder, Original name, New name, Reason (why it was not renamed), ready to filter; with `.log` or `.txt` it is two tab-separated columns (`v` success, `x` error). The *Save* button of the Log page offers the same two formats.
 
 ## 10. Options (F10)
 
