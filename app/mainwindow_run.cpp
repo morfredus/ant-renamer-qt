@@ -507,7 +507,7 @@ void MainWindow::processCommandLine(const QStringList& args) {
             break;
         }
         if (a.startsWith(u"--filter-") || a == u"--log-keep") {
-            const QString opt = a;
+            const QString& opt = a;  // value(i) moves i, not a: a still names this option
             if (opt == u"--filter-case") {
                 flt.name.caseSensitive = true;
             } else if (opt == u"--filter-remove") {
