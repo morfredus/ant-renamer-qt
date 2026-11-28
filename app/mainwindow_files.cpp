@@ -12,9 +12,8 @@
 namespace {
 
 // Flatpak: the document portal keeps the real (host) path of an exported entry in the xattr user.document-portal.host-path.
-// Used only as the starting folder of the FileChooser portal (it may ignore it): empty when unknown, so nothing changes.
-// For a file the start is its folder, for a folder the folder itself.
-QString portalStartDir(const QString& docPath) {
+// Empty when unknown (not an exported entry, or not Linux).
+QString portalHostPath(const QString& docPath) {
 #ifdef Q_OS_LINUX
     const QByteArray p = QFile::encodeName(docPath);
     char buf[4096];
@@ -25,14 +24,64 @@ QString portalStartDir(const QString& docPath) {
         }
         return {};
     }
-    const QString host = QString::fromLocal8Bit(buf, int(n));
+    return QString::fromLocal8Bit(buf, int(n));
+#else
+    Q_UNUSED(docPath);
+    return {};
+#endif
+}
+
+// Used only as the starting folder of the FileChooser portal (it may ignore it): empty when unknown, so nothing changes.
+// For a file the start is its folder, for a folder the folder itself.
+QString portalStartDir(const QString& docPath) {
+    const QString host = portalHostPath(docPath);
+    if (host.isEmpty()) {
+        return {};
+    }
     const QString start = QFileInfo(docPath).isDir() ? host : QFileInfo(host).absolutePath();
     if (qEnvironmentVariableIsSet("AR_DEBUG_DROP")) {
         qWarning() << "picker start folder for" << docPath << "=" << start;
     }
     return start;
+}
+
+// Flatpak: the folders already given to the program with the FileChooser portal are kept by the system between sessions, and the
+// sandbox sees them as $XDG_RUNTIME_DIR/doc/<id>/<folder> (read and write). Where hostPath (a real path: a dropped file or folder)
+// lies inside one of them, this is its path in the sandbox, so nothing has to be asked again. The deepest folder wins.
+// Empty when no granted folder holds it (nothing changes then).
+QString grantedPortalPath(const QString& hostPath) {
+#ifdef Q_OS_LINUX
+    const QString runtime = qEnvironmentVariable("XDG_RUNTIME_DIR");
+    if (runtime.isEmpty() || hostPath.isEmpty()) {
+        return {};
+    }
+    QString best;
+    qsizetype bestLen = -1;
+    const QDir docs(runtime + u"/doc"_s);
+    for (const QString& id : docs.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        const QDir entryDir(docs.filePath(id));
+        for (const QString& name : entryDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden)) {
+            const QString doc = entryDir.filePath(name);
+            QString base = portalHostPath(doc);
+            if (base.isEmpty()) {
+                continue;
+            }
+            while (base.endsWith(u'/')) {
+                base.chop(1);  // "/" granted: empty base, every path lies inside
+            }
+            if ((hostPath != base && !hostPath.startsWith(base + u'/')) || base.size() <= bestLen) {
+                continue;
+            }
+            best = doc + hostPath.mid(base.size());
+            bestLen = base.size();
+        }
+    }
+    if (qEnvironmentVariableIsSet("AR_DEBUG_DROP")) {
+        qWarning() << "granted folder for" << hostPath << "=" << best;
+    }
+    return best;
 #else
-    Q_UNUSED(docPath);
+    Q_UNUSED(hostPath);
     return {};
 #endif
 }
@@ -260,7 +309,14 @@ void MainWindow::addFiles(const QStringList& paths, const AddChoice* choice, boo
             }
         } else if (!choice || (choice->files && fi.isFile())) {
             if (ren::isPortalSingleFile(QDir::fromNativeSeparators(p))) {
-                portalFiles << p;
+                // Flatpak: its folder may already have been given to the program (kept by the system): then nothing is asked.
+                const QString host = portalHostPath(p);
+                const QString granted = host.isEmpty() ? QString() : grantedPortalPath(host);
+                if (!granted.isEmpty() && QFileInfo(granted).isFile()) {
+                    addFile(native(granted));
+                } else {
+                    portalFiles << p;
+                }
             } else {
                 addFile(native(p));
             }
@@ -375,6 +431,13 @@ void MainWindow::importDropped(const QStringList& paths, bool fromShell) {
     for (QString& p : list) {
         const QFileInfo fi(p);
         if (!fi.isDir() || !ren::isPortalSingleFile(QDir::fromNativeSeparators(p))) {
+            continue;
+        }
+        // Already given to the program (the folder itself, or a folder that holds it): the writable path is used, no question.
+        const QString host = portalHostPath(p);
+        const QString granted = host.isEmpty() ? QString() : grantedPortalPath(host);
+        if (!granted.isEmpty() && QFileInfo(granted).isDir()) {
+            p = granted;
             continue;
         }
         if (QMessageBox::question(this, QStringLiteral("Ant Renamer Qt"),

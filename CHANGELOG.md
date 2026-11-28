@@ -8,6 +8,10 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+### Changed
+
+- Flatpak: a folder already given to the program (the system keeps it between sessions) is no longer asked again. A file or a folder dropped, or a file chosen with the file picker, that lies inside such a folder is reached through it, writable, with no question (`grantedPortalPath` in `app/mainwindow_files.cpp`: it looks at the folders the sandbox sees under `$XDG_RUNTIME_DIR/doc/` and matches their real path, read from the xattr `user.document-portal.host-path`; the deepest folder wins). The question and the folder picker only appear for a folder not given yet. Nothing changes for Windows, the `.deb` and the AppImage.
+
 ## [3.3.1] - 2026-11-25
 
 Corrective version of the Flatpak package. 3.3.0 asked for `--filesystem=home` to rename files given one by one; Flathub refused that permission. The package now has no access to your files except what you give it: a file or a folder given by drag and drop or by the file picker is asked for again with the system folder picker, which keeps the permission. Nothing changes for Windows, the `.deb` and the AppImage.
