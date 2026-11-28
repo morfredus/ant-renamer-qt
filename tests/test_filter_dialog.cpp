@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
     FilterDialog dlg(nullptr);
     CHECK(dlg.filter().isEmpty());  // nothing ticked: no criterion
     const auto boxes = dlg.findChildren<QCheckBox*>();
-    CHECK(boxes.size() == 5);
+    CHECK(boxes.size() == 7);  // name, its case box, from, to, time, min, max
     for (QCheckBox* b : boxes) {  // tick and untick every box: the fields follow (the old code crashed on the first click)
         b->click();
         b->click();
@@ -66,7 +66,19 @@ int main(int argc, char** argv) {
     CHECK(back.timeTo && back.timeTo->msecsSinceStartOfDay() == QTime(15, 0, 0, 999).msecsSinceStartOfDay());
     CHECK(back.minSize && *back.minSize == (3ll << 20));
     CHECK(back.maxSize && *back.maxSize == (1500ll << 10));
-    CHECK(again.findChildren<QCheckBox*>().size() == 6);  // the five criteria and the put-back choice
+    CHECK(again.findChildren<QCheckBox*>().size() == 8);  // the seven criteria boxes and the put-back choice
+    CHECK(back.name.isEmpty());  // no name criterion was set: the name box stays unticked
+
+    // the name criterion comes back as it was typed, and a regular expression that does not compile is refused
+    ren::FileFilter named;
+    named.name.pattern = u"IMG_\\d+"_s;
+    named.name.regex = true;
+    named.name.caseSensitive = true;
+    FilterDialog withName(nullptr, named);
+    const ren::FileFilter namedBack = withName.filter();
+    CHECK(namedBack.name.pattern == named.name.pattern && namedBack.name.regex && namedBack.name.caseSensitive);
+    named.name.pattern = u"(unclosed"_s;  // MessageBox would block the test: only the criterion is looked at
+    CHECK(!named.name.error().isEmpty());
     CHECK(!again.clearRequested());
     QPushButton* clearBtn = nullptr;  // "Clear the filter": only there when the last filter took files out
     for (auto* b : again.findChildren<QPushButton*>()) {

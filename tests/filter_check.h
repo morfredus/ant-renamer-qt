@@ -82,4 +82,72 @@ inline void filterCheck() {
     shotNoExif.timeFrom = QTime(14, 0);
     shotNoExif.timeTo = QTime(15, 0);
     CHECK_EQ(shotNoExif.matches(File(d + u"a.txt"_s)) ? u"y"_s : u"n"_s, u"y"_s);
+
+    // by name: masks (several, * and ?, whole name, not case sensitive) and regular expressions (anywhere in the name)
+    const QStringList sample = {u"IMG_0001.JPG"_s, u"IMG_0002.png"_s, u"notes.txt"_s, u"a.txt"_s, u"photo.jpeg"_s};
+    auto hits = [&](const NameFilter& nf) {
+        QStringList out;
+        for (const QString& n : sample) {
+            if (nf.matches(n)) {
+                out << n;
+            }
+        }
+        return out.join(u',');
+    };
+    NameFilter none2;
+    CHECK_EQ(none2.isEmpty() ? u"y"_s : u"n"_s, u"y"_s);
+    CHECK_EQ(hits(none2), sample.join(u','));  // no pattern: everything
+    NameFilter jpg;
+    jpg.pattern = u"*.jpg"_s;  // the whole name, extension included, capitals ignored
+    CHECK_EQ(hits(jpg), u"IMG_0001.JPG"_s);
+    jpg.caseSensitive = true;
+    CHECK_EQ(hits(jpg), QString());
+    NameFilter masks;
+    masks.pattern = u"*.png; *.txt ;IMG_000?.JPG"_s;  // several masks, blanks around them ignored
+    CHECK_EQ(hits(masks), u"IMG_0001.JPG,IMG_0002.png,notes.txt,a.txt"_s);
+    NameFilter dots;
+    dots.pattern = u"a.txt"_s;  // the dot of a mask is a dot, not "any character"
+    CHECK_EQ(hits(dots), u"a.txt"_s);
+    NameFilter rx;
+    rx.regex = true;
+    rx.pattern = u"^IMG_\\d+\\."_s;
+    CHECK_EQ(hits(rx), u"IMG_0001.JPG,IMG_0002.png"_s);
+    rx.pattern = u"txt"_s;  // found anywhere
+    CHECK_EQ(hits(rx), u"notes.txt,a.txt"_s);
+    rx.pattern = u"(unclosed"_s;
+    CHECK_EQ(rx.error().isEmpty() ? u"y"_s : u"n"_s, u"n"_s);  // not usable: says why, matches nothing
+    CHECK_EQ(hits(rx), QString());
+    CHECK_EQ(masks.error().isEmpty() ? u"y"_s : u"n"_s, u"y"_s);
+    FileFilter byName;  // inside a filter, with the other criteria
+    byName.name.pattern = u"*.txt"_s;
+    CHECK_EQ(byName.isEmpty() ? u"y"_s : u"n"_s, u"n"_s);
+    CHECK_EQ(names(byName), u"a.txt,b.txt,c.txt,d.txt"_s);
+    byName.from = at(2024, 6, 1, 0, 0);
+    CHECK_EQ(names(byName), u"c.txt,d.txt"_s);  // the name AND the period
+    byName.name.pattern = u"a*"_s;
+    CHECK_EQ(names(byName), QString());
+
+    // values of the command line
+    qint64 n = 0;
+    CHECK_EQ(parseFilterSize(u"500"_s, n) && n == 500 ? u"y"_s : u"n"_s, u"y"_s);
+    CHECK_EQ(parseFilterSize(u"10K"_s, n) && n == 10240 ? u"y"_s : u"n"_s, u"y"_s);
+    CHECK_EQ(parseFilterSize(u" 2.5 mb "_s, n) && n == 2621440 ? u"y"_s : u"n"_s, u"y"_s);
+    CHECK_EQ(parseFilterSize(u"1G"_s, n) && n == (1ll << 30) ? u"y"_s : u"n"_s, u"y"_s);
+    CHECK_EQ(parseFilterSize(u"1,5K"_s, n) && n == 1536 ? u"y"_s : u"n"_s, u"y"_s);  // a French decimal comma
+    CHECK_EQ(parseFilterSize(u"big"_s, n) ? u"y"_s : u"n"_s, u"n"_s);
+    CHECK_EQ(parseFilterSize(u"-5"_s, n) ? u"y"_s : u"n"_s, u"n"_s);
+    QTime tm;
+    CHECK_EQ(parseFilterTime(u"14:05"_s, tm) && tm == QTime(14, 5) ? u"y"_s : u"n"_s, u"y"_s);
+    CHECK_EQ(parseFilterTime(u"23:59:30"_s, tm) && tm == QTime(23, 59, 30) ? u"y"_s : u"n"_s, u"y"_s);
+    CHECK_EQ(parseFilterTime(u"25:00"_s, tm) ? u"y"_s : u"n"_s, u"n"_s);
+    CHECK_EQ(parseFilterTime(u"noon"_s, tm) ? u"y"_s : u"n"_s, u"n"_s);
+    QDateTime dt;
+    CHECK_EQ(parseFilterDate(u"2024-05-01"_s, false, dt) && dt == at(2024, 5, 1, 0, 0) ? u"y"_s : u"n"_s, u"y"_s);
+    CHECK_EQ(parseFilterDate(u"2024-05-01"_s, true, dt) && dt == QDateTime(QDate(2024, 5, 1), QTime(23, 59, 59, 999)) ? u"y"_s : u"n"_s,
+             u"y"_s);  // "to" a date keeps that whole day
+    CHECK_EQ(parseFilterDate(u"2024-05-01T14:30"_s, true, dt) && dt == at(2024, 5, 1, 14, 30) ? u"y"_s : u"n"_s, u"y"_s);
+    CHECK_EQ(parseFilterDate(u"2024-05-01 14:30:15"_s, false, dt) && dt == QDateTime(QDate(2024, 5, 1), QTime(14, 30, 15)) ? u"y"_s : u"n"_s,
+             u"y"_s);
+    CHECK_EQ(parseFilterDate(u"01/05/2024"_s, false, dt) ? u"y"_s : u"n"_s, u"n"_s);  // only the ISO order, no guessing
+    CHECK_EQ(parseFilterDate(u"2024-13-40"_s, false, dt) ? u"y"_s : u"n"_s, u"n"_s);
 }

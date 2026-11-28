@@ -2,6 +2,10 @@
 
 Ant Renamer Qt, versions 3.x (portage C++/Qt 6 par Frédéric Biron, développé en parallèle de l'original) :
 
+- 3.4.0-beta.1 (28/11/2026)
+  - Nouveau : Filtrer les fichiers regarde aussi le nom (une liste de masques comme `*.jpg;IMG_??.png`, ou une expression régulière) ; « Ajouter des dossiers » et la fenêtre du glisser-déposer ont une ligne « Seulement les fichiers nommés » pour n'ajouter que les fichiers dont le nom correspond ; Rechercher dans la liste (Ctrl+F) retrouve un fichier par son nom, son dossier, sa date ou son heure et le sélectionne.
+  - Nouveau : ligne de commande, les filtres (`--filter-name`, `--filter-regex`, `--filter-date`, `--filter-from`, `--filter-to`, `--filter-time-from`, `--filter-time-to`, `--filter-min-size`, `--filter-max-size`, `--filter-remove`) et `--log-keep` pour choisir ce que le fichier journal garde ; code de sortie 4 pour une valeur non comprise.
+  - Changement : Flatpak, un dossier déjà donné au programme n'est plus redemandé.
 - 3.3.1 (25/11/2026)
   - Correction : paquet Flatpak, plus d'accès au dossier personnel (Flathub l'a refusé). Un fichier donné seul, ou un dossier déposé, est redemandé avec le sélecteur de dossier du système, qui garde l'autorisation ; le programme renomme ensuite normalement. Un dépôt que le bac à sable ne voit pas affiche un message. Traduction française des messages Flatpak. Rien ne change pour Windows, le .deb et l'AppImage.
 - 3.3.0 (24/11/2026)

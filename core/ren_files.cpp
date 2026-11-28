@@ -805,7 +805,95 @@ static QDateTime filterDate(const File& f, FileFilter::DateKind kind) {
     return f.modifiedDate();
 }
 
+// Compiles the pattern once (the filter is asked about every file of a list): again only when the pattern changes.
+void NameFilter::prepare() const {
+    const QString key = QString::number(int(regex)) + QString::number(int(caseSensitive)) + u':' + pattern;
+    if (key == key_) {
+        return;
+    }
+    key_ = key;
+    compiled_.clear();
+    const auto opt = caseSensitive ? QRegularExpression::NoPatternOption : QRegularExpression::CaseInsensitiveOption;
+    if (regex) {
+        compiled_.append(QRegularExpression(pattern, opt));
+        return;
+    }
+    for (const QString& mask : pattern.split(u';', Qt::SkipEmptyParts)) {
+        if (!mask.trimmed().isEmpty()) {
+            compiled_.append(QRegularExpression(QRegularExpression::wildcardToRegularExpression(mask.trimmed()), opt));
+        }
+    }
+}
+
+bool NameFilter::matches(const QString& fileName) const {
+    if (isEmpty()) {
+        return true;
+    }
+    prepare();
+    return std::any_of(compiled_.cbegin(), compiled_.cend(),
+                       [&](const QRegularExpression& re) { return re.isValid() && re.match(fileName).hasMatch(); });
+}
+
+QString NameFilter::error() const {
+    if (!regex || isEmpty()) {
+        return {};
+    }
+    const QRegularExpression re(pattern);
+    return re.isValid() ? QString() : re.errorString();
+}
+
+bool parseFilterSize(const QString& text, qint64& bytes) {
+    static const QRegularExpression re(u"^\\s*(\\d+(?:[.,]\\d+)?)\\s*([KMG]?)B?\\s*$"_s, QRegularExpression::CaseInsensitiveOption);
+    const QRegularExpressionMatch m = re.match(text);
+    if (!m.hasMatch()) {
+        return false;
+    }
+    bool ok = false;
+    const double n = m.captured(1).replace(u',', u'.').toDouble(&ok);
+    if (!ok) {
+        return false;
+    }
+    const QString unit = m.captured(2).toUpper();
+    const double mult = unit == u"K" ? 1024.0 : unit == u"M" ? 1048576.0 : unit == u"G" ? 1073741824.0 : 1.0;
+    bytes = qint64(n * mult);
+    return true;
+}
+
+bool parseFilterTime(const QString& text, QTime& t) {
+    const QString s = text.trimmed();
+    for (const QString& fmt : {u"HH:mm:ss"_s, u"HH:mm"_s}) {
+        const QTime v = QTime::fromString(s, fmt);
+        if (v.isValid()) {
+            t = v;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool parseFilterDate(const QString& text, bool asEnd, QDateTime& d) {
+    QString s = text.trimmed();
+    s.replace(u' ', u'T');
+    if (!s.contains(u'T')) {  // a date alone (QDate would also accept a date followed by anything, so a time is looked for first)
+        const QDate day = QDate::fromString(s, Qt::ISODate);
+        if (!day.isValid()) {
+            return false;
+        }
+        d = QDateTime(day, asEnd ? QTime(23, 59, 59, 999) : QTime(0, 0));
+        return true;
+    }
+    const QDateTime v = QDateTime::fromString(s, Qt::ISODate);
+    if (!v.isValid()) {
+        return false;
+    }
+    d = v;
+    return true;
+}
+
 bool FileFilter::matches(const File& f) const {
+    if (!name.isEmpty() && !name.matches(f.fileName())) {
+        return false;
+    }
     if (from || to || timeFrom || timeTo) {
         const QDateTime d = filterDate(f, kind);
         if (!d.isValid()) {

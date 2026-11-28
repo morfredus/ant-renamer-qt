@@ -6,6 +6,7 @@
 
 #include <QMainWindow>
 #include <QPersistentModelIndex>
+#include <QPointer>
 #include <QThread>
 #include <QTreeWidget>
 
@@ -151,7 +152,10 @@ private:
     void removeSelectedFiles();
     void removeAllFiles();
     void removeDeadFiles();
-    void filterFiles();  // keep or remove the files of the list by date, time of the day and size (the Filter button)
+    void filterFiles();  // keep or remove the files of the list by name, date, time of the day and size (the Filter button)
+    int applyFileFilter(const ren::FileFilter& flt, bool keep);  // the pass itself, also used by the command line; returns how many went
+    void findFiles();  // Ctrl+F: the Find window (name, folder, dates), which selects what it finds
+    QPointer<QDialog> findDialog_;  // non-modal, deleted when closed
     void fileHeaderMenu(const QPoint& pos);
     void sortFilesBy(int column);
     int sortColumn_ = -1;
@@ -232,6 +236,8 @@ private:
     std::vector<LogEntry> logEntries_;
     size_t runLogStart_ = 0;  // first log entry of the current run (the auto-saved log holds this run only)
     bool logShowOk_ = true, logShowError_ = true, logShowNot_ = true;
+    // What the log file saved at the end of a run keeps (--log-keep on the command line); the window's own filter above is separate.
+    bool logSaveOk_ = true, logSaveError_ = true, logSaveNot_ = true;
 
     // widgets
     QStackedWidget* stack_;
@@ -250,7 +256,7 @@ private:
 
     QAction *aGo_, *aStop_, *aUndo_, *aHistory_, *aOnTop_, *aTheme_, *aOptions_, *aHelp_, *aAbout_, *aExit_;
     QAction* aTab_[3];
-    QAction *aSetDates_, *aFilter_, *aAddFiles_, *aAddFolders_, *aRemoveSel_, *aRemoveAll_, *aRemoveDead_, *aPreview_, *aChangedOnly_, *aShowHidden_;
+    QAction *aFind_, *aSetDates_, *aFilter_, *aAddFiles_, *aAddFolders_, *aRemoveSel_, *aRemoveAll_, *aRemoveDead_, *aPreview_, *aChangedOnly_, *aShowHidden_;
     QAction *aBatchAdd_, *aBatchEdit_, *aBatchRemoveSel_, *aBatchClear_, *aBatchOpen_, *aBatchSave_;
     QAction *aLogFilter_, *aLogOk_, *aLogError_, *aLogNot_, *aLogClear_, *aLogSave_, *aLogCopy_;
     QAction *aUp_, *aDown_, *aTop_, *aBottom_;

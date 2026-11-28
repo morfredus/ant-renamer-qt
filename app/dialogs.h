@@ -14,6 +14,7 @@ class QTreeView;
 
 struct AddChoice {
     bool files = true, folders = false, recursive = true, hidden = false;  // hidden: also hidden and system files
+    ren::NameFilter name{};  // only the files whose name fits (empty: all); not remembered between additions
     bool any() const { return files || folders; }
 };
 
@@ -28,7 +29,11 @@ void rememberAddChoice(const AddChoice& c);
 struct AddChoiceBoxes {
     AddChoiceBoxes();
     AddChoice choice() const;
+    bool validate(QWidget* parent) const;  // false (with a message) when the regular expression does not compile
     QCheckBox *files, *folders, *recursive, *hidden;
+    QLineEdit* mask;         // "only files whose name matches": masks, or a regular expression with the box below
+    QCheckBox* maskRegex;
+    QWidget* maskRow;        // the line holding the three above, to put in the dialog's layout
 };
 
 // "Add folders": pick folders and what to take from them.
@@ -37,6 +42,7 @@ public:
     AddFoldersDialog(const QString& startFolder, QWidget* parent);
     QStringList folders() const;
     AddChoice choice() const;
+    void accept() override;
 
 private:
     bool portal_;  // Flatpak: folders come one by one from the portal picker
@@ -54,13 +60,14 @@ public:
     explicit DragDropDialog(QWidget* parent);
     AddChoice choice() const;
     bool dontAskAgain() const;
+    void accept() override;
 
 private:
     AddChoiceBoxes boxes_;
     QCheckBox* notAgain_;
 };
 
-// "Filter files": keep (or remove) the files of the list by date, time of the day and size.
+// "Filter files": keep (or remove) the files of the list by name, date, time of the day and size.
 class FilterDialog : public QDialog {
 public:
     // `previous` and `keep` fill the fields again (to correct the last filter); removed > 0 adds the choice to put back the
@@ -71,6 +78,7 @@ public:
     bool keepMatching() const;  // true: the files that match stay; false: they are removed
     bool putBack() const;       // put the files of the previous filter back before filtering
     bool clearRequested() const;  // the "Clear the filter" button: put every file back, filter nothing
+    void accept() override;       // refuses a regular expression that does not compile
 
 private:
     struct Ui;

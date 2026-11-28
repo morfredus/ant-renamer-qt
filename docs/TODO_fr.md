@@ -42,14 +42,15 @@ Pas de 3.2.1 à part : les corrections attendent la 3.3, pour qu'une seule versi
   - Le journal garde l'ancienne et la nouvelle date, et l'historique permet d'annuler.
   - En ligne de commande, la fonction demande son option explicite.
   - La documentation (guide, aide, README) dit que la date de modification n'est pas une preuve d'authenticité et que, pour des originaux à valeur de preuve, il faut travailler sur des copies (option « Copier au lieu de renommer »).
-- **Filtrer par date et/ou heure** (fait dans `dev/3.3.0`, clic droit « Filtrer les fichiers... » ; les mêmes filtres en ligne de commande viendront en 3.4) : garder les fichiers dont la date de modification, de création ou de prise de vue EXIF tombe dans une période ou à une heure de la journée (« tout ce qui a été pris entre 14 h et 15 h »), et aussi par taille.
+- **Filtrer par date et/ou heure** (fait dans `dev/3.3.0`, clic droit « Filtrer les fichiers... » ; les mêmes filtres en ligne de commande sont faits dans `dev/3.4.0`) : garder les fichiers dont la date de modification, de création ou de prise de vue EXIF tombe dans une période ou à une heure de la journée (« tout ce qui a été pris entre 14 h et 15 h »), et aussi par taille.
 
 ### 3.4 : choisir les fichiers
 
-Aujourd'hui seuls les fichiers cachés et système sont filtrés.
-- **Filtrer par masque ou expression régulière**, avant ou après l'ajout des fichiers.
-- **Retrouver un fichier** dans la liste (par nom, date, heure).
-- Ligne de commande : les mêmes filtres, et le choix de ce que le journal garde (réussites, erreurs, fichiers inchangés ; aujourd'hui le filtre ne s'applique qu'à la fenêtre).
+Fait dans `dev/3.4.0` (28/11/2026, essayé sous Windows avec les tests unitaires et la ligne de commande ; à la main sous Windows 11 et sous Fedora (Flatpak) : le masque à l'ajout de dossiers et dans la fenêtre du glisser-déposer, le critère de nom de Filtrer les fichiers et Rechercher dans la liste fonctionnent) :
+- **Filtrer par masque ou expression régulière** : un critère « Le nom correspond » dans Filtrer les fichiers, et une ligne « Seulement les fichiers nommés » dans Ajouter des dossiers et la fenêtre du glisser-déposer (avant l'ajout).
+- **Retrouver un fichier** dans la liste (Ctrl+F) : par nom, dossier, date ou heure, avec Suivant, Précédent et Tout sélectionner.
+- Ligne de commande : les mêmes filtres (`--filter-*`), et le choix de ce que le fichier journal garde (`--log-keep`) ; une valeur non comprise donne le code de sortie 4.
+Laissé pour plus tard : la ligne « Seulement les fichiers nommés » ne concerne que les fichiers (les dossiers ne sont pas filtrés par nom), et un masque ou une expression n'est pas enregistré avec les autres options.
 
 ### 3.5 : réutiliser et réparer les noms
 

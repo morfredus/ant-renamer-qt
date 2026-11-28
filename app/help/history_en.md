@@ -2,6 +2,10 @@
 
 Ant Renamer Qt, 3.x versions (C++/Qt 6 port by Frédéric Biron, developed in parallel with the original):
 
+- 3.4.0-beta.1 (28/11/2026)
+  - New: Filter files can also look at the name (a list of masks such as `*.jpg;IMG_??.png`, or a regular expression); "Add folders" and the drag and drop window have an "Only files named" line to add only the files whose name fits; Find in the list (Ctrl+F) finds a file by name, folder, date or time and selects it.
+  - New: command line, the filters (`--filter-name`, `--filter-regex`, `--filter-date`, `--filter-from`, `--filter-to`, `--filter-time-from`, `--filter-time-to`, `--filter-min-size`, `--filter-max-size`, `--filter-remove`) and `--log-keep` to choose what the log file keeps; exit code 4 for a value that is not understood.
+  - Change: Flatpak, a folder already given to the program is no longer asked again.
 - 3.3.1 (25/11/2026)
   - Fix: Flatpak package, no more access to the home folder (Flathub refused it). A file given alone, or a folder dropped, is asked again with the system folder picker, which keeps the permission; the program then renames normally. A drop the sandbox cannot see gets a message. French translation of the Flatpak messages. Nothing changes for Windows, the .deb and the AppImage.
 - 3.3.0 (24/11/2026)

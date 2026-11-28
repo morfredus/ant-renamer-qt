@@ -102,6 +102,7 @@ AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent)
         for (auto* c : {boxes_.files, boxes_.folders, boxes_.recursive, boxes_.hidden}) {
             v->addWidget(c);
         }
+        v->addWidget(boxes_.maskRow);
         v->addWidget(standardButtons(this));
 
         const QModelIndex start = model_->index(startFolder);
@@ -171,6 +172,7 @@ AddFoldersDialog::AddFoldersDialog(const QString& startFolder, QWidget* parent)
     for (auto* c : {boxes_.files, boxes_.folders, boxes_.recursive, boxes_.hidden}) {
         v->addWidget(c);
     }
+    v->addWidget(boxes_.maskRow);
 
     v->addWidget(standardButtons(this));
 
@@ -197,16 +199,47 @@ AddChoice AddFoldersDialog::choice() const {
     return boxes_.choice();
 }
 
+void AddFoldersDialog::accept() {
+    if (boxes_.validate(this)) {
+        QDialog::accept();
+    }
+}
+
 AddChoiceBoxes::AddChoiceBoxes()
     : files(new QCheckBox(QDialog::tr("Add files of selected folders"))),
       folders(new QCheckBox(QDialog::tr("Add selected folders"))),
       recursive(new QCheckBox(QDialog::tr("Apply these two options also to subfolders"))),
-      hidden(new QCheckBox(QDialog::tr("Include hidden and system files when adding a folder"))) {
+      hidden(new QCheckBox(QDialog::tr("Include hidden and system files when adding a folder"))),
+      mask(new QLineEdit),
+      maskRegex(new QCheckBox(QDialog::tr("Regular expression"))),
+      maskRow(new QWidget) {
     const AppOptions& o = appOptions();
     files->setChecked(o.addFiles);
     folders->setChecked(o.addFolders);
     recursive->setChecked(o.recursive);
     hidden->setChecked(o.addHidden);
+    // not remembered: a mask kept from one addition to the next would silently leave files out
+    mask->setPlaceholderText(QDialog::tr("e.g. *.jpg;*.png (empty: every file)"));
+    mask->setToolTip(QDialog::tr("Only the files whose name fits are added (folders are not concerned). Masks: * and ?, several "
+                                 "separated by ; . With the box ticked: a regular expression, found anywhere in the name. "
+                                 "Not remembered for the next addition."));
+    auto* h = new QHBoxLayout(maskRow);
+    h->setContentsMargins(0, 0, 0, 0);
+    h->addWidget(new QLabel(QDialog::tr("Only files named:")));
+    h->addWidget(mask, 1);
+    h->addWidget(maskRegex);
+}
+
+bool AddChoiceBoxes::validate(QWidget* parent) const {
+    ren::NameFilter nf;
+    nf.pattern = mask->text();
+    nf.regex = maskRegex->isChecked();
+    const QString err = nf.error();
+    if (err.isEmpty()) {
+        return true;
+    }
+    QMessageBox::warning(parent, QDialog::tr("Add files"), QDialog::tr("This regular expression is not valid: %1").arg(err));
+    return false;
 }
 
 void rememberAddChoice(const AddChoice& c) {
@@ -218,7 +251,10 @@ void rememberAddChoice(const AddChoice& c) {
 }
 
 AddChoice AddChoiceBoxes::choice() const {
-    return {files->isChecked(), folders->isChecked(), recursive->isChecked(), hidden->isChecked()};
+    AddChoice c{files->isChecked(), folders->isChecked(), recursive->isChecked(), hidden->isChecked(), {}};
+    c.name.pattern = mask->text();
+    c.name.regex = maskRegex->isChecked();
+    return c;
 }
 
 // --- Drag & drop ---
@@ -231,6 +267,7 @@ DragDropDialog::DragDropDialog(QWidget* parent) : QDialog(parent) {
     for (auto* c : {boxes_.files, boxes_.folders, boxes_.recursive, boxes_.hidden}) {
         v->addWidget(c);
     }
+    v->addWidget(boxes_.maskRow);
     v->addSpacing(8);
     v->addWidget(notAgain_);
     v->addWidget(standardButtons(this));
@@ -239,6 +276,11 @@ DragDropDialog::DragDropDialog(QWidget* parent) : QDialog(parent) {
 AddChoice DragDropDialog::choice() const {
     return boxes_.choice();
 }
+void DragDropDialog::accept() {
+    if (boxes_.validate(this)) {
+        QDialog::accept();
+    }
+}
 bool DragDropDialog::dontAskAgain() const {
     return notAgain_->isChecked();
 }
@@ -246,6 +288,9 @@ bool DragDropDialog::dontAskAgain() const {
 // --- Filter files ---
 struct FilterDialog::Ui {
     QComboBox* kind;
+    QCheckBox *useName = nullptr, *nameCase = nullptr;
+    QLineEdit* name = nullptr;
+    QComboBox* nameMode = nullptr;
     QCheckBox *useFrom, *useTo, *useTime, *useMin, *useMax;
     QDateTimeEdit *from, *to;
     QTimeEdit *timeFrom, *timeTo;
@@ -268,6 +313,16 @@ FilterDialog::FilterDialog(QWidget* parent, const ren::FileFilter& previous, boo
     auto* g = new QGridLayout;
     v->addLayout(g);
     int row = 0;
+    ui_->useName = new QCheckBox(tr("Name matches"));
+    ui_->name = new QLineEdit;
+    ui_->name->setPlaceholderText(tr("e.g. *.jpg;*.png"));
+    ui_->nameMode = new QComboBox;
+    ui_->nameMode->addItems({tr("Masks (* and ?, several separated by ;)"), tr("Regular expression (found anywhere in the name)")});
+    ui_->nameCase = new QCheckBox(tr("Case sensitive"));
+    g->addWidget(ui_->useName, row, 0);
+    g->addWidget(ui_->name, row++, 1, 1, 2);
+    g->addWidget(ui_->nameMode, row, 1);
+    g->addWidget(ui_->nameCase, row++, 2);
     ui_->kind = new QComboBox;
     ui_->kind->addItems({tr("Modification date"), tr("Creation date"), tr("Shooting date (EXIF; else modification date)")});
     g->addWidget(new QLabel(tr("Date to look at:")), row, 0);
@@ -328,6 +383,7 @@ FilterDialog::FilterDialog(QWidget* parent, const ren::FileFilter& previous, boo
             }
         });
     };
+    link(ui_->useName, {ui_->name, ui_->nameMode, ui_->nameCase});
     link(ui_->useFrom, {ui_->from});
     link(ui_->useTo, {ui_->to});
     link(ui_->useTime, {ui_->timeFrom, ui_->timeTo});
@@ -352,6 +408,12 @@ FilterDialog::FilterDialog(QWidget* parent, const ren::FileFilter& previous, boo
 
     // the last criteria again, to correct them (set after link(): ticking a box enables its fields)
     ui_->kind->setCurrentIndex(int(previous.kind));
+    if (!previous.name.isEmpty()) {
+        ui_->useName->setChecked(true);
+        ui_->name->setText(previous.name.pattern);
+        ui_->nameMode->setCurrentIndex(previous.name.regex ? 1 : 0);
+        ui_->nameCase->setChecked(previous.name.caseSensitive);
+    }
     if (previous.from) {
         ui_->useFrom->setChecked(true);
         ui_->from->setDateTime(*previous.from);
@@ -383,6 +445,11 @@ FilterDialog::~FilterDialog() = default;
 ren::FileFilter FilterDialog::filter() const {
     ren::FileFilter f;
     f.kind = static_cast<ren::FileFilter::DateKind>(ui_->kind->currentIndex());
+    if (ui_->useName->isChecked()) {
+        f.name.pattern = ui_->name->text();
+        f.name.regex = ui_->nameMode->currentIndex() == 1;
+        f.name.caseSensitive = ui_->nameCase->isChecked();
+    }
     if (ui_->useFrom->isChecked()) {
         f.from = ui_->from->dateTime();
     }
@@ -403,6 +470,17 @@ ren::FileFilter FilterDialog::filter() const {
         f.maxSize = bytes(ui_->maxSize, ui_->maxUnit);
     }
     return f;
+}
+
+void FilterDialog::accept() {
+    if (!ui_->clear && ui_->useName->isChecked()) {
+        const QString err = filter().name.error();
+        if (!err.isEmpty()) {
+            QMessageBox::warning(this, tr("Filter files"), tr("This regular expression is not valid: %1").arg(err));
+            return;
+        }
+    }
+    QDialog::accept();
 }
 
 bool FilterDialog::keepMatching() const {

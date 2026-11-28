@@ -2,6 +2,8 @@
 
 #include <QLockFile>
 
+#include <cstdio>
+
 // MainWindow: running the batch (worker thread, progress, undo), the log and the command line.
 
 // --- running ---
@@ -230,6 +232,10 @@ void MainWindow::onFinished() {
             }
             for (size_t i = qMin(runLogStart_, logEntries_.size()); i < logEntries_.size(); ++i) {  // this run only
                 const LogEntry& e = logEntries_[i];
+                if ((e.state == State::Ok && !logSaveOk_) || (e.state == State::Error && !logSaveError_) ||
+                    (e.state == State::NotRenamed && !logSaveNot_)) {
+                    continue;  // --log-keep
+                }
                 const char* mark = e.state == State::NotRenamed ? " "
                                    : e.state == State::Ok       ? "v"
                                    : e.state == State::Error    ? "x"
@@ -467,18 +473,102 @@ void MainWindow::logAction(int which) {
 // --set-dates-from-exif  instead of renaming: the modification date of the files becomes their EXIF shooting date. With -g or
 //              -q it runs at once (the option is the consent); alone, the window shows the table of the dates and asks.
 // -a[fFr]      what the following paths add: f = files, F = folders, r = recursive; wildcards allowed
+// Which files stay, once all the paths are added (every criterion that is given must hold):
+// --filter-name MASKS  names that fit one of the masks (* and ?, separated by ;)   --filter-regex EXPR  a regular expression
+// --filter-case        names are compared with the case          --filter-remove  take out the files that match, keep the others
+// --filter-date modified|created|shot   the date the next four look at (default modified; shot = EXIF, else modified)
+// --filter-from DATE  --filter-to DATE        yyyy-MM-dd or yyyy-MM-ddTHH:mm[:ss]   (a date alone as --filter-to: the whole day)
+// --filter-time-from HH:mm[:ss]  --filter-time-to HH:mm[:ss]   time of the day, whatever the day (from after to: across midnight)
+// --filter-min-size N  --filter-max-size N    bytes, or with K, M, G (1K = 1024 bytes)
+// --log-keep ok,error,unchanged   what the log file (Options, "Save log to file") keeps for this run; the default is everything
+// Exit code 4: an option of the line is not understood (nothing was renamed).
 void MainWindow::processCommandLine(const QStringList& args) {
     silent_ = args.contains(u"-q"_s);
     bool go = silent_, exit = silent_;
     bool setDates = false;  // --set-dates-from-exif
     AddChoice add{false, false, false};
     bool haveAdd = false;
+    ren::FileFilter flt;  // --filter-*
+    bool filterRemove = false;
+    QStringList argErrors;
+    // value of the option at args[i]: the next argument, or an error
+    auto value = [&](int& i) -> QString {
+        if (i + 1 >= args.size()) {
+            argErrors << tr_("%1 needs a value").arg(args[i]);
+            return {};
+        }
+        return args[++i];
+    };
     const QString start = QDir::currentPath();
     for (int i = 0; i < args.size(); ++i) {
         const QString& a = args[i];
         if (a == u"--shell") {  // Explorer context menu: everything after it is a path
             addShellPaths(args.mid(i + 1));
             break;
+        }
+        if (a.startsWith(u"--filter-") || a == u"--log-keep") {
+            const QString& opt = a;  // value(i) moves i, not a: a still names this option
+            if (opt == u"--filter-case") {
+                flt.name.caseSensitive = true;
+            } else if (opt == u"--filter-remove") {
+                filterRemove = true;
+            } else {
+                const QString v = value(i);
+                if (v.isNull()) {
+                    continue;  // "needs a value" is already noted
+                }
+                bool ok = true;
+                QDateTime d;
+                QTime t;
+                qint64 n = 0;
+                if (opt == u"--filter-name" || opt == u"--filter-regex") {
+                    flt.name.pattern = v;
+                    flt.name.regex = opt == u"--filter-regex";
+                    const QString err = flt.name.error();
+                    if (!err.isEmpty()) {
+                        argErrors << tr_("This regular expression is not valid: %1").arg(err);
+                    }
+                } else if (opt == u"--filter-date") {
+                    const QString k = v.toLower();
+                    ok = k == u"modified" || k == u"created" || k == u"shot";
+                    flt.kind = k == u"created" ? ren::FileFilter::DateKind::Created
+                               : k == u"shot"  ? ren::FileFilter::DateKind::Shot
+                                               : ren::FileFilter::DateKind::Modified;
+                } else if (opt == u"--filter-from" || opt == u"--filter-to") {
+                    ok = ren::parseFilterDate(v, opt == u"--filter-to", d);
+                    (opt == u"--filter-from" ? flt.from : flt.to) = d;
+                } else if (opt == u"--filter-time-from" || opt == u"--filter-time-to") {
+                    ok = ren::parseFilterTime(v, t);
+                    if (opt == u"--filter-time-from") {
+                        flt.timeFrom = t;
+                    } else {
+                        flt.timeTo = t.addMSecs(999);  // up to the end of the last second, like the dialog
+                    }
+                } else if (opt == u"--filter-min-size" || opt == u"--filter-max-size") {
+                    ok = ren::parseFilterSize(v, n);
+                    (opt == u"--filter-min-size" ? flt.minSize : flt.maxSize) = n;
+                } else if (opt == u"--log-keep") {
+                    logSaveOk_ = logSaveError_ = logSaveNot_ = false;
+                    for (const QString& w : v.toLower().split(QRegularExpression(u"[,;]"_s), Qt::SkipEmptyParts)) {
+                        if (w.trimmed() == u"ok") {
+                            logSaveOk_ = true;
+                        } else if (w.trimmed() == u"error") {
+                            logSaveError_ = true;
+                        } else if (w.trimmed() == u"unchanged") {
+                            logSaveNot_ = true;
+                        } else {
+                            ok = false;
+                        }
+                    }
+                } else {
+                    argErrors << tr_("Unknown option %1").arg(opt);
+                    continue;
+                }
+                if (!ok) {
+                    argErrors << tr_("%1: the value \"%2\" is not understood").arg(opt, v);
+                }
+            }
+            continue;
         }
         if (a == u"-b" && i + 1 < args.size()) {
             openBatchFile(QDir(start).absoluteFilePath(args[++i]));
@@ -521,6 +611,24 @@ void MainWindow::processCommandLine(const QStringList& args) {
                 }
             }
         }
+    }
+    if (!argErrors.isEmpty()) {  // nothing is renamed with a line that is not understood
+        if (silent_) {
+            for (const QString& e : std::as_const(argErrors)) {
+                fprintf(stderr, "%s\n", qPrintable(e));
+            }
+            quitSilently(4);
+        } else {
+            QMessageBox::warning(this, QStringLiteral("Ant Renamer Qt"), argErrors.join(u'\n'));
+            if (exit) {
+                QTimer::singleShot(0, this, [this] { close(); });
+            }
+        }
+        return;
+    }
+    if (!flt.isEmpty()) {  // after every path is added: the filter works on the whole list
+        const int gone = applyFileFilter(flt, !filterRemove);
+        addLog(tr_("Filter: %1 file(s) taken out of the list").arg(gone), State::Info);
     }
     const QString message = statusLabel_->text();  // e.g. "No file found in ...": setStatus() would wipe it
     setStatus();

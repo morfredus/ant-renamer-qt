@@ -8,6 +8,23 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ## [Unreleased]
 
+## [3.4.0-beta.1] - 2026-11-28
+
+First beta of 3.4.0, "choosing the files": a filter by name (masks or a regular expression), the same choice when adding files, a Find window for the list, and the filters on the command line. The Flatpak package also stops asking again for the folders it was already given (the Flatpak is only published with final versions).
+
+### Added
+
+- Filter files: a **name** criterion, a list of masks (`*.jpg;IMG_??.png`) or a regular expression, not case sensitive unless ticked. It joins the date, the time of the day and the size (`NameFilter` in `core/ren_files.h`, shared with the next item). A folder is judged on its name too. A regular expression that does not compile is refused with the reason.
+- Add folders and the drag and drop window: an "Only files named" line adds only the files whose name fits (masks, or a regular expression with its box ticked). Not remembered for the next addition, so that no file is left out by a forgotten mask.
+- Find in the list (Ctrl+F, and the right-click menu): a small window that stays open, finds the files whose name, folder, modification date or creation date contains the text (dates as `2024-05-01` or `14:30`, or as the system shows them). Next / Previous select the matches one by one, Select all selects them together.
+- Command line: the filters, applied once all the paths are added: `--filter-name`, `--filter-regex`, `--filter-case`, `--filter-date`, `--filter-from`, `--filter-to`, `--filter-time-from`, `--filter-time-to`, `--filter-min-size`, `--filter-max-size`, and `--filter-remove` to take out what matches instead of keeping it. A value that is not understood stops the run with exit code 4, before anything is renamed.
+- Command line: `--log-keep ok,error,unchanged` chooses what the log file saved by the options keeps (successes, errors, unchanged files); the window's own log filter stays separate.
+
+### Changed
+
+- Flatpak: a folder already given to the program (the system keeps it between sessions) is no longer asked again. A file or a folder dropped, or a file chosen with the file picker, that lies inside such a folder is reached through it, writable, with no question (`grantedPortalPath` in `app/mainwindow_files.cpp`: it looks at the folders the sandbox sees under `$XDG_RUNTIME_DIR/doc/` and matches their real path, read from the xattr `user.document-portal.host-path`; only the folders the sandbox can write to count, so a dropped folder, given read only, is not taken for a granted one; the deepest folder wins). The question and the folder picker only appear for a folder not given yet. Nothing changes for Windows, the `.deb` and the AppImage.
+- `AR_DEBUG_DROP=1` now also logs every path received by a drop (exists, folder, given alone through the portal), whichever way it arrives (list, window, Explorer menu).
+
 ## [3.3.1] - 2026-11-25
 
 Corrective version of the Flatpak package. 3.3.0 asked for `--filesystem=home` to rename files given one by one; Flathub refused that permission. The package now has no access to your files except what you give it: a file or a folder given by drag and drop or by the file picker is asked for again with the system folder picker, which keeps the permission. Nothing changes for Windows, the `.deb` and the AppImage.

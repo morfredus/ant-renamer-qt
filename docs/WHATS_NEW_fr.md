@@ -4,7 +4,17 @@
 Pour le détail technique : [CHANGELOG](../CHANGELOG.md). Pour le chemin parcouru depuis le programme d'origine (ce qui est
 conservé, les différences voulues, ce qui a été ajouté) : [PRESENTATION_fr.md](PRESENTATION_fr.md).
 
-Version courante : **3.3.1**.
+Version courante : **3.4.0-beta.1**.
+
+## 3.4.0-beta.1
+
+| Nouveauté | Depuis |
+|---|---|
+| **Filtre par nom** : « Filtrer les fichiers » (F4) a un critère « Le nom correspond », une liste de masques (`*.jpg;IMG_??.png`) ou une expression régulière, insensible à la casse sauf si « Respecter la casse » est coché. | 3.4.0-beta.1 |
+| **Seulement les fichiers nommés** : « Ajouter des dossiers » et la fenêtre du glisser-déposer n'ajoutent que les fichiers dont le nom correspond (masques ou expression régulière). La ligne n'est pas retenue pour l'ajout suivant. | 3.4.0-beta.1 |
+| **Rechercher dans la liste** (Ctrl+F) : trouve les fichiers dont le nom, le dossier, la date de modification ou la date de création contient le texte, un par un (Suivant, Précédent) ou tous à la fois (Tout sélectionner). | 3.4.0-beta.1 |
+| **Ligne de commande** : les filtres (`--filter-name`, `--filter-regex`, `--filter-from`, `--filter-to`, `--filter-time-from`, `--filter-time-to`, `--filter-min-size`, `--filter-max-size`, `--filter-remove`) et `--log-keep` pour choisir ce que le fichier journal garde ; code de sortie 4 pour une valeur non comprise. | 3.4.0-beta.1 |
+| **Flatpak** : un dossier déjà donné au programme n'est plus redemandé (seulement dans le Flatpak, publié avec les versions finales). | 3.4.0-beta.1 |
 
 ## 3.3.1
 

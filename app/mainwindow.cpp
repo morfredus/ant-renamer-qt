@@ -262,11 +262,16 @@ void MainWindow::createActions() {
     aRemoveSel_ = makeAction(tr_("Remove sel."), tr_("Remove selected files from the list"), TbRemoveSelected, K(Qt::Key_F6));
     aRemoveAll_ = makeAction(tr_("Remove all"), tr_("Remove all files from the list"), TbRemoveAll, K(Qt::Key_F7));
     aRemoveDead_ = makeAction(tr_("Remove dead"), tr_("Remove dead files from the list"), TbRemoveDead, K(Qt::Key_F8));
-    aFilter_ = makeAction(tr_("Filter files..."), tr_("Keep or remove the files of the list by date, time of the day and size"),
+    aFilter_ = makeAction(tr_("Filter files..."), tr_("Keep or remove the files of the list by name, date, time of the day and size"),
                           TbFilter, K(Qt::Key_F4));
     aFilter_->setCheckable(true);  // pressed while a filter hides files: set by showFilterState(), never by the click
     aPreview_ = makeAction(tr_("Preview"), tr_("Refresh preview"), TbPreview, K(Qt::Key_F5));
     // Not on the toolbar and without a shortcut: it changes dates, never by accident
+    aFind_ = new QAction(tr_("Find in the list..."), this);
+    aFind_->setToolTip(tr_("Find a file of the list by name, folder, date or time, and select it"));
+    aFind_->setShortcut(QKeySequence::Find);
+    addAction(aFind_);  // for the shortcut to work from anywhere in the window
+    connect(aFind_, &QAction::triggered, this, [this] { findFiles(); });
     aSetDates_ = new QAction(tr_("Set dates from EXIF..."), this);
     aSetDates_->setToolTip(tr_("Give the files the EXIF shooting date as their modification date"));
     connect(aSetDates_, &QAction::triggered, this, [this] { setDatesFromExif(); });
@@ -639,6 +644,7 @@ void MainWindow::createPages() {
         m.addAction(aSelInvert_);
         m.addSeparator();
         m.addAction(aFilter_);
+        m.addAction(aFind_);
         m.addAction(aPreview_);
         m.addAction(tr_("Export preview..."), this, [this] { exportPreview(); });
         m.addSeparator();
@@ -1084,7 +1090,7 @@ void MainWindow::showFilterState() {
     } else {
         countLabel_->setText(tr_("%1 files").arg(files_.size()));
         countLabel_->setStyleSheet(QString());
-        aFilter_->setToolTip(tr_("Keep or remove the files of the list by date, time of the day and size"));
+        aFilter_->setToolTip(tr_("Keep or remove the files of the list by name, date, time of the day and size"));
     }
     aFilter_->setChecked(hidden > 0);
 }

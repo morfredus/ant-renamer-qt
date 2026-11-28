@@ -4,7 +4,17 @@
 For the technical detail: [CHANGELOG](../CHANGELOG.md). For the road travelled since the original program (what is kept,
 the deliberate differences, what was added): [PRESENTATION.md](PRESENTATION.md).
 
-Current version: **3.3.1**.
+Current version: **3.4.0-beta.1**.
+
+## 3.4.0-beta.1
+
+| What is new | Since |
+|---|---|
+| **Filter by name**: "Filter files" (F4) has a "Name matches" criterion, a list of masks (`*.jpg;IMG_??.png`) or a regular expression, not case sensitive unless ticked. | 3.4.0-beta.1 |
+| **Only files named**: "Add folders" and the drag and drop window add only the files whose name fits (masks or a regular expression). The line is not remembered for the next addition. | 3.4.0-beta.1 |
+| **Find in the list** (Ctrl+F): finds the files whose name, folder, modification date or creation date contains the text, one by one (Next, Previous) or all at once (Select all). | 3.4.0-beta.1 |
+| **Command line**: the filters (`--filter-name`, `--filter-regex`, `--filter-from`, `--filter-to`, `--filter-time-from`, `--filter-time-to`, `--filter-min-size`, `--filter-max-size`, `--filter-remove`) and `--log-keep` to choose what the log file keeps; exit code 4 for a value not understood. | 3.4.0-beta.1 |
+| **Flatpak**: a folder already given to the program is no longer asked again (only in the Flatpak, published with final versions). | 3.4.0-beta.1 |
 
 ## 3.3.1
 
