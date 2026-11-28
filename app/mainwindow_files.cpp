@@ -46,7 +46,8 @@ QString portalStartDir(const QString& docPath) {
 }
 
 // Flatpak: the folders already given to the program with the FileChooser portal are kept by the system between sessions, and the
-// sandbox sees them as $XDG_RUNTIME_DIR/doc/<id>/<folder> (read and write). Where hostPath (a real path: a dropped file or folder)
+// sandbox sees them as $XDG_RUNTIME_DIR/doc/<id>/<folder> (read and write; a folder given by a drop is listed there too, but
+// read only, so it is skipped: it could not be renamed in). Where hostPath (a real path: a dropped file or folder)
 // lies inside one of them, this is its path in the sandbox, so nothing has to be asked again. The deepest folder wins.
 // Empty when no granted folder holds it (nothing changes then).
 QString grantedPortalPath(const QString& hostPath) {
@@ -62,6 +63,9 @@ QString grantedPortalPath(const QString& hostPath) {
         const QDir entryDir(docs.filePath(id));
         for (const QString& name : entryDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden)) {
             const QString doc = entryDir.filePath(name);
+            if (!QFileInfo(doc).isWritable()) {
+                continue;  // given by a drop: read only (dr-xr-xr-x), and gone with the session. Only the picker's grants write.
+            }
             QString base = portalHostPath(doc);
             if (base.isEmpty()) {
                 continue;

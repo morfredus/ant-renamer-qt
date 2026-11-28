@@ -10,7 +10,7 @@ C++/Qt 6 port and Linux port: Frédéric Biron ([morfredus](https://github.com/m
 
 ### Changed
 
-- Flatpak: a folder already given to the program (the system keeps it between sessions) is no longer asked again. A file or a folder dropped, or a file chosen with the file picker, that lies inside such a folder is reached through it, writable, with no question (`grantedPortalPath` in `app/mainwindow_files.cpp`: it looks at the folders the sandbox sees under `$XDG_RUNTIME_DIR/doc/` and matches their real path, read from the xattr `user.document-portal.host-path`; the deepest folder wins). The question and the folder picker only appear for a folder not given yet. Nothing changes for Windows, the `.deb` and the AppImage.
+- Flatpak: a folder already given to the program (the system keeps it between sessions) is no longer asked again. A file or a folder dropped, or a file chosen with the file picker, that lies inside such a folder is reached through it, writable, with no question (`grantedPortalPath` in `app/mainwindow_files.cpp`: it looks at the folders the sandbox sees under `$XDG_RUNTIME_DIR/doc/` and matches their real path, read from the xattr `user.document-portal.host-path`; only the folders the sandbox can write to count, so a dropped folder, given read only, is not taken for a granted one; the deepest folder wins). The question and the folder picker only appear for a folder not given yet. Nothing changes for Windows, the `.deb` and the AppImage.
 
 ## [3.3.1] - 2026-11-25
 
